@@ -1,0 +1,46 @@
+<!--{"zh":"已知边界","en":"Known limits","desc":"集中一处列出这个项目做不到的事：推理不在端侧、兼容只是加载器与垫片面、FJFS 写入上限、真机覆盖是部分的。","banner_zh":"已知边界 · 集中一处，先说清楚","banner_en":"Known limits · all in one place"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="已知边界" data-en="Known limits">已知边界</h1>
+
+              <div class="prose">
+                <p data-zh="这些限制分散在各页里都写过，这里集中一遍。理由很简单：一份文档最容易骗人的地方不是它写了什么，而是它把不利信息分散到读者找不到的位置。" data-en="These limits are stated elsewhere on the site; here they are in one place. The reason is simple: what makes documentation deceptive is rarely what it says, but where it puts the unfavourable parts.">
+                  这些限制分散在各页里都写过，这里集中一遍。理由很简单：一份文档最容易骗人的地方不是它写了什么，而是它把不利信息分散到读者找不到的位置。
+                </p>
+              </div>
+
+              <h3 class="h3" data-zh="AI 层" data-en="AI layer">AI 层</h3>
+              <ul class="list">
+                <li><b data-zh="推理不在端侧" data-en="Inference is not on-device">推理不在端侧</b> <span data-zh="—— 模型跑在宿主上，内核提供的是链接、审计与回退规则，不是把权重搬进内核。" data-en=" — the model runs on the host; what the kernel provides is the link, the audit and the fallback rules, not the weights.">—— 模型跑在宿主上，内核提供的是链接、审计与回退规则，不是把权重搬进内核。</span></li>
+                <li><b data-zh="A1–A4 只到产物层" data-en="A1–A4 reach the artifact layer only">A1–A4 只到产物层</b> <span data-zh="—— 断言表由形式对象生成，但尚未被内核 include!，运行时断言待接入。" data-en=" — the assertion table is generated from formal objects but is not yet include!'d by the kernel; runtime assertions await integration.">—— 断言表由形式对象生成，但尚未被内核 include!，运行时断言待接入。</span></li>
+                <li><b data-zh="LLM 臂未运行" data-en="The LLM arm has not been run">LLM 臂未运行</b> <span data-zh="—— 波 C 主表的“两臂”是工具链的严格 / 宽松档，不得当作 LLM 对照。" data-en=" — the two arms in the wave-C table are the toolchain's strict / lenient settings and must not be presented as an LLM comparison.">—— 波 C 主表的“两臂”是工具链的严格 / 宽松档，不得当作 LLM 对照。</span></li>
+                <li><b data-zh="转写器是结构识别，不是语义等价" data-en="The translator is structural, not semantically equivalent">转写器是结构识别，不是语义等价</b> <span data-zh="—— 只保证类型与签名结构，不保证转出的函数与原函数行为一致。" data-en=" — it guarantees type and signature structure only, not that a translated function behaves like the original.">—— 只保证类型与签名结构，不保证转出的函数与原函数行为一致。</span></li>
+                <li><b data-zh="Potato v1 不含 AI 能力空间语义" data-en="Potato v1 has no AI capability-space semantics">Potato v1 不含 AI 能力空间语义</b> <span data-zh="—— A3 只检查“没申请 AI 空间”，不检查 AI 调用是否越界。" data-en=" — A3 only checks that the AI space was not requested; it does not check whether an AI call goes out of bounds.">—— A3 只检查“没申请 AI 空间”，不检查 AI 调用是否越界。</span></li>
+              </ul>
+
+              <h3 class="h3" data-zh="内核与硬件" data-en="Kernel and hardware">内核与硬件</h3>
+              <ul class="list">
+                <li><b data-zh="TCG 很慢" data-en="TCG is slow">TCG 很慢</b> <span data-zh="—— 真机与 KVM 预期快 10–100×，但这一点尚未测量。预期不是结果。" data-en=" — real hardware and KVM are expected to be 10–100× faster, but that has not been measured. An expectation is not a result.">—— 真机与 KVM 预期快 10–100×，但这一点尚未测量。预期不是结果。</span></li>
+                <li><b data-zh="ACPI 表在 64 MiB 以上不映射" data-en="ACPI tables above 64 MiB are not mapped">ACPI 表在 64 MiB 以上不映射</b> <span data-zh="—— 有意设置的护栏，不是遗漏。" data-en=" — a deliberate guard, not an oversight.">—— 有意设置的护栏，不是遗漏。</span></li>
+                <li><b data-zh="真机覆盖是部分的" data-en="Real-hardware coverage is partial">真机覆盖是部分的</b> <span data-zh="—— GRUB 启动、AHCI/SATA 持久化、平台检测已演示；VBE 视频与 USB 驱动未完成。" data-en=" — GRUB boot, AHCI/SATA persistence and platform detection are demonstrated; VBE video and USB drivers are unfinished.">—— GRUB 启动、AHCI/SATA 持久化、平台检测已演示；VBE 视频与 USB 驱动未完成。</span></li>
+                <li><b data-zh="WHPX 上的两处平台差异" data-en="Two platform differences under WHPX">WHPX 上的两处平台差异</b> <span data-zh="—— 传统 8259 路径需要 kernel-irqchip=off；INIT/SIPI 注入被拒绝。" data-en=" — the legacy 8259 path needs kernel-irqchip=off, and INIT/SIPI injection is refused.">—— 传统 8259 路径需要 kernel-irqchip=off；INIT/SIPI 注入被拒绝。</span></li>
+              </ul>
+
+              <h3 class="h3" data-zh="存储与兼容" data-en="Storage and compatibility">存储与兼容</h3>
+              <ul class="list">
+                <li><b data-zh="FJFS 多簇写入上限 32 KiB" data-en="FJFS multi-cluster writes cap at 32 KiB">FJFS 多簇写入上限 32 KiB</b> <span data-zh="—— 更大的文件是排队中的工作，不是“已支持”。" data-en=" — larger files are queued work, not “supported”.">—— 更大的文件是排队中的工作，不是“已支持”。</span></li>
+                <li><b data-zh="“兼容”不含完整用户态模拟" data-en="“Compatibility” excludes full user-space emulation">“兼容”不含完整用户态模拟</b> <span data-zh="—— 指的是加载器与垫片面：Linux ELF，以及小体积静态 Mach-O / PE32+ 样例。" data-en=" — it means the loader and shim surface: Linux ELF, plus small static Mach-O / PE32+ samples.">—— 指的是加载器与垫片面：Linux ELF，以及小体积静态 Mach-O / PE32+ 样例。</span></li>
+                <li><b data-zh="Windows 程序一般跑不到底" data-en="Windows programs generally do not run end to end">Windows 程序一般跑不到底</b> <span data-zh="—— user32 只有 2 条，任何带真实窗口的程序都不行。" data-en=" — user32 has only 2 entries, so any program with a real window is out.">—— user32 只有 2 条，任何带真实窗口的程序都不行。</span></li>
+                <li><b data-zh="Linux 面有 10 条命名表项无实现" data-en="10 named Linux entries have no implementation">Linux 面有 10 条命名表项无实现</b> <span data-zh="—— 含 socket 族，它是网络线的前置条件。" data-en=" — including the socket family, which is a prerequisite for the network line.">—— 含 socket 族，它是网络线的前置条件。</span></li>
+              </ul>
+
+              <h3 class="h3" data-zh="语言" data-en="Language">语言</h3>
+              <ul class="list">
+                <li><b data-zh="Loment 未冻结 1.0" data-en="Loment has not frozen 1.0">Loment 未冻结 1.0</b> <span data-zh="—— 1.0-pre。M96（冻结）与 M100（发布审计）均未达。" data-en=" — 1.0-pre. M96 (freeze) and M100 (release audit) are both unmet.">—— 1.0-pre。M96（冻结）与 M100（发布审计）均未达。</span></li>
+                <li><b data-zh="自举符号表是全单元扁平的" data-en="The self-hosted symbol table is flat across units">自举符号表是全单元扁平的</b> <span data-zh="—— 兄弟模块同名私有函数会撞名。" data-en=" — identically named private functions in sibling modules collide.">—— 兄弟模块同名私有函数会撞名。</span></li>
+                <li><b data-zh="自举检查器是 4 条规则的子集" data-en="The self-hosted checker implements 4 rules of a larger set">自举检查器是 4 条规则的子集</b> <span data-zh="—— 会把合法程序判错，暂不能当闸门。" data-en=" — it rejects legal programs, so it cannot serve as a gate yet.">—— 会把合法程序判错，暂不能当闸门。</span></li>
+                <li><b data-zh="内核内编译器是 C 子集" data-en="The in-kernel compiler is a C subset">内核内编译器是 C 子集</b> <span data-zh="—— 不是完整 C。" data-en=" — not full C.">—— 不是完整 C。</span></li>
+              </ul>
+
+              <div class="note note--amber">
+                <strong data-zh="最后一条，也是最重要的一条：" data-en="And the most important one: ">最后一条，也是最重要的一条：</strong>
+                <span data-zh="这是一个个人学生项目，参考机器是 QEMU，没有做过第三方审计。它主张的是“这个设计可以被验证”，而不是“这个系统已经安全”。前者有证据，后者没有。" data-en="this is a personal student project whose reference machine is QEMU, and it has had no third-party audit. What it claims is that the design can be verified, not that the system is already secure. The first has evidence; the second does not.">这是一个个人学生项目，参考机器是 QEMU，没有做过第三方审计。它主张的是“这个设计可以被验证”，而不是“这个系统已经安全”。前者有证据，后者没有。</span>
+              </div>

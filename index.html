@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html
+  lang="zh-CN"
+  class="theme-instrument"
+  data-title-zh="FujoOS — 模型只提供提示，内核决定执行"
+  data-title-en="FujoOS — The model offers hints. The kernel decides what runs."
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FujoOS — 模型只提供提示，内核决定执行</title>
+    <meta
+      name="description"
+      content="FujoOS 是一套从零写起的 x86_64 操作系统：内核、驱动、窗口系统、文件系统、网络栈与编译器全部自研，零第三方依赖。大语言模型作为系统部件接入内核，接受可撤销、可审计的权限域约束。"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/style.css" />
+    <script>
+      document.documentElement.classList.add("js");
+      /* If site.js never runs, reveal everything instead of leaving it hidden. */
+      setTimeout(function () {
+        var r = document.documentElement;
+        if (!r.hasAttribute("data-motion-on")) r.classList.add("no-motion");
+      }, 1200);
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#main" data-zh="跳到主要内容" data-en="Skip to content">跳到主要内容</a>
+
+    <!-- kernel banner: real telemetry, worn as the site's status line -->
+    <div class="banner" role="note">
+      <div class="banner__inner">
+        <b>FujoOS</b>
+        <span class="sep">|</span>
+        <span data-zh="x86_64 · 零第三方依赖" data-en="x86_64 · no third-party deps"
+          >x86_64 · 零第三方依赖</span
+        >
+        <span class="sep">|</span>
+        <span
+          data-zh="回归 59/59 (TCG) · 49/51 (WHPX/KVM)"
+          data-en="regression 59/59 (TCG) · 49/51 (WHPX/KVM)"
+          >回归 59/59 (TCG) · 49/51 (WHPX/KVM)</span
+        >
+        <span class="sep">|</span>
+        <span
+          data-zh="契约 46 原语 · 0 漂移"
+          data-en="contract 46 primitives · 0 drift"
+          >契约 46 原语 · 0 漂移</span
+        >
+        <span class="cadence"
+          ><span class="dot" aria-hidden="true"></span
+          ><span
+            data-zh="T* = [0.429, 0.454) · τ 45/35"
+            data-en="T* = [0.429, 0.454) · τ 45/35"
+            >T* = [0.429, 0.454) · τ 45/35</span
+          ></span
+        >
+      </div>
+    </div>
+
+    <header class="nav">
+      <div class="wrap nav__inner">
+        <a class="nav__brand" href="index.html">
+          <svg viewBox="0 0 32 32" aria-hidden="true">
+            <rect
+              x="4.5"
+              y="4.5"
+              width="23"
+              height="23"
+              rx="1.5"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+            />
+            <path d="M4.5 12.5h23" fill="none" stroke="currentColor" stroke-width="1.6" />
+            <circle cx="16" cy="19.5" r="3.1" fill="none" stroke="#e29a4a" stroke-width="1.6" />
+            <path d="M19.5 19.5h8" fill="none" stroke="#e29a4a" stroke-width="1.6" />
+          </svg>
+          FujoOS
+        </a>
+        <nav class="nav__links" aria-label="主导航" data-zh-aria="主导航" data-en-aria="Primary">
+          <a class="nav__link" href="index.html" aria-current="page" data-zh="首页" data-en="Home">首页</a>
+          <a class="nav__link" href="fuai.html" data-zh="FUAI 安全体系" data-en="FUAI safety">FUAI 安全体系</a>
+          <a class="nav__link" href="loment.html" data-zh="Loment · Potato" data-en="Loment · Potato">Loment · Potato</a>
+          <a class="nav__link" href="docs/index.html" data-zh="文档" data-en="Docs">文档</a>
+          <a
+            class="nav__link"
+            href="https://zenodo.org/records/22352904"
+            rel="noopener"
+            data-zh="论文 ↗"
+            data-en="Paper ↗"
+            >论文 ↗</a
+          >
+          <div class="lang" role="group" aria-label="语言" data-zh-aria="语言" data-en-aria="Language">
+            <button type="button" data-lang="zh" aria-pressed="true">ZH</button>
+            <button type="button" data-lang="en" aria-pressed="false">EN</button>
+          </div>
+        </nav>
+        <button class="nav__toggle" type="button" aria-expanded="false" data-zh="菜单" data-en="Menu">
+          菜单
+        </button>
+      </div>
+      <div class="wrap">
+        <div class="nav__drawer" data-open="false">
+          <a href="index.html" data-zh="首页" data-en="Home">首页</a>
+          <a href="fuai.html" data-zh="FUAI 安全体系" data-en="FUAI safety system">FUAI 安全体系</a>
+          <a href="loment.html" data-zh="Loment · Potato 语言" data-en="Loment · Potato language">Loment · Potato 语言</a>
+          <a href="docs/index.html" data-zh="文档" data-en="Documentation">文档</a>
+          <a href="docs/start/index.html" data-zh="构建与运行" data-en="Build and run">构建与运行</a>
+          <a href="https://zenodo.org/records/22352904" rel="noopener" data-zh="论文 (Zenodo) ↗" data-en="Paper (Zenodo) ↗">论文 (Zenodo) ↗</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+      <!-- ============================================================ hero -->
+      <section class="hero" data-motion>
+        <div class="wrap hero__inner grid grid--hero">
+          <div>
+            <h1 class="display fade-step" style="--delay: 0.02s" data-zh-html="模型只提供<em class=&quot;propose&quot;>提示</em>，<br />内核决定<em class=&quot;decide&quot;>执行</em>。" data-en-html="The model offers <em class=&quot;propose&quot;>hints</em>.<br />The kernel decides what <em class=&quot;decide&quot;>runs</em>.">
+              模型只提供<em class="propose">提示</em>，<br />内核决定<em class="decide">执行</em>。
+            </h1>
+            <p class="lede fade-step" style="--delay: 0.1s; margin-top: 1.4rem" data-zh="FujoOS 是一套从零写起的 x86_64 操作系统：内核、驱动、窗口系统、文件系统、网络栈与编译器全部自研，零第三方依赖、无 std。大语言模型可以作为系统部件接入内核，接受内核的结构化视野并提出动作建议——而每一个动作都要穿过权限域、留下审计、可被撤销。" data-en="FujoOS is an x86_64 operating system written from scratch: kernel, drivers, window system, filesystem, network stack and compiler are all built here, with no third-party dependencies and no std. A language model can be attached to the kernel as a system component — it receives a structured view of the machine and proposes actions, and every proposed action passes through a permission domain, is audited, and can be revoked.">
+              FujoOS 是一套从零写起的 x86_64 操作系统：内核、驱动、窗口系统、文件系统、网络栈与编译器全部自研，零第三方依赖、无 std。大语言模型可以作为系统部件接入内核，接受内核的结构化视野并提出动作建议——而每一个动作都要穿过权限域、留下审计、可被撤销。
+            </p>
+            <div class="hero__actions fade-step" style="--delay: 0.18s">
+              <a class="btn btn--primary" href="docs/start/index.html" data-zh="构建并运行" data-en="Build and run">构建并运行</a>
+              <a class="btn" href="fuai.html" data-zh="FUAI 安全体系" data-en="The FUAI safety system">FUAI 安全体系</a>
+              <a class="btn btn--ghost" href="https://zenodo.org/records/22352904" rel="noopener" data-zh="预印本 ↗" data-en="Preprint ↗">预印本 ↗</a>
+            </div>
+          </div>
+
+          <!-- the envelope: the single memorable element -->
+          <figure class="figure fade-step" style="--delay: 0.22s; margin: 0; --draw-dur: 0.75s">
+            <svg
+              class="envelope"
+              viewBox="0 0 620 400"
+              role="img"
+              aria-label="模型的提议经由系统调用闸门进入内核强制边界：在能力域接受检查，放行则执行并审计，拒绝则回退到确定性规则；能力可被撤销。"
+              data-zh-aria="模型的提议经由系统调用闸门进入内核强制边界：在能力域接受检查，放行则执行并审计，拒绝则回退到确定性规则；能力可被撤销。"
+              data-en-aria="A model's proposal enters the kernel-enforced envelope through a syscall gate: it is checked by the capability domain, executed and audited if allowed, refused and replaced by deterministic fallback rules if not; capabilities can be revoked."
+            >
+              <defs>
+                <marker id="mk-steel" class="mk" viewBox="0 0 8 8" refX="7.5" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+                  <path d="M0,0 L8,4 L0,8 Z" />
+                </marker>
+                <marker id="mk-amber" class="mk mk--amber" viewBox="0 0 8 8" refX="7.5" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+                  <path d="M0,0 L8,4 L0,8 Z" />
+                </marker>
+              </defs>
+
+              <!-- 1. the boundary exists; the model does not define it -->
+              <path
+                class="stroke s-steel draw"
+                d="M176,40 H444 V360 H176 V185 M176,137 V40"
+                style="--delay: 0.28s"
+              />
+              <text x="310" y="62" text-anchor="middle" class="t-steel fade-step" style="--delay: 0.4s">
+                内核强制边界
+              </text>
+              <text x="310" y="78" text-anchor="middle" class="t-dim fade-step" style="--delay: 0.43s">
+                kernel-enforced envelope
+              </text>
+
+              <!-- 2. outside it, the model — a hint, never an authority -->
+              <rect x="14" y="129" width="112" height="64" class="stroke s-amber fade-step" style="--delay: 0.36s" />
+              <text x="70" y="155" text-anchor="middle" class="t-amber fade-step" style="--delay: 0.4s">宿主 LLM</text>
+              <text x="70" y="173" text-anchor="middle" class="t-dim fade-step" style="--delay: 0.43s">hint · 非授权</text>
+
+              <!-- 3. the way in is a gate, not a door -->
+              <rect x="168" y="137" width="16" height="48" class="gate fade-step" style="--delay: 0.5s" />
+              <text x="180" y="207" class="t-dim fade-step" style="--delay: 0.54s">syscall gate</text>
+              <path class="stroke s-amber s-dash fade-step" d="M126,161 H206" marker-end="url(#mk-amber)" style="--delay: 0.58s" />
+
+              <!-- 4. the proposal is weighed inside a capability domain -->
+              <rect x="206" y="132" width="208" height="58" class="stroke s-steel fade-step" style="--delay: 0.63s" />
+              <text x="222" y="156" class="t-steel fade-step" style="--delay: 0.66s">能力域</text>
+              <text x="222" y="175" class="t-dim fade-step" style="--delay: 0.69s">A1 无越权执行 · A4 可撤销</text>
+
+              <!-- 5a. allowed → executed and recorded -->
+              <path class="stroke s-steel draw" d="M310,190 V214" marker-end="url(#mk-steel)" style="--delay: 0.73s" />
+              <rect x="206" y="214" width="208" height="58" class="stroke s-steel fade-step" style="--delay: 0.78s" />
+              <text x="222" y="238" class="t-steel fade-step" style="--delay: 0.81s">执行 · 审计</text>
+              <text x="222" y="257" class="t-dim fade-step" style="--delay: 0.84s">A2 每次能力使用留痕</text>
+
+              <!-- 5b. refused → deterministic rules keep the system running -->
+              <path class="stroke s-amber s-dash fade-step" d="M310,272 V296" marker-end="url(#mk-amber)" style="--delay: 0.88s" />
+              <rect x="206" y="296" width="208" height="58" class="stroke s-amber fade-step" style="--delay: 0.92s" />
+              <text x="222" y="320" class="t-amber fade-step" style="--delay: 0.95s">拒绝 · 回退</text>
+              <text x="222" y="339" class="t-dim fade-step" style="--delay: 0.98s">A3 模型缺席仍可运行</text>
+
+              <!-- 6. what the envelope actually supervises -->
+              <path class="stroke s-steel draw" d="M414,243 H486" marker-end="url(#mk-steel)" style="--delay: 0.88s" />
+              <rect x="486" y="211" width="118" height="64" class="stroke s-rule fade-step" style="--delay: 0.92s" />
+              <text x="545" y="237" text-anchor="middle" class="t-dim fade-step" style="--delay: 0.95s">被监督应用</text>
+              <text x="545" y="255" text-anchor="middle" class="t-dim fade-step" style="--delay: 0.98s">supervised app</text>
+
+              <!-- 7. and it can always be taken back -->
+              <path
+                class="stroke s-amber s-dash fade-step"
+                d="M310,354 C310,388 70,392 70,196"
+                marker-end="url(#mk-amber)"
+                style="--delay: 1.06s"
+              />
+              <text x="318" y="388" class="t-amber fade-step" style="--delay: 1.1s">撤销 revoke</text>
+            </svg>
+            <figcaption class="figure__cap">
+              <span data-zh="琥珀 = 模型 / 提示（不受信）" data-en="amber = model / hint (untrusted)">琥珀 = 模型 / 提示（不受信）</span>
+              <span data-zh="钢青 = 内核 / 机制（受信）" data-en="steel = kernel / mechanism (trusted)">钢青 = 内核 / 机制（受信）</span>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- =========================================================== stats -->
+      <section class="section section--tight">
+        <div class="wrap">
+          <div class="stats">
+            <div class="stat">
+              <span class="stat__v">59<em>/59</em></span>
+              <span class="stat__k" data-zh="回归用例（TCG）；WHPX/KVM 为 49/51，两处差异已记录" data-en="Regression cases (TCG); 49/51 on WHPX/KVM, both differences documented">回归用例（TCG）；WHPX/KVM 为 49/51，两处差异已记录</span>
+            </div>
+            <div class="stat">
+              <span class="stat__v">46</span>
+              <span class="stat__k" data-zh="契约原语（core 40 · host-ext 6），两实现对账 0 差异" data-en="Contract primitives (core 40 · host-ext 6), 0 drift across two implementations">契约原语（core 40 · host-ext 6），两实现对账 0 差异</span>
+            </div>
+            <div class="stat">
+              <span class="stat__v">T* ∈ [0.429, 0.454)</span>
+              <span class="stat__k" data-zh="语义金标 v2（280 例）推导的信任阈值区间" data-en="Trust-threshold interval derived from semantic goldset v2 (280 examples)">语义金标 v2（280 例）推导的信任阈值区间</span>
+            </div>
+            <div class="stat">
+              <span class="stat__v">18<em>/18</em></span>
+              <span class="stat__k" data-zh="LinuxFUAI 第二实现探针，含带外验证器" data-en="Probes in the LinuxFUAI second implementation, incl. out-of-band verifier">LinuxFUAI 第二实现探针，含带外验证器</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================== what it is -->
+      <section class="section anchor" id="what">
+        <div class="wrap">
+          <div class="grid grid--2">
+            <div class="prose">
+              <h2 class="h2" data-zh="一套完整的系统，而不是一个内核原型" data-en="A whole system, not a kernel prototype">
+                一套完整的系统，而不是一个内核原型
+              </h2>
+              <p class="muted" data-zh="四层结构：Ring0 只保留 CPU 相关与空间管理，设备驱动、VFS、网络栈下沉到可崩溃、可热升级的用户态服务。兼容性被当作内核的一等能力，而不是补丁。" data-en="Four layers: Ring0 keeps only CPU-adjacent and space-management concerns; drivers, VFS and the network stack move down into user-space services that can crash, restart and be hot-upgraded. Compatibility is a first-class kernel capability, not a patch.">
+                四层结构：Ring0 只保留 CPU 相关与空间管理，设备驱动、VFS、网络栈下沉到可崩溃、可热升级的用户态服务。兼容性被当作内核的一等能力，而不是补丁。
+              </p>
+            </div>
+            <div class="prose">
+              <h2 class="h2" data-zh="不寻常的地方在 AI 层" data-en="What is unusual is the AI layer">
+                不寻常的地方在 AI 层
+              </h2>
+              <p class="muted" data-zh="模型不是权威来源，只是提示来源。内核给它一份结构化的机器视野，收回一个受监督的动作提议；提议要过权限域、要留审计、可被撤销。模型缺席或出错时，系统退回到确定性规则继续运行。" data-en="The model is a source of hints, not of authority. The kernel gives it a structured view of the machine and takes back a supervised action proposal; that proposal must cross a permission domain, is recorded in an audit trail, and can be revoked. If the model is absent or wrong, the system falls back to deterministic rules and keeps running.">
+                模型不是权威来源，只是提示来源。内核给它一份结构化的机器视野，收回一个受监督的动作提议；提议要过权限域、要留审计、可被撤销。模型缺席或出错时，系统退回到确定性规则继续运行。
+              </p>
+            </div>
+          </div>
+
+          <div class="table-wrap" style="margin-top: var(--s5)">
+            <table>
+              <caption data-zh="子系统现状（实测事实）" data-en="Subsystem status (measured facts)">子系统现状（实测事实）</caption>
+              <thead>
+                <tr>
+                  <th scope="col" data-zh="层" data-en="Layer">层</th>
+                  <th scope="col" data-zh="能力" data-en="Capability">能力</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td data-zh="内核" data-en="Kernel">内核</td>
+                  <td data-zh="x86_64 长模式 · IDT/GDT/TSS · PIT 100Hz 抢占式多任务 · 亲和性与负载均衡统计" data-en="x86_64 long mode · IDT/GDT/TSS · 100 Hz PIT preemptive multitasking · affinity and load-balance stats">x86_64 长模式 · IDT/GDT/TSS · PIT 100Hz 抢占式多任务 · 亲和性与负载均衡统计</td>
+                </tr>
+                <tr>
+                  <td data-zh="内存" data-en="Memory">内存</td>
+                  <td data-zh="虚拟内存 · 按需零页 · 帧分配器 · 每任务页表链与 CR3 · >1 GiB 恒等映射" data-en="Virtual memory · demand zero pages · frame allocator · per-task page-table chain with CR3 · >1 GiB identity map">虚拟内存 · 按需零页 · 帧分配器 · 每任务页表链与 CR3 · >1 GiB 恒等映射</td>
+                </tr>
+                <tr>
+                  <td data-zh="ABI" data-en="ABI">ABI</td>
+                  <td data-zh="ELF64 / Mach-O / PE32+ 加载器子集 · Linux x86-64 系统调用 · darwin/win32 垫片家族 · FUJR (.run) 容器" data-en="ELF64 / Mach-O / PE32+ loader subset · Linux x86-64 syscalls · darwin/win32 shim families · FUJR (.run) containers">ELF64 / Mach-O / PE32+ 加载器子集 · Linux x86-64 系统调用 · darwin/win32 垫片家族 · FUJR (.run) 容器</td>
+                </tr>
+                <tr>
+                  <td data-zh="存储" data-en="Storage">存储</td>
+                  <td data-zh="ATA PIO + FJFS 4 MiB 卷（格式化 / 持久化）· AHCI/SATA 真盘 · 页缓存与预读 · 存档沙箱" data-en="ATA PIO + 4 MiB FJFS volume (format / persist) · AHCI/SATA on real disks · page cache and read-ahead · archive sandbox">ATA PIO + FJFS 4 MiB 卷（格式化 / 持久化）· AHCI/SATA 真盘 · 页缓存与预读 · 存档沙箱</td>
+                </tr>
+                <tr>
+                  <td data-zh="网络" data-en="Network">网络</td>
+                  <td data-zh="virtio-net · IPv4/UDP 往返 · 最小 TCP 服务端（SYN/ACK/PSH echo）· 帧级用户态 ABI" data-en="virtio-net · IPv4/UDP round-trip · minimal TCP server (SYN/ACK/PSH echo) · frame-level user-space ABI">virtio-net · IPv4/UDP 往返 · 最小 TCP 服务端（SYN/ACK/PSH echo）· 帧级用户态 ABI</td>
+                </tr>
+                <tr>
+                  <td data-zh="图形与窗口" data-en="Graphics &amp; windows">图形与窗口</td>
+                  <td data-zh="VBE 1024×768×32 帧缓冲 · 软件光栅（rect/tri/line）· 着色器 VM · wmsg 窗口系统 · fujokit 控件 · .fui 声明式界面" data-en="VBE 1024×768×32 framebuffer · software rasterizer (rect/tri/line) · shader VM · wmsg window system · fujokit widgets · .fui declarative UI">VBE 1024×768×32 帧缓冲 · 软件光栅（rect/tri/line）· 着色器 VM · wmsg 窗口系统 · fujokit 控件 · .fui 声明式界面</td>
+                </tr>
+                <tr>
+                  <td data-zh="工具链" data-en="Toolchain">工具链</td>
+                  <td data-zh="内核内汇编器 → 链接器 → C 子集编译器（ELF64 全链）· 调试器（TF 单步 / int3 断点）· trace、性能窗口、单元测试" data-en="In-kernel assembler → linker → C-subset compiler (full ELF64 chain) · debugger (TF single-step / int3 breakpoints) · trace, perf window, unit tests">内核内汇编器 → 链接器 → C 子集编译器（ELF64 全链）· 调试器（TF 单步 / int3 断点）· trace、性能窗口、单元测试</td>
+                </tr>
+                <tr>
+                  <td data-zh="AI 层" data-en="AI layer">AI 层</td>
+                  <td data-zh="能力表与审计环 · 信任自适应域宽 · 模型卡（权限 / 计费 / 审计）· 五职责（哨兵 / 规划 / IO 预测 / 自然语言配置 / 环境扫描）· 规则书回退" data-en="Capability table and audit ring · trust-adaptive domain width · model cards (permission / billing / audit) · five duties (sentinel, planner, I/O prediction, NL configuration, environment scan) · rule-book fallback">能力表与审计环 · 信任自适应域宽 · 模型卡（权限 / 计费 / 审计）· 五职责（哨兵 / 规划 / IO 预测 / 自然语言配置 / 环境扫描）· 规则书回退</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================================================== boot sequence -->
+      <section class="section anchor" id="boot">
+        <div class="wrap">
+          <h2 class="h2" data-zh="从加电到桌面" data-en="From power-on to desktop">从加电到桌面</h2>
+          <p class="muted prose" style="margin-top: var(--s2)" data-zh="下面是一条真实顺序：每一步都可以用仓库里的脚本重放。" data-en="This is a real order of events — every step is replayable with scripts in the repository.">
+            下面是一条真实顺序：每一步都可以用仓库里的脚本重放。
+          </p>
+
+          <div class="boot" style="margin-top: var(--s4)">
+            <div class="stage">
+              <span class="stage__n">01</span>
+              <h3 class="stage__t" data-zh="固件交接" data-en="Firmware handoff">固件交接</h3>
+              <p class="stage__d" data-zh="GRUB multiboot、直接 -kernel，或从可引导 ISO 链式加载；进入长模式并建立恒等映射。" data-en="GRUB multiboot, direct -kernel, or chain-load from a bootable ISO; enter long mode and establish the identity map.">
+                GRUB multiboot、直接 -kernel，或从可引导 ISO 链式加载；进入长模式并建立恒等映射。
+              </p>
+            </div>
+            <div class="stage">
+              <span class="stage__n">02</span>
+              <h3 class="stage__t" data-zh="内核初始化" data-en="Kernel bring-up">内核初始化</h3>
+              <p class="stage__d" data-zh="IDT/GDT/TSS、PIT 100Hz、虚拟内存与帧分配器就位，抢占式多任务开始调度。" data-en="IDT/GDT/TSS, 100 Hz PIT, virtual memory and frame allocator come up; preemptive multitasking starts scheduling.">
+                IDT/GDT/TSS、PIT 100Hz、虚拟内存与帧分配器就位，抢占式多任务开始调度。
+              </p>
+            </div>
+            <div class="stage">
+              <span class="stage__n">03</span>
+              <h3 class="stage__t" data-zh="服务与桌面" data-en="Services and desktop">服务与桌面</h3>
+              <p class="stage__d" data-zh="VBE 帧缓冲点亮，PS/2 输入就绪，wmsg 窗口系统按 .fui 文档绘制壁纸、图标、面板与窗口。" data-en="The VBE framebuffer lights up, PS/2 input comes alive, and the wmsg window system draws wallpaper, icons, panel and windows from a .fui document.">
+                VBE 帧缓冲点亮，PS/2 输入就绪，wmsg 窗口系统按 .fui 文档绘制壁纸、图标、面板与窗口。
+              </p>
+            </div>
+            <div class="stage">
+              <span class="stage__n">04</span>
+              <h3 class="stage__t" data-zh="部件就位" data-en="Components online">部件就位</h3>
+              <p class="stage__d" data-zh="FJFS 卷、AHCI/SATA 真盘、virtio-net 可用；可选地把宿主 LLM 接入内核——它拿到的是一道能力域和一条审计链，而不是一台机器。" data-en="FJFS volumes, AHCI/SATA real disks and virtio-net become available. Optionally, a host LLM is attached to the kernel — what it receives is a capability domain and an audit trail, not a machine.">
+                FJFS 卷、AHCI/SATA 真盘、virtio-net 可用；可选地把宿主 LLM 接入内核——它拿到的是一道能力域和一条审计链，而不是一台机器。
+              </p>
+            </div>
+          </div>
+
+          <div class="code" style="margin-top: var(--s5)">
+            <div class="code__bar">
+              <span class="lang-tag">bash</span>
+              <span data-zh="构建、启动、跑回归" data-en="build, boot, run regression">构建、启动、跑回归</span>
+              <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+            </div>
+            <pre><span class="c"># 1) 构建 / build</span>
+cd kernel && cargo build --release
+python tools/flatten_elf.py kernel/target/x86_64-unknown-none/release/fujo-kernel \
+    kernel/fujo-kernel.bin --pad 0x1C0000
+
+<span class="c"># 2) 启动 / boot</span>
+qemu-system-x86_64 -m 256M -kernel kernel/fujo-kernel.bin \
+    -initrd sdk/linux/m30_linux.elf \
+    -monitor telnet:127.0.0.1:4568,server,nowait -display none -no-reboot
+
+<span class="c"># 3) 回归 / regression — 59/59 (TCG)</span>
+python tools/fujoregress.py
+python tools/fujoregress.py --accel whpx   <span class="c"># 第二执行模式</span></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================================================== what it looks like -->
+      <section class="section anchor" id="look">
+        <div class="wrap">
+          <h2 class="h2" data-zh="它现在长什么样" data-en="What it looks like now">它现在长什么样</h2>
+          <p class="muted prose" style="margin-top: var(--s2)" data-zh="这是 QEMU 里一次真实运行的原样截图。桌面由内核里的软件光栅绘制，界面本身是一份 .fui 声明式文档；右侧 Control Center 读的是真实的 CPU、内存与存储状态，以及当前自适应出来的 AI 域宽。" data-en="An unretouched capture from a real run in QEMU. The desktop is drawn by the in-kernel software rasterizer, and the interface itself is a .fui declarative document. The Control Center on the right reads live CPU, memory and storage state, along with the AI domain width that trust adaptation currently allows.">
+            这是 QEMU 里一次真实运行的原样截图。桌面由内核里的软件光栅绘制，界面本身是一份 .fui 声明式文档；右侧 Control Center 读的是真实的 CPU、内存与存储状态，以及当前自适应出来的 AI 域宽。
+          </p>
+
+          <figure class="figure" style="margin-top: var(--s4)">
+            <img
+              src="assets/shots/desktop.png"
+              width="1280"
+              height="1024"
+              loading="lazy"
+              decoding="async"
+              data-zh-alt="FujoOS 桌面截图：左侧是 Home / Files / Terminal / Settings 图标与一个 Terminal 窗口，右侧是 Control Center 窗口，显示 CPU、Memory、Storage 三个读数，以及标记为 adaptive 的 AI envelope 面板（域宽 45）和内核服务列表（scheduler、audit ring、network、terminal）。"
+              data-en-alt="A FujoOS desktop capture: on the left, Home / Files / Terminal / Settings icons and a Terminal window; on the right, a Control Center window showing CPU, Memory and Storage readouts, an AI envelope panel marked adaptive (domain width 45), and a kernel services list (scheduler, audit ring, network, terminal)."
+              alt="FujoOS 桌面截图：左侧是 Home / Files / Terminal / Settings 图标与一个 Terminal 窗口，右侧是 Control Center 窗口，显示 CPU、Memory、Storage 三个读数，以及标记为 adaptive 的 AI envelope 面板（域宽 45）和内核服务列表。"
+            />
+            <figcaption class="figure__cap figure__cap--note">
+              <b data-zh="桌上的是真实状态，不是概念图。" data-en="These are real readings, not a concept render.">桌上的是真实状态，不是概念图。</b>
+              <span data-zh="Terminal 窗口显示「no program running」是因为当时没有加载 demo；AI envelope 面板的 adaptive 标记来自信任自适应逻辑，域宽随质量台账变化。" data-en="The Terminal window reads “no program running” because no demo was loaded at that moment; the adaptive marker on the AI envelope panel comes from the trust-adaptation logic, with domain width tracking the quality ledger.">Terminal 窗口显示「no program running」是因为当时没有加载 demo；AI envelope 面板的 adaptive 标记来自信任自适应逻辑，域宽随质量台账变化。</span>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- ================================================== development lines -->
+      <section class="section anchor" id="lines">
+        <div class="wrap">
+          <h2 class="h2" data-zh="三条并行开发线" data-en="Three parallel development lines">三条并行开发线</h2>
+          <p class="muted prose" style="margin-top: var(--s2)" data-zh="语言、网络、兼容三条线各自有独立分支与判据；任何“完成”都必须给出可重放的命令与输出。" data-en="Language, network and compatibility each run on their own branch with their own criteria. Any claim of done must come with a replayable command and its output.">
+            语言、网络、兼容三条线各自有独立分支与判据；任何“完成”都必须给出可重放的命令与输出。
+          </p>
+
+          <div class="grid grid--3" style="margin-top: var(--s4)">
+            <a class="card card--link" href="loment.html">
+              <span class="card__k">FujoLang-DEV</span>
+              <h3 class="h3" data-zh="语言线" data-en="Language line">语言线</h3>
+              <p data-zh="Loment 是平台的系统语言（Rust 严格子集 + 一等能力域），Potato 是编译器的强制输出：一份机器可读的形式对象。一个管“怎么写”，一个管“怎么看”。" data-en="Loment is the platform's system language — a strict Rust subset with first-class capability domains. Potato is the compiler's mandatory output: a machine-readable formal object. One governs how you write; the other how a machine reads.">
+                Loment 是平台的系统语言（Rust 严格子集 + 一等能力域），Potato 是编译器的强制输出：一份机器可读的形式对象。一个管“怎么写”，一个管“怎么看”。
+              </p>
+            </a>
+            <a class="card card--link" href="docs/project/network-line.html">
+              <span class="card__k">NET-DEV</span>
+              <h3 class="h3" data-zh="网络线" data-en="Network line">网络线</h3>
+              <p data-zh="让 Loment 的第一个真应用是网络，而不是玩具样例。网络同时提供字节级契约与能力边界，是语言线的理想压力面。" data-en="Making Loment's first real application networking rather than a toy sample. Networking supplies both a byte-level contract and a capability boundary — the ideal stress surface for the language.">
+                让 Loment 的第一个真应用是网络，而不是玩具样例。网络同时提供字节级契约与能力边界，是语言线的理想压力面。
+              </p>
+            </a>
+            <a class="card card--link" href="docs/compat/index.html">
+              <span class="card__k">compat · FUFORALL</span>
+              <h3 class="h3" data-zh="兼容线" data-en="Compatibility line">兼容线</h3>
+              <p data-zh="ELF / PE32+ / Mach-O / FUJR 四套加载器，三套 ABI 共享同一内核服务面。兼容被定义为集合包含，而不是容器模拟。" data-en="Four loaders — ELF, PE32+, Mach-O, FUJR — with three ABIs sharing one kernel service surface. Compatibility is defined as set inclusion, not container emulation.">
+                ELF / PE32+ / Mach-O / FUJR 四套加载器，三套 ABI 共享同一内核服务面。兼容被定义为集合包含，而不是容器模拟。
+              </p>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================= verification -->
+      <section class="section anchor" id="verified">
+        <div class="wrap">
+          <h2 class="h2" data-zh="验证方式" data-en="How it is verified">验证方式</h2>
+          <p class="muted prose" style="margin-top: var(--s2)" data-zh="仓库里的每一个主张都绑在一条可复现的测试上。数字都可以用 tools/ 里的脚本重新跑出来。" data-en="Every claim in this repository is tied to a reproducible test. The numbers can all be regenerated with scripts under tools/.">
+            仓库里的每一个主张都绑在一条可复现的测试上。数字都可以用 tools/ 里的脚本重新跑出来。
+          </p>
+
+          <div class="table-wrap" style="margin-top: var(--s4)">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col" data-zh="面" data-en="Surface">面</th>
+                  <th scope="col" data-zh="判据" data-en="Criterion">判据</th>
+                  <th scope="col" data-zh="结果" data-en="Result">结果</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td data-zh="内核回归" data-en="Kernel regression">内核回归</td>
+                  <td data-zh="tools/fujoregress.py 全量用例" data-en="Full suite via tools/fujoregress.py">tools/fujoregress.py 全量用例</td>
+                  <td class="num"><span class="tag tag--ok">59/59 TCG</span></td>
+                </tr>
+                <tr>
+                  <td data-zh="第二执行模式" data-en="Second execution mode">第二执行模式</td>
+                  <td data-zh="--accel whpx / KVM 对照" data-en="Contrast under --accel whpx / KVM">--accel whpx / KVM 对照</td>
+                  <td class="num"><span class="tag tag--ok">49/51</span></td>
+                </tr>
+                <tr>
+                  <td data-zh="契约一致性" data-en="Contract consistency">契约一致性</td>
+                  <td data-zh="spec.json ↔ 富士内核 ↔ LinuxFUAI 双向对账" data-en="spec.json ↔ FujoOS kernel ↔ LinuxFUAI, both directions">spec.json ↔ 富士内核 ↔ LinuxFUAI 双向对账</td>
+                  <td class="num"><span class="tag tag--ok">0 差异</span></td>
+                </tr>
+                <tr>
+                  <td data-zh="双后端差分" data-en="Two-backend differ">双后端差分</td>
+                  <td data-zh="同一策略与事件夹具喂两个实现，比对判决序列" data-en="Same policy and event fixture fed to both implementations; verdict sequences compared">同一策略与事件夹具喂两个实现，比对判决序列</td>
+                  <td class="num"><span class="tag tag--ok">19/19 步一致</span></td>
+                </tr>
+                <tr>
+                  <td data-zh="带外验证" data-en="Out-of-band verification">带外验证</td>
+                  <td data-zh="独立进程重推导审计序列（不链接运行时库）" data-en="Independent process re-derives the audit sequence, linked against no runtime library">独立进程重推导审计序列（不链接运行时库）</td>
+                  <td class="num"><span class="tag tag--ok">含篡改自证</span></td>
+                </tr>
+                <tr>
+                  <td data-zh="Potato 校验" data-en="Potato validation">Potato 校验</td>
+                  <td data-zh="33 条反例变异全部被拒 · 两实现判定一致" data-en="All 33 counterexample mutations rejected; both implementations agree">33 条反例变异全部被拒 · 两实现判定一致</td>
+                  <td class="num"><span class="tag tag--ok">50/50</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="note note--steel" style="margin-top: var(--s4)">
+            <strong data-zh="已知边界（不做过度声明）" data-en="Known limits (no overclaiming)">已知边界（不做过度声明）</strong>
+            <span data-zh="：推理不在端侧——模型跑在宿主上，内核提供链接、审计与回退规则；“兼容”指的是加载器与垫片面，不是完整用户态模拟；FJFS 多簇写入目前支持到 32 KiB 的文件。" data-en=": inference is not on-device — the model runs on the host while the kernel supplies the link, the audit and the fallback rules. “Compatibility” means the loader and shim surface, not full user-space emulation. FJFS multi-cluster writes currently cover files up to 32 KiB.">：推理不在端侧——模型跑在宿主上，内核提供链接、审计与回退规则；“兼容”指的是加载器与垫片面，不是完整用户态模拟；FJFS 多簇写入目前支持到 32 KiB 的文件。</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================= paper -->
+      <section class="section anchor" id="paper">
+        <div class="wrap">
+          <div class="grid grid--2" style="align-items: start">
+            <div class="prose">
+              <h2 class="h2" data-zh="设计背后的论文" data-en="The paper behind the design">设计背后的论文</h2>
+              <p class="muted" data-zh-html="<em>FUAI: A Measurement-Parameterized Safety Envelope for AI-Integrated Operating Systems</em>。核心命题：安全 = α（无越界，S1 机制）× 域宽，而域宽是测量质量 S2 的函数；S3 策略边界由人或蒸馏规则画定。" data-en-html="<em>FUAI: A Measurement-Parameterized Safety Envelope for AI-Integrated Operating Systems</em>. The core proposition: safety = α (no out-of-bounds, the S1 mechanism) × domain width, where domain width is a function of measurement quality S2; the S3 policy boundary is drawn by people or distilled rules.">
+                <em>FUAI: A Measurement-Parameterized Safety Envelope for AI-Integrated Operating Systems</em>。核心命题：安全 = α（无越界，S1 机制）× 域宽，而域宽是测量质量 S2 的函数；S3 策略边界由人或蒸馏规则画定。
+              </p>
+              <p class="small dim" data-zh="预印本已锚定 Zenodo（10.5281/zenodo.22352904），作者 Yuxuan Jiang。论文按浙大要求保持私有，不以期刊公开投稿；预印本时间戳是优先权的唯一锚点。" data-en="Preprint anchored on Zenodo (10.5281/zenodo.22352904), by Yuxuan Jiang. The manuscript is kept private at the university's request rather than submitted publicly; the preprint timestamp is the sole anchor of priority.">
+                预印本已锚定 Zenodo（10.5281/zenodo.22352904），作者 Yuxuan Jiang。论文按浙大要求保持私有，不以期刊公开投稿；预印本时间戳是优先权的唯一锚点。
+              </p>
+            </div>
+            <div class="stack">
+              <a class="card card--link" href="fuai.html">
+                <span class="card__k" data-zh="安全体系" data-en="Safety system">安全体系</span>
+                <h3 class="h3" data-zh="FUAI：把信任变成参数，把边界变成结构" data-en="FUAI: trust as a parameter, boundary as a structure">FUAI：把信任变成参数，把边界变成结构</h3>
+                <p data-zh="S1/S2/S3 分解、A1–A4 公理、信任自适应域宽、带外证据链，以及一个不依赖 FujoOS 的独立运行时。" data-en="The S1/S2/S3 decomposition, the A1–A4 axioms, trust-adaptive domain width, an out-of-band evidence chain, and a runtime that does not depend on FujoOS.">
+                  S1/S2/S3 分解、A1–A4 公理、信任自适应域宽、带外证据链，以及一个不依赖 FujoOS 的独立运行时。
+                </p>
+              </a>
+              <a class="card card--link" href="loment.html">
+                <span class="card__k" data-zh="语言" data-en="Language">语言</span>
+                <h3 class="h3" data-zh="Loment 与 Potato" data-en="Loment and Potato">Loment 与 Potato</h3>
+                <p data-zh="一门面向作者的系统语言，和一份面向机器读者的形式对象；两者在语义模型处相遇。" data-en="A system language for authors, and a formal object for machine readers; the two meet at the semantic model.">
+                  一门面向作者的系统语言，和一份面向机器读者的形式对象；两者在语义模型处相遇。
+                </p>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ============================================================= footer -->
+    <footer class="foot">
+      <div class="wrap">
+        <div class="foot__grid">
+          <div>
+            <div class="nav__brand" style="margin-bottom: 0.7rem">
+              <svg viewBox="0 0 32 32" aria-hidden="true">
+                <rect x="4.5" y="4.5" width="23" height="23" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6" />
+                <path d="M4.5 12.5h23" fill="none" stroke="currentColor" stroke-width="1.6" />
+                <circle cx="16" cy="19.5" r="3.1" fill="none" stroke="#e29a4a" stroke-width="1.6" />
+                <path d="M19.5 19.5h8" fill="none" stroke="#e29a4a" stroke-width="1.6" />
+              </svg>
+              FujoOS
+            </div>
+            <p class="small dim" style="max-width: 34ch" data-zh="一个学生个人项目。参考机器是 QEMU；它真正要问的问题是：能否把一个 LLM 放进由内核强制、可撤销的信封里。" data-en="A personal student project. The reference machine is QEMU; the question it actually investigates is whether an LLM can be placed inside a kernel-enforced, revocable envelope.">
+              一个学生个人项目。参考机器是 QEMU；它真正要问的问题是：能否把一个 LLM 放进由内核强制、可撤销的信封里。
+            </p>
+          </div>
+          <div>
+            <h4 data-zh="项目" data-en="Project">项目</h4>
+            <a href="fuai.html" data-zh="FUAI 安全体系" data-en="FUAI safety system">FUAI 安全体系</a>
+            <a href="loment.html" data-zh="Loment · Potato" data-en="Loment · Potato">Loment · Potato</a>
+            <a href="docs/project/branches.html" data-zh="开发分支" data-en="Development branches">开发分支</a>
+            <a href="docs/project/roadmap.html" data-zh="路线图" data-en="Roadmap">路线图</a>
+          </div>
+          <div>
+            <h4 data-zh="文档" data-en="Documentation">文档</h4>
+            <a href="docs/start/index.html" data-zh="构建与运行" data-en="Build and run">构建与运行</a>
+            <a href="docs/architecture/index.html" data-zh="系统架构" data-en="Architecture">系统架构</a>
+            <a href="docs/compat/index.html" data-zh="兼容层" data-en="Compatibility layer">兼容层</a>
+            <a href="docs/project/network-line.html" data-zh="网络线" data-en="Network line">网络线</a>
+          </div>
+          <div>
+            <h4 data-zh="外部" data-en="Elsewhere">外部</h4>
+            <a href="https://zenodo.org/records/22352904" rel="noopener" data-zh="预印本 (Zenodo) ↗" data-en="Preprint (Zenodo) ↗">预印本 (Zenodo) ↗</a>
+            <a href="https://github.com/FujoJTOP/LinuxFUAI" rel="noopener" data-zh="LinuxFUAI 第二实现 ↗" data-en="LinuxFUAI second implementation ↗">LinuxFUAI 第二实现 ↗</a>
+            <a href="docs/index.html" data-zh="全部文档 →" data-en="All documentation →">全部文档 →</a>
+          </div>
+        </div>
+        <div class="foot__end">
+          <span>© <span data-year>2026</span> Yuxuan Jiang · MIT</span>
+          <span data-zh="零第三方依赖 · 构建于 QEMU 之上" data-en="No third-party dependencies · built against QEMU">零第三方依赖 · 构建于 QEMU 之上</span>
+        </div>
+      </div>
+    </footer>
+
+    <script src="assets/site.js"></script>
+  </body>
+</html>

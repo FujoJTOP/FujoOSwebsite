@@ -1,0 +1,59 @@
+<!--{"zh":"模型五职责","en":"The five duties","desc":"接入内核的模型具体做什么：异常哨兵、规划器、I/O 预测、自然语言配置、环境扫描。","banner_zh":"五职责 · 模型具体在干什么","banner_en":"Five duties · what the model actually does"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="模型五职责" data-en="The five duties">模型五职责</h1>
+
+              <div class="prose">
+                <p data-zh="“把模型接进内核”这句话太笼统。落到具体，这个项目给了模型五件明确的工作。每一件都有确定性的回退规则——模型不在或缺席时，这五件事仍然有人做，只是做得笨一点。" data-en="“Attach a model to the kernel” is too vague. Concretely, this project gives the model five defined jobs. Each has a deterministic fallback — when the model is absent or wrong, the job still gets done, just less cleverly.">
+                  “把模型接进内核”这句话太笼统。落到具体，这个项目给了模型五件明确的工作。每一件都有确定性的回退规则——模型不在或缺席时，这五件事仍然有人做，只是做得笨一点。
+                </p>
+              </div>
+
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="职责" data-en="Duty">职责</th>
+                      <th scope="col" data-zh="做什么" data-en="What it does">做什么</th>
+                      <th scope="col" data-zh="回退" data-en="Fallback">回退</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong data-zh="异常哨兵" data-en="Anomaly sentinel">异常哨兵</strong></td>
+                      <td data-zh="盯事件流，指出偏离常态的行为。" data-en="Watches the event stream and flags behaviour that departs from normal.">盯事件流，指出偏离常态的行为。</td>
+                      <td data-zh="规则书里的固定阈值。" data-en="Fixed thresholds from the rule book.">规则书里的固定阈值。</td>
+                    </tr>
+                    <tr>
+                      <td><strong data-zh="规划器" data-en="Planner">规划器</strong></td>
+                      <td data-zh="把高层目标拆成可执行的动作序列。" data-en="Decomposes a high-level goal into an executable action sequence.">把高层目标拆成可执行的动作序列。</td>
+                      <td data-zh="预置的确定性流程。" data-en="A pre-set deterministic procedure.">预置的确定性流程。</td>
+                    </tr>
+                    <tr>
+                      <td><strong data-zh="I/O 预测" data-en="I/O prediction">I/O 预测</strong></td>
+                      <td data-zh="预测接下来的块访问序列，供预读使用。实现是一个马尔可夫模型。" data-en="Predicts the next block-access sequence for read-ahead. The implementation is a Markov model.">预测接下来的块访问序列，供预读使用。实现是一个马尔可夫模型。</td>
+                      <td data-zh="顺序预读。" data-en="Sequential read-ahead.">顺序预读。</td>
+                    </tr>
+                    <tr>
+                      <td><strong data-zh="自然语言配置" data-en="Natural-language configuration">自然语言配置</strong></td>
+                      <td data-zh="把一句话映射成配置项。生成结果仍要穿过配置能力域，越域即拒。" data-en="Maps a sentence onto configuration values. The result still crosses the configuration capability domain; out of domain means refused.">把一句话映射成配置项。生成结果仍要穿过配置能力域，越域即拒。</td>
+                      <td data-zh="默认配置值。" data-en="Default configuration values.">默认配置值。</td>
+                    </tr>
+                    <tr>
+                      <td><strong data-zh="环境扫描" data-en="Environment scan">环境扫描</strong></td>
+                      <td data-zh="汇总当前机器状态，给模型自己当上下文。" data-en="Summarizes current machine state as context for the model itself.">汇总当前机器状态，给模型自己当上下文。</td>
+                      <td data-zh="静态摘要。" data-en="A static summary.">静态摘要。</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 data-zh="重要的一点：这五件事都不改变边界" data-en="One thing that matters: none of these changes the boundary">重要的一点：这五件事都不改变边界</h2>
+              <div class="prose">
+                <p data-zh="五个职责都是“提议”性质的：它们产生的是建议，不是决定。规划器提出的动作序列照样要过能力域；自然语言配置产出的值照样要过越域检查。职责列表本身不构成权限扩大——这正是 A3（模型缺席仍运行）能成立的原因。" data-en="All five duties are proposals: they produce suggestions, not decisions. A plan from the planner still crosses the capability domain; a value from natural-language configuration still crosses the domain check. The duty list itself grants no extra authority — which is exactly why A3 (runs with the model absent) can hold.">
+                  五个职责都是“提议”性质的：它们产生的是建议，不是决定。规划器提出的动作序列照样要过能力域；自然语言配置产出的值照样要过越域检查。职责列表本身不构成权限扩大——这正是 A3（模型缺席仍运行）能成立的原因。
+                </p>
+              </div>
+
+              <div class="note note--steel">
+                <strong data-zh="延伸阅读：" data-en="Read next: ">延伸阅读：</strong>
+                <span data-zh-html="模型的权限与计费在 <a href=&quot;model-card.html&quot;>模型卡</a>；它被允许有多宽的活动范围在 <a href=&quot;trust.html&quot;>信任自适应域宽</a>。" data-en-html="the model's permissions and billing are on the <a href=&quot;model-card.html&quot;>model card</a>; how much room it gets is under <a href=&quot;trust.html&quot;>Trust-adaptive width</a>.">模型的权限与计费在 <a href="model-card.html">模型卡</a>；它被允许有多宽的活动范围在 <a href="trust.html">信任自适应域宽</a>。</span>
+              </div>

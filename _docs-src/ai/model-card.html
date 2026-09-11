@@ -1,0 +1,75 @@
+<!--{"zh":"模型卡","en":"Model cards","desc":"模型在系统里的身份：权限、计费、审计三样元数据装在 120 字节的卡上，由 0x7D01–0x7D04 四个原语管理。","banner_zh":"模型卡 · 权限、计费、审计在一张卡上","banner_en":"Model cards · permission, billing, audit on one card"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="模型卡" data-en="Model cards">模型卡</h1>
+
+              <div class="prose">
+                <p data-zh="接入内核的模型不是一个匿名函数，它有身份。模型卡就是这个身份的载体：权限掩码、调用计数、token 预算、审计环，全部写在一张定长的卡上。" data-en="A model attached to the kernel is not an anonymous function; it has an identity. The model card carries it: permission mask, call count, token budget and audit ring, all on one fixed-length card.">
+                  接入内核的模型不是一个匿名函数，它有身份。模型卡就是这个身份的载体：权限掩码、调用计数、token 预算、审计环，全部写在一张定长的卡上。
+                </p>
+              </div>
+
+              <h2 data-zh="四个原语" data-en="Four primitives">四个原语</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="编号" data-en="Number">编号</th>
+                      <th scope="col" data-zh="签名" data-en="Signature">签名</th>
+                      <th scope="col" data-zh="说明" data-en="Notes">说明</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td class="num">0x7D01</td><td class="num">mc_register(ptr)</td><td data-zh="装载模型卡（资源节元数据面）" data-en="Load a model card (resource-section metadata)">装载模型卡（资源节元数据面）</td></tr>
+                    <tr><td class="num">0x7D02</td><td class="num">mc_call(len, perm_need)</td><td data-zh="调用：权限检查 + 计费 + 审计" data-en="Call: permission check + billing + audit">调用：权限检查 + 计费 + 审计</td></tr>
+                    <tr><td class="num">0x7D03</td><td class="num">mc_info(ptr)</td><td data-zh="读回 (calls, tokens, budget, perm)" data-en="Read back (calls, tokens, budget, perm)">读回 (calls, tokens, budget, perm)</td></tr>
+                    <tr><td class="num">0x7D04</td><td class="num">mc_audit(ptr, cap)</td><td data-zh="审计环拷贝（32 B × n）" data-en="Copy the audit ring (32 B × n)">审计环拷贝（32 B × n）</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 data-zh="卡的布局（120 字节）" data-en="Card layout (120 bytes)">卡的布局（120 字节）</h2>
+              <div class="code">
+                <div class="code__bar">
+                  <span class="lang-tag">c</span>
+                  <span data-zh="定长记录" data-en="fixed-length record">定长记录</span>
+                  <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+                </div>
+                <pre>[0..24)   name          <span class="c">// 模型名</span>
+[24]      version
+[32]      perm_mask u64 <span class="c">// 权限掩码</span>
+[40]      cost u32      <span class="c">// 单次代价</span>
+[48]      calls u32     <span class="c">// 调用计数</span>
+[56]      budget u64    <span class="c">// token 预算</span>
+[64]      预留</pre>
+              </div>
+
+              <h2 data-zh="调用时的判定" data-en="What a call decides">调用时的判定</h2>
+              <div class="prose">
+                <p data-zh-html="mc_call 的规则很短：<code>(perm &amp; perm_need) == perm_need</code> 且累计 token 不超过预算（预算 ≠ 0 且 ≠ MAX）时，计费后返回 0；否则返回 -1 拒绝。<b>两类结果都写审计环</b>——这是重点。" data-en-html="mc_call's rule is short: if <code>(perm &amp; perm_need) == perm_need</code> and cumulative tokens stay within budget (budget ≠ 0 and ≠ MAX), it bills and returns 0; otherwise it returns -1. <b>Both outcomes write to the audit ring</b> — that is the point.">
+                  mc_call 的规则很短：<code>(perm &amp; perm_need) == perm_need</code> 且累计 token 不超过预算（预算 ≠ 0 且 ≠ MAX）时，计费后返回 0；否则返回 -1 拒绝。<b>两类结果都写审计环</b>——这是重点。
+                </p>
+              </div>
+
+              <div class="code">
+                <div class="code__bar">
+                  <span class="lang-tag" data-zh="实测输出" data-en="measured output">实测输出</span>
+                  <span class="docs">sdk/linux/m87_mcard.c</span>
+                  <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+                </div>
+                <pre>mcard: registered <span class="s">'qwen3-0.6b'</span> perm=3
+mcard: call tokens=100 result=0 ×3
+mcard: call tokens=100 result=0xFFFFFFFFFFFFFFFF   <span class="c">(perm_need=8 deny)</span>
+mcard: call tokens=900 result=0xFFFFFFFFFFFFFFFF   <span class="c">(超预算 deny)</span>
+m87: calls=00000003 tokens=0000012c aud=00000005
+m87: M87 RESULT: PASS</pre>
+              </div>
+
+              <div class="prose">
+                <p data-zh="读法：3 次正常调用共 300 token；越权 1 次、超预算 1 次各自被拒；审计 5 条全记录。也就是说卡的计数与审计是自洽的，拒绝不是“悄悄发生”的。" data-en="Reading it: three normal calls totalling 300 tokens; one out-of-authority and one over-budget call each denied; five audit entries recorded. The card's counters and the audit agree, so a denial never happens silently.">
+                  读法：3 次正常调用共 300 token；越权 1 次、超预算 1 次各自被拒；审计 5 条全记录。也就是说卡的计数与审计是自洽的，拒绝不是“悄悄发生”的。
+                </p>
+              </div>
+
+              <div class="note note--steel">
+                <strong data-zh="集成方式：" data-en="Integration: ">集成方式：</strong>
+                <span data-zh="模型卡随资源节（M31 DATA）携带，装载路径自动 mc_register；能力表与审计日志复用审计环格式。" data-en="The card rides in the resource section (M31 DATA) and the load path calls mc_register; the capability table and audit log reuse the ring format.">模型卡随资源节（M31 DATA）携带，装载路径自动 mc_register；能力表与审计日志复用审计环格式。</span>
+              </div>

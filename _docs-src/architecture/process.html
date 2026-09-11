@@ -1,0 +1,20 @@
+<!--{"zh":"进程与隔离","en":"Processes and isolation","desc":"统一进程底座、打包即权限的 fujo-sandbox、以及三套 ABI 的信号归一。","banner_zh":"进程 · 一个底座，三种 ABI 标签","banner_en":"Processes · one substrate, three ABI labels"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="进程与隔离" data-en="Processes and isolation">进程与隔离</h1>
+
+              <div class="prose">
+                <p data-zh="三种兼容进程（原生 / Linux / Windows / macOS）在实现上不是四套东西，而是同一个底座上的不同标签。这一点决定了隔离、权限与调度只需要实现一次。" data-en="The compatibility process types (native / Linux / Windows / macOS) are not four implementations but one substrate carrying different labels. That is what lets isolation, permission and scheduling be built once.">
+                  三种兼容进程（原生 / Linux / Windows / macOS）在实现上不是四套东西，而是同一个底座上的不同标签。这一点决定了隔离、权限与调度只需要实现一次。
+                </p>
+              </div>
+
+              <ul class="list list--check">
+                <li><b data-zh="统一底座" data-en="One substrate">统一底座</b> <span data-zh="—— 每个进程是「地址空间 + 线程组 + 能力句柄表」。三种兼容进程只是 ABI 标签不同，隔离机制完全共用。" data-en=" — every process is an address space plus a thread group plus a capability handle table. The compatibility types differ only by an ABI label; the isolation machinery is entirely shared.">—— 每个进程是「地址空间 + 线程组 + 能力句柄表」。三种兼容进程只是 ABI 标签不同，隔离机制完全共用。</span></li>
+                <li><b data-zh="打包即权限" data-en="Packaging is permission">打包即权限</b> <span data-zh="—— .run 默认运行在 fujo-sandbox 内，以 manifest 声明的 API 与能力为准：子系统、文件系统名字空间、网络白名单。权限来自打包声明，而不是运行时的默认值。" data-en=" — a .run runs inside fujo-sandbox by default, bound by the APIs and capabilities its manifest declares: subsystems, filesystem name space, network allowlist. Permission comes from the packaging declaration, not from a runtime default.">—— .run 默认运行在 fujo-sandbox 内，以 manifest 声明的 API 与能力为准：子系统、文件系统名字空间、网络白名单。权限来自打包声明，而不是运行时的默认值。</span></li>
+                <li><b data-zh="信号语义归一" data-en="Unified signal semantics">信号语义归一</b> <span data-zh="—— Linux 信号与 Win32 异常（SEH）都映射到内核统一信号模型。垫片只负责注册映射表，不各自实现一套。" data-en=" — Linux signals and Win32 exceptions (SEH) both map onto one kernel signal model. The shims only register mapping tables rather than each implementing their own.">—— Linux 信号与 Win32 异常（SEH）都映射到内核统一信号模型。垫片只负责注册映射表，不各自实现一套。</span></li>
+                <li><b data-zh="fork/exec 中间态不泄漏挂起句柄" data-en="No leaked handles across fork/exec">fork/exec 中间态不泄漏挂起句柄</b> <span data-zh="—— 一条具体的安全要求，对应 PIE 场景。" data-en=" — one concrete security requirement, aimed at the PIE case.">—— 一条具体的安全要求，对应 PIE 场景。</span></li>
+              </ul>
+
+              <div class="note note--steel">
+                <strong data-zh="与 AI 层的接口：" data-en="Interface with the AI layer: ">与 AI 层的接口：</strong>
+                <span data-zh-html="FUAI 的进程隔离在用户态复用 SIGSTOP 语义——监督运行时不需要内核新机制就能冻结一个目标进程树。见 <a href=&quot;../ai/runtime.html&quot;>AI 层 · 运行时与证据链</a>。" data-en-html="FUAI's process isolation reuses SIGSTOP semantics in user space — the supervisory runtime can freeze a target process tree without a new kernel mechanism. See <a href=&quot;../ai/runtime.html&quot;>AI layer · Runtime and evidence chain</a>.">FUAI 的进程隔离在用户态复用 SIGSTOP 语义——监督运行时不需要内核新机制就能冻结一个目标进程树。见 <a href="../ai/runtime.html">AI 层 · 运行时与证据链</a>。</span>
+              </div>

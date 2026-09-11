@@ -1,0 +1,74 @@
+<!--{"zh":"系统调用","en":"Syscalls","desc":"Linux 面的 45 条 dispatch 臂，以及 FujoOS 原生编号的区段划分与各自的归属。","banner_zh":"系统调用 · Linux 45 条 + 原生区段","banner_en":"Syscalls · 45 on Linux, plus native ranges"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="系统调用" data-en="Syscalls">系统调用</h1>
+
+              <div class="prose">
+                <p data-zh-html="三套 ABI 共享同一个内核服务面，差别只在编号映射（见 <a href=&quot;../architecture/syscall-gate.html&quot;>系统调用闸门</a>）。这一页是编号面的速查。" data-en-html="three ABIs share one kernel service surface and differ only in number mapping (see <a href=&quot;../architecture/syscall-gate.html&quot;>The syscall gate</a>). This page is the number-side quick reference.">
+                  三套 ABI 共享同一个内核服务面，差别只在编号映射（见 <a href="../architecture/syscall-gate.html">系统调用闸门</a>）。这一页是编号面的速查。
+                </p>
+              </div>
+
+              <h2 data-zh="原生编号区段" data-en="Native number ranges">原生编号区段</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="区段" data-en="Range">区段</th>
+                      <th scope="col" data-zh="归属" data-en="Owned by">归属</th>
+                      <th scope="col" data-zh="说明" data-en="Notes">说明</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td class="num">0x7D00–0x7D04</td><td data-zh="模型卡" data-en="Model cards">模型卡</td><td data-zh="mc_register / mc_call / mc_info / mc_audit" data-en="mc_register / mc_call / mc_info / mc_audit">mc_register / mc_call / mc_info / mc_audit</td></tr>
+                    <tr><td class="num">0x8100–0x83FF</td><td data-zh="FUAI 契约面" data-en="FUAI contract surface">FUAI 契约面</td><td data-zh="core 层与 host-ext 层的原语（46 个的归属见下页）" data-en="the core-layer and host-ext primitives (attribution of all 46 on the next page)">core 层与 host-ext 层的原语（46 个的归属见下页）</td></tr>
+                    <tr><td class="num">0x8316–0x8320</td><td data-zh="盒桥（host-ext）" data-en="Box bridge (host-ext)">盒桥（host-ext）</td><td data-zh="Windows 宿主对象上的操作；不参与核心契约差分" data-en="operations on Windows host objects; excluded from the core-contract differ">Windows 宿主对象上的操作；不参与核心契约差分</td></tr>
+                    <tr><td class="num">0x8A04–0x8A06</td><td data-zh="网络" data-en="Networking">网络</td><td data-zh="帧级 tx/rx，单帧 ≤ 1514 B" data-en="frame-level tx/rx, ≤ 1514 B per frame">帧级 tx/rx，单帧 ≤ 1514 B</td></tr>
+                    <tr><td class="num">186 / 204 / 253</td><td data-zh="网络驱动原语" data-en="NIC driver primitives">网络驱动原语</td><td data-zh="fujo_net_info / fujo_net_tx / fujo_net_rx" data-en="fujo_net_info / fujo_net_tx / fujo_net_rx">fujo_net_info / fujo_net_tx / fujo_net_rx</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 data-zh="Linux 面：45 条 dispatch 臂" data-en="Linux surface: 45 dispatch arms">Linux 面：45 条 dispatch 臂</h2>
+              <div class="prose">
+                <p data-zh="一等公民，原生执行、零垫片。命名表已同步为实现面 45 条——此前有 15 条臂没有名字，是 C12 度量抓出来的，处理方式见 Linux ABI 一节。" data-en="First-class: native execution with no shims. The name table is synced to the 45 implemented entries — previously 15 arms had no name, which C12's measurement caught; the handling is described under Linux ABI.">
+                  一等公民，原生执行、零垫片。命名表已同步为实现面 45 条——此前有 15 条臂没有名字，是 C12 度量抓出来的，处理方式见 Linux ABI 一节。
+                </p>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <caption data-zh="按功能归类（条目名即 dispatch 臂名）" data-en="Grouped by function (entry names are dispatch arm names)">按功能归类（条目名即 dispatch 臂名）</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="类别" data-en="Category">类别</th>
+                      <th scope="col" data-zh="条目" data-en="Entries">条目</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td data-zh="进程与身份" data-en="Process and identity">进程与身份</td>
+                      <td class="docs">getpid · gettid · getuid · getgid · geteuid · getegid · set_tid_address · set_robust_list · get_robust_list · prlimit64 · rseq · unlink</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="时间与同步" data-en="Time and synchronisation">时间与同步</td>
+                      <td class="docs">time · clock_gettime · futex</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="文件与内存" data-en="Files and memory">文件与内存</td>
+                      <td class="docs">（其余实现面条目，含 mmap / brk 一类）</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="尚未实现（C01 / C08 目标）" data-en="Not yet implemented (C01 / C08 targets)">尚未实现（C01 / C08 目标）</td>
+                      <td class="docs">poll · ioctl · pread64 · readv · select · sched_yield · socket · connect · accept · wait4</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="note note--amber">
+                <strong data-zh="最后一行值得单独看：" data-en="The last row is worth a closer look: ">最后一行值得单独看：</strong>
+                <span data-zh-html="这 10 条是“名字占着但没有实现”的。其中 socket 族是 <a href=&quot;../project/network-line.html&quot;>网络线</a> 的前置条件——所以在规划里它的优先级比它在表中出现的位置要高。" data-en-html="these 10 have names reserved but no implementation. The socket family is a prerequisite for the <a href=&quot;../project/network-line.html&quot;>network line</a>, which makes it higher priority in the plan than its position in the table suggests.">这 10 条是“名字占着但没有实现”的。其中 socket 族是 <a href="../project/network-line.html">网络线</a> 的前置条件——所以在规划里它的优先级比它在表中出现的位置要高。</span>
+              </div>
+
+              <div class="note note--steel">
+                <strong data-zh="一致性来源：" data-en="Where consistency comes from: ">一致性来源：</strong>
+                <span data-zh="本页条目与实现面的对齐由 tools/compat_audit.py 的“表↔臂一致性”检查维持，不一致会直接报出来。" data-en="the alignment between this page's entries and the implemented surface is maintained by tools/compat_audit.py's table↔arm consistency check, which reports any mismatch directly.">本页条目与实现面的对齐由 tools/compat_audit.py 的“表↔臂一致性”检查维持，不一致会直接报出来。</span>
+              </div>

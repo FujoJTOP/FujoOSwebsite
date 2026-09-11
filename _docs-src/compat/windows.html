@@ -1,0 +1,44 @@
+<!--{"zh":"Windows 垫片","en":"Windows shims","desc":"SHIM_TABLE 97 条、为什么必须停在 ntdll 这一层，以及 user32 只有 2 条这个最刺眼的事实。","banner_zh":"Windows 垫片 · 97 条，且分布很不均","banner_en":"Windows shims · 97 entries, very unevenly spread"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="Windows 垫片" data-en="Windows shims">Windows 垫片</h1>
+
+              <div class="prose">
+                <p data-zh="Windows 是三条路径里最难的一条，原因只有一个：它的 syscall 编号不透明、随版本变化。Linux 可以直接映射编号，Windows 不能——必须停在 ntdll 这一层做翻译。" data-en="Windows is the hardest of the three paths for one reason: its syscall numbers are opaque and version-dependent. Linux numbers can be mapped directly; Windows numbers cannot — the translation has to stop at the ntdll layer.">
+                  Windows 是三条路径里最难的一条，原因只有一个：它的 syscall 编号不透明、随版本变化。Linux 可以直接映射编号，Windows 不能——必须停在 ntdll 这一层做翻译。
+                </p>
+              </div>
+
+              <h2 data-zh="SHIM_TABLE 的分布" data-en="How the SHIM_TABLE is spread">SHIM_TABLE 的分布</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="DLL" data-en="DLL">DLL</th>
+                      <th scope="col" class="num" data-zh="条数" data-en="Entries">条数</th>
+                      <th scope="col" data-zh="说明" data-en="Notes">说明</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td class="docs">msvcrt</td><td class="num">45</td><td data-zh="最多——C 运行时的字符串 / 内存 / 格式化函数是几乎所有程序都需要的。" data-en="The most — the C runtime's string / memory / formatting functions are needed by nearly every program.">最多——C 运行时的字符串 / 内存 / 格式化函数是几乎所有程序都需要的。</td></tr>
+                    <tr><td class="docs">kernel32</td><td class="num">40</td><td data-zh="文件、句柄、进程与线程的基础面。" data-en="The base surface of files, handles, processes and threads.">文件、句柄、进程与线程的基础面。</td></tr>
+                    <tr><td class="docs">gdi32</td><td class="num">10</td><td data-zh="绘制原语，够画基本图形。" data-en="Drawing primitives, enough for basic shapes.">绘制原语，够画基本图形。</td></tr>
+                    <tr><td class="docs">user32</td><td class="num">2</td><td data-zh="只有 2 条。这是整张表里最刺眼的数字，下面单说。" data-en="Only 2. The most conspicuous number in the table — covered below.">只有 2 条。这是整张表里最刺眼的数字，下面单说。</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="note note--amber">
+                <strong data-zh="user32 只有 2 条意味着什么：" data-en="What 2 user32 entries means: ">user32 只有 2 条意味着什么：</strong>
+                <span data-zh="任何带真实窗口的 Windows 程序都跑不到底。窗口创建、消息循环、控件——这些全在 user32 上。所以“Windows 程序能跑”这句话目前只对无界面的控制台程序成立。这条限制写在缺口的第二条，而不是藏在测试结果后面。" data-en="any Windows program with a real window cannot run end to end. Window creation, the message loop, controls — all of it lives in user32. So “Windows programs run” currently holds only for console programs with no UI. That limit is item two in the gap list, not buried behind test results.">任何带真实窗口的 Windows 程序都跑不到底。窗口创建、消息循环、控件——这些全在 user32 上。所以“Windows 程序能跑”这句话目前只对无界面的控制台程序成立。这条限制写在缺口的第二条，而不是藏在测试结果后面。</span>
+              </div>
+
+              <h2 data-zh="盒桥：把 Windows 应用也纳入监督" data-en="The box bridge: bringing Windows apps under supervision too">盒桥：把 Windows 应用也纳入监督</h2>
+              <div class="prose">
+                <p data-zh-html="垫片让 Windows 二进制能加载；盒桥是另一件事——让模型隔着进程边界驱动宿主上的 GUI 应用（COM Excel/Word、certutil、notepad 一类）。因为谓词指向的是 Windows 特有对象，它被划在宿主扩展层，不参与核心契约的差分。见 <a href=&quot;../ai/box-bridge.html&quot;>AI 层 · 盒桥</a>。" data-en-html="shims let a Windows binary load; the box bridge is different — it lets a model drive a GUI application on the host across a process boundary (COM Excel/Word, certutil, notepad and the like). Because its predicates point at Windows-specific objects, it sits in the host extension layer and takes no part in the core-contract differ. See <a href=&quot;../ai/box-bridge.html&quot;>AI layer · Box bridge</a>.">
+                  垫片让 Windows 二进制能加载；盒桥是另一件事——让模型隔着进程边界驱动宿主上的 GUI 应用（COM Excel/Word、certutil、notepad 一类）。因为谓词指向的是 Windows 特有对象，它被划在宿主扩展层，不参与核心契约的差分。见 <a href="../ai/box-bridge.html">AI 层 · 盒桥</a>。
+                </p>
+              </div>
+
+              <div class="note note--steel">
+                <strong data-zh="加固计划：" data-en="The hardening plan: ">加固计划：</strong>
+                <span data-zh-html="C02（PE 装载器深度：SEH / TLS 回调 / 延迟导入）、C03（kernel32 40→70 并起步 ntdll）、C04（真实 CRT）、C05（LoadLibraryA 真实映射）——见 <a href=&quot;plan.html&quot;>C01–C15</a>。" data-en-html="C02 (PE loader depth: SEH / TLS callbacks / delayed imports), C03 (kernel32 40→70 and starting ntdll), C04 (a real CRT), C05 (real LoadLibraryA mapping) — see <a href=&quot;plan.html&quot;>C01–C15</a>.">C02（PE 装载器深度：SEH / TLS 回调 / 延迟导入）、C03（kernel32 40→70 并起步 ntdll）、C04（真实 CRT）、C05（LoadLibraryA 真实映射）——见 <a href="plan.html">C01–C15</a>。</span>
+              </div>

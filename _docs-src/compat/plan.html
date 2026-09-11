@@ -1,0 +1,64 @@
+<!--{"zh":"C01–C15 规划","en":"The C01–C15 plan","desc":"兼容线 15 项工作，每项带一条可执行判据。前五项详列，并说明为什么“不做”也写在规划里。","banner_zh":"规划 · 15 项，逐项可判定","banner_en":"The plan · fifteen items, each judgeable"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="C01–C15 规划" data-en="The C01–C15 plan">C01–C15 规划</h1>
+
+              <div class="prose">
+                <p data-zh="兼容线按 C01 → C15 推进，每一项都带一条可执行的判据——不是“完成 PE 装载器”，而是“非首选基址 + SEH 展开样例 PASS”。判据必须能被别人跑出来，否则它只是愿望。" data-en="The compatibility line proceeds C01 → C15, each with an executable criterion — not “finish the PE loader” but “non-preferred base and an SEH unwind sample PASS”. A criterion has to be runnable by someone else, or it is only a wish.">
+                  兼容线按 C01 → C15 推进，每一项都带一条可执行的判据——不是“完成 PE 装载器”，而是“非首选基址 + SEH 展开样例 PASS”。判据必须能被别人跑出来，否则它只是愿望。
+                </p>
+              </div>
+
+              <h2 data-zh="前五项" data-en="The first five">前五项</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="编号" data-en="ID">编号</th>
+                      <th scope="col" data-zh="主题" data-en="Theme">主题</th>
+                      <th scope="col" data-zh="判据（可执行）" data-en="Criterion (executable)">判据（可执行）</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="num"><strong>C01</strong></td>
+                      <td data-zh="Linux ABI 第一公民加固" data-en="Hardening the Linux ABI">Linux ABI 第一公民加固</td>
+                      <td data-zh="动态链接 + LTP 子集 + /proc 面 → LTP 子集 N 例与真实动态 ELF PASS" data-en="Dynamic linking + LTP subset + /proc surface → N LTP cases and a real dynamic ELF PASS">动态链接 + LTP 子集 + /proc 面 → LTP 子集 N 例与真实动态 ELF PASS</td>
+                    </tr>
+                    <tr>
+                      <td class="num"><strong>C02</strong></td>
+                      <td data-zh="PE 装载器深度" data-en="PE loader depth">PE 装载器深度</td>
+                      <td data-zh="SEH / TLS 回调 / 延迟导入 / 重定位完整性 → 非首选基址与 SEH 展开样例 PASS" data-en="SEH / TLS callbacks / delayed imports / relocation completeness → non-preferred base and an SEH unwind sample PASS">SEH / TLS 回调 / 延迟导入 / 重定位完整性 → 非首选基址与 SEH 展开样例 PASS</td>
+                    </tr>
+                    <tr>
+                      <td class="num"><strong>C03</strong></td>
+                      <td data-zh="kernel32 / ntdll 第二档" data-en="kernel32 / ntdll, second tier">kernel32 / ntdll 第二档</td>
+                      <td data-zh="SHIM_TABLE +30，且每个 API 都带用例" data-en="SHIM_TABLE +30, with a test for every API">SHIM_TABLE +30，且每个 API 都带用例</td>
+                    </tr>
+                    <tr>
+                      <td class="num"><strong>C04</strong></td>
+                      <td data-zh="真实 CRT（msvcrt）" data-en="A real CRT (msvcrt)">真实 CRT（msvcrt）</td>
+                      <td data-zh="完整 printf / scanf 集与动态 CRT → mingw-w64 全链接程序 PASS" data-en="Full printf / scanf set and dynamic CRT → a fully linked mingw-w64 program PASS">完整 printf / scanf 集与动态 CRT → mingw-w64 全链接程序 PASS</td>
+                    </tr>
+                    <tr>
+                      <td class="num"><strong>C05</strong></td>
+                      <td data-zh="LoadLibraryA 真实映射" data-en="Real LoadLibraryA mapping">LoadLibraryA 真实映射</td>
+                      <td data-zh="导出表 / 转发导出 / 依赖递归 → 真 DLL 加载且 GetProcAddress 命中" data-en="Export table / forwarded exports / dependency recursion → a real DLL loads and GetProcAddress hits">导出表 / 转发导出 / 依赖递归 → 真 DLL 加载且 GetProcAddress 命中</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <p class="small dim" data-zh="C06–C15 覆盖 shim 面继续扩容、真实世界程序矩阵、跨架构翻译与签名 / 完整性容器等，与上面的硬缺口清单一一对应。" data-en="C06–C15 cover the continued shim expansion, a real-world program matrix, cross-architecture translation and a signing / integrity container — matching the hard-gap list item for item.">
+                C06–C15 覆盖 shim 面继续扩容、真实世界程序矩阵、跨架构翻译与签名 / 完整性容器等，与上面的硬缺口清单一一对应。
+              </p>
+
+              <h2 data-zh="“不做”也写在规划里" data-en="“Not doing” is in the plan too">“不做”也写在规划里</h2>
+              <div class="prose">
+                <p data-zh="一份只列待办的规划会让人误以为范围无边界。这份规划明确划掉了三样：内核驱动（.sys / .ko / .kext，改用 hypervisor 兜底）、完整 macOS GUI 等价、任何形式的专有代码复用。" data-en="A plan listing only to-dos implies unlimited scope. This one rules out three things explicitly: kernel drivers (.sys / .ko / .kext, with a hypervisor fallback instead), full macOS GUI equivalence, and any reuse of proprietary code whatsoever.">
+                  一份只列待办的规划会让人误以为范围无边界。这份规划明确划掉了三样：内核驱动（.sys / .ko / .kext，改用 hypervisor 兜底）、完整 macOS GUI 等价、任何形式的专有代码复用。
+                </p>
+              </div>
+
+              <div class="note note--amber">
+                <strong data-zh="当前状态：" data-en="Current status: ">当前状态：</strong>
+                <span data-zh="AI 线（FUAI / FUAI-OS）在兼容仓里处于“暂停并保留”状态，本线按 C01 → C15 推进。这两条线使用不同的分支，互不阻塞。" data-en="the AI line (FUAI / FUAI-OS) is paused and preserved in the compatibility repository, while this line proceeds C01 → C15. The two lines use different branches and do not block each other.">AI 线（FUAI / FUAI-OS）在兼容仓里处于“暂停并保留”状态，本线按 C01 → C15 推进。这两条线使用不同的分支，互不阻塞。</span>
+              </div>

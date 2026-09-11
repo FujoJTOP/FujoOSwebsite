@@ -1,0 +1,107 @@
+<!--{"zh":"波 C 测量","en":"Wave-C measurement","desc":"把“能转写”变成可复现的数字：语料、识别率、转换率的条件口径、Wilson 置信区间，以及必须一起读的原因。","banner_zh":"波 C 测量 · 转换率是条件于识别的比率","banner_en":"Wave-C · conversion is conditional on recognition"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="波 C 测量" data-en="Wave-C measurement">波 C 测量</h1>
+
+              <div class="prose">
+                <p data-zh="“这套工具能把现有代码转成形式对象”——这句话如果不带数字，等于没说；如果带了数字但没说口径，比没说更糟。这一页记录的是口径。" data-en="“This tooling can turn existing code into formal objects” — without numbers that sentence says nothing; with numbers but no definitions it is worse than nothing. This page records the definitions.">
+                  “这套工具能把现有代码转成形式对象”——这句话如果不带数字，等于没说；如果带了数字但没说口径，比没说更糟。这一页记录的是口径。
+                </p>
+              </div>
+
+              <h2 data-zh="语料" data-en="The corpus">语料</h2>
+              <div class="prose">
+                <p data-zh-html="12 个仓库真实文件（每种语言 4 个）。每个文件的 sha256 前 16 位记入结果文件——测量与内容绑定，语料一变数字就作废。两臂是工具链的<b>严格</b>与<b>宽松</b>档，都确定性、可复现，不使用随机数。" data-en-html="12 real repository files (4 per language). The first 16 hex digits of each file's sha256 go into the results file, binding the measurement to its content — change the corpus and the numbers are void. The two arms are the toolchain's <b>strict</b> and <b>lenient</b> settings, both deterministic and reproducible, neither using randomness.">
+                  12 个仓库真实文件（每种语言 4 个）。每个文件的 sha256 前 16 位记入结果文件——测量与内容绑定，语料一变数字就作废。两臂是工具链的<b>严格</b>与<b>宽松</b>档，都确定性、可复现，不使用随机数。
+                </p>
+              </div>
+
+              <h2 data-zh="两个比率，必须一起读" data-en="Two rates that must be read together">两个比率，必须一起读</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="指标" data-en="Metric">指标</th>
+                      <th scope="col" data-zh="定义" data-en="Definition">定义</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong data-zh="识别率" data-en="Recognition rate">识别率</strong></td>
+                      <td data-zh="识别器看见的实体 ÷ 独立估计的实体数（宽松模式另算，用来暴露识别器自己的盲区）" data-en="Entities the recogniser saw ÷ independently estimated entities (the lenient mode computes its own, exposing the recogniser's blind spots)">识别器看见的实体 ÷ 独立估计的实体数（宽松模式另算，用来暴露识别器自己的盲区）</td>
+                    </tr>
+                    <tr>
+                      <td><strong data-zh="转换率" data-en="Conversion rate">转换率</strong></td>
+                      <td data-zh="已转写实体 ÷ <b>识别到的</b>实体 —— 注意分母，它是<b>条件于识别</b>的比率" data-en="Translated entities ÷ <b>recognised</b> entities — mind the denominator: this is conditional on recognition">已转写实体 ÷ <b>识别到的</b>实体 —— 注意分母，它是<b>条件于识别</b>的比率</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="note note--amber">
+                <strong data-zh="这就是为什么必须一起读：" data-en="Which is why they must be read together: ">这就是为什么必须一起读：</strong>
+                <span data-zh="只看转换率会得到“C 语言 100%”这种读起来很漂亮的结论，但那个 100% 的分母只包含识别器看得见的签名。真正限制 C 的是 89.2% 的识别率。两个数字分开报，任何一个都会误导。" data-en="reading conversion alone yields the flattering “C is 100%”, but that 100% has a denominator containing only the signatures the recogniser could see. What actually limits C is the 89.2% recognition rate. Reported apart, either number misleads.">只看转换率会得到“C 语言 100%”这种读起来很漂亮的结论，但那个 100% 的分母只包含识别器看得见的签名。真正限制 C 的是 89.2% 的识别率。两个数字分开报，任何一个都会误导。</span>
+              </div>
+
+              <h2 data-zh="主表" data-en="The main table">主表</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="语言" data-en="Language">语言</th>
+                      <th scope="col" data-zh="臂" data-en="Arm">臂</th>
+                      <th scope="col" class="num" data-zh="实体" data-en="Entities">实体</th>
+                      <th scope="col" class="num" data-zh="识别率" data-en="Recognition">识别率</th>
+                      <th scope="col" class="num" data-zh="转换率" data-en="Conversion">转换率</th>
+                      <th scope="col" class="num" data-zh="95% CI" data-en="95% CI">95% CI</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td rowspan="2"><strong>Python</strong></td>
+                      <td data-zh="严格" data-en="strict">严格</td>
+                      <td class="num">48</td><td class="num">100.0%</td><td class="num">27.1%</td><td class="num">[16.6, 41.0]</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="宽松" data-en="lenient">宽松</td>
+                      <td class="num">48</td><td class="num">100.0%</td><td class="num">93.8%</td><td class="num">[83.2, 97.9]</td>
+                    </tr>
+                    <tr>
+                      <td rowspan="2"><strong>C</strong></td>
+                      <td data-zh="严格" data-en="strict">严格</td>
+                      <td class="num">37</td><td class="num">89.2%</td><td class="num">100.0%</td><td class="num">[89.6, 100.0]</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="宽松" data-en="lenient">宽松</td>
+                      <td class="num">37</td><td class="num">89.2%</td><td class="num">100.0%</td><td class="num">[89.6, 100.0]</td>
+                    </tr>
+                    <tr>
+                      <td rowspan="2"><strong>Rust</strong></td>
+                      <td data-zh="严格" data-en="strict">严格</td>
+                      <td class="num">116</td><td class="num">98.3%</td><td class="num">91.2%</td><td class="num">[84.6, 95.2]</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="宽松" data-en="lenient">宽松</td>
+                      <td class="num">116</td><td class="num">98.3%</td><td class="num">98.2%</td><td class="num">[93.8, 99.5]</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 data-zh="怎么读这张表" data-en="How to read it">怎么读这张表</h2>
+              <ul class="list">
+                <li><b data-zh="Python 的瓶颈是注解质量" data-en="Python's bottleneck is annotation quality">Python 的瓶颈是注解质量</b> <span data-zh="—— 严格臂 27.1%，主因是 list[str] / dict 这类没有 Potato 对应物的容器类型被跳过。这不算“缺注解”，而是“注解表达不了”。" data-en=" — strict arm 27.1%, mainly because container types like list[str] / dict have no Potato counterpart and are skipped. That is not missing annotations but unexpressible ones.">—— 严格臂 27.1%，主因是 list[str] / dict 这类没有 Potato 对应物的容器类型被跳过。这不算“缺注解”，而是“注解表达不了”。</span></li>
+                <li><b data-zh="C 的瓶颈是识别器" data-en="C's bottleneck is the recogniser">C 的瓶颈是识别器</b> <span data-zh="—— 4 个多行 / 宏签名对正则不可见。这是工具的局限，不是语言的问题。" data-en=" — four multi-line / macro signatures are invisible to the regexes. A limitation of the tool, not of the language.">—— 4 个多行 / 宏签名对正则不可见。这是工具的局限，不是语言的问题。</span></li>
+                <li><b data-zh="Rust 最好转" data-en="Rust translates best">Rust 最好转</b> <span data-zh="—— 静态类型加显式切片；剩余跳过是常量长度数组、never 类型与元组返回。" data-en=" — static types plus explicit slices; what remains skipped is constant-length arrays, the never type and tuple returns.">—— 静态类型加显式切片；剩余跳过是常量长度数组、never 类型与元组返回。</span></li>
+                <li><b data-zh="对象合法率 100%" data-en="Object validity 100%">对象合法率 100%</b> <span data-zh="—— 工具链宁可少转，也不乱转。" data-en=" — the toolchain would rather translate less than translate wrongly.">—— 工具链宁可少转，也不乱转。</span></li>
+              </ul>
+
+              <h2 data-zh="一处必须标注的边界" data-en="One boundary that must be labelled">一处必须标注的边界</h2>
+              <div class="note note--amber">
+                <strong data-zh="LLM 臂尚未运行。" data-en="The LLM arm has not been run.">LLM 臂尚未运行。</strong>
+                <span data-zh="本环境没有外部模型凭据，所以“工具链 vs 宿主 LLM”这组对照还没有数据。协议已就绪：任何外部转写器按同一报告 schema 产出结果即可并入主表。但当前主表的“两臂”是工具链的严格 / 宽松两档，<b>不得</b>在论文中当作 LLM 对照。" data-en=" There are no external model credentials in this environment, so the “toolchain vs host LLM” comparison has no data yet. The protocol is ready: any external translator emitting a report against the same schema can join the table. But the current two arms are the toolchain's strict / lenient settings and <b>must not</b> be presented as an LLM comparison in the paper."> 本环境没有外部模型凭据，所以“工具链 vs 宿主 LLM”这组对照还没有数据。协议已就绪：任何外部转写器按同一报告 schema 产出结果即可并入主表。但当前主表的“两臂”是工具链的严格 / 宽松两档，<b>不得</b>在论文中当作 LLM 对照。</span>
+              </div>
+
+              <div class="prose">
+                <p data-zh="另有一条样本量提醒：当前 n = 48 / 33 / 116，Wilson 区间在 n &lt; 30 时明显偏宽。要把半宽压到 ±5% 以内，主表语料需要扩到每语言 ≥200 实体（约 15–20 个文件）。" data-en="One more caveat on sample size: currently n = 48 / 33 / 116, and Wilson intervals are noticeably wide below n &lt; 30. To bring the half-width under ±5%, the main-table corpus needs roughly ≥200 entities per language (about 15–20 files).">
+                  另有一条样本量提醒：当前 n = 48 / 33 / 116，Wilson 区间在 n &lt; 30 时明显偏宽。要把半宽压到 ±5% 以内，主表语料需要扩到每语言 ≥200 实体（约 15–20 个文件）。
+                </p>
+              </div>

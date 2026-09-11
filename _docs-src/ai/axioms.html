@@ -1,0 +1,59 @@
+<!--{"zh":"A1–A4 公理","en":"Axioms A1–A4","desc":"机制必须满足的四条：无越权执行、可审计、模型缺席仍运行、失败计数与降级。每条都能从形式对象直接判定。","banner_zh":"A1–A4 · 接口性质，不是实现细节","banner_en":"A1–A4 · interface properties, not implementation details"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="A1–A4 公理" data-en="Axioms A1–A4">A1–A4 公理</h1>
+
+              <div class="prose">
+                <p data-zh="四条公理描述的是机制本身必须满足的性质。把它们写成公理而不是需求，是因为它们必须是接口性质——只有接口性质才能让第二实现照契约重写，而不是照第一实现的代码抄。" data-en="The four axioms describe properties the mechanism itself must hold. They are stated as axioms rather than requirements because they have to be interface properties — and only interface properties let a second implementation be rewritten against the contract rather than copied from the first implementation's code.">
+                  四条公理描述的是机制本身必须满足的性质。把它们写成公理而不是需求，是因为它们必须是接口性质——只有接口性质才能让第二实现照契约重写，而不是照第一实现的代码抄。
+                </p>
+              </div>
+
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="公理" data-en="Axiom">公理</th>
+                      <th scope="col" data-zh="内容" data-en="Statement">内容</th>
+                      <th scope="col" data-zh="可由形式对象判定为" data-en="Decidable from the formal object as">可由形式对象判定为</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>A1</strong></td>
+                      <td data-zh="无越权执行——任何动作都在有声明的能力域内" data-en="No out-of-authority execution — every action lies inside a declared capability domain">无越权执行——任何动作都在有声明的能力域内</td>
+                      <td class="num" data-zh="space 非空且 hi ≥ lo" data-en="space non-empty and hi ≥ lo">space 非空且 hi ≥ lo</td>
+                    </tr>
+                    <tr>
+                      <td><strong>A2</strong></td>
+                      <td data-zh="可审计——每次能力使用都留痕" data-en="Auditable — every capability use leaves a trace">可审计——每次能力使用都留痕</td>
+                      <td class="num" data-zh="guard 站点 ≥ 0，且编译期强制落审计计数" data-en="guard sites ≥ 0, with audit counting enforced at compile time">guard 站点 ≥ 0，且编译期强制落审计计数</td>
+                    </tr>
+                    <tr>
+                      <td><strong>A3</strong></td>
+                      <td data-zh="模型缺席仍运行——单元不得申请模型 / 推理能力空间" data-en="Runs with the model absent — a unit may not request the model / inference capability space">模型缺席仍运行——单元不得申请模型 / 推理能力空间</td>
+                      <td class="num" data-zh="space ∉ {ai, model, llm, net_llm, infer}" data-en="space ∉ {ai, model, llm, net_llm, infer}">space ∉ {ai, model, llm, net_llm, infer}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>A4</strong></td>
+                      <td data-zh="失败计数与降级——可撤销能力必须声明 revocable" data-en="Failure counting and degradation — a revocable capability must declare revocable">失败计数与降级——可撤销能力必须声明 revocable</td>
+                      <td class="num" data-zh="revocable 为真" data-en="revocable is true">revocable 为真</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 data-zh="为什么由形式对象判定" data-en="Why the formal object decides">为什么由形式对象判定</h2>
+              <div class="prose">
+                <p data-zh-html="四条断言的输入不是源码，而是编译器强制导出的<a href=&quot;../language/potato.html&quot;>形式对象</a>（Potato）。一个独立校验器仅凭该对象就能判定合法性——不读源码、不读二进制。这样一来，A1–A4 就从“运行时可能会检查”变成了“离线就能判定”。" data-en-html="The input to these assertions is not source code but the <a href=&quot;../language/potato.html&quot;>formal object</a> a compiler is forced to emit (Potato). An independent validator decides legality from that object alone — reading neither source nor binary. That turns A1–A4 from “something that might be checked at runtime” into “something decidable offline”.">
+                  四条断言的输入不是源码，而是编译器强制导出的<a href="../language/potato.html">形式对象</a>（Potato）。一个独立校验器仅凭该对象就能判定合法性——不读源码、不读二进制。这样一来，A1–A4 就从“运行时可能会检查”变成了“离线就能判定”。
+                </p>
+              </div>
+
+              <div class="note note--amber">
+                <strong data-zh="目前做到哪一步：" data-en="How far this actually goes: ">目前做到哪一步：</strong>
+                <span data-zh="断言表已经由形式对象生成（cap_asserts.rs），但尚未被内核 include! ——A1–A4 的运行时断言要等内核侧接入。当前只保证“表由形式对象驱动且逐字节对账”，不宣称运行时已在执行这四条。" data-en="The assertion table is already generated from formal objects (cap_asserts.rs) but is not yet include!'d by the kernel — the runtime assertions of A1–A4 await kernel-side integration. What is guaranteed today is that the table is driven by formal objects and reconciled byte for byte, not that the four axioms are enforced at runtime.">断言表已经由形式对象生成（cap_asserts.rs），但尚未被内核 include! ——A1–A4 的运行时断言要等内核侧接入。当前只保证“表由形式对象驱动且逐字节对账”，不宣称运行时已在执行这四条。</span>
+              </div>
+
+              <div class="note note--steel">
+                <strong data-zh="延伸到 AGI 的那一步：" data-en="The step toward AGI: ">延伸到 AGI 的那一步：</strong>
+                <span data-zh="A1–A4 的形式化推广（模型不可被理解时，边界是否仍可被审计）属于 FUAI Pro 的方向，与主线共用同一套数学底座。目前它是一条研究线，不是已实现的东西。" data-en="The formal generalization of A1–A4 — when a model cannot be understood, can the boundary still be audited — belongs to the FUAI Pro direction and shares a mathematical basis with the main line. It is a research line, not something implemented.">A1–A4 的形式化推广（模型不可被理解时，边界是否仍可被审计）属于 FUAI Pro 的方向，与主线共用同一套数学底座。目前它是一条研究线，不是已实现的东西。</span>
+              </div>

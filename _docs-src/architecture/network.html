@@ -1,0 +1,66 @@
+<!--{"zh":"网络栈","en":"Network stack","desc":"virtio-net 三个原语、帧级用户 ABI 0x8A04–06，以及协议头为什么是 L0 要收掉的重复。","banner_zh":"网络栈 · 只有裸驱动，没有协议栈","banner_en":"Network stack · a bare driver, no stack"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="网络栈" data-en="Network stack">网络栈</h1>
+
+              <div class="prose">
+                <p data-zh="这一节的标题其实有点名不副实：FujoOS 没有网络栈。有的是一个裸的 virtio-net 驱动，加每个 demo 各自手搓的 IP / UDP / TCP 头。把这件事说清楚，比给它起一个好听的名字重要。" data-en="The title of this section is slightly misleading: FujoOS has no network stack. What it has is a bare virtio-net driver plus IP / UDP / TCP headers hand-rolled by each demo. Saying that plainly matters more than giving it a nicer name.">
+                  这一节的标题其实有点名不副实：FujoOS 没有网络栈。有的是一个裸的 virtio-net 驱动，加每个 demo 各自手搓的 IP / UDP / TCP 头。把这件事说清楚，比给它起一个好听的名字重要。
+                </p>
+              </div>
+
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="面" data-en="Surface">面</th>
+                      <th scope="col" data-zh="现状" data-en="Status">现状</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td data-zh="网卡驱动" data-en="NIC driver">网卡驱动</td>
+                      <td data-zh="virtio-net，仅 3 个原语" data-en="virtio-net, with only 3 primitives">virtio-net，仅 3 个原语</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="原语" data-en="Primitives">原语</td>
+                      <td class="num" data-zh="fujo_net_info(186) · fujo_net_tx(204) · fujo_net_rx(253)" data-en="fujo_net_info(186) · fujo_net_tx(204) · fujo_net_rx(253)">fujo_net_info(186) · fujo_net_tx(204) · fujo_net_rx(253)</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="用户 ABI" data-en="User ABI">用户 ABI</td>
+                      <td data-zh="帧级 tx/rx，单帧 ≤ 1514 B，原生 opcode 0x8A04–06" data-en="Frame-level tx/rx, ≤ 1514 B per frame, native opcodes 0x8A04–06">帧级 tx/rx，单帧 ≤ 1514 B，原生 opcode 0x8A04–06</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="POSIX socket" data-en="POSIX sockets">POSIX socket</td>
+                      <td data-zh="仅名字占位，dispatch 返回 -ENOSYS" data-en="Name placeholders only; dispatch returns -ENOSYS">仅名字占位，dispatch 返回 -ENOSYS</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="服务模型" data-en="Service model">服务模型</td>
+                      <td data-zh="srv_net 只存在于文档里；驱动直接从用户 ELF 调用" data-en="srv_net exists only in documentation; the driver is called from user ELFs directly">srv_net 只存在于文档里；驱动直接从用户 ELF 调用</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="协议实现" data-en="Protocol implementation">协议实现</td>
+                      <td data-zh="每个 demo 各写一遍 ARP / IP / UDP 头与校验和" data-en="Every demo rewrites ARP / IP / UDP headers and checksums">每个 demo 各写一遍 ARP / IP / UDP 头与校验和</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="回归" data-en="Regression">回归</td>
+                      <td data-zh="UDP 回环 PASS；宿主→客体 TCP PASS；出向 TCP 响应被 slirp 丢弃（已记录）" data-en="UDP loopback PASS; host→guest TCP PASS; outbound TCP responses dropped by slirp (documented)">UDP 回环 PASS；宿主→客体 TCP PASS；出向 TCP 响应被 slirp 丢弃（已记录）</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 data-zh="为什么这块值得单独讲" data-en="Why this deserves its own page">为什么这块值得单独讲</h2>
+              <div class="grid grid--2">
+                <div class="note note--steel">
+                  <strong data-zh="它是 L0 的靶子。" data-en="It is L0's target.">它是 L0 的靶子。</strong>
+                  <span data-zh="上面那句“每个 demo 各写一遍协议头”就是这个项目最典型的重复。ARP / IP / UDP 的字段偏移、字节序、校验和是绝对精确的，正好是 .lom 单一真源最擅长消灭的那类跨语言重复。" data-en=" That line about every demo rewriting the headers is the project's most typical duplication. Field offsets, endianness and checksums in ARP / IP / UDP are absolutely exact — precisely the kind of cross-language duplication a .lom source of truth removes best."> 上面那句“每个 demo 各写一遍协议头”就是这个项目最典型的重复。ARP / IP / UDP 的字段偏移、字节序、校验和是绝对精确的，正好是 .lom 单一真源最擅长消灭的那类跨语言重复。</span>
+                </div>
+                <div class="note note--amber">
+                  <strong data-zh="它需要能力边界。" data-en="It needs capability boundaries.">它需要能力边界。</strong>
+                  <span data-zh="网络是“一个进程只应该碰它被允许碰的那部分”最自然的例子：端口白名单、允许的目的地址、最大帧长。现有能力表只管 AI 动作，还没有端口 / socket 能力。" data-en=" Networking is the most natural example of “a process should touch only what it is allowed to touch”: port allowlists, permitted destinations, maximum frame size. The current capability table only covers AI actions; port / socket capability does not exist yet."> 网络是“一个进程只应该碰它被允许碰的那部分”最自然的例子：端口白名单、允许的目的地址、最大帧长。现有能力表只管 AI 动作，还没有端口 / socket 能力。</span>
+                </div>
+              </div>
+
+              <div class="note note--steel">
+                <strong data-zh="网络线是另一件事：" data-en="The network line is a separate matter: ">网络线是另一件事：</strong>
+                <span data-zh-html="这一页讲的是内核侧的网络现状。用 Loment / Potato 重写用户态网络层的那条开发线，见 <a href=&quot;../project/network-line.html&quot;>项目 · 网络线</a>。" data-en-html="this page covers the kernel-side state of networking. The development line rewriting the user-space network layer in Loment / Potato is under <a href=&quot;../project/network-line.html&quot;>Project · The network line</a>.">这一页讲的是内核侧的网络现状。用 Loment / Potato 重写用户态网络层的那条开发线，见 <a href="../project/network-line.html">项目 · 网络线</a>。</span>
+              </div>

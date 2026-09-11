@@ -1,0 +1,406 @@
+#!/usr/bin/env node
+/*
+ * Generates docs/**\/*.html from _docs-src/**\/*.html.
+ *
+ * Why a generator: the chrome (banner, top nav, sidebar, breadcrumbs,
+ * prev/next, footer) is identical on every page. Writing it by hand 48 times
+ * is the exact duplication this project lists as its first pain point, and it
+ * drifts. Content lives once in _docs-src/; this script emits the site.
+ *
+ * The generated HTML is committed, so visitors still get a static, zero-build
+ * site — the generator is a development tool, not a runtime dependency.
+ *
+ *   node tools/docs.gen.mjs          # write docs/
+ *   node tools/docs.gen.mjs --check  # fail if output would change
+ *
+ * Zero third-party dependencies, on purpose.
+ */
+
+import { readFileSync, writeFileSync, mkdirSync, existsSync, rmSync } from "node:fs";
+import { dirname, join, relative, sep } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const HERE = dirname(fileURLToPath(import.meta.url));
+const ROOT = join(HERE, "..");
+const SRC = join(ROOT, "_docs-src");
+const OUT = join(ROOT, "docs");
+
+/* ------------------------------------------------------------------ nav */
+
+const SECTIONS = [
+  {
+    id: "start",
+    zh: "开始",
+    en: "Start",
+    pages: [
+      { slug: "index", zh: "导览", en: "Overview" },
+      { slug: "requirements", zh: "环境要求", en: "Requirements" },
+      { slug: "build", zh: "构建内核", en: "Building" },
+      { slug: "run", zh: "启动与运行", en: "Running" },
+      { slug: "verify", zh: "回归、ISO 与 CI", en: "Regression, ISO and CI" },
+    ],
+  },
+  {
+    id: "architecture",
+    zh: "架构",
+    en: "Architecture",
+    pages: [
+      { slug: "index", zh: "总览", en: "Overview" },
+      { slug: "layers", zh: "分层与内核形态", en: "Layers and kernel shape" },
+      { slug: "syscall-gate", zh: "系统调用闸门", en: "The syscall gate" },
+      { slug: "memory", zh: "内存与地址空间", en: "Memory and address space" },
+      { slug: "process", zh: "进程与隔离", en: "Processes and isolation" },
+      { slug: "storage", zh: "存储与 FJFS", en: "Storage and FJFS" },
+      { slug: "graphics", zh: "图形与窗口系统", en: "Graphics and windows" },
+      { slug: "network", zh: "网络栈", en: "Network stack" },
+      { slug: "security", zh: "安全模型", en: "Security model" },
+    ],
+  },
+  {
+    id: "ai",
+    zh: "AI 层 · FUAI",
+    en: "AI layer · FUAI",
+    pages: [
+      { slug: "index", zh: "总览", en: "Overview" },
+      { slug: "proposition", zh: "命题与 S1/S2/S3", en: "Proposition and S1/S2/S3" },
+      { slug: "axioms", zh: "A1–A4 公理", en: "Axioms A1–A4" },
+      { slug: "capability", zh: "能力域与审计环", en: "Capability domains and audit" },
+      { slug: "model-card", zh: "模型卡", en: "Model cards" },
+      { slug: "duties", zh: "模型五职责", en: "The five duties" },
+      { slug: "trust", zh: "信任自适应域宽", en: "Trust-adaptive width" },
+      { slug: "runtime", zh: "运行时与证据链", en: "Runtime and evidence chain" },
+      { slug: "box-bridge", zh: "盒桥", en: "Box bridge" },
+    ],
+  },
+  {
+    id: "language",
+    zh: "语言",
+    en: "Language",
+    pages: [
+      { slug: "index", zh: "总览", en: "Overview" },
+      { slug: "loment", zh: "Loment 语言", en: "The Loment language" },
+      { slug: "l0", zh: "L0 单一真源", en: "L0 source of truth" },
+      { slug: "capability", zh: "能力域即语言构造", en: "Capability as a construct" },
+      { slug: "toolchain", zh: "工具链", en: "Toolchain" },
+      { slug: "selfhost", zh: "自举", en: "Self-hosting" },
+      { slug: "potato", zh: "Potato 形式对象", en: "The Potato object" },
+      { slug: "measurement", zh: "波 C 测量", en: "Wave-C measurement" },
+    ],
+  },
+  {
+    id: "compat",
+    zh: "兼容",
+    en: "Compatibility",
+    pages: [
+      { slug: "index", zh: "总览与口径", en: "Overview and definitions" },
+      { slug: "loaders", zh: "四套加载器", en: "Four loaders" },
+      { slug: "linux-abi", zh: "Linux ABI", en: "Linux ABI" },
+      { slug: "windows", zh: "Windows 垫片", en: "Windows shims" },
+      { slug: "fujr", zh: "FUJR 容器", en: "FUJR containers" },
+      { slug: "plan", zh: "C01–C15 规划", en: "The C01–C15 plan" },
+    ],
+  },
+  {
+    id: "reference",
+    zh: "参考",
+    en: "Reference",
+    pages: [
+      { slug: "index", zh: "总览", en: "Overview" },
+      { slug: "syscalls", zh: "系统调用", en: "Syscalls" },
+      { slug: "opcodes", zh: "FUAI 操作码", en: "FUAI opcodes" },
+      { slug: "fui", zh: "FUI 与 .fuc", en: "FUI and .fuc" },
+      { slug: "repo", zh: "仓库结构", en: "Repository layout" },
+    ],
+  },
+  {
+    id: "project",
+    zh: "项目",
+    en: "Project",
+    pages: [
+      { slug: "index", zh: "总览", en: "Overview" },
+      { slug: "branches", zh: "开发分支", en: "Development branches" },
+      { slug: "network-line", zh: "网络线", en: "The network line" },
+      { slug: "roadmap", zh: "路线图", en: "Roadmap" },
+      { slug: "verification", zh: "可复现性纪律", en: "Reproducibility discipline" },
+      { slug: "limitations", zh: "已知边界", en: "Known limits" },
+    ],
+  },
+];
+
+const PAPER = "https://zenodo.org/records/22352904";
+
+/* -------------------------------------------------------------- helpers */
+
+const flat = SECTIONS.flatMap((s) => s.pages.map((p) => ({ ...p, section: s.id })));
+const upFrom = (depth) => "../".repeat(depth);
+
+function docHref(fromSection, fromDepth, toSection, toSlug) {
+  const up = upFrom(fromDepth);
+  return `${up}docs/${toSection}/${toSlug}.html`;
+}
+
+function sectionOf(id) {
+  return SECTIONS.find((s) => s.id === id);
+}
+
+/* Fragment metadata is a JSON comment on the first line:
+   <!--{"zh":"...","en":"...","desc":"...","banner_zh":"...","banner_en":"..."}--> */
+function parseFragment(raw) {
+  const m = raw.match(/^\s*<!--(\{[\s\S]*?\})-->/);
+  if (!m) throw new Error("fragment is missing its <!--{...}--> metadata comment");
+  return { meta: JSON.parse(m[1]), body: raw.slice(m[0].length).trim() };
+}
+
+const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+/* ------------------------------------------------------------ rendering */
+
+function sidebar(sec, slug, depth) {
+  const parts = [];
+  for (const s of SECTIONS) {
+    const active = s.id === sec ? " docs-side__group--active" : "";
+    parts.push(`              <div class="docs-side__group${active}">`);
+    parts.push(
+      `                <a class="docs-side__h" href="${docHref(sec, depth, s.id, "index")}"` +
+        ` data-zh="${esc(s.zh)}" data-en="${esc(s.en)}">${esc(s.zh)}</a>`
+    );
+    parts.push(`                <div class="docs-side__links">`);
+    for (const p of s.pages) {
+      const here = s.id === sec && p.slug === slug ? ' aria-current="page"' : "";
+      parts.push(
+        `                  <a href="${docHref(sec, depth, s.id, p.slug)}"${here}` +
+          ` data-zh="${esc(p.zh)}" data-en="${esc(p.en)}">${esc(p.zh)}</a>`
+      );
+    }
+    parts.push(`                </div>`);
+    parts.push(`              </div>`);
+  }
+  return parts.join("\n");
+}
+
+function prevNext(sec, slug, depth) {
+  const i = flat.findIndex((p) => p.section === sec && p.slug === slug);
+  if (i < 0) return "";
+  const prev = i > 0 ? flat[i - 1] : null;
+  const next = i < flat.length - 1 ? flat[i + 1] : null;
+  const cell = (p, side) => {
+    if (!p) return `            <span class="pager__spacer"></span>`;
+    const dir = side === "prev" ? "上一步" : "下一步";
+    const dirEn = side === "prev" ? "Previous" : "Next";
+    return (
+      `            <a class="pager__link pager__link--${side}" href="${docHref(sec, depth, p.section, p.slug)}">\n` +
+      `              <span class="pager__dir" data-zh="${dir}" data-en="${dirEn}">${dir}</span>\n` +
+      `              <span class="pager__t" data-zh="${esc(p.zh)}" data-en="${esc(p.en)}">${esc(p.zh)}</span>\n` +
+      `            </a>`
+    );
+  };
+  return `          <nav class="pager" aria-label="文档翻页" data-zh-aria="文档翻页" data-en-aria="Documentation paging">\n${cell(
+    prev,
+    "prev"
+  )}\n${cell(next, "next")}\n          </nav>`;
+}
+
+function crumbs(sec, slug, depth) {
+  const s = sectionOf(sec);
+  const p = s.pages.find((x) => x.slug === slug);
+  const out = [
+    `              <a href="${upFrom(depth)}docs/index.html" data-zh="文档" data-en="Docs">文档</a>`,
+    `              <span class="sep">/</span>`,
+    `              <a href="${docHref(sec, depth, sec, "index")}" data-zh="${esc(s.zh)}" data-en="${esc(s.en)}">${esc(
+      s.zh
+    )}</a>`,
+  ];
+  if (slug !== "index") {
+    out.push(`              <span class="sep">/</span>`);
+    out.push(`              <span data-zh="${esc(p.zh)}" data-en="${esc(p.en)}">${esc(p.zh)}</span>`);
+  }
+  return out.join("\n");
+}
+
+function shell({ sec, slug, depth, meta, body, hub }) {
+  const s = hub ? null : sectionOf(sec);
+  const page = hub ? null : s.pages.find((x) => x.slug === slug);
+  const up = upFrom(depth);
+  let titleZh, titleEn, bannerZh, bannerEn;
+  if (hub) {
+    titleZh = "文档 — FujoOS";
+    titleEn = "Documentation — FujoOS";
+    bannerZh = meta.banner_zh || "文档总览";
+    bannerEn = meta.banner_en || "Documentation overview";
+  } else {
+    titleZh = slug === "index" ? `${s.zh} — FujoOS 文档` : `${page.zh} — ${s.zh} — FujoOS 文档`;
+    titleEn = slug === "index" ? `${s.en} — FujoOS documentation` : `${page.en} — ${s.en} — FujoOS documentation`;
+    bannerZh = meta.banner_zh || page.zh;
+    bannerEn = meta.banner_en || page.en;
+  }
+  const crumbBlock = hub
+    ? ""
+    : `              <p class="crumbs">\n${crumbs(sec, slug, depth)}\n              </p>\n`;
+  const pagerBlock = hub ? "" : `\n${prevNext(sec, slug, depth)}`;
+
+  return `<!DOCTYPE html>
+<!-- GENERATED by tools/docs.gen.mjs — edit _docs-src/${sec}/${slug}.html instead. -->
+<html
+  lang="zh-CN"
+  class="theme-datasheet"
+  data-title-zh="${esc(meta.zh || page.zh)}"
+  data-title-en="${esc(meta.en || page.en)}"
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>${esc(titleZh)}</title>
+    <meta name="description" content="${esc(meta.desc || "")}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="${up}assets/style.css" />
+    <script>
+      document.documentElement.classList.add("js");
+      /* If site.js never runs, reveal everything instead of leaving it hidden. */
+      setTimeout(function () {
+        var r = document.documentElement;
+        if (!r.hasAttribute("data-motion-on")) r.classList.add("no-motion");
+      }, 1200);
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#main" data-zh="跳到主要内容" data-en="Skip to content">跳到主要内容</a>
+
+    <div class="banner" role="note">
+      <div class="banner__inner">
+        <b>FujoOS docs</b>
+        <span class="sep">|</span>
+        <span data-zh="${esc(bannerZh)}" data-en="${esc(bannerEn)}">${esc(bannerZh)}</span>
+        <span class="cadence"
+          ><span class="dot" aria-hidden="true"></span
+          ><span data-zh="任何“完成”都要给出可重放的命令与输出" data-en="any “done” must come with a replayable command and its output">任何“完成”都要给出可重放的命令与输出</span></span
+        >
+      </div>
+    </div>
+
+    <header class="nav">
+      <div class="wrap nav__inner">
+        <a class="nav__brand" href="${up}index.html">
+          <svg viewBox="0 0 32 32" aria-hidden="true">
+            <rect x="4.5" y="4.5" width="23" height="23" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6" />
+            <path d="M4.5 12.5h23" fill="none" stroke="currentColor" stroke-width="1.6" />
+            <circle cx="16" cy="19.5" r="3.1" fill="none" stroke="#b4702a" stroke-width="1.6" />
+            <path d="M19.5 19.5h8" fill="none" stroke="#b4702a" stroke-width="1.6" />
+          </svg>
+          FujoOS
+        </a>
+        <nav class="nav__links" aria-label="主导航" data-zh-aria="主导航" data-en-aria="Primary">
+          <a class="nav__link" href="${up}index.html" data-zh="首页" data-en="Home">首页</a>
+          <a class="nav__link" href="${up}fuai.html" data-zh="FUAI 安全体系" data-en="FUAI safety">FUAI 安全体系</a>
+          <a class="nav__link" href="${up}loment.html" data-zh="Loment · Potato" data-en="Loment · Potato">Loment · Potato</a>
+          <a class="nav__link" href="${up}docs/index.html" aria-current="page" data-zh="文档" data-en="Docs">文档</a>
+          <a class="nav__link" href="${PAPER}" rel="noopener" data-zh="论文 ↗" data-en="Paper ↗">论文 ↗</a>
+          <div class="lang" role="group" aria-label="语言" data-zh-aria="语言" data-en-aria="Language">
+            <button type="button" data-lang="zh" aria-pressed="true">ZH</button>
+            <button type="button" data-lang="en" aria-pressed="false">EN</button>
+          </div>
+        </nav>
+        <button class="nav__toggle" type="button" aria-expanded="false" data-zh="菜单" data-en="Menu">菜单</button>
+      </div>
+      <div class="wrap">
+        <div class="nav__drawer" data-open="false">
+          <a href="${up}index.html" data-zh="首页" data-en="Home">首页</a>
+          <a href="${up}fuai.html" data-zh="FUAI 安全体系" data-en="FUAI safety system">FUAI 安全体系</a>
+          <a href="${up}loment.html" data-zh="Loment · Potato 语言" data-en="Loment · Potato language">Loment · Potato 语言</a>
+          <a href="${up}docs/index.html" data-zh="文档" data-en="Documentation">文档</a>
+          <a href="${up}docs/start/index.html" data-zh="构建与运行" data-en="Build and run">构建与运行</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="section section--flush" style="padding-top: var(--s5)">
+        <div class="wrap">
+          <div class="docs-shell">
+            <aside class="docs-side" aria-label="文档导航" data-zh-aria="文档导航" data-en-aria="Documentation">
+${sidebar(sec, slug, depth)}
+            </aside>
+
+            <div class="docs-body">
+${crumbBlock}${body}
+${pagerBlock}
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <div class="wrap">
+        <div class="foot__end" style="border-top: 0; margin-top: 0">
+          <span>© <span data-year>2026</span> Yuxuan Jiang · MIT</span>
+          <span data-zh="文档与仓库同步 · 以脚本输出为准" data-en="Docs in sync with the repository · scripts are authoritative">文档与仓库同步 · 以脚本输出为准</span>
+        </div>
+      </div>
+    </footer>
+
+    <script src="${up}assets/site.js"></script>
+  </body>
+</html>
+`;
+}
+
+/* ------------------------------------------------------------------ run */
+
+const check = process.argv.includes("--check");
+let written = 0;
+const problems = [];
+
+for (const s of SECTIONS) {
+  for (const p of s.pages) {
+    const srcFile = join(SRC, s.id, `${p.slug}.html`);
+    if (!existsSync(srcFile)) {
+      problems.push(`missing source: _docs-src/${s.id}/${p.slug}.html`);
+      continue;
+    }
+    const { meta, body } = parseFragment(readFileSync(srcFile, "utf8"));
+    const depth = 2; // docs/<section>/<page>.html
+    const html = shell({ sec: s.id, slug: p.slug, depth, meta, body });
+    const outDir = join(OUT, s.id);
+    const outFile = join(outDir, `${p.slug}.html`);
+    if (check) {
+      if (!existsSync(outFile) || readFileSync(outFile, "utf8") !== html) {
+        problems.push(`stale: docs/${s.id}/${p.slug}.html`);
+      }
+    } else {
+      mkdirSync(outDir, { recursive: true });
+      writeFileSync(outFile, html);
+      written++;
+    }
+  }
+}
+
+/* the hub lives at docs/index.html, one level higher than the sections */
+{
+  const srcFile = join(SRC, "_hub.html");
+  if (!existsSync(srcFile)) {
+    problems.push("missing source: _docs-src/_hub.html");
+  } else {
+    const { meta, body } = parseFragment(readFileSync(srcFile, "utf8"));
+    const html = shell({ hub: true, depth: 1, meta, body });
+    const outFile = join(OUT, "index.html");
+    if (check) {
+      if (!existsSync(outFile) || readFileSync(outFile, "utf8") !== html) {
+        problems.push("stale: docs/index.html");
+      }
+    } else {
+      writeFileSync(outFile, html);
+      written++;
+    }
+  }
+}
+
+if (problems.length) {
+  console.error(problems.join("\n"));
+  process.exit(1);
+}
+console.log(check ? `ok — ${flat.length} pages up to date` : `generated ${written} pages`);

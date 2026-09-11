@@ -1,0 +1,81 @@
+<!--{"zh":"工具链","en":"Toolchain","desc":"lomfmt、LSP、lompkg、lomdoc、DWARF 语句级行表、增量构建与内容哈希缓存，以及内建测试 / 基准 / 覆盖率。","banner_zh":"工具链 · 让人愿意用的一层","banner_en":"Toolchain · the layer that makes it usable"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="工具链" data-en="Toolchain">工具链</h1>
+
+              <div class="prose">
+                <p data-zh="一门语言能不能被真正使用，多半不取决于语言本身，而取决于周边。这一页列的是围绕 Loment 建起来的东西，以及每一项的判据。" data-en="Whether a language actually gets used depends less on the language than on what surrounds it. This page lists what has been built around Loment, and the criterion for each.">
+                  一门语言能不能被真正使用，多半不取决于语言本身，而取决于周边。这一页列的是围绕 Loment 建起来的东西，以及每一项的判据。
+                </p>
+              </div>
+
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="工具" data-en="Tool">工具</th>
+                      <th scope="col" data-zh="做什么" data-en="What it does">做什么</th>
+                      <th scope="col" data-zh="判据" data-en="Criterion">判据</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>lomfmt</strong></td>
+                      <td data-zh="格式化器" data-en="Formatter">格式化器</td>
+                      <td data-zh="幂等：格式化两次结果相同" data-en="Idempotent: formatting twice gives the same result">幂等：格式化两次结果相同</td>
+                    </tr>
+                    <tr>
+                      <td><strong>loment_lsp</strong></td>
+                      <td data-zh="语言服务：补全 / 跳转 / 诊断" data-en="Language service: completion / go-to / diagnostics">语言服务：补全 / 跳转 / 诊断</td>
+                      <td data-zh="VS Code 扩展已装，无头验收含完整 LSP 往返；编辑器内人工点验待做" data-en="VS Code extension installed; headless acceptance covers a full LSP round trip; hands-on verification in the editor still pending">VS Code 扩展已装，无头验收含完整 LSP 往返；编辑器内人工点验待做</td>
+                    </tr>
+                    <tr>
+                      <td><strong>lompkg</strong></td>
+                      <td data-zh="包管理器：依赖解析 + 校验和" data-en="Package manager: dependency resolution + checksums">包管理器：依赖解析 + 校验和</td>
+                      <td data-zh="依赖解析与校验和可复现" data-en="Resolution and checksums reproducible">依赖解析与校验和可复现</td>
+                    </tr>
+                    <tr>
+                      <td><strong>lomdoc</strong></td>
+                      <td data-zh="从 .lomt 生成 API 文档" data-en="Generates API docs from .lomt">从 .lomt 生成 API 文档</td>
+                      <td data-zh="文档与编译器同版本" data-en="Docs versioned with the compiler">文档与编译器同版本</td>
+                    </tr>
+                    <tr>
+                      <td><strong>loment ir</strong></td>
+                      <td data-zh="一条命令同时看 IR 与机器码" data-en="IR and machine code in one command">一条命令同时看 IR 与机器码</td>
+                      <td data-zh="输出可读、与目标一致" data-en="Readable output matching the target">输出可读、与目标一致</td>
+                    </tr>
+                    <tr>
+                      <td><strong>loment test / bench / cov</strong></td>
+                      <td data-zh="内建测试、基准与 IR 级覆盖率" data-en="Built-in tests, benchmarks and IR-level coverage">内建测试、基准与 IR 级覆盖率</td>
+                      <td data-zh="测试 4/4 PASS；覆盖率报告可复现" data-en="Tests 4/4 PASS; coverage report reproducible">测试 4/4 PASS；覆盖率报告可复现</td>
+                    </tr>
+                    <tr>
+                      <td><strong>loment dbg</strong></td>
+                      <td data-zh="符号化：按符号名断点、源行映射" data-en="Symbolisation: break by symbol name, source-line mapping">符号化：按符号名断点、源行映射</td>
+                      <td data-zh="“不再读二进制”——编译器导出语义，调试器直接消费" data-en="“No more reading binaries” — the compiler exports semantics and the debugger consumes them">“不再读二进制”——编译器导出语义，调试器直接消费</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 data-zh="构建性能" data-en="Build performance">构建性能</h2>
+              <div class="stats">
+                <div class="stat">
+                  <span class="stat__v">82.6 ms</span>
+                  <span class="stat__k" data-zh="冷构建" data-en="cold build">冷构建</span>
+                </div>
+                <div class="stat">
+                  <span class="stat__v">9.0 ms</span>
+                  <span class="stat__k" data-zh="热构建（增量 + 内容哈希缓存）" data-en="warm build (incremental + content-hash cache)">热构建（增量 + 内容哈希缓存）</span>
+                </div>
+              </div>
+
+              <h2 data-zh="错误信息" data-en="Diagnostics">错误信息</h2>
+              <div class="prose">
+                <p data-zh="诊断分成 E001–E013 十三类，每一类都带修复建议。13 条反例全部命中——这意味着错误分类不是文档里的一张表，而是真的会触发的代码路径。" data-en="Diagnostics fall into thirteen classes, E001–E013, each carrying a repair suggestion. All thirteen counterexamples hit — meaning the classification is not a table in a document but code paths that actually fire.">
+                  诊断分成 E001–E013 十三类，每一类都带修复建议。13 条反例全部命中——这意味着错误分类不是文档里的一张表，而是真的会触发的代码路径。
+                </p>
+              </div>
+
+              <div class="note note--steel">
+                <strong data-zh="编译器内部的那套工具链是另一回事：" data-en="The toolchain inside the kernel is a different thing: ">编译器内部的那套工具链是另一回事：</strong>
+                <span data-zh-html="内核自带汇编器 → 链接器 → C 子集编译器（fujocc）。那是 FujoOS 的，不是 Loment 的——见 <a href=&quot;../start/build.html&quot;>开始 · 构建内核</a>。" data-en-html="the kernel carries its own assembler → linker → C-subset compiler (fujocc). That belongs to FujoOS, not Loment — see <a href=&quot;../start/build.html&quot;>Start · Building the kernel</a>.">内核自带汇编器 → 链接器 → C 子集编译器（fujocc）。那是 FujoOS 的，不是 Loment 的——见 <a href="../start/build.html">开始 · 构建内核</a>。</span>
+              </div>

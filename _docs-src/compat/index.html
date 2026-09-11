@@ -1,0 +1,75 @@
+<!--{"zh":"兼容层总览","en":"Compatibility overview","desc":"兼容的四个口径 P1–P4、现状基线、以及已识别的硬缺口。兼容被定义为集合包含，而不是容器模拟。","banner_zh":"兼容 · 先把“兼容”这个词说死","banner_en":"Compatibility · fixing the word first"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="兼容层总览" data-en="Compatibility overview">兼容层总览</h1>
+
+              <div class="prose">
+                <p data-zh="“兼容”是最容易被含糊过去的词。所以在讲任何实现之前，先把口径写死——否则后面所有的进度汇报都可以靠重新定义词义变得好看。" data-en="“Compatibility” is the easiest word to be vague about. So before any implementation, the definitions are fixed — otherwise every later progress report can be made to look good by redefining the word.">
+                  “兼容”是最容易被含糊过去的词。所以在讲任何实现之前，先把口径写死——否则后面所有的进度汇报都可以靠重新定义词义变得好看。
+                </p>
+              </div>
+
+              <h2 data-zh="四个口径" data-en="Four definitions">四个口径</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="代号" data-en="ID">代号</th>
+                      <th scope="col" data-zh="口径" data-en="Definition">口径</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td><strong>P1</strong></td><td data-zh="兼容 = 集合包含。说“能跑”时，要能说出跑的是哪个子集。" data-en="Compatibility = set inclusion. Claiming “it runs” obliges you to name the subset that runs.">兼容 = 集合包含。说“能跑”时，要能说出跑的是哪个子集。</td></tr>
+                    <tr><td><strong>P2</strong></td><td data-zh="接口契约，而非容器模拟。不模拟操作系统，只履行接口。" data-en="An interface contract, not container emulation. No OS is simulated; interfaces are honoured.">接口契约，而非容器模拟。不模拟操作系统，只履行接口。</td></tr>
+                    <tr><td><strong>P3</strong></td><td data-zh="边界可声明、可测量。说不清边界的兼容不算兼容。" data-en="The boundary can be declared and measured. Compatibility you cannot bound is not compatibility.">边界可声明、可测量。说不清边界的兼容不算兼容。</td></tr>
+                    <tr><td><strong>P4</strong></td><td data-zh="兼容 = 回归矩阵覆盖的依赖闭包。“能跑”的证据是它在矩阵里。" data-en="Compatibility = the dependency closure the regression matrix covers. The evidence for “it runs” is that it is in the matrix.">兼容 = 回归矩阵覆盖的依赖闭包。“能跑”的证据是它在矩阵里。</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 data-zh="原则与不做的事" data-en="Principles and non-goals">原则与不做的事</h2>
+              <div class="grid grid--2">
+                <ul class="list list--check">
+                  <li><b data-zh="clean-room" data-en="clean-room">clean-room</b> <span data-zh="—— 零专有代码。" data-en=" — zero proprietary code.">—— 零专有代码。</span></li>
+                  <li><b data-zh="表驱动" data-en="table-driven">表驱动</b> <span data-zh="—— SHIM_TABLE 加 .def 文件，而不是散落的 if。" data-en=" — a SHIM_TABLE plus .def files, not scattered ifs.">—— SHIM_TABLE 加 .def 文件，而不是散落的 if。</span></li>
+                  <li><b data-zh="每个 API 有正例用例" data-en="a positive test per API">每个 API 有正例用例</b> <span data-zh="—— 没有用例的 API 视为未实现。" data-en=" — an API without a test counts as unimplemented.">—— 没有用例的 API 视为未实现。</span></li>
+                </ul>
+                <ul class="list">
+                  <li><b data-zh="不做内核驱动" data-en="No kernel drivers">不做内核驱动</b> <span data-zh="—— .sys / .ko / .kext 不实现，提供 hypervisor 兜底。" data-en=" — .sys / .ko / .kext are not implemented; a hypervisor provides the fallback.">—— .sys / .ko / .kext 不实现，提供 hypervisor 兜底。</span></li>
+                  <li><b data-zh="不做完整 macOS GUI 等价" data-en="No full macOS GUI equivalence">不做完整 macOS GUI 等价</b> <span data-zh="—— 兼容目标限定在加载器与垫片面。" data-en=" — the target is bounded to the loader and shim surface.">—— 兼容目标限定在加载器与垫片面。</span></li>
+                </ul>
+              </div>
+
+              <h2 data-zh="现状基线（实测事实）" data-en="Current baseline (measured facts)">现状基线（实测事实）</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="面" data-en="Surface">面</th>
+                      <th scope="col" data-zh="现状" data-en="Status">现状</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td data-zh="加载器" data-en="Loaders">加载器</td><td data-zh="ELF / PE32+ / Mach-O / FUJR 四套齐备" data-en="ELF / PE32+ / Mach-O / FUJR — all four in place">ELF / PE32+ / Mach-O / FUJR 四套齐备</td></tr>
+                    <tr><td data-zh="Linux ABI" data-en="Linux ABI">Linux ABI</td><td data-zh="一等公民：原生执行零垫片；命名表已同步为实现面 45 条" data-en="First-class: native execution with no shims; the name table is synced to the 45 implemented entries">一等公民：原生执行零垫片；命名表已同步为实现面 45 条</td></tr>
+                    <tr><td data-zh="Windows 垫片" data-en="Windows shims">Windows 垫片</td><td class="num" data-zh="SHIM_TABLE 97 条：kernel32 40 · msvcrt 45 · gdi32 10 · user32 2" data-en="SHIM_TABLE 97 entries: kernel32 40 · msvcrt 45 · gdi32 10 · user32 2">SHIM_TABLE 97 条：kernel32 40 · msvcrt 45 · gdi32 10 · user32 2</td></tr>
+                    <tr><td data-zh="Darwin" data-en="Darwin">Darwin</td><td data-zh="8 个 BSD syscall + mach-trap 垫片" data-en="8 BSD syscalls + mach-trap shims">8 个 BSD syscall + mach-trap 垫片</td></tr>
+                    <tr><td data-zh="回归" data-en="Regression">回归</td><td class="num" data-zh="59 用例 / TCG 59-59" data-en="59 cases / 59-59 on TCG">59 用例 / TCG 59-59</td></tr>
+                    <tr><td data-zh="样本" data-en="Samples">样本</td><td class="num" data-zh="Linux demo 119 · Windows 样本 8 · Darwin 2" data-en="Linux demos 119 · Windows samples 8 · Darwin 2">Linux demo 119 · Windows 样本 8 · Darwin 2</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 data-zh="已识别的硬缺口" data-en="Identified hard gaps">已识别的硬缺口</h2>
+              <p class="small muted" data-zh="这份清单是兼容线规划的直接动机，也是对“Linux 二进制能在上面原生跑”这类说法最有效的边界声明。" data-en="This list is the direct motivation for the compatibility plan, and the most effective boundary statement against claims like “Linux binaries run natively on it”.">这份清单是兼容线规划的直接动机，也是对“Linux 二进制能在上面原生跑”这类说法最有效的边界声明。</p>
+              <ul class="list">
+                <li data-zh="user32 仅 2 条；无 ntdll 表，无 ws2_32 表" data-en="user32 has only 2 entries; no ntdll table, no ws2_32 table">user32 仅 2 条；无 ntdll 表，无 ws2_32 表</li>
+                <li data-zh="LoadLibraryA 返回假句柄；无真实动态 CRT" data-en="LoadLibraryA returns a fake handle; no real dynamic CRT">LoadLibraryA 返回假句柄；无真实动态 CRT</li>
+                <li data-zh="无跨架构翻译器" data-en="No cross-architecture translator">无跨架构翻译器</li>
+                <li data-zh="compat_audit 目前只覆盖 Windows 面" data-en="compat_audit currently covers the Windows surface only">compat_audit 目前只覆盖 Windows 面</li>
+                <li data-zh="无真实世界程序矩阵；无签名与完整性容器" data-en="No real-world program matrix; no signing or integrity container">无真实世界程序矩阵；无签名与完整性容器</li>
+                <li data-zh="Linux 面：10 条命名表项无实现，已移入 C01 / C08 目标集" data-en="Linux surface: 10 named entries are unimplemented and have moved into the C01 / C08 target set">Linux 面：10 条命名表项无实现，已移入 C01 / C08 目标集</li>
+              </ul>
+
+              <div class="note note--steel">
+                <strong data-zh="下一步：" data-en="Next: ">下一步：</strong>
+                <span data-zh-html="四套加载器见 <a href=&quot;loaders.html&quot;>加载器</a>；三套 ABI 各自的细节见 <a href=&quot;linux-abi.html&quot;>Linux</a> 与 <a href=&quot;windows.html&quot;>Windows</a>；15 项规划见 <a href=&quot;plan.html&quot;>C01–C15</a>。" data-en-html="the four loaders are under <a href=&quot;loaders.html&quot;>Loaders</a>; per-ABI detail under <a href=&quot;linux-abi.html&quot;>Linux</a> and <a href=&quot;windows.html&quot;>Windows</a>; the fifteen-item plan under <a href=&quot;plan.html&quot;>C01–C15</a>.">四套加载器见 <a href="loaders.html">加载器</a>；三套 ABI 各自的细节见 <a href="linux-abi.html">Linux</a> 与 <a href="windows.html">Windows</a>；15 项规划见 <a href="plan.html">C01–C15</a>。</span>
+              </div>

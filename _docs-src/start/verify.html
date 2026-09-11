@@ -1,0 +1,90 @@
+<!--{"zh":"回归、ISO 与 CI","en":"Regression, ISO and CI","desc":"59/59 是什么意思、ISO 自验证给出什么证据、静态门禁查什么、以及 49/51 为什么不是失败。","banner_zh":"回归、ISO 与 CI · 数字要能重跑","banner_en":"Regression, ISO and CI · numbers must re-run"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="回归、ISO 与 CI" data-en="Regression, ISO and CI">回归、ISO 与 CI</h1>
+
+              <div class="prose">
+                <p data-zh="这个仓库对“验证”的定义比较窄：一个主张必须绑在一条能重跑的命令上，输出对得上才算数。所以下面这些不是“测试通过率”，而是可复现的判据。" data-en="This repository defines verification narrowly: a claim must be tied to a re-runnable command, and it counts only if the output matches. So what follows is not a “pass rate” but a set of reproducible criteria.">
+                  这个仓库对“验证”的定义比较窄：一个主张必须绑在一条能重跑的命令上，输出对得上才算数。所以下面这些不是“测试通过率”，而是可复现的判据。
+                </p>
+              </div>
+
+              <h2 data-zh="主回归" data-en="The main regression">主回归</h2>
+              <div class="code">
+                <div class="code__bar">
+                  <span class="lang-tag">bash</span>
+                  <span data-zh="两条命令" data-en="two commands">两条命令</span>
+                  <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+                </div>
+                <pre>python tools/fujoregress.py                 <span class="c"># 59/59 (TCG)</span>
+python tools/fujoregress.py --accel whpx   <span class="c"># 49/51（平台限制）</span></pre>
+              </div>
+
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="口径" data-en="Mode">口径</th>
+                      <th scope="col" data-zh="结果" data-en="Result">结果</th>
+                      <th scope="col" data-zh="差额是什么" data-en="What the difference is">差额是什么</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>TCG</strong> <span class="dim" data-zh="纯软件模拟" data-en="pure emulation">纯软件模拟</span></td>
+                      <td class="num"><span class="tag tag--ok">59/59</span></td>
+                      <td data-zh="参考口径。全部用例在软件模拟下自洽。" data-en="The reference mode. Every case holds under pure emulation.">参考口径。全部用例在软件模拟下自洽。</td>
+                    </tr>
+                    <tr>
+                      <td><strong>WHPX / KVM</strong> <span class="dim" data-zh="硬件虚拟化" data-en="hardware virtualization">硬件虚拟化</span></td>
+                      <td class="num"><span class="tag tag--part">49/51</span></td>
+                      <td data-zh="两处平台限制：传统 8259 路径需要 kernel-irqchip=off；INIT/SIPI 注入被拒绝。是差异，不是失败。" data-en="Two platform limits: the legacy 8259 path needs kernel-irqchip=off, and INIT/SIPI injection is refused. Differences, not failures.">两处平台限制：传统 8259 路径需要 kernel-irqchip=off；INIT/SIPI 注入被拒绝。是差异，不是失败。</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="note note--amber">
+                <strong data-zh="为什么两个口径不同还都写出来：" data-en="Why both modes are published: ">为什么两个口径不同还都写出来：</strong>
+                <span data-zh="只报 59/59 会隐去平台差异；只报 49/51 会让参考口径看起来有问题。两个都写、并说明差额的来源，才是完整的事实。" data-en="quoting only 59/59 hides the platform differences; quoting only 49/51 makes the reference mode look broken. Publishing both and naming the cause of the gap is the complete fact.">只报 59/59 会隐去平台差异；只报 49/51 会让参考口径看起来有问题。两个都写、并说明差额的来源，才是完整的事实。</span>
+              </div>
+
+              <h2 data-zh="ISO 自验证" data-en="ISO self-verification">ISO 自验证</h2>
+              <div class="prose">
+                <p data-zh-html="配套文档 <code>docs/127-iso-verify.md</code> 的写法值得单独一提：它逐行给出“这次启动证明了什么、没有证明什么”。这不是结果表，而是证据的边界声明——一个绿色勾并不能说明全部，说明它能说明哪一部分才有用。" data-en-html="The companion document <code>docs/127-iso-verify.md</code> is worth singling out: it gives, line by line, what this boot proves and what it does not. That is not a results table but a boundary statement about the evidence — a green tick proves little; saying exactly which part it covers is what is useful.">
+                  配套文档 <code>docs/127-iso-verify.md</code> 的写法值得单独一提：它逐行给出“这次启动证明了什么、没有证明什么”。这不是结果表，而是证据的边界声明——一个绿色勾并不能说明全部，说明它能说明哪一部分才有用。
+                </p>
+              </div>
+
+              <h2 data-zh="静态门禁" data-en="The static gate">静态门禁</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="检查" data-en="Check">检查</th>
+                      <th scope="col" data-zh="防的是什么" data-en="What it prevents">防的是什么</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="docs">tools/fuai_contract_check.py</td>
+                      <td data-zh="契约漂移：spec 与两个实现的 opcode / 签名 / 帧布局对不上。" data-en="Contract drift: spec vs. the two implementations disagreeing on opcodes, signatures or frame layout.">契约漂移：spec 与两个实现的 opcode / 签名 / 帧布局对不上。</td>
+                    </tr>
+                    <tr>
+                      <td class="docs">tools/potato_test.py / potato_cross.py</td>
+                      <td data-zh="形式对象规范被放宽：33 条反例必须仍被拒，两个实现判定必须一致。" data-en="The formal-object spec loosening: all 33 counterexamples must still be rejected, and both implementations must agree.">形式对象规范被放宽：33 条反例必须仍被拒，两个实现判定必须一致。</td>
+                    </tr>
+                    <tr>
+                      <td class="docs">tools/lom_audit</td>
+                      <td data-zh="编译器偷偷不导出形式对象：每个示例都必须带一份逐字节一致的对象。" data-en="The compiler quietly skipping formal-object emission: every example must carry a byte-identical object.">编译器偷偷不导出形式对象：每个示例都必须带一份逐字节一致的对象。</td>
+                    </tr>
+                    <tr>
+                      <td class="docs">ci.py --static-only</td>
+                      <td data-zh="上面这些一起跑，作为提交前的静态闸门。" data-en="Runs all of the above together as a pre-commit static gate.">上面这些一起跑，作为提交前的静态闸门。</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="note note--steel">
+                <strong data-zh="这条纪律的由来：" data-en="Where this discipline came from: ">这条纪律的由来：</strong>
+                <span data-zh-html="W46 反证轮发现，最伤人的弱点不是机制被绕过，而是数字口径不可查（同一指标两种算法对不上）。从那以后，“一键复现”从加分项变成了硬要求。细节见 <a href=&quot;../project/verification.html&quot;>可复现性纪律</a>。" data-en-html="The W46 refutation round found that the most damaging weakness was not a bypass of the mechanism but unverifiable number definitions — the same metric computed two ways, disagreeing. Since then, one-command reproduction went from nice-to-have to hard requirement. Details under <a href=&quot;../project/verification.html&quot;>Reproducibility discipline</a>.">W46 反证轮发现，最伤人的弱点不是机制被绕过，而是数字口径不可查（同一指标两种算法对不上）。从那以后，“一键复现”从加分项变成了硬要求。细节见 <a href="../project/verification.html">可复现性纪律</a>。</span>
+              </div>

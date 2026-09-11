@@ -1,0 +1,60 @@
+<!--{"zh":"Loment 语言","en":"The Loment language","desc":"Rust 的严格子集加少量显式扩展：语法不新、语义才新。确定性、no_std 优先、布局与 ABI 是一等公民。","banner_zh":"Loment · 语法不新，语义才新","banner_en":"Loment · not new syntax, new semantics"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="Loment 语言" data-en="The Loment language">Loment 语言</h1>
+
+              <div class="prose">
+                <p data-zh="造一门新语言最大的障碍不是设计，是语料：没有语料的语言，大模型写不了，而今天写系统的人（和 Agent）大量依赖模型辅助。Loment 对这个问题的回答很直接——不新造语法。" data-en="The biggest obstacle to a new language is not design but corpus: without one, a model cannot write it — and people (and agents) writing systems today lean heavily on model assistance. Loment's answer is direct: do not invent new syntax.">
+                  造一门新语言最大的障碍不是设计，是语料：没有语料的语言，大模型写不了，而今天写系统的人（和 Agent）大量依赖模型辅助。Loment 对这个问题的回答很直接——不新造语法。
+                </p>
+              </div>
+
+              <div class="note note--amber">
+                <strong data-zh="策略：" data-en="The strategy: ">策略：</strong>
+                <span data-zh="Loment 的表面语法取 Rust 的严格子集，加少量显式扩展。模型的 Rust 先验可以直接迁移，于是“零语料”这道坎被绕过而不是被硬闯。先例是 C++ 之于 C、TypeScript 之于 JS、Kotlin 之于 Java——新意落在语义与工具上，不落在语法上。" data-en="Loment's surface grammar is a strict Rust subset with a few explicit extensions. A model's Rust priors transfer directly, so the zero-corpus wall is sidestepped rather than head-butted. The precedents are C++ against C, TypeScript against JS, Kotlin against Java — the novelty lands in semantics and tooling, not in syntax.">Loment 的表面语法取 Rust 的严格子集，加少量显式扩展。模型的 Rust 先验可以直接迁移，于是“零语料”这道坎被绕过而不是被硬闯。先例是 C++ 之于 C、TypeScript 之于 JS、Kotlin 之于 Java——新意落在语义与工具上，不落在语法上。</span>
+              </div>
+
+              <h2 data-zh="设计目标（按优先级）" data-en="Design goals (in priority order)">设计目标（按优先级）</h2>
+              <ul class="list">
+                <li><b data-zh="布局与 ABI 是一等公民" data-en="Layout and ABI are first-class">布局与 ABI 是一等公民</b> <span data-zh="—— 显式 layout，编译期 ABI 校验，禁止隐式布局。这条直接消灭了手写 ELF 头与手写机器码那类工作。" data-en=" — explicit layout, compile-time ABI checking, no implicit layout. This directly removes the hand-written ELF headers and machine code.">—— 显式 layout，编译期 ABI 校验，禁止隐式布局。这条直接消灭了手写 ELF 头与手写机器码那类工作。</span></li>
+                <li><b data-zh="确定性" data-en="Determinism">确定性</b> <span data-zh="—— 无 GC、显式所有权、no_std 优先。内核里不能有“偶尔停顿一下”的东西。" data-en=" — no GC, explicit ownership, no_std first. Nothing that “pauses occasionally” belongs in a kernel.">—— 无 GC、显式所有权、no_std 优先。内核里不能有“偶尔停顿一下”的东西。</span></li>
+                <li><b data-zh="能力域语法化" data-en="Capability domains as syntax">能力域语法化</b> <span data-zh="—— capability 是语言构造，A1–A4 可以在编译期静态检查。见下一节。" data-en=" — capability is a language construct, so A1–A4 can be checked statically. See the next page.">—— capability 是语言构造，A1–A4 可以在编译期静态检查。见下一节。</span></li>
+                <li><b data-zh="语义模型导出" data-en="Semantic model export">语义模型导出</b> <span data-zh="—— 每个编译单元产出可审计的 Potato 形式对象。这是硬性的，不是可选优化。" data-en=" — every compilation unit emits an auditable Potato formal object. Mandatory, not an optional optimisation.">—— 每个编译单元产出可审计的 Potato 形式对象。这是硬性的，不是可选优化。</span></li>
+                <li><b data-zh="跨后端" data-en="Multiple backends">跨后端</b> <span data-zh="—— 先做 transpile-to-Rust，再谈 LLVM 与自研后端。可行性判据是“能否不写后端就跑起来”。" data-en=" — transpile-to-Rust first, then LLVM and a self-built backend. The feasibility test was whether it could run at all without writing a backend.">—— 先做 transpile-to-Rust，再谈 LLVM 与自研后端。可行性判据是“能否不写后端就跑起来”。</span></li>
+                <li><b data-zh="内核内可用" data-en="Usable inside the kernel">内核内可用</b> <span data-zh="—— 不依赖宿主，与既有的汇编器 / 链接器 / 编译壳路线衔接。" data-en=" — no host dependency, joining up with the existing assembler / linker / compiler-shell line.">—— 不依赖宿主，与既有的汇编器 / 链接器 / 编译壳路线衔接。</span></li>
+              </ul>
+
+              <h2 data-zh="三层分期" data-en="Three stages">三层分期</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="层" data-en="Layer">层</th>
+                      <th scope="col" data-zh="是什么" data-en="What it is">是什么</th>
+                      <th scope="col" data-zh="状态" data-en="Status">状态</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>L0</strong></td>
+                      <td data-zh="接口层：.lom 单一真源 → 生成器 → 多语言产物" data-en="Interface layer: .lom source of truth → generator → multi-language output">接口层：.lom 单一真源 → 生成器 → 多语言产物</td>
+                      <td><span class="tag tag--ok" data-zh="已落地" data-en="landed">已落地</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>L1</strong></td>
+                      <td data-zh="系统语言：Loment 本体，转译到 Rust 起步" data-en="System language: Loment itself, starting with transpilation to Rust">系统语言：Loment 本体，转译到 Rust 起步</td>
+                      <td><span class="tag tag--part" data-zh="1.0-pre" data-en="1.0-pre">1.0-pre</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>L2</strong></td>
+                      <td data-zh="平台母语：SDK 用 Loment，内核自带工具链" data-en="Platform mother tongue: the SDK in Loment, toolchain in the kernel">平台母语：SDK 用 Loment，内核自带工具链</td>
+                      <td><span class="tag tag--no" data-zh="远期" data-en="long term">远期</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 data-zh="写在前面的一条止损线" data-en="A stop-loss, written down in advance">写在前面的一条止损线</h2>
+              <div class="prose">
+                <p data-zh="如果 L1 在三个月内无法与 Rust 原版逐位对齐，就回退到“L0 + 代码生成”路线，L1 归档。这条线在立项文档里就写定了，不是事后追认——它的作用是在做不下去时，让放弃变成一个已经决定过的动作，而不是一次情绪化的止损。" data-en="If L1 cannot align bit-for-bit with the Rust original within three months, the project falls back to “L0 + code generation” and archives L1. That line was fixed in the founding document rather than added retroactively — its purpose is to make giving up a decision already taken, rather than an emotional exit.">
+                  如果 L1 在三个月内无法与 Rust 原版逐位对齐，就回退到“L0 + 代码生成”路线，L1 归档。这条线在立项文档里就写定了，不是事后追认——它的作用是在做不下去时，让放弃变成一个已经决定过的动作，而不是一次情绪化的止损。
+                </p>
+              </div>

@@ -1,0 +1,56 @@
+<!--{"zh":"存储与 FJFS","en":"Storage and FJFS","desc":"内核只做块设备访问，文件语义全在用户态服务；FJFS 卷、AHCI/SATA 真盘与页缓存。","banner_zh":"存储 · 内核只碰块设备","banner_en":"Storage · the kernel touches blocks only"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="存储与 FJFS" data-en="Storage and FJFS">存储与 FJFS</h1>
+
+              <div class="prose">
+                <p data-zh="划界很清楚：内核只负责块设备访问（经 Ring3 驱动），文件语义全部由 srv_fs 服务实现。这样做的直接后果是——换一个文件系统不需要动内核。" data-en="The boundary is clear: the kernel only performs block-device access, through Ring3 drivers, and all file semantics live in the srv_fs service. The direct consequence is that swapping a filesystem does not require touching the kernel.">
+                  划界很清楚：内核只负责块设备访问（经 Ring3 驱动），文件语义全部由 srv_fs 服务实现。这样做的直接后果是——换一个文件系统不需要动内核。
+                </p>
+              </div>
+
+              <h2 data-zh="服务端驱动表" data-en="Service-side driver table">服务端驱动表</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="驱动" data-en="Driver">驱动</th>
+                      <th scope="col" data-zh="定位" data-en="Role">定位</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td class="docs">fujo-fs</td><td data-zh="原生文件系统（FJFS），格式化 / 持久化已验证。" data-en="The native filesystem (FJFS); formatting and persistence are verified.">原生文件系统（FJFS），格式化 / 持久化已验证。</td></tr>
+                    <tr><td class="docs">ext4</td><td data-zh="Linux 兼容读取。" data-en="Linux-compatible reads.">Linux 兼容读取。</td></tr>
+                    <tr><td class="docs">ntfs</td><td data-zh="只读（计划中）。" data-en="Read-only (planned).">只读（计划中）。</td></tr>
+                    <tr><td class="docs">exfat / fat</td><td data-zh="共享分区。" data-en="Shared partitions.">共享分区。</td></tr>
+                    <tr><td class="docs">hfs+ / apfs-ro</td><td data-zh="只读。" data-en="Read-only.">只读。</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 data-zh="FJFS 的实际状态" data-en="Where FJFS actually stands">FJFS 的实际状态</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="项" data-en="Item">项</th>
+                      <th scope="col" data-zh="状态" data-en="Status">状态</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td data-zh="卷大小" data-en="Volume size">卷大小</td><td class="num">4 MiB</td></tr>
+                    <tr><td data-zh="格式化 / 持久化" data-en="Format / persist">格式化 / 持久化</td><td><span class="tag tag--ok" data-zh="已验证" data-en="verified">已验证</span></td></tr>
+                    <tr><td data-zh="真盘（AHCI/SATA）" data-en="Real disk (AHCI/SATA)">真盘（AHCI/SATA）</td><td><span class="tag tag--ok" data-zh="已验证" data-en="verified">已验证</span></td></tr>
+                    <tr><td data-zh="多簇写入上限" data-en="Multi-cluster write ceiling">多簇写入上限</td><td class="num">32 KiB <span class="tag tag--part" data-zh="待扩展" data-en="pending">待扩展</span></td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="note note--amber">
+                <strong data-zh="最容易被含糊过去的一条：" data-en="The easiest thing to gloss over: ">最容易被含糊过去的一条：</strong>
+                <span data-zh="FJFS 的多簇写入目前只支持到 32 KiB 的文件。更大的文件是排队中的工作，不是“已支持”。这条写在这里而不是留给读者去试。" data-en="FJFS multi-cluster writes currently cover files up to 32 KiB. Larger files are queued work, not “supported”. That is stated here rather than left for the reader to discover.">FJFS 的多簇写入目前只支持到 32 KiB 的文件。更大的文件是排队中的工作，不是“已支持”。这条写在这里而不是留给读者去试。</span>
+              </div>
+
+              <div class="prose">
+                <p data-zh="其余部分：ATA PIO 提供最基础的块访问，页缓存与预读在其上收敛性能；存档沙箱提供 8×8 KiB 的隔离写入区；所有服务都可注入检查点，为翻译缓存与进程迁移打底。" data-en="The rest: ATA PIO provides the most basic block access, with page cache and read-ahead converging performance on top; an archive sandbox provides an 8×8 KiB isolated write area; and every service can take a checkpoint, laying groundwork for translation caching and process migration.">
+                  其余部分：ATA PIO 提供最基础的块访问，页缓存与预读在其上收敛性能；存档沙箱提供 8×8 KiB 的隔离写入区；所有服务都可注入检查点，为翻译缓存与进程迁移打底。
+                </p>
+              </div>

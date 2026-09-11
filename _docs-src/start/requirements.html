@@ -1,0 +1,65 @@
+<!--{"zh":"环境要求","en":"Requirements","desc":"构建与运行 FujoOS 需要什么：Rust nightly、Python 3、QEMU，以及哪些是可选的加速路径。","banner_zh":"环境要求 · 参考机器是 QEMU","banner_en":"Requirements · the reference machine is QEMU"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="环境要求" data-en="Requirements">环境要求</h1>
+
+              <div class="prose">
+                <p data-zh="“零第三方依赖”说的是内核本身：它是 no_std、不引用任何外部 crate。构建和验证仍然需要几样宿主工具，下面一条条写清楚，并区分哪些是必需的、哪些只是加速。" data-en="“No third-party dependencies” describes the kernel itself: it is no_std and pulls in no external crates. Building and verifying still need a few host tools — listed below, with a clear split between required and merely optional.">
+                  “零第三方依赖”说的是内核本身：它是 no_std、不引用任何外部 crate。构建和验证仍然需要几样宿主工具，下面一条条写清楚，并区分哪些是必需的、哪些只是加速。
+                </p>
+              </div>
+
+              <h2 data-zh="必需" data-en="Required">必需</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="工具" data-en="Tool">工具</th>
+                      <th scope="col" data-zh="为什么需要" data-en="Why it is needed">为什么需要</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Rust nightly + cargo</strong> <span class="dim" data-zh="目标 x86_64-unknown-none" data-en="target x86_64-unknown-none">目标 x86_64-unknown-none</span></td>
+                      <td data-zh="内核是 no_std crate。裸机目标需要 nightly 才有的特性，因此不能只用 stable。" data-en="The kernel is a no_std crate. The bare-metal target needs nightly-only features, so stable alone is not enough.">内核是 no_std crate。裸机目标需要 nightly 才有的特性，因此不能只用 stable。</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Python 3</strong></td>
+                      <td data-zh="构建辅助（ELF 压平）、回归套件、模型评测与图形脚本。tools/ 下的脚本全部是纯 Python，没有 pip 依赖。" data-en="Build helpers (ELF flattening), the regression suite, model evaluation and figure scripts. Everything under tools/ is pure Python with no pip dependencies.">构建辅助（ELF 压平）、回归套件、模型评测与图形脚本。tools/ 下的脚本全部是纯 Python，没有 pip 依赖。</td>
+                    </tr>
+                    <tr>
+                      <td><strong>QEMU (x86_64)</strong></td>
+                      <td data-zh="参考机器。启动与全部回归都在它上面跑；没有开发板、没有真机依赖。" data-en="The reference machine. Booting and the whole regression suite run on it; no development board, no real-hardware dependency.">参考机器。启动与全部回归都在它上面跑；没有开发板、没有真机依赖。</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 data-zh="可选" data-en="Optional">可选</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="工具" data-en="Tool">工具</th>
+                      <th scope="col" data-zh="得到什么" data-en="What it buys you">得到什么</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>WHPX / KVM</strong></td>
+                      <td data-zh="硬件虚拟化加速。回归会从 59/59 变成 49/51 —— 差额是两处已记录的平台限制，不是失败。" data-en="Hardware virtualization acceleration. The regression count moves from 59/59 to 49/51 — the difference is two documented platform limits, not failures.">硬件虚拟化加速。回归会从 59/59 变成 49/51 —— 差额是两处已记录的平台限制，不是失败。</td>
+                    </tr>
+                    <tr>
+                      <td><strong>PowerShell</strong></td>
+                      <td data-zh="Windows 侧的 scripts/onebuild.ps1 一键构建脚本（hello / gui / game 模板）。" data-en="The Windows-side one-click script scripts/onebuild.ps1 (hello / gui / game templates).">Windows 侧的 scripts/onebuild.ps1 一键构建脚本（hello / gui / game 模板）。</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Ollama</strong></td>
+                      <td data-zh="只有要复现 AI 层实验时才需要。模型跑在宿主上，不进内核；没有它，系统退回确定性规则照常运行。" data-en="Only needed to reproduce the AI-layer experiments. The model runs on the host and never enters the kernel; without it, the system falls back to deterministic rules and keeps running.">只有要复现 AI 层实验时才需要。模型跑在宿主上，不进内核；没有它，系统退回确定性规则照常运行。</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="note note--amber">
+                <strong data-zh="关于“真机”：" data-en="On “real hardware”: ">关于“真机”：</strong>
+                <span data-zh="GRUB 启动、AHCI/SATA 持久化与平台检测已在真机上演示过；VBE 视频与 USB 驱动仍未完成。也就是说，真机覆盖是部分的，而且这一点写在明处而不是含混过去。" data-en="GRUB boot, AHCI/SATA persistence and platform detection have been demonstrated on real hardware; VBE video and USB drivers are unfinished. Real-hardware coverage is partial, and that is stated plainly rather than glossed over.">GRUB 启动、AHCI/SATA 持久化与平台检测已在真机上演示过；VBE 视频与 USB 驱动仍未完成。也就是说，真机覆盖是部分的，而且这一点写在明处而不是含混过去。</span>
+              </div>

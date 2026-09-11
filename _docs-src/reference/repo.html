@@ -1,0 +1,64 @@
+<!--{"zh":"仓库结构","en":"Repository layout","desc":"顶层目录各是什么，以及 docs/ 的编号组织方式与几份应该先读的文档。","banner_zh":"仓库结构 · 从哪读起","banner_en":"Repository layout · where to start reading"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="仓库结构" data-en="Repository layout">仓库结构</h1>
+
+              <h2 data-zh="顶层目录" data-en="Top-level directories">顶层目录</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="目录" data-en="Directory">目录</th>
+                      <th scope="col" data-zh="内容" data-en="Contents">内容</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td class="docs">kernel/</td><td data-zh="内核本体（x86_64，no_std，无第三方依赖）" data-en="The kernel itself (x86_64, no_std, no third-party dependencies)">内核本体（x86_64，no_std，无第三方依赖）</td></tr>
+                    <tr><td class="docs">sdk/</td><td data-zh="样例程序：linux / win / mac / kit / hermes / user，以及模板" data-en="Sample programs: linux / win / mac / kit / hermes / user, plus templates">样例程序：linux / win / mac / kit / hermes / user，以及模板</td></tr>
+                    <tr><td class="docs">tools/</td><td data-zh="构建、回归、模型评测与图形脚本（纯 Python，无 pip 依赖）" data-en="Build, regression, model evaluation and figure scripts (pure Python, no pip dependencies)">构建、回归、模型评测与图形脚本（纯 Python，无 pip 依赖）</td></tr>
+                    <tr><td class="docs">scripts/</td><td data-zh="构建辅助，含 onebuild 一键脚本" data-en="Build helpers, including the onebuild one-click script">构建辅助，含 onebuild 一键脚本</td></tr>
+                    <tr><td class="docs">docs/</td><td data-zh="项目文档与里程碑笔记（多数是中文）" data-en="Project documentation and milestone notes (mostly Chinese)">项目文档与里程碑笔记（多数是中文）</td></tr>
+                    <tr><td class="docs">lom/ · loment/ · fujopack/ · fujorun/</td><td data-zh="语言线：单一真源、语言实现、打包与装载工具" data-en="Language line: single source of truth, language implementation, packing and loading tools">语言线：单一真源、语言实现、打包与装载工具</td></tr>
+                    <tr><td class="docs">release/</td><td data-zh="可引导 ISO 与校验和" data-en="Bootable ISO and checksums">可引导 ISO 与校验和</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 data-zh="docs/ 的编号" data-en="The docs/ numbering">docs/ 的编号</h2>
+              <div class="prose">
+                <p data-zh="文档用递增数字编号，大体按时间顺序，而不是按主题分组。这带来一个副作用：想找“某个主题的权威说明”时不能靠目录，得知道它在哪一波里出现。下面这份分组索引就是为了补上这一点。" data-en="Documents are numbered in increasing order, roughly chronologically rather than grouped by topic. One side effect: finding the authoritative text on a subject does not work by browsing — you have to know which wave it appeared in. The grouped index below exists to make up for that.">
+                  文档用递增数字编号，大体按时间顺序，而不是按主题分组。这带来一个副作用：想找“某个主题的权威说明”时不能靠目录，得知道它在哪一波里出现。下面这份分组索引就是为了补上这一点。
+                </p>
+              </div>
+
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="主题" data-en="Theme">主题</th>
+                      <th scope="col" data-zh="入口文档" data-en="Entry documents">入口文档</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td data-zh="总纲" data-en="Orientation">总纲</td><td class="docs">01-architecture · 51-project-status · 57-long-roadmap · 58-handoff</td></tr>
+                    <tr><td data-zh="内核与硬件" data-en="Kernel and hardware">内核与硬件</td><td class="docs">13-smp · 14-tss-irq · 15-pcache · 45-acpi · 46-hwadapt · 75-w20-ahci</td></tr>
+                    <tr><td data-zh="AI 层与 FUAI" data-en="AI layer and FUAI">AI 层与 FUAI</td><td class="docs">82-w22-ai-vertical · 130-fuai-research-program · 133-phase2-a6-alpha · 137-fuai-os-charter</td></tr>
+                    <tr><td data-zh="语言 L0 / L1" data-en="Languages L0 / L1">语言 L0 / L1</td><td class="docs">140-loment-lang-plan · 141-l0-lom-spec · 145-loment-100-milestones · 150-loment-selfhost</td></tr>
+                    <tr><td data-zh="表示层 Potato" data-en="Representation layer, Potato">表示层 Potato</td><td class="docs">110-w36-potato-lang · 142-potato-v0 · 147-potato-v1-spec</td></tr>
+                    <tr><td data-zh="兼容层" data-en="Compatibility">兼容层</td><td class="docs">03-compatibility · 105-w34-win-compat · 123-w45-compat-deep · 139-compat-line-plan</td></tr>
+                    <tr><td data-zh="网络" data-en="Networking">网络</td><td class="docs">100-b2-tcp-probe · 155-net-line · docs/net/CHARTER</td></tr>
+                    <tr><td data-zh="工具链与交付" data-en="Toolchain and delivery">工具链与交付</td><td class="docs">20-asm-tool · 21-ld-tool · 24-debugger · 29-sdk-close · 49-release-notes</td></tr>
+                    <tr><td data-zh="可复现与验证" data-en="Reproduction and verification">可复现与验证</td><td class="docs">27-ci · 92-w29-platform-contrast · 127-iso-verify · 131-semantic-goldset</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 data-zh="如果只想读三份" data-en="If you only read three">如果只想读三份</h2>
+              <ul class="list">
+                <li><b data-zh="51-project-status" data-en="51-project-status">51-project-status</b> <span data-zh="—— 项目现状总览，权威快照。" data-en=" — the authoritative snapshot of where the project stands.">—— 项目现状总览，权威快照。</span></li>
+                <li><b data-zh="137-fuai-os-charter" data-en="137-fuai-os-charter">137-fuai-os-charter</b> <span data-zh="—— AI 层的完整宪章，含与另一方案的四处实质分歧及理由。" data-en=" — the full charter for the AI layer, including four substantive disagreements with an alternative plan and the reasoning.">—— AI 层的完整宪章，含与另一方案的四处实质分歧及理由。</span></li>
+                <li><b data-zh="140-loment-lang-plan" data-en="140-loment-lang-plan">140-loment-lang-plan</b> <span data-zh="—— 语言立项，含十个痛点与三条可行性破解。" data-en=" — the language proposal, with the ten pain points and the three feasibility workarounds.">—— 语言立项，含十个痛点与三条可行性破解。</span></li>
+              </ul>
+
+              <div class="note note--steel">
+                <strong data-zh="同一份材料的两处呈现：" data-en="Two presentations of one body of material: ">同一份材料的两处呈现：</strong>
+                <span data-zh="这个站点是给外部读者的组织化版本；仓库里的 docs/ 是原始笔记，保留了当时的实测输出与踩坑记录，也更坦白——两者不冲突，但后者信息更密。" data-en="this site is the organised version for outside readers; the docs/ in the repository are the raw notes, keeping the measurement output and pitfalls of their moment, and blunter. The two do not conflict, but the latter is denser.">这个站点是给外部读者的组织化版本；仓库里的 docs/ 是原始笔记，保留了当时的实测输出与踩坑记录，也更坦白——两者不冲突，但后者信息更密。</span>
+              </div>

@@ -1,0 +1,56 @@
+<!--{"zh":"构建内核","en":"Building the kernel","desc":"构建 no_std 内核 crate，并把 ELF 压平成可被 -kernel 直接加载的镜像。","banner_zh":"构建内核 · 两步","banner_en":"Building · two steps"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="构建内核" data-en="Building the kernel">构建内核</h1>
+
+              <div class="prose">
+                <p data-zh="构建分两步：cargo 产出 ELF，然后把它压平成一个连续镜像。第二步存在的原因值得说明——它不是习惯，而是因为 -kernel 路径需要一个可被直接映射的连续映像，而链接产物带有节区对齐与间隙。" data-en="The build has two steps: cargo produces an ELF, then it is flattened into one contiguous image. The second step is worth explaining — it is not habit, but because the -kernel path needs a contiguous image it can map directly, while a linked artifact carries section alignment and gaps.">
+                  构建分两步：cargo 产出 ELF，然后把它压平成一个连续镜像。第二步存在的原因值得说明——它不是习惯，而是因为 -kernel 路径需要一个可被直接映射的连续映像，而链接产物带有节区对齐与间隙。
+                </p>
+              </div>
+
+              <div class="code">
+                <div class="code__bar">
+                  <span class="lang-tag">bash</span>
+                  <span data-zh="构建" data-en="build">构建</span>
+                  <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+                </div>
+                <pre>cd kernel
+cargo build --release
+
+python tools/flatten_elf.py \
+    kernel/target/x86_64-unknown-none/release/fujo-kernel \
+    kernel/fujo-kernel.bin --pad 0x1C0000</pre>
+              </div>
+
+              <h2 data-zh="产物" data-en="Artifacts">产物</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="文件" data-en="File">文件</th>
+                      <th scope="col" data-zh="说明" data-en="Notes">说明</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="docs">kernel/target/x86_64-unknown-none/release/fujo-kernel</td>
+                      <td data-zh="链接器直接产出的 ELF64，带节区与对齐信息。" data-en="The ELF64 the linker emits, with section headers and alignment.">链接器直接产出的 ELF64，带节区与对齐信息。</td>
+                    </tr>
+                    <tr>
+                      <td class="docs">kernel/fujo-kernel.bin</td>
+                      <td data-zh="压平后的连续镜像，--pad 补齐到固定大小，供 -kernel 直接加载。" data-en="The flattened contiguous image, --pad-ed to a fixed size for -kernel to load directly.">压平后的连续镜像，--pad 补齐到固定大小，供 -kernel 直接加载。</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 data-zh="内核内部还有一套工具链" data-en="There is a second toolchain inside the kernel">内核内部还有一套工具链</h2>
+              <div class="prose">
+                <p data-zh="上面构建的是内核。有趣的是内核自己也带一套编译器：汇编器 → 链接器 → C 子集编译器（fujocc），全链产出 ELF64，它已经构建并运行过自己的 hello。那是 W16 的自举“毕业考试”，和这里的宿主构建是两件不同的事。" data-en="What you build above is the kernel. What is unusual is that the kernel carries its own compiler too: assembler → linker → C-subset compiler (fujocc), the full chain emitting ELF64, which has already built and run its own hello. That was the W16 self-hosting “final exam”, and it is a different thing from this host-side build.">
+                  上面构建的是内核。有趣的是内核自己也带一套编译器：汇编器 → 链接器 → C 子集编译器（fujocc），全链产出 ELF64，它已经构建并运行过自己的 hello。那是 W16 的自举“毕业考试”，和这里的宿主构建是两件不同的事。
+                </p>
+              </div>
+
+              <div class="note note--steel">
+                <strong data-zh="相关：" data-en="See also: ">相关：</strong>
+                <span data-zh-html="内核内部的工具链细节见 <a href=&quot;../reference/repo.html&quot;>仓库结构</a>；Loment 自己的工具链（lomfmt / LSP / 包管理器）是另一条线，见 <a href=&quot;../language/toolchain.html&quot;>语言 · 工具链</a>。" data-en-html="the in-kernel toolchain is detailed under <a href=&quot;../reference/repo.html&quot;>Repository layout</a>; Loment's own toolchain (lomfmt / LSP / package manager) is a separate line — see <a href=&quot;../language/toolchain.html&quot;>Language · Toolchain</a>.">内核内部的工具链细节见 <a href="../reference/repo.html">仓库结构</a>；Loment 自己的工具链（lomfmt / LSP / 包管理器）是另一条线，见 <a href="../language/toolchain.html">语言 · 工具链</a>。</span>
+              </div>

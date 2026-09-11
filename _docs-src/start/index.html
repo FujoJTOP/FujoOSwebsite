@@ -1,0 +1,37 @@
+<!--{"zh":"开始","en":"Start","desc":"构建、启动并验证 FujoOS：环境要求、构建内核、在 QEMU 中运行、跑回归与 ISO 自验证。","banner_zh":"开始 · 从零到桌面","banner_en":"Start · from scratch to desktop"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="开始" data-en="Start">开始</h1>
+
+              <div class="prose">
+                <p data-zh="这一节的目标是：让任何一台装好工具链的机器，在不读源码的前提下，把 FujoOS 构建出来、跑起来，并且自己判断它是否真的工作。每一步都对应仓库里的一条命令，不是示意。" data-en="The goal of this section: on any machine with the toolchain installed, build FujoOS, run it, and judge for yourself whether it actually works — without reading the source first. Every step maps to a real command in the repository, not an illustration.">
+                  这一节的目标是：让任何一台装好工具链的机器，在不读源码的前提下，把 FujoOS 构建出来、跑起来，并且自己判断它是否真的工作。每一步都对应仓库里的一条命令，不是示意。
+                </p>
+              </div>
+
+              <h2 data-zh="四步路径" data-en="The four-step path">四步路径</h2>
+              <div class="grid grid--2">
+                <a class="card card--link" href="requirements.html">
+                  <span class="card__k" data-zh="第一步" data-en="Step one">第一步</span>
+                  <h3 class="h3" data-zh="环境要求" data-en="Requirements">环境要求</h3>
+                  <p data-zh="Rust nightly、Python 3、QEMU，以及哪些是可选的加速路径。" data-en="Rust nightly, Python 3, QEMU — and which parts are optional acceleration.">Rust nightly、Python 3、QEMU，以及哪些是可选的加速路径。</p>
+                </a>
+                <a class="card card--link" href="build.html">
+                  <span class="card__k" data-zh="第二步" data-en="Step two">第二步</span>
+                  <h3 class="h3" data-zh="构建内核" data-en="Building the kernel">构建内核</h3>
+                  <p data-zh="no_std crate 构建，以及为什么还需要把 ELF 压平成可被 -kernel 吃下的镜像。" data-en="Building the no_std crate, and why the ELF then has to be flattened into an image -kernel can load.">no_std crate 构建，以及为什么还需要把 ELF 压平成可被 -kernel 吃下的镜像。</p>
+                </a>
+                <a class="card card--link" href="run.html">
+                  <span class="card__k" data-zh="第三步" data-en="Step three">第三步</span>
+                  <h3 class="h3" data-zh="启动与运行" data-en="Running it">启动与运行</h3>
+                  <p data-zh="三种启动方式、monitor 里怎么选 demo、以及失败时先看哪里。" data-en="Three ways to boot, how to pick a demo from the monitor, and where to look first when it fails.">三种启动方式、monitor 里怎么选 demo、以及失败时先看哪里。</p>
+                </a>
+                <a class="card card--link" href="verify.html">
+                  <span class="card__k" data-zh="第四步" data-en="Step four">第四步</span>
+                  <h3 class="h3" data-zh="回归、ISO 与 CI" data-en="Regression, ISO and CI">回归、ISO 与 CI</h3>
+                  <p data-zh="59/59 是什么、ISO 自验证给出什么样的证据、静态门禁查什么。" data-en="What 59/59 means, what evidence the ISO self-verification gives, and what the static gate checks.">59/59 是什么、ISO 自验证给出什么样的证据、静态门禁查什么。</p>
+                </a>
+              </div>
+
+              <div class="note note--steel">
+                <strong data-zh="读完这一节能得到什么：" data-en="What you get from this section: ">读完这一节能得到什么：</strong>
+                <span data-zh="一个能在自己机器上复现的“它确实启动了”的结论，以及知道每个数字是从哪条命令跑出来的。剩下三节（架构、AI 层、语言）讲的是它为什么这样设计。" data-en="a reproducible conclusion on your own machine that it really does boot, plus knowing which command produced which number. The other three sections — architecture, AI layer, language — cover why it is designed this way.">一个能在自己机器上复现的“它确实启动了”的结论，以及知道每个数字是从哪条命令跑出来的。剩下三节（架构、AI 层、语言）讲的是它为什么这样设计。</span>
+              </div>

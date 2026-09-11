@@ -1,0 +1,100 @@
+<!--{"zh":"系统调用闸门","en":"The syscall gate","desc":"三套 ABI 共享同一个内核服务面，差别只在编号映射：Linux 原生零垫片，Windows 走 ntdll，macOS 走 BSD 表与 mach trap。","banner_zh":"系统调用闸门 · 三套 ABI，一个服务面","banner_en":"Syscall gate · three ABIs, one service surface"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="系统调用闸门" data-en="The syscall gate">系统调用闸门</h1>
+
+              <div class="prose">
+                <p data-zh="这是整个设计里最关键的一处，也是“兼容是一等能力”这句话的落地方式：三套 ABI 共享同一内核服务面（POSIX 风格服务 + FujoOS 扩展），差别只在编号映射。" data-en="This is the single most important decision in the design, and the concrete form of “compatibility is first-class”: three ABIs share one kernel service surface (POSIX-style services plus FujoOS extensions) and differ only in number mapping.">
+                  这是整个设计里最关键的一处，也是“兼容是一等能力”这句话的落地方式：三套 ABI 共享同一内核服务面（POSIX 风格服务 + FujoOS 扩展），差别只在编号映射。
+                </p>
+              </div>
+
+              <figure class="figure" style="margin-top: var(--s4)">
+                <svg
+                  class="envelope"
+                  viewBox="0 0 620 240"
+                  role="img"
+                  aria-label="Linux ELF、Windows PE32+ 与 macOS Mach-O 三种二进制经由 ABI 选择器汇入同一个内核服务面。"
+                  data-zh-aria="Linux ELF、Windows PE32+ 与 macOS Mach-O 三种二进制经由 ABI 选择器汇入同一个内核服务面。"
+                  data-en-aria="Linux ELF, Windows PE32+ and macOS Mach-O binaries converge through an ABI selector into a single kernel service surface."
+                >
+                  <defs>
+                    <marker id="mkg-s" class="mk" viewBox="0 0 8 8" refX="7.5" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+                      <path d="M0,0 L8,4 L0,8 Z" />
+                    </marker>
+                  </defs>
+
+                  <rect x="16" y="30" width="150" height="48" class="stroke s-steel" />
+                  <text x="30" y="52" class="t-steel">Linux ELF</text>
+                  <text x="30" y="68" class="t-dim" style="font-size: 11px">原生 · 零垫片</text>
+
+                  <rect x="16" y="96" width="150" height="48" class="stroke s-amber" />
+                  <text x="30" y="118" class="t-amber">Windows PE32+</text>
+                  <text x="30" y="134" class="t-dim" style="font-size: 11px">ntdll 垫片</text>
+
+                  <rect x="16" y="162" width="150" height="48" class="stroke s-amber" />
+                  <text x="30" y="184" class="t-amber">macOS Mach-O</text>
+                  <text x="30" y="200" class="t-dim" style="font-size: 11px">BSD 表 + mach_msg</text>
+
+                  <path class="stroke s-steel" d="M166,54 C204,54 196,120 232,120" marker-end="url(#mkg-s)" />
+                  <path class="stroke s-amber" d="M166,120 H232" marker-end="url(#mkg-s)" />
+                  <path class="stroke s-amber" d="M166,186 C204,186 196,120 232,120" marker-end="url(#mkg-s)" />
+
+                  <rect x="232" y="96" width="116" height="48" class="stroke s-rule" />
+                  <text x="290" y="126" text-anchor="middle" class="t-dim">ABI 选择器</text>
+
+                  <path class="stroke s-steel" d="M348,120 H418" marker-end="url(#mkg-s)" />
+
+                  <rect x="418" y="76" width="186" height="88" class="stroke s-steel" />
+                  <text x="434" y="112" class="t-steel">内核服务面</text>
+                  <text x="434" y="132" class="t-dim" style="font-size: 11px">POSIX 风格服务</text>
+                  <text x="434" y="148" class="t-dim" style="font-size: 11px">+ FujoOS 扩展</text>
+                </svg>
+                <figcaption class="figure__cap">
+                  <span data-zh="琥珀 = 需要垫片的路径" data-en="amber = paths needing a shim">琥珀 = 需要垫片的路径</span>
+                  <span data-zh="钢青 = 直接映射" data-en="steel = direct mapping">钢青 = 直接映射</span>
+                </figcaption>
+              </figure>
+
+              <h2 data-zh="三条路为什么不一样" data-en="Why the three paths differ">三条路为什么不一样</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="ABI" data-en="ABI">ABI</th>
+                      <th scope="col" data-zh="路径" data-en="Path">路径</th>
+                      <th scope="col" data-zh="为什么" data-en="Why">为什么</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Linux x86_64</strong></td>
+                      <td data-zh="原始 syscall 号 → 服务表，第一公民" data-en="Raw syscall numbers → service table, first-class">原始 syscall 号 → 服务表，第一公民</td>
+                      <td data-zh="编号稳定且公开，glibc 直接 syscall，不需要用户态垫片，跑原生速度。" data-en="The numbers are stable and public, so glibc issues syscalls directly with no user-space shim, at native speed.">编号稳定且公开，glibc 直接 syscall，不需要用户态垫片，跑原生速度。</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Darwin x86_64</strong></td>
+                      <td data-zh="BSD 空间（0x2000000|nr）+ Mach trap 空间" data-en="BSD space (0x2000000|nr) + Mach trap space">BSD 空间（0x2000000|nr）+ Mach trap 空间</td>
+                      <td data-zh="需要一层垫片把 mach_msg 映射到本项目的 IPC 端口——好在端口本身就是幂等的 mach port 语义，映射不别扭。" data-en="A shim maps mach_msg onto this project's IPC ports; conveniently the ports already have idempotent mach-port semantics, so the mapping is not awkward.">需要一层垫片把 mach_msg 映射到本项目的 IPC 端口——好在端口本身就是幂等的 mach port 语义，映射不别扭。</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Windows</strong></td>
+                      <td data-zh="ntdll 垫片，再由 kernel32 / ws2_32 等 shim DLL 转调" data-en="ntdll shim, then kernel32 / ws2_32 shim DLLs call onward">ntdll 垫片，再由 kernel32 / ws2_32 等 shim DLL 转调</td>
+                      <td data-zh="Windows 的 syscall 编号不透明、随版本变化，因此不能直接映射；必须停在 ntdll 这一层做转换。" data-en="Windows syscall numbers are opaque and version-dependent, so they cannot be mapped directly; the translation has to sit at the ntdll layer.">Windows 的 syscall 编号不透明、随版本变化，因此不能直接映射；必须停在 ntdll 这一层做转换。</td>
+                    </tr>
+                    <tr>
+                      <td><strong>FujoOS 原生</strong></td>
+                      <td data-zh="fujo syscall 号（扩展指令集 / 栅栏 / 能力）" data-en="fujo syscall numbers (extended instruction set / fences / capability)">fujo syscall 号（扩展指令集 / 栅栏 / 能力）</td>
+                      <td data-zh="三套 ABI 之外的扩展面。FUAI 的 0x81xx–0x83xx、网络的 0x8A04–06 都在这条线上。" data-en="The extension surface beyond the three ABIs. FUAI's 0x81xx–0x83xx and the network's 0x8A04–06 both live here.">三套 ABI 之外的扩展面。FUAI 的 0x81xx–0x83xx、网络的 0x8A04–06 都在这条线上。</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="note note--amber">
+                <strong data-zh="诚实边界：" data-en="Honest boundary: ">诚实边界：</strong>
+                <span data-zh="“Linux 二进制原生运行”指的是被这台机器接受的那部分系统调用，不是整个 Linux 平台。命名表与实现面的差额在兼容层一节逐条列出，没有藏起来。" data-en="“Linux binaries run natively” means the subset of syscalls this machine accepts, not the whole Linux platform. The gap between the named table and the implemented surface is listed item by item under Compatibility, not hidden.">“Linux 二进制原生运行”指的是被这台机器接受的那部分系统调用，不是整个 Linux 平台。命名表与实现面的差额在兼容层一节逐条列出，没有藏起来。</span>
+              </div>
+
+              <div class="note note--steel">
+                <strong data-zh="延伸阅读：" data-en="Read next: ">延伸阅读：</strong>
+                <span data-zh-html="实现面清单在 <a href=&quot;../compat/linux-abi.html&quot;>兼容 · Linux ABI</a>，编号表在 <a href=&quot;../reference/syscalls.html&quot;>参考 · 系统调用</a>。" data-en-html="the implemented surface is listed under <a href=&quot;../compat/linux-abi.html&quot;>Compatibility · Linux ABI</a>, and the number table under <a href=&quot;../reference/syscalls.html&quot;>Reference · Syscalls</a>.">实现面清单在 <a href="../compat/linux-abi.html">兼容 · Linux ABI</a>，编号表在 <a href="../reference/syscalls.html">参考 · 系统调用</a>。</span>
+              </div>

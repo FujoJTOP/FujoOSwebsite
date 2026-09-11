@@ -1,0 +1,50 @@
+<!--{"zh":"盒桥","en":"Box bridge","desc":"让模型隔着进程边界操作宿主应用：谓词是 COM Excel/Word、certutil、notepad 这类 Windows 宿主对象，因此被排除在核心契约之外。","banner_zh":"盒桥 · 宿主扩展层，不在核心契约内","banner_en":"Box bridge · a host extension, outside the core contract"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="盒桥" data-en="Box bridge">盒桥</h1>
+
+              <div class="prose">
+                <p data-zh="FUAI 的核心主张是“机制可以在任何宿主上重写”。但有一部分能力天生就不通用：让模型去操作一个 Excel 表格、调用 certutil、驱动记事本——这些谓词指向的是 Windows 宿主上的具体对象，在 Linux 上不存在对应物。" data-en="FUAI's core claim is that the mechanism can be rewritten on any host. But part of the capability surface is inherently non-portable: having a model drive an Excel sheet, invoke certutil, or operate Notepad — these predicates point at concrete objects on a Windows host with no Linux counterpart.">
+                  FUAI 的核心主张是“机制可以在任何宿主上重写”。但有一部分能力天生就不通用：让模型去操作一个 Excel 表格、调用 certutil、驱动记事本——这些谓词指向的是 Windows 宿主上的具体对象，在 Linux 上不存在对应物。
+                </p>
+              </div>
+
+              <h2 data-zh="契约因此分成两层" data-en="So the contract splits in two">契约因此分成两层</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="层" data-en="Layer">层</th>
+                      <th scope="col" data-zh="内容" data-en="Contents">内容</th>
+                      <th scope="col" data-zh="差分是否断言" data-en="Asserted by the differ">差分是否断言</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong data-zh="核心层" data-en="Core layer">核心层</strong></td>
+                      <td data-zh="主机无关的监督原语：能力域、隔离、审计、撤销。46 个原语中的 40 个。" data-en="Host-agnostic supervisory primitives: capability domains, isolation, audit, revocation. 40 of the 46 primitives.">主机无关的监督原语：能力域、隔离、审计、撤销。46 个原语中的 40 个。</td>
+                      <td><span class="tag tag--ok" data-zh="是" data-en="yes">是</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong data-zh="宿主扩展层" data-en="Host extension layer">宿主扩展层</strong></td>
+                      <td data-zh="实现特有部分，盒桥在其中（0x8316–0x8320 一类）。46 个原语中的 6 个。" data-en="Implementation-specific parts, the box bridge among them (the 0x8316–0x8320 group). 6 of the 46 primitives.">实现特有部分，盒桥在其中（0x8316–0x8320 一类）。46 个原语中的 6 个。</td>
+                      <td><span class="tag tag--no" data-zh="否" data-en="no">否</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="note note--amber">
+                <strong data-zh="这个划分解决了一个真实的僵局。" data-en="This split resolves a real deadlock.">这个划分解决了一个真实的僵局。</strong>
+                <span data-zh="如果要求 LinuxFUAI 也“完整覆盖”盒桥，就等于要求在 Linux 上实现一个 Windows 盒——没有意义，而且会让差分器永远红着。把宿主扩展排除在核心契约之外，两个实现才第一次变得“可判定地一致”。" data-en=" Demanding that LinuxFUAI also “fully cover” the box bridge would mean implementing a Windows box on Linux — pointless, and it would leave the differ permanently red. Excluding host extensions from the core contract is what first made the two implementations decidable against each other."> 如果要求 LinuxFUAI 也“完整覆盖”盒桥，就等于要求在 Linux 上实现一个 Windows 盒——没有意义，而且会让差分器永远红着。把宿主扩展排除在核心契约之外，两个实现才第一次变得“可判定地一致”。</span>
+              </div>
+
+              <h2 data-zh="为什么值得保留" data-en="Why it is worth keeping">为什么值得保留</h2>
+              <div class="prose">
+                <p data-zh="盒桥的存在本身是一个有用的事实：它证明了这套机制不只是能管“内核里的动作”，也能管“另一个进程里的 GUI 应用”。能力域、撤销、审计这些概念跨过进程边界之后依然成立——只是具体谓词换了一套。" data-en="The box bridge's existence is itself a useful fact: it shows the mechanism can govern not only actions inside the kernel but a GUI application in another process. Capability domains, revocation and audit still hold across a process boundary — only the concrete predicates change.">
+                  盒桥的存在本身是一个有用的事实：它证明了这套机制不只是能管“内核里的动作”，也能管“另一个进程里的 GUI 应用”。能力域、撤销、审计这些概念跨过进程边界之后依然成立——只是具体谓词换了一套。
+                </p>
+              </div>
+
+              <div class="note note--steel">
+                <strong data-zh="相关：" data-en="Related: ">相关：</strong>
+                <span data-zh-html="契约的完整原语表与两侧实现覆盖情况见 <a href=&quot;../reference/opcodes.html&quot;>参考 · FUAI 操作码</a>；Windows 侧的垫片另有 <a href=&quot;../compat/windows.html&quot;>兼容 · Windows 垫片</a>。" data-en-html="the full primitive table and each side's coverage are under <a href=&quot;../reference/opcodes.html&quot;>Reference · FUAI opcodes</a>; the Windows-side shims are covered separately under <a href=&quot;../compat/windows.html&quot;>Compatibility · Windows shims</a>.">契约的完整原语表与两侧实现覆盖情况见 <a href="../reference/opcodes.html">参考 · FUAI 操作码</a>；Windows 侧的垫片另有 <a href="../compat/windows.html">兼容 · Windows 垫片</a>。</span>
+              </div>

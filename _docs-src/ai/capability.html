@@ -1,0 +1,62 @@
+<!--{"zh":"能力域与审计环","en":"Capability domains and audit","desc":"内核怎么记住谁被允许碰什么：能力表、域与区间、撤销语义，以及每一次能力使用如何落进审计环。","banner_zh":"能力域 · 内核记住谁可以碰什么","banner_en":"Capability domains · who may touch what"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="能力域与审计环" data-en="Capability domains and audit">能力域与审计环</h1>
+
+              <div class="prose">
+                <p data-zh="这一页是 S1 机制的实体：一张能力表记住“谁被允许碰什么”，一个审计环记住“谁碰了什么”。两者都很小、很笨，这是有意的——它们是唯一不允许出错的部分。" data-en="This page is the substance of the S1 mechanism: a capability table remembering who may touch what, and an audit ring remembering who touched what. Both are small and dumb on purpose — they are the one part not allowed to fail.">
+                  这一页是 S1 机制的实体：一张能力表记住“谁被允许碰什么”，一个审计环记住“谁碰了什么”。两者都很小、很笨，这是有意的——它们是唯一不允许出错的部分。
+                </p>
+              </div>
+
+              <h2 data-zh="能力域的形状" data-en="The shape of a capability domain">能力域的形状</h2>
+              <div class="prose">
+                <p data-zh="一个能力域由三样东西定义：一个名字空间、一个有界区间、一个可撤销标志。名字空间说明这块能力属于哪个领域（磁盘块、AI 动作、……），区间说明允许的范围，可撤销标志说明这块能力能不能被收回。" data-en="A capability domain is defined by three things: a name space, a bounded interval, and a revocable flag. The name space says which territory the capability belongs to (disk blocks, AI actions, …), the interval says how far it reaches, and the flag says whether it can be taken back.">
+                  一个能力域由三样东西定义：一个名字空间、一个有界区间、一个可撤销标志。名字空间说明这块能力属于哪个领域（磁盘块、AI 动作、……），区间说明允许的范围，可撤销标志说明这块能力能不能被收回。
+                </p>
+              </div>
+
+              <div class="code">
+                <div class="code__bar">
+                  <span class="lang-tag">json</span>
+                  <span data-zh="形式对象里的能力域" data-en="a capability domain in the formal object">形式对象里的能力域</span>
+                  <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+                </div>
+                <pre>{"name": <span class="s">"blk_write"</span>,
+ "domain": <span class="s">"disk[0..4]"</span>,   <span class="c">// 名字空间 + 闭区间</span>
+ "revocable": true,          <span class="c">// A4：可撤销</span>
+ "on_revoke": <span class="s">"fallback"</span>}    <span class="c">// 撤销后退回确定性规则</span></pre>
+              </div>
+
+              <h2 data-zh="撤销是这套设计的关键动作" data-en="Revocation is the key move">撤销是这套设计的关键动作</h2>
+              <div class="prose">
+                <p data-zh="大多数“AI 安全”方案关注的是“拦住不该做的”。撤销关注的是另一件事：已经建立的能力可以随时被收回，收回后调用返回拒绝，系统退回确定性规则照常运行。这让“模型变坏了怎么办”有一个不需要重启、不需要人工介入的答案。" data-en="Most “AI safety” schemes focus on blocking what should not be done. Revocation addresses something else: an established capability can be taken back at any time, after which calls are refused and the system falls back to deterministic rules and keeps running. That gives “what if the model goes bad” an answer requiring neither reboot nor human intervention.">
+                  大多数“AI 安全”方案关注的是“拦住不该做的”。撤销关注的是另一件事：已经建立的能力可以随时被收回，收回后调用返回拒绝，系统退回确定性规则照常运行。这让“模型变坏了怎么办”有一个不需要重启、不需要人工介入的答案。
+                </p>
+              </div>
+
+              <h2 data-zh="审计环" data-en="The audit ring">审计环</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="项" data-en="Item">项</th>
+                      <th scope="col" data-zh="说明" data-en="Notes">说明</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td data-zh="条目" data-en="Entry">条目</td><td data-zh="定长记录：时间戳、模型索引、token 数、结果。" data-en="A fixed-length record: timestamp, model index, token count, result.">定长记录：时间戳、模型索引、token 数、结果。</td></tr>
+                    <tr><td data-zh="写入时机" data-en="When it writes">写入时机</td><td data-zh="放行与拒绝都写。只记失败会丢掉“系统正常时是什么样”，只记成功会丢掉越权尝试。" data-en="Both allows and denials are written. Logging only failures loses what normal looks like; logging only successes loses the out-of-bounds attempts.">放行与拒绝都写。只记失败会丢掉“系统正常时是什么样”，只记成功会丢掉越权尝试。</td></tr>
+                    <tr><td data-zh="消费者" data-en="Consumers">消费者</td><td data-zh="内核能力域、A1–A4 验证器、外部 Agent——三方读同一份序列。" data-en="The kernel capability domain, the A1–A4 verifier and external agents — three readers, one sequence.">内核能力域、A1–A4 验证器、外部 Agent——三方读同一份序列。</td></tr>
+                    <tr><td data-zh="持久化" data-en="Persistence">持久化</td><td data-zh="在 FUAI-OS 运行时里升级为 append-only 哈希链，跨进程重启保持连续。" data-en="In the FUAI-OS runtime it becomes an append-only hash chain that stays continuous across process restarts.">在 FUAI-OS 运行时里升级为 append-only 哈希链，跨进程重启保持连续。</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="note note--steel">
+                <strong data-zh="一个实证教训：" data-en="A lesson from measurement: ">一个实证教训：</strong>
+                <span data-zh-html="LinuxFUAI 的 l15 带外验证器证明了“域内自证不可信”——库内证书可以被伪造成 0xF，只有用一个独立的带外进程重推导审计序列才发现断档。这条纪律后来成了 FUAI-OS 的硬约束。见 <a href=&quot;runtime.html&quot;>运行时与证据链</a>。" data-en-html="LinuxFUAI's l15 out-of-band verifier proved that self-certification inside the domain cannot be trusted — an in-library certificate could be forged as 0xF, and only an independent out-of-band process re-deriving the audit sequence exposed the gap. That lesson became a hard constraint on FUAI-OS. See <a href=&quot;runtime.html&quot;>Runtime and evidence chain</a>.">LinuxFUAI 的 l15 带外验证器证明了“域内自证不可信”——库内证书可以被伪造成 0xF，只有用一个独立的带外进程重推导审计序列才发现断档。这条纪律后来成了 FUAI-OS 的硬约束。见 <a href="runtime.html">运行时与证据链</a>。</span>
+              </div>
+
+              <div class="note note--steel">
+                <strong data-zh="语言侧对应物：" data-en="On the language side: ">语言侧对应物：</strong>
+                <span data-zh-html="能力域在 Loment 里是一等语言构造（guard 语句、编译期边界、运行期 trap、审计计数），见 <a href=&quot;../language/capability.html&quot;>语言 · 能力域即语言构造</a>。" data-en-html="in Loment, capability domains are a first-class language construct (guard statements, compile-time bounds, runtime traps, audit counting) — see <a href=&quot;../language/capability.html&quot;>Language · Capability as a construct</a>.">能力域在 Loment 里是一等语言构造（guard 语句、编译期边界、运行期 trap、审计计数），见 <a href="../language/capability.html">语言 · 能力域即语言构造</a>。</span>
+              </div>

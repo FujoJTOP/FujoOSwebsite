@@ -1,0 +1,69 @@
+<!--{"zh":"FUAI 操作码","en":"FUAI opcodes","desc":"契约的 46 个原语（core 40 / host-ext 6）、模型卡与盒桥的编号，以及两个实现的覆盖情况。","banner_zh":"操作码 · 46 个原语，核心 40","banner_en":"Opcodes · 46 primitives, 40 core"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="FUAI 操作码" data-en="FUAI opcodes">FUAI 操作码</h1>
+
+              <div class="prose">
+                <p data-zh="契约规范是唯一权威：两个实现从它派生（生成头文件）或对它校验（静态检查器）。检查器的输出必须是 0 差异，否则判据 A 不成立。" data-en="The contract specification is the sole authority: both implementations either derive from it (generating headers) or are checked against it (a static checker). The checker's output must be zero drift, or criterion A does not hold.">
+                  契约规范是唯一权威：两个实现从它派生（生成头文件）或对它校验（静态检查器）。检查器的输出必须是 0 差异，否则判据 A 不成立。
+                </p>
+              </div>
+
+              <h2 data-zh="分两层" data-en="Two layers">分两层</h2>
+              <div class="stats">
+                <div class="stat">
+                  <span class="stat__v">40</span>
+                  <span class="stat__k" data-zh="core 层：主机无关的监督原语。差分器对这一层断言。" data-en="core layer: host-agnostic supervisory primitives. The differ asserts on this layer.">core 层：主机无关的监督原语。差分器对这一层断言。</span>
+                </div>
+                <div class="stat">
+                  <span class="stat__v">6</span>
+                  <span class="stat__k" data-zh="host-ext 层：实现特有（含盒桥）。排除在核心契约差分之外。" data-en="host-ext layer: implementation-specific (including the box bridge). Excluded from the core-contract differ.">host-ext 层：实现特有（含盒桥）。排除在核心契约差分之外。</span>
+                </div>
+              </div>
+
+              <div class="note note--amber">
+                <strong data-zh="为什么要分两层：" data-en="Why two layers: ">为什么要分两层：</strong>
+                <span data-zh-html="盒桥的谓词是 COM Excel/Word、certutil、notepad ——全是 Windows 宿主对象。要求 LinuxFUAI 也“完整覆盖”它们，等于要求在 Linux 上实现一个 Windows 盒，无意义且会让差分器永远红着。把宿主扩展排除在核心契约外，两个实现才第一次可判定地一致。见 <a href=&quot;../ai/box-bridge.html&quot;>盒桥</a>。" data-en-html="the box bridge's predicates are COM Excel/Word, certutil, notepad — all Windows host objects. Demanding LinuxFUAI “fully cover” them would mean implementing a Windows box on Linux: pointless, and it would leave the differ permanently red. Excluding host extensions from the core contract is what first made the two implementations decidable against each other. See <a href=&quot;../ai/box-bridge.html&quot;>Box bridge</a>.">
+                  盒桥的谓词是 COM Excel/Word、certutil、notepad ——全是 Windows 宿主对象。要求 LinuxFUAI 也“完整覆盖”它们，等于要求在 Linux 上实现一个 Windows 盒，无意义且会让差分器永远红着。把宿主扩展排除在核心契约外，两个实现才第一次可判定地一致。见 <a href="../ai/box-bridge.html">盒桥</a>。
+                </span>
+              </div>
+
+              <h2 data-zh="检查器查什么" data-en="What the checker checks">检查器查什么</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="项" data-en="Item">项</th>
+                      <th scope="col" data-zh="说明" data-en="Notes">说明</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td data-zh="双向对账" data-en="Two-way reconciliation">双向对账</td><td data-zh="spec ↔ 富士内核 ↔ LinuxFUAI，三个方向都要一致" data-en="spec ↔ FujoOS kernel ↔ LinuxFUAI, all three directions">spec ↔ 富士内核 ↔ LinuxFUAI，三个方向都要一致</td></tr>
+                    <tr><td data-zh="帧常量点检" data-en="Frame constant spot-check">帧常量点检</td><td class="num" data-zh="payload@0x30 ≤ 0x400 · ctx@0x800 ≤ 0x600 · crit 0x1C" data-en="payload@0x30 ≤ 0x400 · ctx@0x800 ≤ 0x600 · crit 0x1C">payload@0x30 ≤ 0x400 · ctx@0x800 ≤ 0x600 · crit 0x1C</td></tr>
+                    <tr><td data-zh="核心层覆盖" data-en="Core-layer coverage">核心层覆盖</td><td class="num" data-zh="core 双实现 31/40；fujo-only 的 9 个是 P1/P2 的推进面" data-en="core: both implementations 31/40; the 9 fujo-only ones are P1/P2 work">core 双实现 31/40；fujo-only 的 9 个是 P1/P2 的推进面</td></tr>
+                    <tr><td data-zh="部署参数" data-en="Deployment parameters">部署参数</td><td data-zh="以 INFO 提示而非错误——例如 LinuxFUAI 默认 τ_high=46 与 FujoOS 的 45 不同，那是部署参数不是接口差异" data-en="reported as INFO rather than an error — e.g. LinuxFUAI defaulting τ_high=46 against FujoOS's 45 is a deployment parameter, not an interface difference">以 INFO 提示而非错误——例如 LinuxFUAI 默认 τ_high=46 与 FujoOS 的 45 不同，那是部署参数不是接口差异</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 data-zh="另一张表：模型卡" data-en="A second table: model cards">另一张表：模型卡</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="编号" data-en="Number">编号</th>
+                      <th scope="col" data-zh="签名" data-en="Signature">签名</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td class="num">0x7D01</td><td class="num">mc_register(ptr)</td></tr>
+                    <tr><td class="num">0x7D02</td><td class="num">mc_call(len, perm_need)</td></tr>
+                    <tr><td class="num">0x7D03</td><td class="num">mc_info(ptr)</td></tr>
+                    <tr><td class="num">0x7D04</td><td class="num">mc_audit(ptr, cap)</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="small dim" data-zh-html="语义与实测输出见 <a href=&quot;../ai/model-card.html&quot;>AI 层 · 模型卡</a>。" data-en-html="semantics and measured output are under <a href=&quot;../ai/model-card.html&quot;>AI layer · Model cards</a>.">语义与实测输出见 <a href="../ai/model-card.html">AI 层 · 模型卡</a>。</p>
+
+              <div class="note note--steel">
+                <strong data-zh="单源在哪：" data-en="Where the single source is: ">单源在哪：</strong>
+                <span data-zh-html="这张表的真源是 <code>sdk/fuai-spec/spec.json</code>，由 L0 的 .lom 单一真源接管后，两个实现的语言侧常量从它生成。见 <a href=&quot;../language/l0.html&quot;>L0 单一真源</a>。" data-en-html="the source of truth for this table is <code>sdk/fuai-spec/spec.json</code>; once taken over by L0's .lom source of truth, both implementations' language-side constants are generated from it. See <a href=&quot;../language/l0.html&quot;>L0 source of truth</a>.">这张表的真源是 <code>sdk/fuai-spec/spec.json</code>，由 L0 的 .lom 单一真源接管后，两个实现的语言侧常量从它生成。见 <a href="../language/l0.html">L0 单一真源</a>。</span>
+              </div>

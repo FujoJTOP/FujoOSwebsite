@@ -1,0 +1,77 @@
+<!--{"zh":"能力域即语言构造","en":"Capability as a construct","desc":"capability 不是库调用而是语言构造：guard 语句、编译期边界检查、运行期 trap、审计计数与域表。","banner_zh":"能力域 · 不是库调用，是语法","banner_en":"Capability · syntax, not a library call"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="能力域即语言构造" data-en="Capability as a construct">能力域即语言构造</h1>
+
+              <div class="prose">
+                <p data-zh="这一页是语言与 FUAI 的接缝。如果能力只是一组运行时检查函数，那么“这个程序需要哪些能力”就只能在运行时才知道；如果能力是语言构造，它就能在编译期被声明、检查、并导出成形式对象。" data-en="This page is the seam between the language and FUAI. If capability is just a set of runtime checks, then “which capabilities does this program need” is only knowable at runtime; if capability is a language construct, it can be declared, checked and exported at compile time.">
+                  这一页是语言与 FUAI 的接缝。如果能力只是一组运行时检查函数，那么“这个程序需要哪些能力”就只能在运行时才知道；如果能力是语言构造，它就能在编译期被声明、检查、并导出成形式对象。
+                </p>
+              </div>
+
+              <div class="code">
+                <div class="code__bar">
+                  <span class="lang-tag">loment</span>
+                  <span data-zh="作者面" data-en="author side">作者面</span>
+                  <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+                </div>
+                <pre><span class="c">// 声明一块可撤销的能力域</span>
+capability blk_write: disk[0..4] revocable {
+  on_revoke =&gt; fallback
+}
+
+export fn flush(req: FlushReq) contract(hex64) {
+  guard blk_write(idx)   <span class="c">// 越界在编译期拒绝</span>
+  ...
+}</pre>
+              </div>
+
+              <h2 data-zh="四件事由同一条声明推出" data-en="Four things follow from one declaration">四件事由同一条声明推出</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="层" data-en="Layer">层</th>
+                      <th scope="col" data-zh="发生时机" data-en="When">发生时机</th>
+                      <th scope="col" data-zh="产物" data-en="Artifact">产物</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td data-zh="编译期边界检查" data-en="Compile-time bounds">编译期边界检查</td>
+                      <td data-zh="编译时" data-en="compile time">编译时</td>
+                      <td data-zh="越界访问直接编译失败" data-en="an out-of-bounds access fails the build">越界访问直接编译失败</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="运行期 trap" data-en="Runtime trap">运行期 trap</td>
+                      <td data-zh="运行时" data-en="run time">运行时</td>
+                      <td data-zh="动态越界落到 trap，而不是静默继续" data-en="a dynamic overrun traps rather than proceeding silently">动态越界落到 trap，而不是静默继续</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="审计计数" data-en="Audit counting">审计计数</td>
+                      <td data-zh="每次使用" data-en="every use">每次使用</td>
+                      <td data-zh="guard 站点落审计（A2 的输入）" data-en="guard sites write audit entries (A2's input)">guard 站点落审计（A2 的输入）</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="域表" data-en="Domain table">域表</td>
+                      <td data-zh="编译时生成" data-en="emitted at compile time">编译时生成</td>
+                      <td data-zh="CapDomain 常量表，供内核执行" data-en="a CapDomain constant table for the kernel to enforce">CapDomain 常量表，供内核执行</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="prose">
+                <p data-zh="这四件事合起来，让 A1–A4 从“运行时可能会检查”变成“离线就能判定”。其中 A1（无越权执行）和 A4（可撤销）直接来自这条声明的两个字段，A2（可审计）来自 guard 站点，A3（模型缺席仍运行）来自“没有申请 AI 能力空间”这一条可检查的性质。" data-en="Together these four turn A1–A4 from “something that might be checked at runtime” into “decidable offline”. A1 (no out-of-authority execution) and A4 (revocable) come straight from the declaration's two fields, A2 (auditable) from the guard sites, and A3 (runs with the model absent) from the checkable property of not requesting the AI capability space.">
+                  这四件事合起来，让 A1–A4 从“运行时可能会检查”变成“离线就能判定”。其中 A1（无越权执行）和 A4（可撤销）直接来自这条声明的两个字段，A2（可审计）来自 guard 站点，A3（模型缺席仍运行）来自“没有申请 AI 能力空间”这一条可检查的性质。
+                </p>
+              </div>
+
+              <h2 data-zh="实测过的两件事" data-en="Two things that were measured">实测过的两件事</h2>
+              <ul class="list list--check">
+                <li><b data-zh="能力域模糊测试" data-en="Capability-domain fuzzing">能力域模糊测试</b> <span data-zh="—— 120 组随机域与索引，无一次越权放行。" data-en=" — 120 randomised domain/index combinations with no out-of-authority pass-through.">—— 120 组随机域与索引，无一次越权放行。</span></li>
+                <li><b data-zh="越界声明编译期报错" data-en="Out-of-domain declarations fail the build">越界声明编译期报错</b> <span data-zh="—— excluded 出界声明强制生效，不是警告。" data-en=" — the excluded declaration is enforced, not a warning.">—— excluded 出界声明强制生效，不是警告。</span></li>
+              </ul>
+
+              <div class="note note--steel">
+                <strong data-zh="延伸到内核：" data-en="Reaching into the kernel: ">延伸到内核：</strong>
+                <span data-zh-html="域表由形式对象生成后交给内核执行；内核侧的能力表与审计环见 <a href=&quot;../ai/capability.html&quot;>AI 层 · 能力域与审计环</a>。" data-en-html="the domain table is generated from the formal object and handed to the kernel to enforce; the kernel-side table and ring are under <a href=&quot;../ai/capability.html&quot;>AI layer · Capability domains and audit</a>.">域表由形式对象生成后交给内核执行；内核侧的能力表与审计环见 <a href="../ai/capability.html">AI 层 · 能力域与审计环</a>。</span>
+              </div>

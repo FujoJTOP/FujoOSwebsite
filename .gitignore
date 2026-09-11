@@ -1,0 +1,7 @@
+# Local editor/tool permission grants — never published
+.claude/settings.local.json
+
+# OS cruft
+.DS_Store
+Thumbs.db
+desktop.ini

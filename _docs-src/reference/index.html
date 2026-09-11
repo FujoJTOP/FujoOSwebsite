@@ -1,0 +1,36 @@
+<!--{"zh":"参考总览","en":"Reference overview","desc":"系统调用与操作码表、FUI 词汇与 .fuc 布局、仓库结构。查表用，不解释设计动机。","banner_zh":"参考 · 查表用","banner_en":"Reference · for looking things up"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="参考总览" data-en="Reference overview">参考总览</h1>
+
+              <div class="prose">
+                <p data-zh="这一节是查表用的，不讲设计动机。设计动机在前面几节，这里只放数字、布局和路径。" data-en="This section is for looking things up; it does not explain design rationale. That lives in the earlier sections. Here there are only numbers, layouts and paths.">
+                  这一节是查表用的，不讲设计动机。设计动机在前面几节，这里只放数字、布局和路径。
+                </p>
+              </div>
+
+              <div class="grid grid--2">
+                <a class="card card--link" href="syscalls.html">
+                  <span class="card__k" data-zh="表" data-en="Table">表</span>
+                  <h3 class="h3" data-zh="系统调用" data-en="Syscalls">系统调用</h3>
+                  <p data-zh="Linux 面的 45 条 dispatch 臂，以及 FujoOS 原生编号的区段划分。" data-en="The 45 dispatch arms on the Linux surface, and the number ranges allocated to native FujoOS calls.">Linux 面的 45 条 dispatch 臂，以及 FujoOS 原生编号的区段划分。</p>
+                </a>
+                <a class="card card--link" href="opcodes.html">
+                  <span class="card__k" data-zh="表" data-en="Table">表</span>
+                  <h3 class="h3" data-zh="FUAI 操作码" data-en="FUAI opcodes">FUAI 操作码</h3>
+                  <p data-zh="契约的 46 个原语（core 40 / host-ext 6），以及模型卡与盒桥的编号。" data-en="The contract's 46 primitives (core 40 / host-ext 6), plus the model-card and box-bridge numbers.">契约的 46 个原语（core 40 / host-ext 6），以及模型卡与盒桥的编号。</p>
+                </a>
+                <a class="card card--link" href="fui.html">
+                  <span class="card__k" data-zh="布局" data-en="Layout">布局</span>
+                  <h3 class="h3" data-zh="FUI 与 .fuc" data-en="FUI and .fuc">FUI 与 .fuc</h3>
+                  <p data-zh="声明式界面的词汇表，以及 64 字节节点记录的字段偏移。" data-en="The declarative-UI vocabulary, and the field offsets of the 64-byte node record.">声明式界面的词汇表，以及 64 字节节点记录的字段偏移。</p>
+                </a>
+                <a class="card card--link" href="repo.html">
+                  <span class="card__k" data-zh="路径" data-en="Paths">路径</span>
+                  <h3 class="h3" data-zh="仓库结构" data-en="Repository layout">仓库结构</h3>
+                  <p data-zh="顶层目录是什么，以及文档编号的组织方式。" data-en="What the top-level directories are, and how the documentation numbering is organised.">顶层目录是什么，以及文档编号的组织方式。</p>
+                </a>
+              </div>
+
+              <div class="note note--steel">
+                <strong data-zh="口径提醒：" data-en="A note on wording: ">口径提醒：</strong>
+                <span data-zh="这里的数字都来自脚本输出或源码常量。如果某张表和实现不一致，那是一个缺陷而不是“文档略有滞后”——契约检查器的存在就是为了让这种情况发生不了。" data-en="the numbers here come from script output or source constants. If a table disagrees with the implementation, that is a defect rather than “the docs lagging a little” — the contract checker exists precisely so that cannot happen.">这里的数字都来自脚本输出或源码常量。如果某张表和实现不一致，那是一个缺陷而不是“文档略有滞后”——契约检查器的存在就是为了让这种情况发生不了。</span>
+              </div>

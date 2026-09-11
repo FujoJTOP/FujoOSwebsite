@@ -1,0 +1,100 @@
+<!--{"zh":"Potato 形式对象","en":"The Potato object","desc":"编译器强制导出的机器可读语义模型：v0/v1 字段、三层校验规则、强制导出与跨实现一致性。","banner_zh":"Potato · 编译器强制导出的那一半","banner_en":"Potato · the half the compiler must emit"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="Potato 形式对象" data-en="The Potato object">Potato 形式对象</h1>
+
+              <div class="prose">
+                <p data-zh="Potato 不是语言。它没有语法，只有结构。它的位置在编译流程的输出端：每个编译单元产出一份机器可读的形式对象，描述这个单元的类型、布局、能力需求与契约。" data-en="Potato is not a language. It has no grammar, only structure. Its place is at the output end of the compiler: each compilation unit emits a machine-readable formal object describing that unit's types, layout, capability requirements and contracts.">
+                  Potato 不是语言。它没有语法，只有结构。它的位置在编译流程的输出端：每个编译单元产出一份机器可读的形式对象，描述这个单元的类型、布局、能力需求与契约。
+                </p>
+              </div>
+
+              <div class="code">
+                <div class="code__bar">
+                  <span class="lang-tag">json</span>
+                  <span class="docs">loment/build/&lt;unit&gt;.potato.json</span>
+                  <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+                </div>
+                <pre>{"unit": <span class="s">"ahci.flush"</span>,
+ "potato": <span class="s">"v1"</span>,
+ "language": <span class="s">"loment"</span>,
+ "capabilities": [
+   {"name": <span class="s">"blk_write"</span>, "domain": <span class="s">"disk[0..4]"</span>,
+    "revocable": true, "on_revoke": <span class="s">"fallback"</span>}
+ ],
+ "contracts": [{"pred": <span class="s">"hex64"</span>, "mode": <span class="s">"binary"</span>}],
+ "guards": 1,
+ "excluded": []}</pre>
+              </div>
+
+              <h2 data-zh="v0 与 v1" data-en="v0 and v1">v0 与 v1</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="版本" data-en="Version">版本</th>
+                      <th scope="col" data-zh="覆盖" data-en="Coverage">覆盖</th>
+                      <th scope="col" data-zh="状态" data-en="Status">状态</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>v0</strong></td>
+                      <td data-zh="标量、数组、struct、枚举、布局、能力域" data-en="Scalars, arrays, structs, enums, layout, capability domains">标量、数组、struct、枚举、布局、能力域</td>
+                      <td data-zh="仍合法，可回放（冻结样本 demo.v0.json 持续回放）" data-en="Still valid and replayable (the frozen demo.v0.json is replayed continuously)">仍合法，可回放（冻结样本 demo.v0.json 持续回放）</td>
+                    </tr>
+                    <tr>
+                      <td><strong>v1</strong></td>
+                      <td data-zh="新增泛型与单态化实例、trait/impl、切片、str、ptr、()、guard 审计站点" data-en="Adds generics and monomorphised instances, trait/impl, slices, str, ptr, (), and guard audit sites">新增泛型与单态化实例、trait/impl、切片、str、ptr、()、guard 审计站点</td>
+                      <td data-zh="7/7 自检 · 33 条反例全被拒 · 跨实现 50/50" data-en="7/7 self-check · all 33 counterexamples rejected · 50/50 across implementations">7/7 自检 · 33 条反例全被拒 · 跨实现 50/50</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="note note--steel">
+                <strong data-zh="版本策略：" data-en="Version policy: ">版本策略：</strong>
+                <span data-zh="v0 对象永远合法——新版本发布不会让旧对象失效。这看起来是小事，但它决定了“回放”能不能作为一条长期判据存在。" data-en="a v0 object stays valid forever — a new release never invalidates an old object. That looks minor, but it is what lets replay survive as a long-term criterion.">v0 对象永远合法——新版本发布不会让旧对象失效。这看起来是小事，但它决定了“回放”能不能作为一条长期判据存在。</span>
+              </div>
+
+              <h2 data-zh="校验分三层" data-en="Validation in three layers">校验分三层</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="层" data-en="Layer">层</th>
+                      <th scope="col" data-zh="查什么" data-en="What it checks">查什么</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong data-zh="结构层" data-en="Structural">结构层</strong></td>
+                      <td data-zh="顶层字段白名单（按版本）、unit/language/imports 形态、表内元素唯一、types 与 enums 共用一个命名空间" data-en="Top-level field allowlist (per version), unit/language/imports shape, uniqueness within tables, types and enums sharing one namespace">顶层字段白名单（按版本）、unit/language/imports 形态、表内元素唯一、types 与 enums 共用一个命名空间</td>
+                    </tr>
+                    <tr>
+                      <td><strong data-zh="类型层" data-en="Type">类型层</strong></td>
+                      <td data-zh="合法类型的递归定义；layout 字段只允许定宽整型，且 offset + width ≤ size、区间不重叠" data-en="A recursive definition of legal types; layout fields allow only fixed-width integers, with offset + width ≤ size and non-overlapping ranges">合法类型的递归定义；layout 字段只允许定宽整型，且 offset + width ≤ size、区间不重叠</td>
+                    </tr>
+                    <tr>
+                      <td><strong data-zh="语义层" data-en="Semantic">语义层</strong></td>
+                      <td data-zh="能力域区间合法性、枚举载荷键、泛型参数、单态化实参匹配、trait/impl 方法集、guard 计数非负" data-en="Capability domain bounds, enum payload keys, generic parameters, monomorphisation argument matching, trait/impl method sets, non-negative guard counts">能力域区间合法性、枚举载荷键、泛型参数、单态化实参匹配、trait/impl 方法集、guard 计数非负</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="prose">
+                <p data-zh="反例完备性由 33 条变异保证：规范里每一条规则至少对应一条被拒绝的反例。这是防止“规范写得很严但校验器没实现”这类空隙的办法。" data-en="Counterexample completeness is guaranteed by 33 mutations: every rule in the spec has at least one rejected counterexample. This closes the gap where a strict spec meets a validator that never implemented it.">
+                  反例完备性由 33 条变异保证：规范里每一条规则至少对应一条被拒绝的反例。这是防止“规范写得很严但校验器没实现”这类空隙的办法。
+                </p>
+              </div>
+
+              <h2 data-zh="强制导出的三层都不可关闭" data-en="All three layers of forced export are non-negotiable">强制导出的三层都不可关闭</h2>
+              <ul class="list list--check">
+                <li><b data-zh="编译器内部" data-en="Inside the compiler">编译器内部</b> <span data-zh="—— emit_potato() 返回前调用独立校验器，有错即编译失败。" data-en=" — emit_potato() calls the independent validator before returning; any error fails the build.">—— emit_potato() 返回前调用独立校验器，有错即编译失败。</span></li>
+                <li><b data-zh="CLI 层" data-en="At the CLI">CLI 层</b> <span data-zh="—— 要 --emit-rust / --emit-llvm 就必须同时给 --emit-potato，否则退出码 2。" data-en=" — asking for --emit-rust / --emit-llvm requires --emit-potato too, or exit code 2.">—— 要 --emit-rust / --emit-llvm 就必须同时给 --emit-potato，否则退出码 2。</span></li>
+                <li><b data-zh="仓库层" data-en="At the repository">仓库层</b> <span data-zh="—— lom_audit 要求每个示例都有一份逐字节一致的对象，且通过独立校验器。" data-en=" — lom_audit requires every example to carry a byte-identical object that passes the independent validator.">—— lom_audit 要求每个示例都有一份逐字节一致的对象，且通过独立校验器。</span></li>
+              </ul>
+
+              <div class="note note--steel">
+                <strong data-zh="跨实现一致性（M53）：" data-en="Cross-implementation consistency (M53): ">跨实现一致性（M53）：</strong>
+                <span data-zh="同一份形式对象必须被两份独立实现判成同一个结果——FujoOS 侧的 potato.py 与 LinuxFUAI 侧的 potato_verify.py（按规范独立实现，不 import 前者）。50 条对照全部一致。" data-en="the same formal object must be judged identically by two independent implementations — potato.py on the FujoOS side and potato_verify.py on the LinuxFUAI side (written to the spec, importing nothing from the former). All 50 comparisons agree.">同一份形式对象必须被两份独立实现判成同一个结果——FujoOS 侧的 potato.py 与 LinuxFUAI 侧的 potato_verify.py（按规范独立实现，不 import 前者）。50 条对照全部一致。</span>
+              </div>

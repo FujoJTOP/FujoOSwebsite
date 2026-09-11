@@ -1,0 +1,61 @@
+<!--{"zh":"FUJR 容器","en":"FUJR containers","desc":"本项目自己的 .run 容器：MAGIC + MANIFEST + EMBED + DATA（≤8 资源）+ FNV 校验，以及打包即权限。","banner_zh":"FUJR · 四种可执行格式之外的那一种","banner_en":"FUJR · the executable format that is not one"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="FUJR 容器" data-en="FUJR containers">FUJR 容器</h1>
+
+              <div class="prose">
+                <p data-zh="ELF、PE、Mach-O 都是 CPU 的执行格式。FUJR（.run）不是——它是这个项目自己的打包容器，用来把程序、资源与权限声明装在一个文件里。" data-en="ELF, PE and Mach-O are CPU execution formats. FUJR (.run) is not — it is this project's own packaging container, holding a program together with its resources and its permission declaration in one file.">
+                  ELF、PE、Mach-O 都是 CPU 的执行格式。FUJR（.run）不是——它是这个项目自己的打包容器，用来把程序、资源与权限声明装在一个文件里。
+                </p>
+              </div>
+
+              <h2 data-zh="结构" data-en="Structure">结构</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="节" data-en="Section">节</th>
+                      <th scope="col" data-zh="内容" data-en="Contents">内容</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td class="docs">MAGIC</td><td data-zh="容器魔数，用于快速识别与拒绝。" data-en="Container magic, for fast identification and rejection.">容器魔数，用于快速识别与拒绝。</td></tr>
+                    <tr><td class="docs">MANIFEST</td><td data-zh="权限与能力声明：api.subsystems、文件系统名字空间、网络白名单。这是“打包即权限”的载体。" data-en="The permission and capability declaration: api.subsystems, filesystem name space, network allowlist. This is what “packaging is permission” rides on.">权限与能力声明：api.subsystems、文件系统名字空间、网络白名单。这是“打包即权限”的载体。</td></tr>
+                    <tr><td class="docs">EMBED</td><td data-zh="内嵌载荷。首行是 shebang 时按 .shell 处理。" data-en="The embedded payload. A shebang on the first line makes it a .shell.">内嵌载荷。首行是 shebang 时按 .shell 处理。</td></tr>
+                    <tr><td class="docs">DATA</td><td data-zh="资源节，最多 8 项。模型卡（M31）就走这里。" data-en="The resource section, up to 8 entries. Model cards (M31) ride here.">资源节，最多 8 项。模型卡（M31）就走这里。</td></tr>
+                    <tr><td class="docs">FNV</td><td data-zh="校验和。" data-en="A checksum.">校验和。</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 data-zh="工具" data-en="Tools">工具</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="工具" data-en="Tool">工具</th>
+                      <th scope="col" data-zh="用途" data-en="Purpose">用途</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td class="docs">tools/fujopack.py</td><td data-zh="打包成 .run" data-en="Pack into a .run">打包成 .run</td></tr>
+                    <tr><td class="docs">fujorun</td><td data-zh="作为 initrd 的装载器，支持多模块" data-en="Initrd loader with multi-module support">作为 initrd 的装载器，支持多模块</td></tr>
+                    <tr><td class="docs">fujopack / fujorun <span class="dim">Rust</span></td><td data-zh="同一格式的 Rust 实现" data-en="Rust implementations of the same format">同一格式的 Rust 实现</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="note note--amber">
+                <strong data-zh="这就是那 39 KB 的由来。" data-en="This is where the 39 KB comes from.">这就是那 39 KB 的由来。</strong>
+                <span data-zh="FUJR 容器此前有五处平行实现，合计约 39 KB 代码，改一处要记得改四处。它是 L0 单一真源要收拢的第一批目标之一——收拢之后，容器布局只声明一次。见 L0 一节。" data-en=" The FUJR container used to have five parallel implementations totalling roughly 39 KB, and changing one meant remembering four others. It is one of L0's first consolidation targets — after which the container layout is declared exactly once. See the L0 page."> FUJR 容器此前有五处平行实现，合计约 39 KB 代码，改一处要记得改四处。它是 L0 单一真源要收拢的第一批目标之一——收拢之后，容器布局只声明一次。见 L0 一节。</span>
+              </div>
+
+              <h2 data-zh="为什么值得单独存在" data-en="Why it deserves to exist separately">为什么值得单独存在</h2>
+              <div class="prose">
+                <p data-zh="因为“程序”和“程序被允许做什么”在这套设计里是同一件事的两面。把它做成容器而不是配置项，意味着权限声明会随程序一起分发、一起签名、一起被拒绝——而不是靠运行时读一个可能不存在的配置文件。" data-en="Because “a program” and “what the program is allowed to do” are two sides of one thing in this design. Making it a container rather than a config entry means the permission declaration ships with the program, is signed with it, and is rejected with it — instead of relying on a config file that may not be there at runtime.">
+                  因为“程序”和“程序被允许做什么”在这套设计里是同一件事的两面。把它做成容器而不是配置项，意味着权限声明会随程序一起分发、一起签名、一起被拒绝——而不是靠运行时读一个可能不存在的配置文件。
+                </p>
+              </div>
+
+              <div class="note note--steel">
+                <strong data-zh="相关：" data-en="Related: ">相关：</strong>
+                <span data-zh-html=".run 与 fujo-sandbox 的关系见 <a href=&quot;../architecture/process.html&quot;>架构 · 进程与隔离</a>；L0 收拢的细节见 <a href=&quot;../language/l0.html&quot;>语言 · L0 单一真源</a>。" data-en-html="how .run relates to fujo-sandbox is under <a href=&quot;../architecture/process.html&quot;>Architecture · Processes and isolation</a>; the L0 consolidation is detailed under <a href=&quot;../language/l0.html&quot;>Language · L0 source of truth</a>.">.run 与 fujo-sandbox 的关系见 <a href="../architecture/process.html">架构 · 进程与隔离</a>；L0 收拢的细节见 <a href="../language/l0.html">语言 · L0 单一真源</a>。</span>
+              </div>

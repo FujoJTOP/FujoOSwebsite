@@ -1,0 +1,66 @@
+<!--{"zh":"可复现性纪律","en":"Reproducibility discipline","desc":"W46 反证轮之后立下的规矩：数字必须能重跑到同一个值。以及它如何改变了这个项目的做法。","banner_zh":"可复现性 · 数字必须能重跑到同一个值","banner_en":"Reproducibility · a number must re-run to the same value"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="可复现性纪律" data-en="Reproducibility discipline">可复现性纪律</h1>
+
+              <div class="prose">
+                <p data-zh="这一页记录的是一次失败，以及它带来的改变。它比任何成功记录都更能说明这个项目是怎么运作的。" data-en="This page records a failure and what it changed. It explains how this project works better than any success story would.">
+                  这一页记录的是一次失败，以及它带来的改变。它比任何成功记录都更能说明这个项目是怎么运作的。
+                </p>
+              </div>
+
+              <h2 data-zh="W46 反证轮发现了什么" data-en="What the W46 refutation round found">W46 反证轮发现了什么</h2>
+              <div class="prose">
+                <p data-zh="反证轮的预设是“去找机制被绕过的方法”。结果没找到——机制没被绕。真正被找出来的是另一件事：<b>数字口径不可查</b>。" data-en="The round was set up to look for ways to bypass the mechanism. It found none — the mechanism held. What it did find was something else: <b>number definitions could not be verified</b>.">
+                  反证轮的预设是“去找机制被绕过的方法”。结果没找到——机制没被绕。真正被找出来的是另一件事：<b>数字口径不可查</b>。
+                </p>
+              </div>
+              <ul class="list">
+                <li><b data-zh="loss 比的两种算法" data-en="two algorithms for the loss ratio">loss 比的两种算法</b> <span data-zh="—— 9.0× 与 27× 两个数字都对得上，但与脚本实际做的事不符。" data-en=" — 9.0× and 27× were both defensible, yet neither matched what the script actually did.">—— 9.0× 与 27× 两个数字都对得上，但与脚本实际做的事不符。</span></li>
+                <li><b data-zh="相关系数的并列歧义" data-en="a tie in the correlation coefficient">相关系数的并列歧义</b> <span data-zh="—— Spearman 0.69 与 0.632 指向同一次测量，取决于并列如何处理，而口径没有事先写死。" data-en=" — Spearman 0.69 and 0.632 refer to the same measurement, depending on how ties are handled — and the convention had not been fixed in advance.">—— Spearman 0.69 与 0.632 指向同一次测量，取决于并列如何处理，而口径没有事先写死。</span></li>
+              </ul>
+
+              <div class="note note--amber">
+                <strong data-zh="为什么这比机制被绕更严重：" data-en="Why this is worse than a bypass: ">为什么这比机制被绕更严重：</strong>
+                <span data-zh="机制被绕是一个可以修的漏洞；数字口径不可查是对整个证据链的否定。如果同一个指标能算两个数，那么论文里的所有数字都失去了可引用性——哪怕它们碰巧是对的。" data-en="a bypass is a hole you can patch; unverifiable number definitions invalidate the entire evidence chain. If the same metric yields two numbers, every number in the paper loses citability — even the ones that happen to be right.">机制被绕是一个可以修的漏洞；数字口径不可查是对整个证据链的否定。如果同一个指标能算两个数，那么论文里的所有数字都失去了可引用性——哪怕它们碰巧是对的。</span>
+              </div>
+
+              <h2 data-zh="由此立下的三条规矩" data-en="Three rules that followed">由此立下的三条规矩</h2>
+              <div class="matrix">
+                <div class="matrix__row"><b data-zh="数字必须可复现" data-en="Numbers must be reproducible">数字必须可复现</b><span class="tag" data-zh="单命令重跑" data-en="one command">单命令重跑</span></div>
+                <div class="matrix__row"><b data-zh="推翻必须可复现" data-en="A refutation must be reproducible">推翻必须可复现</b><span class="tag" data-zh="脚本 + 真现场" data-en="script + real incident">脚本 + 真现场</span></div>
+                <div class="matrix__row"><b data-zh="τ 不重开" data-en="τ is not reopened">τ 不重开</b><span class="tag" data-zh="重启条件仅两条" data-en="two conditions only">重启条件仅两条</span></div>
+              </div>
+
+              <h2 data-zh="落地成了什么东西" data-en="What it turned into in practice">落地成了什么东西</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="产物" data-en="Artifact">产物</th>
+                      <th scope="col" data-zh="作用" data-en="What it does">作用</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="docs">tools/fuai_eval.py</td>
+                      <td data-zh="一键复现评测包：金标 → 模型农场 → τ 推导 → 报告（md + json，含推导输入输出全记录）" data-en="The one-command reproduction pack: goldset → model farm → τ derivation → report (md + json, recording every derivation input and output)">一键复现评测包：金标 → 模型农场 → τ 推导 → 报告（md + json，含推导输入输出全记录）</td>
+                    </tr>
+                    <tr>
+                      <td class="docs">tools/verify_chain.py</td>
+                      <td data-zh="带外验证器，独立进程重推导审计序列，含 --tamper 自证" data-en="The out-of-band verifier: an independent process re-deriving the audit sequence, with a --tamper self-proof">带外验证器，独立进程重推导审计序列，含 --tamper 自证</td>
+                    </tr>
+                    <tr>
+                      <td class="docs">loment/build/wave-c-results.json</td>
+                      <td data-zh="测量与语料绑定：每个文件的 sha256 记入结果，语料一变数字作废" data-en="Measurement bound to corpus: each file's sha256 goes into the results, so changing the corpus voids the numbers">测量与语料绑定：每个文件的 sha256 记入结果，语料一变数字作废</td>
+                    </tr>
+                    <tr>
+                      <td class="docs">ci.py --static-only</td>
+                      <td data-zh="静态门禁：契约、Potato 校验、示例逐字节对账一起跑" data-en="The static gate: contract, Potato validation and per-example byte reconciliation in one run">静态门禁：契约、Potato 校验、示例逐字节对账一起跑</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="note note--steel">
+                <strong data-zh="一条被写进宪章的推论：" data-en="A corollary written into the charter: ">一条被写进宪章的推论：</strong>
+                <span data-zh="常驻评测设施永不建，用复现包替代。理由不只是“个人研究没有 GPU 农场”——更因为常驻设施与“可复现可审计”的主张相冲突：它把证据变成服务，而服务不可被别人带走重跑。" data-en="no standing evaluation facility will ever be built; a reproduction pack takes its place. The reason is not only that a personal project has no GPU farm — a standing facility contradicts the reproducibility claim itself: it turns evidence into a service, and a service cannot be taken away and re-run by someone else.">常驻评测设施永不建，用复现包替代。理由不只是“个人研究没有 GPU 农场”——更因为常驻设施与“可复现可审计”的主张相冲突：它把证据变成服务，而服务不可被别人带走重跑。</span>
+              </div>

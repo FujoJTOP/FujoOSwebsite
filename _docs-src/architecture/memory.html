@@ -1,0 +1,60 @@
+<!--{"zh":"内存与地址空间","en":"Memory and address space","desc":"4 KiB 页与 2 MiB 大页、伙伴系统、按需零页、每任务页表链与 CR3，以及零拷贝的 fujo-map。","banner_zh":"内存 · 页、大页与伙伴系统","banner_en":"Memory · pages, large pages, buddy allocator"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="内存与地址空间" data-en="Memory and address space">内存与地址空间</h1>
+
+              <div class="prose">
+                <p data-zh="内存子系统在 W10–W20 之间成形，也是“真机化”那一波改动最多的地方——因为它同时要面对 QEMU 和真实硬件的内存布局。" data-en="The memory subsystem took shape across W10–W20 and absorbed most of the changes during the real-hardware push, because it has to cope with both QEMU's and real hardware's memory layouts.">
+                  内存子系统在 W10–W20 之间成形，也是“真机化”那一波改动最多的地方——因为它同时要面对 QEMU 和真实硬件的内存布局。
+                </p>
+              </div>
+
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="机制" data-en="Mechanism">机制</th>
+                      <th scope="col" data-zh="做法" data-en="How">做法</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>页</strong></td>
+                      <td data-zh="4 KiB 基础页，搭配 2 MiB 大页。大页用于恒等映射与内核映像，避免早期大量页表项。" data-en="4 KiB base pages alongside 2 MiB large pages. Large pages cover the identity map and the kernel image, avoiding a flood of early page-table entries.">4 KiB 基础页，搭配 2 MiB 大页。大页用于恒等映射与内核映像，避免早期大量页表项。</td>
+                    </tr>
+                    <tr>
+                      <td><strong>物理分配</strong></td>
+                      <td data-zh="2 MiB 伙伴系统，帧分配器在其上提供页粒度。" data-en="A 2 MiB buddy allocator, with the frame allocator providing page granularity on top.">2 MiB 伙伴系统，帧分配器在其上提供页粒度。</td>
+                    </tr>
+                    <tr>
+                      <td><strong>按需零页</strong></td>
+                      <td data-zh="首次触碰才映射，读到一个共享的零页；写时再分配实页。冷启动时间和内存占用都因此受益。" data-en="Mapping happens on first touch, reading a shared zero page; a real page is allocated on write. Both cold-boot time and footprint benefit.">首次触碰才映射，读到一个共享的零页；写时再分配实页。冷启动时间和内存占用都因此受益。</td>
+                    </tr>
+                    <tr>
+                      <td><strong>地址空间</strong></td>
+                      <td data-zh="每个任务一条页表链，切换任务时换 CR3。这是进程隔离的物理基础。" data-en="One page-table chain per task, with CR3 swapped on context switch. That is the physical basis of process isolation.">每个任务一条页表链，切换任务时换 CR3。这是进程隔离的物理基础。</td>
+                    </tr>
+                    <tr>
+                      <td><strong>恒等映射</strong></td>
+                      <td data-zh="启动早期需要 >1 GiB 的恒等映射，长模式切换后才能依赖完整的分页。" data-en="Early boot needs an identity map of >1 GiB; only after the long-mode switch can full paging be relied on.">启动早期需要 >1 GiB 的恒等映射，长模式切换后才能依赖完整的分页。</td>
+                    </tr>
+                    <tr>
+                      <td><strong>U-位硬化</strong></td>
+                      <td data-zh="用户页的 U 位受严格管理，防止内核页被用户态映射。" data-en="The U bit on user pages is managed strictly, so a kernel page cannot be mapped from user space.">用户页的 U 位受严格管理，防止内核页被用户态映射。</td>
+                    </tr>
+                    <tr>
+                      <td><strong>fujo-map</strong></td>
+                      <td data-zh="用户空间共享内存的零拷贝成对映射，配合 GPU 栅栏同步——这是 AI 层帧池与图形提交共同依赖的一块。" data-en="Zero-copy paired mapping of user-space shared memory with GPU fence synchronisation — the piece both the AI-layer frame pool and graphics submission depend on.">用户空间共享内存的零拷贝成对映射，配合 GPU 栅栏同步——这是 AI 层帧池与图形提交共同依赖的一块。</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 data-zh="相关波次" data-en="Related waves">相关波次</h2>
+              <ul class="list">
+                <li><b>W20</b> <span data-zh="—— 真机化：平台检测、高内存映射、ACPI 表处理。ACPI 表在 64 MiB 以上不映射，这道护栏是有意的。" data-en=" — real hardware: platform detection, high-memory mapping, ACPI table handling. ACPI tables above 64 MiB are not mapped, and that guard is deliberate.">—— 真机化：平台检测、高内存映射、ACPI 表处理。ACPI 表在 64 MiB 以上不映射，这道护栏是有意的。</span></li>
+                <li><b>W40–W43</b> <span data-zh="—— 帧池、大负载、按需分配、换页集中处理，为 AI 层的模型驻留做准备。" data-en=" — frame pool, large load, demand allocation and swapping, preparing the ground for AI-layer model residency.">—— 帧池、大负载、按需分配、换页集中处理，为 AI 层的模型驻留做准备。</span></li>
+              </ul>
+
+              <div class="note note--amber">
+                <strong data-zh="已知限制：" data-en="Known limit: ">已知限制：</strong>
+                <span data-zh="ACPI 表在 64 MiB 以上不映射。这不是遗漏而是护栏——早期的映射策略无法安全处理那个区间，因此显式拒绝而不是碰运气。" data-en="ACPI tables above 64 MiB are not mapped. That is a guard rather than an oversight: the early mapping strategy cannot safely handle that range, so it is refused explicitly instead of left to chance.">ACPI 表在 64 MiB 以上不映射。这不是遗漏而是护栏——早期的映射策略无法安全处理那个区间，因此显式拒绝而不是碰运气。</span>
+              </div>

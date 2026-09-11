@@ -1,0 +1,59 @@
+<!--{"zh":"FUI 与 .fuc","en":"FUI and .fuc","desc":"声明式界面的词汇表，以及 64 字节节点记录的字段偏移。桌面本身就是一份 .fui 文档。","banner_zh":"FUI · 一份文档，一个桌面","banner_en":"FUI · one document, one desktop"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="FUI 与 .fuc" data-en="FUI and .fuc">FUI 与 .fuc</h1>
+
+              <div class="prose">
+                <p data-zh-html="FUI 是这套系统的声明式界面层。<code>.fui</code> / <code>.fus</code> 文档由 <code>tools/fuic.py</code> 编译成 <code>.fuc</code>，再由内核里的运行时渲染。桌面——壁纸、图标、面板、窗口——就是一份这样的文档。" data-en-html="FUI is this system's declarative UI layer. <code>.fui</code> / <code>.fus</code> documents are compiled by <code>tools/fuic.py</code> into <code>.fuc</code> and rendered by an in-kernel runtime. The desktop — wallpaper, icons, panel, windows — is exactly such a document.">
+                  FUI 是这套系统的声明式界面层。<code>.fui</code> / <code>.fus</code> 文档由 <code>tools/fuic.py</code> 编译成 <code>.fuc</code>，再由内核里的运行时渲染。桌面——壁纸、图标、面板、窗口——就是一份这样的文档。
+                </p>
+              </div>
+
+              <h2 data-zh="节点布局（64 字节）" data-en="Node layout (64 bytes)">节点布局（64 字节）</h2>
+              <div class="code">
+                <div class="code__bar">
+                  <span class="lang-tag">lom</span>
+                  <span class="docs">lom/fuc.lom</span>
+                  <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+                </div>
+                <pre>record FucNode layout(packed, size=64) {
+  kind:  u16 @0    <span class="c">// 节点类型</span>
+  flags: u16 @2
+  x:     i16 @4
+  y:     i16 @6
+  ...
+}</pre>
+              </div>
+
+              <div class="note note--amber">
+                <strong data-zh="这份布局以前有三份。" data-en="This layout used to exist in three places.">这份布局以前有三份。</strong>
+                <span data-zh="打包器里的 struct.pack、内核里的 NODE_SIZE 常量、以及文档。改一处忘两处是常态。现在它只有一份 .lom 声明，三处产物全部由生成器产出——包括这份文档里的代码块。见 L0 一节。" data-en=" A struct.pack in the packer, a NODE_SIZE constant in the kernel, and the documentation. Changing one and forgetting two was normal. Now there is one .lom declaration and all three artifacts are generated — including the code block on this page. See the L0 page."> 打包器里的 struct.pack、内核里的 NODE_SIZE 常量、以及文档。改一处忘两处是常态。现在它只有一份 .lom 声明，三处产物全部由生成器产出——包括这份文档里的代码块。见 L0 一节。</span>
+              </div>
+
+              <h2 data-zh="节点 id 的约定" data-en="Node id conventions">节点 id 的约定</h2>
+              <div class="prose">
+                <p data-zh="桌面文档用成段的 node id：100 系列、200 系列、300 系列……分别对应面板、图标、窗口一类的角色。这些 id 此前只在一处注释里定义，而内核代码依赖它们——也就是“文档即契约”。这类魔法常量同样是 L0 的收拢对象。" data-en="Desktop documents use block-allocated node ids: the 100s, 200s, 300s and so on map to roles like panel, icons and windows. These ids used to be defined only in a comment, while kernel code depended on them — documentation as contract. Magic constants like these are another L0 consolidation target.">
+                  桌面文档用成段的 node id：100 系列、200 系列、300 系列……分别对应面板、图标、窗口一类的角色。这些 id 此前只在一处注释里定义，而内核代码依赖它们——也就是“文档即契约”。这类魔法常量同样是 L0 的收拢对象。
+                </p>
+              </div>
+
+              <h2 data-zh="编译链" data-en="The compile chain">编译链</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="文件" data-en="File">文件</th>
+                      <th scope="col" data-zh="角色" data-en="Role">角色</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td class="docs">*.fui / *.fus</td><td data-zh="作者写的声明式文档" data-en="The declarative document an author writes">作者写的声明式文档</td></tr>
+                    <tr><td class="docs">tools/fuic.py</td><td data-zh="编译器，含 --check 逐字节校验" data-en="The compiler, with a byte-exact --check mode">编译器，含 --check 逐字节校验</td></tr>
+                    <tr><td class="docs">*.fuc</td><td data-zh="编译产物：64 字节节点记录序列" data-en="Compiler output: a sequence of 64-byte node records">编译产物：64 字节节点记录序列</td></tr>
+                    <tr><td class="docs">kernel/src/fui/</td><td data-zh="内核内的渲染运行时" data-en="The in-kernel rendering runtime">内核内的渲染运行时</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="note note--steel">
+                <strong data-zh="相关：" data-en="Related: ">相关：</strong>
+                <span data-zh-html="渲染、窗口系统与控件见 <a href=&quot;../architecture/graphics.html&quot;>架构 · 图形与窗口系统</a>；Loment 侧已有一个控件用 Loment 重写且节点打包逐字节一致。" data-en-html="rendering, the window system and widgets are under <a href=&quot;../architecture/graphics.html&quot;>Architecture · Graphics and windows</a>; one widget has already been rewritten in Loment with byte-identical node packing.">渲染、窗口系统与控件见 <a href="../architecture/graphics.html">架构 · 图形与窗口系统</a>；Loment 侧已有一个控件用 Loment 重写且节点打包逐字节一致。</span>
+              </div>

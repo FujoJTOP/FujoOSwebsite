@@ -1,0 +1,114 @@
+<!--{"zh":"运行时与证据链","en":"Runtime and evidence chain","desc":"fuai-run 守护进程：S3 策略加载、进程树监督、append-only 哈希链证据、带外验证器，以及判据 A–E。","banner_zh":"运行时 · 主机无关的监督安全运行时","banner_en":"Runtime · a host-agnostic supervisory runtime"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="运行时与证据链" data-en="Runtime and evidence chain">运行时与证据链</h1>
+
+              <div class="prose">
+                <p data-zh="要证实“这套机制不是某个内核的私产”，只把设计写在论文里不够——需要在没有 FujoOS 的机器上把它跑起来。fuai-run 就是那个独立二进制：加载 S3 策略文件，监督目标进程树，写出证据链。" data-en="To show the mechanism is not the private property of one kernel, writing the design down is not enough — it has to run on a machine with no FujoOS. fuai-run is that standalone binary: it loads an S3 policy file, supervises a target process tree, and writes an evidence chain.">
+                  要证实“这套机制不是某个内核的私产”，只把设计写在论文里不够——需要在没有 FujoOS 的机器上把它跑起来。fuai-run 就是那个独立二进制：加载 S3 策略文件，监督目标进程树，写出证据链。
+                </p>
+              </div>
+
+              <figure class="figure" style="margin-top: var(--s4)">
+                <svg
+                  class="envelope"
+                  viewBox="0 0 620 264"
+                  role="img"
+                  aria-label="审计链由带哈希指针的条目串成：每条含前一条的摘要，任何篡改都会使其后的链条无法重放；带外验证器作为独立进程重推导序列。"
+                  data-zh-aria="审计链由带哈希指针的条目串成：每条含前一条的摘要，任何篡改都会使其后的链条无法重放；带外验证器作为独立进程重推导序列。"
+                  data-en-aria="The evidence chain is a series of entries joined by hash pointers: each entry contains the digest of the previous one, so any tampering breaks replay from that point on. The out-of-band verifier re-derives the sequence as a separate process."
+                >
+                  <defs>
+                    <marker id="mkr-s" class="mk" viewBox="0 0 8 8" refX="7.5" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+                      <path d="M0,0 L8,4 L0,8 Z" />
+                    </marker>
+                    <marker id="mkr-a" class="mk mk--amber" viewBox="0 0 8 8" refX="7.5" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+                      <path d="M0,0 L8,4 L0,8 Z" />
+                    </marker>
+                  </defs>
+
+                  <text x="16" y="30" class="t-steel">审计链 · append-only + SHA-256</text>
+
+                  <rect x="16" y="46" width="96" height="52" class="stroke s-steel" />
+                  <text x="28" y="72" class="t-steel">E0</text>
+                  <text x="28" y="88" class="t-dim">h0</text>
+
+                  <text x="112" y="42" class="t-dim" style="font-size: 11px">prev</text>
+                  <path class="stroke s-steel" d="M112,72 H136" marker-end="url(#mkr-s)" />
+
+                  <rect x="136" y="46" width="96" height="52" class="stroke s-steel" />
+                  <text x="148" y="72" class="t-steel">E1</text>
+                  <text x="148" y="88" class="t-dim">h1 = H(h0)</text>
+
+                  <path class="stroke s-steel" d="M232,72 H256" marker-end="url(#mkr-s)" />
+
+                  <rect x="256" y="46" width="96" height="52" class="stroke s-steel" />
+                  <text x="268" y="72" class="t-steel">E2</text>
+                  <text x="268" y="88" class="t-dim">h2</text>
+
+                  <path class="stroke s-amber s-dash" d="M352,72 H376" marker-end="url(#mkr-a)" />
+                  <text x="364" y="118" text-anchor="middle" class="t-amber">篡改 → 断链</text>
+
+                  <rect x="376" y="46" width="96" height="52" class="stroke s-steel" />
+                  <text x="388" y="72" class="t-steel">E3</text>
+                  <text x="388" y="88" class="t-dim">h3</text>
+
+                  <path class="stroke s-steel" d="M472,72 H496" marker-end="url(#mkr-s)" />
+
+                  <rect x="496" y="46" width="96" height="52" class="stroke s-steel" />
+                  <text x="508" y="72" class="t-steel">En</text>
+                  <text x="508" y="88" class="t-dim">hn</text>
+
+                  <text x="548" y="132" text-anchor="end" class="t-dim" style="font-size: 11px">读取原始链</text>
+                  <path class="stroke s-steel s-dash" d="M560,98 V150" marker-end="url(#mkr-s)" />
+
+                  <rect x="16" y="150" width="576" height="60" class="stroke s-steel s-dash" />
+                  <text x="32" y="176" class="t-steel">带外验证器 · fuai-verify</text>
+                  <text x="32" y="194" class="t-dim">独立进程，不链接运行时库；按契约独立重实现，重放并验签</text>
+                </svg>
+                <figcaption class="figure__cap">
+                  <span data-zh="每环含前一环的摘要：hₙ = H(hₙ₋₁ ∥ xₙ)。篡改任一环，其后全部失效。" data-en="Each link carries the digest of the previous: hₙ = H(hₙ₋₁ ∥ xₙ). Tamper with any link and everything after it fails.">每环含前一环的摘要：hₙ = H(hₙ₋₁ ∥ xₙ)。篡改任一环，其后全部失效。</span>
+                </figcaption>
+              </figure>
+
+              <h2 data-zh="运行时边界（一处被实测修正过）" data-en="Runtime boundary (corrected by measurement)">运行时边界（一处被实测修正过）</h2>
+              <ul class="list">
+                <li><b data-zh="不含进程启动面" data-en="no process-spawning surface">不含进程启动面</b> <span data-zh="—— 启动是宿主职责；这同时消除了命令执行模式。" data-en=" — launching is the host's job; this also removes a command-execution surface.">—— 启动是宿主职责；这同时消除了命令执行模式。</span></li>
+                <li><b data-zh="自检须在策略应用前" data-en="self-check precedes policy application">自检须在策略应用前</b> <span data-zh="—— 策略若预授权 exec 槽，会破坏 I1/I4 前提。这是 l16 实测出来的教训，不是推测。" data-en=" — a policy that pre-authorizes an exec slot breaks the I1/I4 preconditions. This came from l16 measurement, not speculation.">—— 策略若预授权 exec 槽，会破坏 I1/I4 前提。这是 l16 实测出来的教训，不是推测。</span></li>
+                <li><b data-zh="越域即 fail-closed" data-en="out-of-domain means fail-closed">越域即 fail-closed</b> <span data-zh="—— 未知指令与越域值一律拒绝，不做猜测。" data-en=" — unknown directives and out-of-domain values are refused outright, never guessed.">—— 未知指令与越域值一律拒绝，不做猜测。</span></li>
+              </ul>
+
+              <h2 data-zh="第三方验收判据" data-en="Third-party acceptance criteria">第三方验收判据</h2>
+              <div class="matrix">
+                <div class="matrix__row"><b data-zh="A · 契约唯一权威，两实现派生/校验后 0 差异" data-en="A · contract is the sole authority; both implementations derive or check, 0 drift">A · 契约唯一权威，两实现派生 / 校验后 0 差异</b><span class="tag tag--ok">0 差异</span></div>
+                <div class="matrix__row"><b data-zh="B · 未装 FujoOS 也能跑通完整测量链" data-en="B · full measurement chain runs without FujoOS installed">B · 未装 FujoOS 也能跑通完整测量链</b><span class="tag tag--ok">真实 Ollama 全链</span></div>
+                <div class="matrix__row"><b data-zh="C · 带外验证器独立重实现，能重放并验签" data-en="C · verifier reimplemented out-of-band, replays and verifies signatures">C · 带外验证器独立重实现，能重放并验签</b><span class="tag tag--ok">含签名锚定</span></div>
+                <div class="matrix__row"><b data-zh="D · 第三方按 README 三步完成部署" data-en="D · a third party completes deployment in three README steps">D · 第三方按 README 三步完成部署</b><span class="tag tag--ok">已实测</span></div>
+                <div class="matrix__row"><b data-zh="E · 契约升级不破坏任何既有验证" data-en="E · contract upgrade breaks no existing verification">E · 契约升级不破坏任何既有验证</b><span class="tag tag--ok">18/18 + 回归</span></div>
+              </div>
+
+              <h2 data-zh="两个实现，一份契约" data-en="Two implementations, one contract">两个实现，一份契约</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="实现" data-en="Implementation">实现</th>
+                      <th scope="col" data-zh="形态" data-en="Form">形态</th>
+                      <th scope="col" data-zh="验证" data-en="Verification">验证</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>FujoOS 内核模块</strong> <span class="dim" data-zh="第一实现" data-en="first">第一实现</span></td>
+                      <td data-zh="ai.rs / capability.rs / boxbridge.rs / contracts.rs + 0x81xx–0x83xx 系统调用" data-en="ai.rs / capability.rs / boxbridge.rs / contracts.rs + 0x81xx–0x83xx syscalls">ai.rs / capability.rs / boxbridge.rs / contracts.rs + 0x81xx–0x83xx 系统调用</td>
+                      <td class="num" data-zh="内核回归 59/59；m167 夹具逐步执行" data-en="kernel regression 59/59; m167 fixture step-by-step">内核回归 59/59；m167 夹具逐步执行</td>
+                    </tr>
+                    <tr>
+                      <td><strong>LinuxFUAI</strong> <span class="dim" data-zh="第二实现 · C11 / POSIX / MIT" data-en="second · C11 / POSIX / MIT">第二实现 · C11 / POSIX / MIT</span></td>
+                      <td data-zh="独立仓库；fuai-run 守护进程 + fuai_policy + fuai_evidence + 带外验证器" data-en="Separate repository; fuai-run daemon + fuai_policy + fuai_evidence + out-of-band verifier">独立仓库；fuai-run 守护进程 + fuai_policy + fuai_evidence + 带外验证器</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="note note--steel">
+                <strong data-zh="差分结果：" data-en="Differ result: ">差分结果：</strong>
+                <span data-zh="同一策略与 19 步事件夹具喂给两个实现，机制层判决序列 19/19 步零差异。这说明机制级判决是接口性质，而不是某个实现的特定行为。" data-en="the same policy and a 19-step event fixture fed to both implementations produce a mechanism-level verdict sequence that agrees 19/19. Mechanism-level verdicts are an interface property, not behaviour specific to one implementation.">同一策略与 19 步事件夹具喂给两个实现，机制层判决序列 19/19 步零差异。这说明机制级判决是接口性质，而不是某个实现的特定行为。</span>
+              </div>

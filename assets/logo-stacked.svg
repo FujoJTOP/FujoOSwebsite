@@ -1,0 +1,46 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 200 136"
+  width="200"
+  height="136"
+  class="fujo-logo-stacked"
+  role="img"
+  aria-labelledby="fujo-logo-stacked-title"
+>
+  <title id="fujo-logo-stacked-title">FujoOS</title>
+  <style>
+    .fujo-logo-stacked .k { fill: var(--fujo-steel, #7fc4dc); }
+    .fujo-logo-stacked .p { fill: var(--fujo-amber, #e29a4a); }
+    .fujo-logo-stacked .r {
+      fill: none;
+      stroke: var(--fujo-steel, #7fc4dc);
+      stroke-width: 3;
+    }
+    .fujo-logo-stacked .wm {
+      font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 42px;
+      font-weight: 500;
+    }
+    .fujo-logo-stacked .wm-fujo { fill: var(--fujo-fg, #e3e9f1); }
+    .fujo-logo-stacked .wm-os { fill: var(--fujo-steel, #7fc4dc); }
+    @media (prefers-color-scheme: light) {
+      .fujo-logo-stacked .k { fill: var(--fujo-steel, #266b87); }
+      .fujo-logo-stacked .p { fill: var(--fujo-amber, #a8651f); }
+      .fujo-logo-stacked .r { stroke: var(--fujo-steel, #266b87); }
+      .fujo-logo-stacked .wm-fujo { fill: var(--fujo-fg, #101822); }
+      .fujo-logo-stacked .wm-os { fill: var(--fujo-steel, #266b87); }
+    }
+  </style>
+
+  <g transform="translate(42.15 -16.9) scale(1.7)">
+    <path class="r" d="M5 50H24" />
+    <g transform="translate(23 50) rotate(-45)">
+      <path class="k" d="M0 0L13 -6H44V6H13Z" />
+      <path class="p" d="M0 0L10 -4.62L10 4.62Z" />
+    </g>
+  </g>
+
+  <text class="wm" x="100" y="115" text-anchor="middle"
+    ><tspan class="wm-fujo">Fujo</tspan><tspan class="wm-os">OS</tspan></text
+  >
+</svg>

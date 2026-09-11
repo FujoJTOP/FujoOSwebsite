@@ -1,0 +1,102 @@
+<!--{"zh":"文档","en":"Documentation","desc":"FujoOS 文档：开始、架构、AI 层、语言、兼容、参考与项目。共 48 页。","banner_zh":"文档 · 七个章节，先查后读","banner_en":"Docs · seven sections, look up or read through"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="文档" data-en="Documentation">文档</h1>
+
+              <div class="prose">
+                <p data-zh="这一节写给两类读者：想在自己机器上把它跑起来的人，和想搞清楚它为什么这样设计的人。两条路都从下面的入口进去——前者读「开始」，后者读「架构」与「AI 层」。" data-en="This section is for two kinds of reader: someone who wants to run it on their own machine, and someone who wants to understand why it is designed this way. Both paths start below — the first reads Start, the second reads Architecture and AI layer.">
+                  这一节写给两类读者：想在自己机器上把它跑起来的人，和想搞清楚它为什么这样设计的人。两条路都从下面的入口进去——前者读「开始」，后者读「架构」与「AI 层」。
+                </p>
+              </div>
+
+              <h2 data-zh="七个章节" data-en="Seven sections">七个章节</h2>
+              <div class="grid grid--2">
+                <a class="card card--link" href="start/index.html">
+                  <span class="card__k" data-zh="快速开始" data-en="Start here">快速开始</span>
+                  <h3 class="h3" data-zh="开始" data-en="Start">开始</h3>
+                  <p data-zh="环境要求、构建内核、在 QEMU 中启动、跑回归与 ISO 自验证。五页，从零到桌面。" data-en="Requirements, building the kernel, booting in QEMU, regression and ISO self-verification. Five pages, from scratch to desktop.">环境要求、构建内核、在 QEMU 中启动、跑回归与 ISO 自验证。五页，从零到桌面。</p>
+                </a>
+                <a class="card card--link" href="architecture/index.html">
+                  <span class="card__k" data-zh="设计" data-en="Design">设计</span>
+                  <h3 class="h3" data-zh="架构" data-en="Architecture">架构</h3>
+                  <p data-zh="四层结构、混合内核取舍、系统调用闸门、内存、进程、存储、图形、网络与安全。九页。" data-en="Four layers, the hybrid-kernel trade-off, the syscall gate, memory, processes, storage, graphics, networking and security. Nine pages.">四层结构、混合内核取舍、系统调用闸门、内存、进程、存储、图形、网络与安全。九页。</p>
+                </a>
+                <a class="card card--link" href="ai/index.html">
+                  <span class="card__k" data-zh="核心主张" data-en="The core claim">核心主张</span>
+                  <h3 class="h3" data-zh="AI 层 · FUAI" data-en="AI layer · FUAI">AI 层 · FUAI</h3>
+                  <p data-zh="命题与 S1/S2/S3、A1–A4 公理、能力域、模型卡、五职责、信任自适应、运行时与证据链、盒桥。九页。" data-en="The proposition and S1/S2/S3, axioms A1–A4, capability domains, model cards, the five duties, trust adaptation, the runtime and evidence chain, the box bridge. Nine pages.">命题与 S1/S2/S3、A1–A4 公理、能力域、模型卡、五职责、信任自适应、运行时与证据链、盒桥。九页。</p>
+                </a>
+                <a class="card card--link" href="language/index.html">
+                  <span class="card__k" data-zh="语言线" data-en="Language line">语言线</span>
+                  <h3 class="h3" data-zh="语言" data-en="Language">语言</h3>
+                  <p data-zh="Loment 与 Potato 的分工、L0 单一真源、能力域即语言构造、工具链、自举与波 C 测量。八页。" data-en="The Loment / Potato split, L0's source of truth, capability as a language construct, the toolchain, self-hosting and wave-C measurement. Eight pages.">Loment 与 Potato 的分工、L0 单一真源、能力域即语言构造、工具链、自举与波 C 测量。八页。</p>
+                </a>
+                <a class="card card--link" href="compat/index.html">
+                  <span class="card__k" data-zh="一等能力" data-en="First-class">一等能力</span>
+                  <h3 class="h3" data-zh="兼容" data-en="Compatibility">兼容</h3>
+                  <p data-zh="四个口径、四套加载器、Linux ABI、Windows 垫片、FUJR 容器与 C01–C15 规划。六页。" data-en="Four definitions, four loaders, the Linux ABI, Windows shims, FUJR containers and the C01–C15 plan. Six pages.">四个口径、四套加载器、Linux ABI、Windows 垫片、FUJR 容器与 C01–C15 规划。六页。</p>
+                </a>
+                <a class="card card--link" href="reference/index.html">
+                  <span class="card__k" data-zh="查表" data-en="Look up">查表</span>
+                  <h3 class="h3" data-zh="参考" data-en="Reference">参考</h3>
+                  <p data-zh="系统调用与操作码表、FUI 词汇与 .fuc 布局、仓库结构与文档索引。五页。" data-en="Syscall and opcode tables, the FUI vocabulary and .fuc layout, repository structure and the document index. Five pages.">系统调用与操作码表、FUI 词汇与 .fuc 布局、仓库结构与文档索引。五页。</p>
+                </a>
+                <a class="card card--link" href="project/index.html">
+                  <span class="card__k" data-zh="关于项目" data-en="About the project">关于项目</span>
+                  <h3 class="h3" data-zh="项目" data-en="Project">项目</h3>
+                  <p data-zh="开发分支、网络线、路线图、可复现性纪律与已知边界。六页。" data-en="Development branches, the network line, the roadmap, reproducibility discipline and known limits. Six pages.">开发分支、网络线、路线图、可复现性纪律与已知边界。六页。</p>
+                </a>
+                <a class="card card--link" href="../index.html">
+                  <span class="card__k" data-zh="返回" data-en="Back">返回</span>
+                  <h3 class="h3" data-zh="站外三页" data-en="The three main pages">站外三页</h3>
+                  <p data-zh="首页、FUAI 安全体系与 Loment · Potato 三个门面页讲的是同一个故事的精简版。" data-en="The home page, the FUAI safety system page and the Loment · Potato page tell a shorter version of the same story.">首页、FUAI 安全体系与 Loment · Potato 三个门面页讲的是同一个故事的精简版。</p>
+                </a>
+              </div>
+
+              <div class="prose" style="margin-top: var(--s5)">
+                <h2 data-zh="怎么用这套文档" data-en="How to use this documentation">怎么用这套文档</h2>
+              </div>
+
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="如果你想…" data-en="If you want to…">如果你想…</th>
+                      <th scope="col" data-zh="从这里开始" data-en="Start at">从这里开始</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td data-zh="把它跑起来，自己看是不是真的" data-en="run it and see for yourself whether it is real">把它跑起来，自己看是不是真的</td>
+                      <td><a href="start/index.html">开始</a> → <a href="start/verify.html">回归、ISO 与 CI</a></td>
+                    </tr>
+                    <tr>
+                      <td data-zh="理解“AI 在内核里被约束”是什么意思" data-en="understand what “an AI constrained inside a kernel” means">理解“AI 在内核里被约束”是什么意思</td>
+                      <td><a href="ai/proposition.html">命题与 S1/S2/S3</a> → <a href="ai/axioms.html">A1–A4</a> → <a href="ai/runtime.html">运行时与证据链</a></td>
+                    </tr>
+                    <tr>
+                      <td data-zh="看这套机制能不能搬到别的宿主上" data-en="see whether the mechanism can move to another host">看这套机制能不能搬到别的宿主上</td>
+                      <td><a href="ai/runtime.html">运行时与证据链</a> → <a href="ai/box-bridge.html">盒桥</a></td>
+                    </tr>
+                    <tr>
+                      <td data-zh="搞清楚 Loment 和 Potato 到底谁管什么" data-en="work out what Loment and Potato each govern">搞清楚 Loment 和 Potato 到底谁管什么</td>
+                      <td><a href="language/index.html">语言总览</a> → <a href="language/potato.html">Potato 形式对象</a></td>
+                    </tr>
+                    <tr>
+                      <td data-zh="检查“兼容”这个词被用在了什么范围" data-en="check the scope “compatibility” is used in">检查“兼容”这个词被用在了什么范围</td>
+                      <td><a href="compat/index.html">兼容总览</a> → <a href="project/limitations.html">已知边界</a></td>
+                    </tr>
+                    <tr>
+                      <td data-zh="找某个系统调用或操作码" data-en="find a syscall or opcode">找某个系统调用或操作码</td>
+                      <td><a href="reference/syscalls.html">系统调用</a> · <a href="reference/opcodes.html">FUAI 操作码</a></td>
+                    </tr>
+                    <tr>
+                      <td data-zh="知道这个项目明确不做什么" data-en="know what the project explicitly does not do">知道这个项目明确不做什么</td>
+                      <td><a href="project/roadmap.html">路线图</a> · <a href="project/limitations.html">已知边界</a></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="note note--steel" style="margin-top: var(--s3)">
+                <strong data-zh="文档纪律：" data-en="Documentation discipline: ">文档纪律：</strong>
+                <span data-zh="仓库里的数字与判据不靠文档自证，而靠 tools/ 下的脚本重跑。文档写的是结论与边界，脚本才是证据——所以这里的每一句话都应该能被一条命令推翻。" data-en="the numbers and criteria in the repository are not self-certified by documentation but re-run by scripts under tools/. Documentation carries conclusions and boundaries; the scripts are the evidence — which is why every sentence here should be refutable by a command.">仓库里的数字与判据不靠文档自证，而靠 tools/ 下的脚本重跑。文档写的是结论与边界，脚本才是证据——所以这里的每一句话都应该能被一条命令推翻。</span>
+              </div>

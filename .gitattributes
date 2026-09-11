@@ -1,0 +1,10 @@
+* text=auto eol=lf
+
+# Raster assets are binary; never touch their line endings
+*.png binary
+*.jpg binary
+*.ico binary
+
+# Generated HTML is compared byte-for-byte by the generator's --check,
+# so it must round-trip unchanged through git.
+docs/**/*.html -text

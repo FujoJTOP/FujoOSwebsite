@@ -1,0 +1,69 @@
+<!--{"zh":"信任自适应域宽","en":"Trust-adaptive width","desc":"域宽是测量结果而非配置项：τ 阈值、质量台账、K 窗确认，以及 T* 区间与风险比的由来。","banner_zh":"信任自适应 · 域宽是测量结果","banner_en":"Trust-adaptive · width is a measurement"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="信任自适应域宽" data-en="Trust-adaptive width">信任自适应域宽</h1>
+
+              <div class="prose">
+                <p data-zh="这是 S2 的落地方式。核心主张只有一句：域宽不是一个配置项，而是一个测量结果。质量台账记录模型在语义金标上的表现，两个阈值 τ_low 与 τ_high 把质量分成三段，域宽随之变化；放宽需要连续 K 次确认，不是一次好成绩就能换来的。" data-en="This is S2 made concrete. The claim is one sentence: domain width is not a configuration flag but a measurement result. A quality ledger records how the model does on the semantic goldset, two thresholds τ_low and τ_high cut quality into three bands, and the width follows. Widening takes K consecutive confirmations — one good result does not buy it.">
+                  这是 S2 的落地方式。核心主张只有一句：域宽不是一个配置项，而是一个测量结果。质量台账记录模型在语义金标上的表现，两个阈值 τ_low 与 τ_high 把质量分成三段，域宽随之变化；放宽需要连续 K 次确认，不是一次好成绩就能换来的。
+                </p>
+              </div>
+
+              <div class="stats" style="margin-top: var(--s4)">
+                <div class="stat">
+                  <span class="stat__v">45 <span class="dim" style="font-size: 0.6em">/</span> 35</span>
+                  <span class="stat__k" data-zh="τ_high / τ_low（FujoOS 默认）。LinuxFUAI 默认 46，作为部署参数登记，不是接口差异。" data-en="τ_high / τ_low (FujoOS default). LinuxFUAI defaults to 46 — logged as a deployment parameter, not an interface difference.">τ_high / τ_low（FujoOS 默认）。LinuxFUAI 默认 46，作为部署参数登记，不是接口差异。</span>
+                </div>
+                <div class="stat">
+                  <span class="stat__v">[0.429, 0.454)</span>
+                  <span class="stat__k" data-zh="T* —— 语义金标 v2 口径下重推导的信任阈值区间（旧口径为 [0.369, 0.534)）" data-en="T* — the trust-threshold interval re-derived under semantic goldset v2 (the old interval was [0.369, 0.534))">T* —— 语义金标 v2 口径下重推导的信任阈值区间（旧口径为 [0.369, 0.534)）</span>
+                </div>
+                <div class="stat">
+                  <span class="stat__v">5.01×</span>
+                  <span class="stat__k" data-zh="R(0.70) —— 0.70 覆盖率下的风险比，由 13 个本地模型的 β 重测得出" data-en="R(0.70) — the risk ratio at 0.70 coverage, from β re-measurement across 13 local models">R(0.70) —— 0.70 覆盖率下的风险比，由 13 个本地模型的 β 重测得出</span>
+                </div>
+                <div class="stat">
+                  <span class="stat__v">13 × 280</span>
+                  <span class="stat__k" data-zh="模型数 × 金标例数。0.5B–9B、7 个家族，含留一模型交叉检查。" data-en="Models × goldset examples. 0.5B–9B, 7 families, with leave-one-model-out checks.">模型数 × 金标例数。0.5B–9B、7 个家族，含留一模型交叉检查。</span>
+                </div>
+              </div>
+
+              <h2 data-zh="测量链上的修正是可查的，不是修辞" data-en="The corrections on the measurement chain are traceable, not rhetoric">测量链上的修正是可查的，不是修辞</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="事件" data-en="Event">事件</th>
+                      <th scope="col" data-zh="结果" data-en="Outcome">结果</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td data-zh="语义金标 v2（280 例，含反 E1 自证）" data-en="Semantic goldset v2 (280 examples, with anti-E1 self-proof)">语义金标 v2（280 例，含反 E1 自证）</td>
+                      <td data-zh="phi3:mini 的 β 从 1.00 崩到 0.00——实证了旧口径的缺陷，而不是把它当成噪声忽略。" data-en="phi3:mini's β collapsed from 1.00 to 0.00 — an empirical demonstration of the old metric's defect, not noise to be waved away.">phi3:mini 的 β 从 1.00 崩到 0.00——实证了旧口径的缺陷，而不是把它当成噪声忽略。</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="G/B 重分层" data-en="G/B re-stratification">G/B 重分层</td>
+                      <td class="num">B = {llama3.2:1b, 0.5b, phi3:mini}</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="τ 声明重标定" data-en="τ declaration recalibration">τ 声明重标定</td>
+                      <td class="num" data-zh="τ_high 46 → 45（落入 v2 区间内）" data-en="τ_high 46 → 45 (falls inside the v2 interval)">τ_high 46 → 45（落入 v2 区间内）</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="W46 反证响应" data-en="W46 refutation response">W46 反证响应</td>
+                      <td data-zh="发现最伤人的弱点不是机制被绕，而是数字口径不可查；一键复现包由此成为硬要求。" data-en="The most damaging weakness found was not a bypass of the mechanism but unreproducible number definitions; the one-command reproduction pack became a hard requirement.">发现最伤人的弱点不是机制被绕，而是数字口径不可查；一键复现包由此成为硬要求。</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 data-zh="一条自我约束：τ 不重开" data-en="One self-imposed rule: τ is not reopened">一条自我约束：τ 不重开</h2>
+              <div class="prose">
+                <p data-zh="τ 的重启条件只有两条：出现真实的部署损失记录，或者语义金标本身发生变化。这条规矩针对的是一个很常见的自欺——看到阈值不合意就回去调测量口径。把重启条件写死，等于提前放弃那次调参的机会。" data-en="τ reopens under exactly two conditions: a real deployment loss record, or a change in the semantic goldset itself. The rule targets a common self-deception — going back to adjust the metric whenever the threshold is inconvenient. Fixing the reopen conditions in advance gives up that option deliberately.">
+                  τ 的重启条件只有两条：出现真实的部署损失记录，或者语义金标本身发生变化。这条规矩针对的是一个很常见的自欺——看到阈值不合意就回去调测量口径。把重启条件写死，等于提前放弃那次调参的机会。
+                </p>
+              </div>
+
+              <div class="note note--steel">
+                <strong data-zh="相关：" data-en="Related: ">相关：</strong>
+                <span data-zh-html="测量方法本身（金标怎么造、识别率与转换率怎么算）在 <a href=&quot;../language/measurement.html&quot;>波 C 测量</a>；数字如何做到可复现在 <a href=&quot;../project/verification.html&quot;>可复现性纪律</a>。" data-en-html="the measurement method itself (how goldsets are built, how recognition and conversion rates are computed) is under <a href=&quot;../language/measurement.html&quot;>Wave-C measurement</a>; how the numbers are made reproducible, under <a href=&quot;../project/verification.html&quot;>Reproducibility discipline</a>.">测量方法本身（金标怎么造、识别率与转换率怎么算）在 <a href="../language/measurement.html">波 C 测量</a>；数字如何做到可复现在 <a href="../project/verification.html">可复现性纪律</a>。</span>
+              </div>

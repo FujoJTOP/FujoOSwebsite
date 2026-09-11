@@ -1,0 +1,66 @@
+<!--{"zh":"路线图","en":"Roadmap","desc":"波次主题、当前进度，以及那六件明确写着“不做”的事。","banner_zh":"路线图 · 也记录“不做”","banner_en":"Roadmap · it records what will not be done too"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="路线图" data-en="Roadmap">路线图</h1>
+
+              <div class="prose">
+                <p data-zh="路线图是“波次”式的：每一波是一段有主题、有交付物、有判据的工作。波与波之间线性推进，同一条线上可以并行开岔。仓库里另有一份 100 里程碑清单作为更细的刻度。" data-en="The roadmap works in waves: each wave is a stretch of work with a theme, deliverables and criteria. Waves advance in sequence, though a single line may branch in parallel. A hundred-milestone list in the repository provides a finer scale.">
+                  路线图是“波次”式的：每一波是一段有主题、有交付物、有判据的工作。波与波之间线性推进，同一条线上可以并行开岔。仓库里另有一份 100 里程碑清单作为更细的刻度。
+                </p>
+              </div>
+
+              <h2 data-zh="波次主题" data-en="Wave themes">波次主题</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="波次" data-en="Waves">波次</th>
+                      <th scope="col" data-zh="主题" data-en="Theme">主题</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td class="num">W10–W19</td><td data-zh="内存、文件系统、AHCI / PCI、高内存映射、页缓存与预读" data-en="Memory, filesystem, AHCI / PCI, high-memory mapping, page cache and read-ahead">内存、文件系统、AHCI / PCI、高内存映射、页缓存与预读</td></tr>
+                    <tr><td class="num">W20</td><td data-zh="真机化：平台检测、GRUB2、AHCI 真盘、PCI 多功能设备" data-en="Real hardware: platform detection, GRUB2, AHCI on real disks, PCI multifunction devices">真机化：平台检测、GRUB2、AHCI 真盘、PCI 多功能设备</td></tr>
+                    <tr><td class="num">W21</td><td data-zh="网络：virtio-net、IPv4/UDP 往返、最小 TCP 服务端、UDP 克隆闭环" data-en="Networking: virtio-net, IPv4/UDP round-trip, a minimal TCP server, UDP clone loop">网络：virtio-net、IPv4/UDP 往返、最小 TCP 服务端、UDP 克隆闭环</td></tr>
+                    <tr><td class="num">W22–W28</td><td data-zh="AI 垂直六波：三引擎对照、蒸馏闭环、对抗验证、I/O 基线、自监督、事件哨兵" data-en="The six-wave AI vertical: three-engine contrast, distillation loop, adversarial validation, I/O baseline, self-supervision, event sentinel">AI 垂直六波：三引擎对照、蒸馏闭环、对抗验证、I/O 基线、自监督、事件哨兵</td></tr>
+                    <tr><td class="num">W29–W31</td><td data-zh="双执行模式对照（TCG / WHPX）、真机工具包、KVM 对照列" data-en="Two-mode contrast (TCG / WHPX), a real-hardware kit, the KVM contrast column">双执行模式对照（TCG / WHPX）、真机工具包、KVM 对照列</td></tr>
+                    <tr><td class="num">W32–W34</td><td data-zh="信任自适应域宽、A 类攻击验证、Windows 兼容深化" data-en="Trust-adaptive domain width, class-A attack validation, deeper Windows compatibility">信任自适应域宽、A 类攻击验证、Windows 兼容深化</td></tr>
+                    <tr><td class="num">W35–W39</td><td data-zh="盒桥规范与实现、契约演进、开闭对照" data-en="Box bridge spec and implementation, contract evolution, open-closed contrast">盒桥规范与实现、契约演进、开闭对照</td></tr>
+                    <tr><td class="num">W40–W43</td><td data-zh="帧池、大负载、按需分配、换页" data-en="Frame pool, large load, demand allocation, swapping">帧池、大负载、按需分配、换页</td></tr>
+                    <tr><td class="num">W44–W46</td><td data-zh="真机标准、兼容深化、ISO 验证、反证轮（W46）" data-en="Real-hardware standard, deeper compatibility, ISO verification, the refutation round (W46)">真机标准、兼容深化、ISO 验证、反证轮（W46）</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 data-zh="当前进度（可对照脚本输出）" data-en="Current progress (checkable against script output)">当前进度（可对照脚本输出）</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="面" data-en="Surface">面</th>
+                      <th scope="col" data-zh="状态" data-en="Status">状态</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td data-zh="内核回归" data-en="Kernel regression">内核回归</td><td class="num"><span class="tag tag--ok">59/59 TCG</span> <span class="tag">49/51 WHPX/KVM</span></td></tr>
+                    <tr><td data-zh="FUAI 契约与运行时（判据 A–E）" data-en="FUAI contract and runtime (criteria A–E)">FUAI 契约与运行时（判据 A–E）</td><td class="num"><span class="tag tag--ok" data-zh="全部达成" data-en="all met">全部达成</span></td></tr>
+                    <tr><td data-zh="Loment 100 里程碑" data-en="Loment's 100 milestones">Loment 100 里程碑</td><td class="num"><span class="tag tag--ok">79 <span data-zh="完成" data-en="done">完成</span></span> <span class="tag tag--part">14 · 2 · 5</span></td></tr>
+                    <tr><td data-zh="语言 1.0 冻结（M96）与发布审计（M100）" data-en="Language 1.0 freeze (M96) and release audit (M100)">语言 1.0 冻结（M96）与发布审计（M100）</td><td class="num"><span class="tag tag--part" data-zh="未达 · 1.0-pre" data-en="unmet · 1.0-pre">未达 · 1.0-pre</span></td></tr>
+                    <tr><td data-zh="真机：GRUB / AHCI / 平台检测" data-en="Real hardware: GRUB / AHCI / platform detection">真机：GRUB / AHCI / 平台检测</td><td class="num"><span class="tag tag--ok" data-zh="已演示" data-en="demonstrated">已演示</span></td></tr>
+                    <tr><td data-zh="真机：VBE 视频与 USB 驱动" data-en="Real hardware: VBE video and USB drivers">真机：VBE 视频与 USB 驱动</td><td class="num"><span class="tag tag--no" data-zh="未完成" data-en="unfinished">未完成</span></td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 data-zh="明确推迟与明确不做的事" data-en="Explicitly deferred and explicitly out">明确推迟与明确不做的事</h2>
+              <div class="prose">
+                <p data-zh="一份只写“要做什么”的路线图是不完整的。下面这些是主动划出去的，理由一并写上。" data-en="A roadmap that only says what will be done is incomplete. These are deliberately left out, with the reasons attached.">
+                  一份只写“要做什么”的路线图是不完整的。下面这些是主动划出去的，理由一并写上。
+                </p>
+              </div>
+              <ul class="list">
+                <li><b data-zh="微核自引导" data-en="Microkernel self-bootstrap">微核自引导</b> <span data-zh="—— 推迟到 FUAI-OS 发布之后，作为“第三后端”探索，不前置。" data-en=" — deferred until after the FUAI-OS release, explored then as a “third backend”, never a prerequisite.">—— 推迟到 FUAI-OS 发布之后，作为“第三后端”探索，不前置。</span></li>
+                <li><b data-zh="常驻评测设施" data-en="A standing evaluation facility">常驻评测设施</b> <span data-zh-html="—— 永不建，用一键复现包替代。理由见 <a href=&quot;verification.html&quot;>可复现性纪律</a>。" data-en-html=" — never built; a one-command reproduction pack takes its place. The reasoning is under <a href=&quot;verification.html&quot;>Reproducibility discipline</a>.">—— 永不建，用一键复现包替代。理由见 <a href="verification.html">可复现性纪律</a>。</span></li>
+                <li><b data-zh="内核驱动的兼容层" data-en="Kernel-driver compatibility">内核驱动的兼容层</b> <span data-zh="—— .sys / .ko / .kext 不做，提供 hypervisor 兜底。" data-en=" — .sys / .ko / .kext are out of scope, with a hypervisor fallback.">—— .sys / .ko / .kext 不做，提供 hypervisor 兜底。</span></li>
+                <li><b data-zh="完整 macOS GUI 等价" data-en="Full macOS GUI equivalence">完整 macOS GUI 等价</b> <span data-zh="—— 不做；兼容目标限定在加载器与垫片面。" data-en=" — not attempted; the target is bounded to the loader and shim surface.">—— 不做；兼容目标限定在加载器与垫片面。</span></li>
+                <li><b data-zh="物理介质执行" data-en="Booting from physical media">物理介质执行</b> <span data-zh="—— 可选后续项，不再阻断真机闭环的关闭。" data-en=" — an optional follow-up; no longer blocks closing the real-hardware loop.">—— 可选后续项，不再阻断真机闭环的关闭。</span></li>
+                <li><b data-zh="公开投稿" data-en="Public submission">公开投稿</b> <span data-zh="—— 论文按浙大要求保持私有；预印本时间戳是优先权的唯一锚点。" data-en=" — the paper stays private at the university's request; the preprint timestamp is the sole anchor of priority.">—— 论文按浙大要求保持私有；预印本时间戳是优先权的唯一锚点。</span></li>
+              </ul>

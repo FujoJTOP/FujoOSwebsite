@@ -1,0 +1,62 @@
+<!--{"zh":"语言总览","en":"Language overview","desc":"Loment 管怎么写，Potato 管怎么看。L0 单一真源、L1 系统语言、能力域即语言构造、工具链、自举与波 C 测量。","banner_zh":"语言 · 一个写，一个看","banner_en":"Language · one writes, one reads"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="语言总览" data-en="Language overview">语言总览</h1>
+
+              <div class="prose">
+                <p data-zh="先说清楚一件容易误会的事：Loment 和 Potato 不是两门语言在竞争。Loment 是语言（语法、类型、所有权、能力域），Potato 不是语言——它是编译流程输出端的形式对象，没有语法，只有结构。一个管怎么写，一个管怎么看。" data-en="One thing to get straight: Loment and Potato are not two languages competing. Loment is a language — grammar, types, ownership, capability domains. Potato is not; it is the formal object at the output end of the compiler, with no grammar, only structure. One governs how you write, the other how a machine reads.">
+                  先说清楚一件容易误会的事：Loment 和 Potato 不是两门语言在竞争。Loment 是语言（语法、类型、所有权、能力域），Potato 不是语言——它是编译流程输出端的形式对象，没有语法，只有结构。一个管怎么写，一个管怎么看。
+                </p>
+              </div>
+
+              <div class="prose">
+                <p data-zh="这层关系不是凭空设计的，它来自一个很具体的痛点：同一个事实在 JSON、Rust、C、Python 里各写一份。立项文档列了十个这样的痛点，其中七个是重复声明。关键推论是——这十个痛点里没有一个是 Rust 造成的，换语言不解决它们，只会增加语言数量。" data-en="This arrangement was not invented for its own sake; it comes from a concrete pain point: the same fact written once each in JSON, Rust, C and Python. The founding document lists ten such pain points, seven of them duplicate declarations. The key inference: none of the ten is caused by Rust, so changing language would not fix them — it would only add another language.">
+                  这层关系不是凭空设计的，它来自一个很具体的痛点：同一个事实在 JSON、Rust、C、Python 里各写一份。立项文档列了十个这样的痛点，其中七个是重复声明。关键推论是——这十个痛点里没有一个是 Rust 造成的，换语言不解决它们，只会增加语言数量。
+                </p>
+              </div>
+
+              <div class="grid grid--2">
+                <a class="card card--link" href="l0.html">
+                  <span class="card__k" data-zh="现在就能做" data-en="Doable now">现在就能做</span>
+                  <h3 class="h3" data-zh="L0 单一真源" data-en="L0 source of truth">L0 单一真源</h3>
+                  <p data-zh="一份 .lom 声明，生成 Rust / C / Python / JSON，漂移在生成期就不可能发生。" data-en="One .lom declaration generating Rust / C / Python / JSON, so drift becomes impossible at generation time.">一份 .lom 声明，生成 Rust / C / Python / JSON，漂移在生成期就不可能发生。</p>
+                </a>
+                <a class="card card--link" href="loment.html">
+                  <span class="card__k" data-zh="语言本体" data-en="The language">语言本体</span>
+                  <h3 class="h3" data-zh="Loment 语言" data-en="The Loment language">Loment 语言</h3>
+                  <p data-zh="Rust 的严格子集，加少量显式扩展——语法不新，语义才新。" data-en="A strict Rust subset with a few explicit extensions — not new syntax, new semantics.">Rust 的严格子集，加少量显式扩展——语法不新，语义才新。</p>
+                </a>
+                <a class="card card--link" href="capability.html">
+                  <span class="card__k" data-zh="接缝" data-en="The seam">接缝</span>
+                  <h3 class="h3" data-zh="能力域即语言构造" data-en="Capability as a construct">能力域即语言构造</h3>
+                  <p data-zh="能力不是库调用，是语言里的东西：guard、编译期边界、运行期 trap、审计计数。" data-en="Capability is not a library call but part of the language: guard, compile-time bounds, runtime trap, audit counting.">能力不是库调用，是语言里的东西：guard、编译期边界、运行期 trap、审计计数。</p>
+                </a>
+                <a class="card card--link" href="potato.html">
+                  <span class="card__k" data-zh="机器面" data-en="Machine side">机器面</span>
+                  <h3 class="h3" data-zh="Potato 形式对象" data-en="The Potato object">Potato 形式对象</h3>
+                  <p data-zh="编译器强制导出，不可关闭；内核、验证器、外部 Agent 读同一份。" data-en="Emitted by the compiler under a mandatory, non-disableable export; the kernel, verifier and external agents read the same object.">编译器强制导出，不可关闭；内核、验证器、外部 Agent 读同一份。</p>
+                </a>
+                <a class="card card--link" href="toolchain.html">
+                  <span class="card__k" data-zh="周边" data-en="Around it">周边</span>
+                  <h3 class="h3" data-zh="工具链" data-en="Toolchain">工具链</h3>
+                  <p data-zh="格式化器、LSP、包管理器、文档生成器、DWARF 行表、增量构建。" data-en="Formatter, LSP, package manager, doc generator, DWARF line tables, incremental builds.">格式化器、LSP、包管理器、文档生成器、DWARF 行表、增量构建。</p>
+                </a>
+                <a class="card card--link" href="selfhost.html">
+                  <span class="card__k" data-zh="闭环" data-en="Closing the loop">闭环</span>
+                  <h3 class="h3" data-zh="自举" data-en="Self-hosting">自举</h3>
+                  <p data-zh="编译器编译自身，三阶段产物逐字节相同——以及还没做到的那两件事。" data-en="The compiler compiles itself with three-stage byte-identical output — and the two things still outstanding.">编译器编译自身，三阶段产物逐字节相同——以及还没做到的那两件事。</p>
+                </a>
+                <a class="card card--link" href="measurement.html">
+                  <span class="card__k" data-zh="证据" data-en="Evidence">证据</span>
+                  <h3 class="h3" data-zh="波 C 测量" data-en="Wave-C measurement">波 C 测量</h3>
+                  <p data-zh="把“能转写”变成可复现的数字：识别率、转换率、置信区间。以及必须一起读的原因。" data-en="Turning “it can translate” into reproducible numbers: recognition, conversion, confidence intervals — and why they must be read together.">把“能转写”变成可复现的数字：识别率、转换率、置信区间。以及必须一起读的原因。</p>
+                </a>
+                <a class="card card--link" href="../project/network-line.html">
+                  <span class="card__k" data-zh="应用" data-en="Application">应用</span>
+                  <h3 class="h3" data-zh="第一个真应用" data-en="The first real application">第一个真应用</h3>
+                  <p data-zh="为什么让一门新语言的第一个真应用是网络，而不是玩具样例。" data-en="Why the first real application of a new language is networking rather than a toy sample.">为什么让一门新语言的第一个真应用是网络，而不是玩具样例。</p>
+                </a>
+              </div>
+
+              <div class="note note--amber">
+                <strong data-zh="一句实话：" data-en="One honest note: ">一句实话：</strong>
+                <span data-zh="Loment 尚未冻结 1.0（里程碑 79/100，M96 与 M100 未达）。下面这些页面写的是当前状态与已测出的边界，不是“已发布产品”的文档。" data-en="Loment has not frozen 1.0 yet (79 of 100 milestones, with M96 and M100 unmet). These pages describe current state and measured boundaries, not documentation for a shipped product.">Loment 尚未冻结 1.0（里程碑 79/100，M96 与 M100 未达）。下面这些页面写的是当前状态与已测出的边界，不是“已发布产品”的文档。</span>
+              </div>

@@ -1,0 +1,28 @@
+<!--{"zh":"安全模型","en":"Security model","desc":"内核不信任任何线程指针、能力句柄默认最小权限、Ed25519 签名，以及三平台垫片全 clean-room。","banner_zh":"安全模型 · 内核不信任任何指针","banner_en":"Security model · the kernel trusts no pointer"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="安全模型" data-en="Security model">安全模型</h1>
+
+              <div class="prose">
+                <p data-zh="这一页是内核自身的防护基线，不是 FUAI。FUAI 管的是“让模型在边界内活动”，这里管的是“边界本身不塌”。两者是不同层次的东西，混为一谈会让两边都说不清。" data-en="This page is the kernel's own defensive baseline, not FUAI. FUAI is about keeping a model inside a boundary; this is about the boundary itself not caving in. They are different layers, and conflating them makes both harder to state.">
+                  这一页是内核自身的防护基线，不是 FUAI。FUAI 管的是“让模型在边界内活动”，这里管的是“边界本身不塌”。两者是不同层次的东西，混为一谈会让两边都说不清。
+                </p>
+              </div>
+
+              <ul class="list list--check">
+                <li><b data-zh="不信任任何线程指针" data-en="Trust no thread pointer">不信任任何线程指针</b> <span data-zh="—— 所有用户地址都要经过 copy_from_user / strnlen_user 的边界校验，没有例外通道。" data-en=" — every user address passes copy_from_user / strnlen_user bounds checks; there is no exception path.">—— 所有用户地址都要经过 copy_from_user / strnlen_user 的边界校验，没有例外通道。</span></li>
+                <li><b data-zh="能力句柄 + 权限掩码" data-en="Capability handles with permission masks">能力句柄 + 权限掩码</b> <span data-zh="—— 文件、端口、GPU 资源全部建模为句柄加权限掩码，默认最小权限。形式上像 NT handle，但默认值相反。" data-en=" — files, ports and GPU resources are all modelled as handles plus permission masks, least-privilege by default. Formally similar to NT handles, but with the opposite default.">—— 文件、端口、GPU 资源全部建模为句柄加权限掩码，默认最小权限。形式上像 NT handle，但默认值相反。</span></li>
+                <li><b data-zh="fork/exec 中间态不泄漏挂起句柄" data-en="No leaked pending handles across fork/exec">fork/exec 中间态不泄漏挂起句柄</b> <span data-zh="—— 针对 PIE 场景的一条具体要求。" data-en=" — one concrete requirement aimed at the PIE case.">—— 针对 PIE 场景的一条具体要求。</span></li>
+                <li><b data-zh="签名与“仅运行已签名”" data-en="Signing and “signed only”">签名与“仅运行已签名”</b> <span data-zh="—— .run 走 Ed25519，可配置为只接受已签名的包。" data-en=" — .run uses Ed25519 and can be configured to accept signed packages only.">—— .run 走 Ed25519，可配置为只接受已签名的包。</span></li>
+                <li><b data-zh="垫片全 clean-room" data-en="Every shim is clean-room">垫片全 clean-room</b> <span data-zh="—— 三平台垫片不包含任何微软或苹果代码。这既是法律边界，也是“兼容 = 接口契约而非容器模拟”这句话的前提。" data-en=" — the three platform shims contain no Microsoft or Apple code. That is both a legal boundary and the precondition for “compatibility is an interface contract, not container emulation”.">—— 三平台垫片不包含任何微软或苹果代码。这既是法律边界，也是“兼容 = 接口契约而非容器模拟”这句话的前提。</span></li>
+              </ul>
+
+              <h2 data-zh="一条设计的对称性" data-en="A symmetry worth noting">一条设计的对称性</h2>
+              <div class="prose">
+                <p data-zh-html="内核安全模型与 FUAI 用的是同一个手法：把“必须绝对可靠”的面积压小，其余部分放到可以失败、可以重启的地方。Ring0 只留 CPU 与空间管理，是空间上的压缩；<a href=&quot;../ai/capability.html&quot;>能力域</a>把模型能碰到的对象枚举出来，是权限上的压缩。两者都不是“加一层检查”，而是“减少需要检查的东西”。" data-en-html="The kernel security model and FUAI use the same move: shrink the area that must be absolutely reliable, and push everything else somewhere it may fail and restart. Keeping Ring0 to CPU and space management is compression in space; <a href=&quot;../ai/capability.html&quot;>capability domains</a> enumerate what a model can touch, which is compression in authority. Neither adds a check — both remove things that need checking.">
+                  内核安全模型与 FUAI 用的是同一个手法：把“必须绝对可靠”的面积压小，其余部分放到可以失败、可以重启的地方。Ring0 只留 CPU 与空间管理，是空间上的压缩；<a href="../ai/capability.html">能力域</a>把模型能碰到的对象枚举出来，是权限上的压缩。两者都不是“加一层检查”，而是“减少需要检查的东西”。
+                </p>
+              </div>
+
+              <div class="note note--amber">
+                <strong data-zh="不要把这一页当成安全审计报告。" data-en="Do not read this page as a security audit.">不要把这一页当成安全审计报告。</strong>
+                <span data-zh="它描述的是设计意图与已实现的具体机制。这是一个学生个人项目，没有做过第三方渗透测试；把它当作“已被验证安全”来读会超出它实际主张的范围。" data-en=" It describes design intent and specific implemented mechanisms. This is a personal student project with no third-party penetration test; reading it as “verified secure” goes beyond what it actually claims."> 它描述的是设计意图与已实现的具体机制。这是一个学生个人项目，没有做过第三方渗透测试；把它当作“已被验证安全”来读会超出它实际主张的范围。</span>
+              </div>

@@ -1,0 +1,72 @@
+<!--{"zh":"图形与窗口系统","en":"Graphics and windows","desc":"VBE 帧缓冲、软件光栅、着色器 VM、wmsg 窗口系统与 fujokit 控件，以及 .fui 声明式界面。","banner_zh":"图形 · 桌面是一份 .fui 文档","banner_en":"Graphics · the desktop is a .fui document"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="图形与窗口系统" data-en="Graphics and windows">图形与窗口系统</h1>
+
+              <div class="prose">
+                <p data-zh="这一层最不寻常的地方不是画得多快，而是界面是“文档”而不是代码：桌面本身就是一个 .fui 声明式文档，由内核里的运行时渲染。" data-en="What is most unusual here is not how fast it draws, but that the UI is a document rather than code: the desktop itself is a .fui declarative document rendered by an in-kernel runtime.">
+                  这一层最不寻常的地方不是画得多快，而是界面是“文档”而不是代码：桌面本身就是一个 .fui 声明式文档，由内核里的运行时渲染。
+                </p>
+              </div>
+
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="层" data-en="Layer">层</th>
+                      <th scope="col" data-zh="实现" data-en="Implementation">实现</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td data-zh="显示" data-en="Display">显示</td>
+                      <td data-zh="VBE 1024×768×32 线性帧缓冲；Bochs VBE 与 virtio-gpu 探测" data-en="VBE 1024×768×32 linear framebuffer; Bochs VBE and virtio-gpu probing">VBE 1024×768×32 线性帧缓冲；Bochs VBE 与 virtio-gpu 探测</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="文本" data-en="Text">文本</td>
+                      <td data-zh="5×7 位图字体（内核横幅、终端、调试输出共用）" data-en="A 5×7 bitmap font, shared by the kernel banner, terminal and debug output">5×7 位图字体（内核横幅、终端、调试输出共用）</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="光栅" data-en="Raster">光栅</td>
+                      <td data-zh="软件光栅：矩形 / 三角形 / 线段，blit 与 scale" data-en="Software rasterizer: rect / triangle / line, with blit and scale">软件光栅：矩形 / 三角形 / 线段，blit 与 scale</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="着色器" data-en="Shaders">着色器</td>
+                      <td data-zh="一个小的着色器 VM，负责渐变、遮罩一类逐像素效果" data-en="A small shader VM handling per-pixel effects such as gradients and masks">一个小的着色器 VM，负责渐变、遮罩一类逐像素效果</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="窗口" data-en="Windows">窗口</td>
+                      <td data-zh="wmsg 窗口类表、64 条消息队列、刷新与命中测试" data-en="The wmsg window class table, a 64-message queue, refresh and hit testing">wmsg 窗口类表、64 条消息队列、刷新与命中测试</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="控件" data-en="Widgets">控件</td>
+                      <td data-zh="fujokit：button / textbox / list" data-en="fujokit: button / textbox / list">fujokit：button / textbox / list</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="输入" data-en="Input">输入</td>
+                      <td data-zh="PS/2 键盘 IRQ1 与鼠标 IRQ12（8042 序列解析、命中测试）；XInput 与 IME" data-en="PS/2 keyboard IRQ1 and mouse IRQ12 (8042 sequence decoding, hit testing); XInput and IME">PS/2 键盘 IRQ1 与鼠标 IRQ12（8042 序列解析、命中测试）；XInput 与 IME</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="音频" data-en="Audio">音频</td>
+                      <td data-zh="AC97 探测与音量；4 通道混音器加 LPF / 增益链" data-en="AC97 probing and volume; a 4-channel mixer with an LPF / gain chain">AC97 探测与音量；4 通道混音器加 LPF / 增益链</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="游戏" data-en="Games">游戏</td>
+                      <td data-zh="游戏模式（前台调度、全屏）；Pong / Breakout 自研引擎；输入延迟基准 avg 94 µs" data-en="Game mode (foreground scheduling, fullscreen); a self-built Pong / Breakout engine; input-latency benchmark averaging 94 µs">游戏模式（前台调度、全屏）；Pong / Breakout 自研引擎；输入延迟基准 avg 94 µs</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 data-zh=".fui：把界面变成文档" data-en=".fui: the interface as a document">.fui：把界面变成文档</h2>
+              <div class="prose">
+                <p data-zh-html=".fui / .fus 文档由 <code>tools/fuic.py</code> 编译成 .fuc，再由内核里的运行时渲染。桌面——壁纸、图标、面板、窗口——就是这样一份文档。它的好处和 L0 单源一脉相承：界面布局是数据，不是散落在代码里的常量。" data-en-html=".fui / .fus documents are compiled by <code>tools/fuic.py</code> into .fuc and rendered by an in-kernel runtime. The desktop — wallpaper, icons, panel, windows — is exactly such a document. The benefit is the same as L0's single source of truth: layout is data, not constants scattered through code.">
+                  .fui / .fus 文档由 <code>tools/fuic.py</code> 编译成 .fuc，再由内核里的运行时渲染。桌面——壁纸、图标、面板、窗口——就是这样一份文档。它的好处和 L0 单源一脉相承：界面布局是数据，不是散落在代码里的常量。
+                </p>
+                <p data-zh-html=".fuc 的节点是 64 字节的定长记录。这个布局此前同时存在于打包器、内核常量与文档三处，是 L0 收拢的第一批目标之一——见 <a href=&quot;../language/l0.html&quot;>L0 单一真源</a>。" data-en-html="A .fuc node is a fixed 64-byte record. That layout used to live in three places at once — the packer, a kernel constant, and the documentation — making it one of L0's first consolidation targets. See <a href=&quot;../language/l0.html&quot;>L0 source of truth</a>.">
+                  .fuc 的节点是 64 字节的定长记录。这个布局此前同时存在于打包器、内核常量与文档三处，是 L0 收拢的第一批目标之一——见 <a href="../language/l0.html">L0 单一真源</a>。
+                </p>
+              </div>
+
+              <div class="note note--steel">
+                <strong data-zh="字段参考：" data-en="Field reference: ">字段参考：</strong>
+                <span data-zh-html="节点字段偏移与 FUI 词汇表见 <a href=&quot;../reference/fui.html&quot;>参考 · FUI 与 .fuc</a>。" data-en-html="node field offsets and the FUI vocabulary are under <a href=&quot;../reference/fui.html&quot;>Reference · FUI and .fuc</a>.">节点字段偏移与 FUI 词汇表见 <a href="../reference/fui.html">参考 · FUI 与 .fuc</a>。</span>
+              </div>

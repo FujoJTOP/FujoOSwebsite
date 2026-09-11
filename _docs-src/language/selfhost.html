@@ -1,0 +1,65 @@
+<!--{"zh":"自举","en":"Self-hosting","desc":"编译器编译自身：三阶段产物逐字节相同（1002385 B），以及仍未做到的两件事。","banner_zh":"自举 · 三阶段定点","banner_en":"Self-hosting · the three-stage fixpoint"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="自举" data-en="Self-hosting">自举</h1>
+
+              <div class="prose">
+                <p data-zh="自举在这个项目里的定义比通常窄：不是“一门语言能写自己的编译器”，而是“编译器编出的编译器，产出的东西与参考实现逐字节相同”。判据是可判定的，不是感受性的。" data-en="Self-hosting here is defined more narrowly than usual: not “the language can express its own compiler” but “the compiler the compiler produces emits output byte-identical to the reference implementation”. The criterion is decidable, not a matter of impression.">
+                  自举在这个项目里的定义比通常窄：不是“一门语言能写自己的编译器”，而是“编译器编出的编译器，产出的东西与参考实现逐字节相同”。判据是可判定的，不是感受性的。
+                </p>
+              </div>
+
+              <div class="stats" style="margin-top: var(--s4)">
+                <div class="stat">
+                  <span class="stat__v">1002385 B</span>
+                  <span class="stat__k" data-zh="三阶段产物 IR 逐字节全等" data-en="three-stage IR output, byte-identical">三阶段产物 IR 逐字节全等</span>
+                </div>
+                <div class="stat">
+                  <span class="stat__v">39/39</span>
+                  <span class="stat__k" data-zh="目标覆盖：标量、控制流、短路、转换、for、除法、内建、常量内联、struct、数组切片、字符串、枚举 match、泛型单态化、trait 派发、能力域、?、if let、整数↔指针" data-en="Target coverage: scalars, control flow, short-circuit, casts, for, division, builtins, constant inlining, struct, array slices, strings, enum match, generic monomorphisation, trait dispatch, capability domains, ?, if let, int↔pointer">目标覆盖：标量、控制流、短路、转换、for、除法、内建、常量内联、struct、数组切片、字符串、枚举 match、泛型单态化、trait 派发、能力域、?、if let、整数↔指针</span>
+                </div>
+              </div>
+
+              <h2 data-zh="自举的阶段" data-en="The stages">自举的阶段</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="阶段" data-en="Stage">阶段</th>
+                      <th scope="col" data-zh="内容" data-en="Content">内容</th>
+                      <th scope="col" data-zh="状态" data-en="Status">状态</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td data-zh="词法" data-en="Lexer">词法</td>
+                      <td data-zh="Loment 版 lexer，与 Python 版 token 流逐 token 一致" data-en="A Loment lexer whose token stream matches the Python one token for token">Loment 版 lexer，与 Python 版 token 流逐 token 一致</td>
+                      <td><span class="tag tag--ok">OK</span></td>
+                    </tr>
+                    <tr>
+                      <td data-zh="语法" data-en="Parser">语法</td>
+                      <td data-zh="语句 / 表达式子集，AST dump 与 Python 版逐字符一致" data-en="A statement / expression subset whose AST dump matches the Python one character for character">语句 / 表达式子集，AST dump 与 Python 版逐字符一致</td>
+                      <td><span class="tag tag--part" data-zh="子集" data-en="subset">子集</span></td>
+                    </tr>
+                    <tr>
+                      <td data-zh="IR 生成" data-en="IR generation">IR 生成</td>
+                      <td data-zh=".ll 与 Python 版逐字节一致，自举四阶段全部能编译自身" data-en=".ll byte-identical to the Python version; all four bootstrap stages can compile themselves">.ll 与 Python 版逐字节一致，自举四阶段全部能编译自身</td>
+                      <td><span class="tag tag--ok">OK</span></td>
+                    </tr>
+                    <tr>
+                      <td data-zh="三阶段定点" data-en="Three-stage fixpoint">三阶段定点</td>
+                      <td data-zh="第 2 / 3 阶段产物逐字节相同；自举驱动也做了二阶段定点" data-en="Stage 2 and 3 outputs byte-identical; the bootstrap driver also reached a two-stage fixpoint">第 2 / 3 阶段产物逐字节相同；自举驱动也做了二阶段定点</td>
+                      <td><span class="tag tag--ok">OK</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 data-zh="还差的两件事（写清楚）" data-en="The two things still outstanding">还差的两件事（写清楚）</h2>
+              <ul class="list">
+                <li><b data-zh="符号表是全单元扁平的" data-en="the symbol table is flat across units">符号表是全单元扁平的</b> <span data-zh="—— 兄弟模块里同名的私有函数会撞名。要修就得给符号加模块作用域。" data-en=" — identically named private functions in sibling modules collide. Fixing it means giving symbols module scope.">—— 兄弟模块里同名的私有函数会撞名。要修就得给符号加模块作用域。</span></li>
+                <li><b data-zh="检查器是 4 条规则的子集" data-en="the checker implements 4 rules of a larger set">检查器是 4 条规则的子集</b> <span data-zh="—— 它会把合法程序判错，所以还不能当闸门用。得先扩展到能放行全部语料。" data-en=" — it rejects legal programs, so it cannot serve as a gate yet. It has to be widened to admit the whole corpus first.">—— 它会把合法程序判错，所以还不能当闸门用。得先扩展到能放行全部语料。</span></li>
+              </ul>
+
+              <div class="note note--amber">
+                <strong data-zh="口径检查：" data-en="Wording check: ">口径检查：</strong>
+                <span data-zh="“自举完成”指的是上面那几项已达成；它不等于“语言可以发布了”。M96（1.0 冻结）与 M100（发布审计）都还是未达状态。" data-en="“Self-hosting done” refers to the items above; it does not mean “the language is ready to ship”. M96 (1.0 freeze) and M100 (release audit) are both still unmet.">“自举完成”指的是上面那几项已达成；它不等于“语言可以发布了”。M96（1.0 冻结）与 M100（发布审计）都还是未达状态。</span>
+              </div>

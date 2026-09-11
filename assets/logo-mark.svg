@@ -1,0 +1,41 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 64 64"
+  width="64"
+  height="64"
+  class="fujo-mark"
+  role="img"
+  aria-labelledby="fujo-mark-title"
+>
+  <title id="fujo-mark-title">FujoOS</title>
+  <desc id="fujo-mark-desc">
+    A pencil mid-stroke. The body is the kernel holding the pen; the amber point is the model's
+    proposal; the hairline already set down is what the kernel has ratified.
+  </desc>
+  <style>
+    /* Steel is the kernel: the hand holding the pen, and every line already committed.
+       Amber is the model: the point of contact, where a proposal is still only a proposal. */
+    .fujo-mark .k { fill: var(--fujo-steel, #7fc4dc); }
+    .fujo-mark .p { fill: var(--fujo-amber, #e29a4a); }
+    .fujo-mark .r {
+      fill: none;
+      stroke: var(--fujo-steel, #7fc4dc);
+      stroke-width: 3;
+    }
+    @media (prefers-color-scheme: light) {
+      .fujo-mark .k { fill: var(--fujo-steel, #266b87); }
+      .fujo-mark .p { fill: var(--fujo-amber, #a8651f); }
+      .fujo-mark .r { stroke: var(--fujo-steel, #266b87); }
+    }
+  </style>
+
+  <!-- what the kernel has already ratified: a hairline rule, not a flourish -->
+  <path class="r" d="M5 50H24" />
+
+  <g transform="translate(23 50) rotate(-45)">
+    <!-- the instrument: sharpened cone and body, one flat silhouette -->
+    <path class="k" d="M0 0L13 -6H44V6H13Z" />
+    <!-- the point of contact: still amber, still only a proposal -->
+    <path class="p" d="M0 0L10 -4.62L10 4.62Z" />
+  </g>
+</svg>

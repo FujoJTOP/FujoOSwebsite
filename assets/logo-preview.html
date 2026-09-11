@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="theme-instrument">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FujoOS — 标志 / logo</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      body {
+        margin: 0;
+        background: #05090f;
+      }
+      .sheet {
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 2.4rem 1.4rem 5rem;
+        display: grid;
+        gap: 1.6rem;
+      }
+      .sheet h1 {
+        font-family: var(--mono);
+        font-size: 1rem;
+        font-weight: 500;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #6b7c91;
+        margin: 0;
+      }
+      .plate {
+        padding: 2.2rem;
+        border-radius: 3px;
+        display: grid;
+        gap: 2rem;
+        justify-items: center;
+      }
+      /* the mark reads the page's own tokens; nothing here is a hard-coded brand colour */
+      .plate {
+        --fujo-steel: var(--steel);
+        --fujo-amber: var(--amber);
+        --fujo-fg: var(--fg);
+      }
+      .plate__label {
+        justify-self: start;
+        font-family: var(--mono);
+        font-size: 0.72rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--fg-3);
+      }
+      .row {
+        display: flex;
+        align-items: flex-end;
+        gap: 2.2rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+      }
+      .cell {
+        display: grid;
+        gap: 0.55rem;
+        justify-items: center;
+        font-family: var(--mono);
+        font-size: 0.7rem;
+        color: var(--fg-3);
+      }
+      .cell svg {
+        display: block;
+      }
+      .sizes svg {
+        height: 64px;
+        width: auto;
+      }
+      .sizes .s48 svg { height: 48px; }
+      .sizes .s32 svg { height: 32px; }
+      .sizes .s24 svg { height: 24px; }
+      .sizes .s16 svg { height: 16px; }
+      .lockup svg { height: 76px; width: auto; }
+      .stacked svg { height: 148px; width: auto; }
+      .note {
+        font-family: var(--mono);
+        font-size: 0.72rem;
+        color: #6b7c91;
+        line-height: 1.7;
+      }
+      .note code {
+        color: #a3b1c3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sheet">
+      <h1>FujoOS — 标志 / logo sheet</h1>
+
+      <!-- dark: the machine's face, the site's default theme -->
+      <section class="plate theme-instrument" style="background: var(--bg); color: var(--fg)">
+        <span class="plate__label">Instrument · 深色</span>
+        <div class="row">
+          <img src="logo-mark.svg" alt="FujoOS" style="height: 200px" />
+        </div>
+        <div class="row lockup">
+          <img src="logo.svg" alt="FujoOS" style="height: 76px" />
+        </div>
+        <div class="row sizes">
+          <span class="cell s64"><img src="logo-mark.svg" alt="" style="height: 64px" />64</span>
+          <span class="cell s48"><img src="logo-mark.svg" alt="" style="height: 48px" />48</span>
+          <span class="cell s32"><img src="logo-mark.svg" alt="" style="height: 32px" />32</span>
+          <span class="cell s24"><img src="logo-mark.svg" alt="" style="height: 24px" />24</span>
+          <span class="cell s16"><img src="logo-mark.svg" alt="" style="height: 16px" />16</span>
+        </div>
+        <div class="row sizes">
+          <span class="cell s32"><img src="logo-mark-compact.svg" alt="" style="height: 32px" />32</span>
+          <span class="cell s24"><img src="logo-mark-compact.svg" alt="" style="height: 24px" />24</span>
+          <span class="cell s16"><img src="logo-mark-compact.svg" alt="" style="height: 16px" />16</span>
+        </div>
+      </section>
+
+      <!-- light: the datasheet theme -->
+      <section class="plate theme-datasheet" style="background: var(--bg); color: var(--fg)">
+        <span class="plate__label">Datasheet · 浅色</span>
+        <div class="row lockup">
+          <img src="logo.svg" alt="FujoOS" style="height: 76px" />
+        </div>
+        <div class="row sizes">
+          <span class="cell s64"><img src="logo-mark.svg" alt="" style="height: 64px" />64</span>
+          <span class="cell s48"><img src="logo-mark.svg" alt="" style="height: 48px" />48</span>
+          <span class="cell s32"><img src="logo-mark.svg" alt="" style="height: 32px" />32</span>
+          <span class="cell s24"><img src="logo-mark.svg" alt="" style="height: 24px" />24</span>
+          <span class="cell s16"><img src="logo-mark.svg" alt="" style="height: 16px" />16</span>
+        </div>
+      </section>
+
+      <section class="plate theme-instrument" style="background: var(--bg); color: var(--fg)">
+        <span class="plate__label">Stacked · 竖排</span>
+        <div class="row stacked">
+          <img src="logo-stacked.svg" alt="FujoOS" style="height: 148px" />
+        </div>
+      </section>
+
+      <p class="note">
+        内联（inline）时用页面自己的 token，标志会自动跟随主题：<br />
+        <code>&lt;svg class="fujo-logo" style="--fujo-steel: var(--steel); --fujo-amber: var(--amber);
+        --fujo-fg: var(--fg)"&gt;</code><br />
+        当作 <code>&lt;img&gt;</code> 载入时用文件内置的深/浅色值（跟随
+        <code>prefers-color-scheme</code>）。
+      </p>
+    </div>
+  </body>
+</html>

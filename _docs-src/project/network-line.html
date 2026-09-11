@@ -1,0 +1,67 @@
+<!--{"zh":"网络线","en":"The network line","desc":"NET-DEV：让 Loment 的第一个真应用是网络。可行性已证、落点明确，范围限定在用户态。","banner_zh":"网络线 · Loment 的第一个真应用","banner_en":"Network line · Loment's first real application"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="网络线" data-en="The network line">网络线</h1>
+
+              <div class="prose">
+                <p data-zh="一门新语言如果只用玩具样例验证，说明不了什么。网络是一个好的压力面，因为它同时要求两样东西：字节级的精确契约（正好是 L0 单一真源要收掉的那类重复），和能力边界（正好是 capability 要表达的那类约束）。" data-en="A new language validated only on toy samples proves little. Networking is a good stress surface because it demands two things at once: byte-exact contracts (exactly the duplication L0's source of truth exists to remove) and capability boundaries (exactly the constraint capability exists to express).">
+                  一门新语言如果只用玩具样例验证，说明不了什么。网络是一个好的压力面，因为它同时要求两样东西：字节级的精确契约（正好是 L0 单一真源要收掉的那类重复），和能力边界（正好是 capability 要表达的那类约束）。
+                </p>
+              </div>
+
+              <h2 data-zh="四条结论先行" data-en="Four conclusions up front">四条结论先行</h2>
+              <ul class="list list--check">
+                <li><b data-zh="可行性已证" data-en="Feasibility proven">可行性已证</b> <span data-zh="—— 用户态 Loment 经 syscall4/6 直接发 0x8A04–06，与 C demo 共用同一 ABI（m124-net 回归 PASS）。不需要改内核就能开工。" data-en=" — user-space Loment issues 0x8A04–06 directly via syscall4/6, sharing the same ABI as the C demo (m124-net regression PASS). Work starts without touching the kernel.">—— 用户态 Loment 经 syscall4/6 直接发 0x8A04–06，与 C demo 共用同一 ABI（m124-net 回归 PASS）。不需要改内核就能开工。</span></li>
+                <li><b data-zh="落点明确" data-en="A clear target">落点明确</b> <span data-zh="—— FujoOS 没有网络栈，只有 virtio-net 裸驱动加每个 demo 各自手搓的 IP / UDP / TCP 头。那些手搓的头，正是 L0 要收掉的重复。" data-en=" — FujoOS has no network stack, only a bare virtio-net driver plus IP / UDP / TCP headers hand-rolled per demo. Those headers are precisely the duplication L0 exists to remove.">—— FujoOS 没有网络栈，只有 virtio-net 裸驱动加每个 demo 各自手搓的 IP / UDP / TCP 头。那些手搓的头，正是 L0 要收掉的重复。</span></li>
+                <li><b data-zh="边界清楚" data-en="A clear boundary">边界清楚</b> <span data-zh="—— 范围是用 Loment / Potato 写用户态网络层（编解码、校验和、UDP 往返），不做内核协议栈的 Loment 化。" data-en=" — the scope is writing the user-space network layer (codec, checksums, UDP round-trip) in Loment / Potato, not converting the kernel protocol stack.">—— 范围是用 Loment / Potato 写用户态网络层（编解码、校验和、UDP 往返），不做内核协议栈的 Loment 化。</span></li>
+                <li><b data-zh="判据不软化" data-en="Criteria do not soften">判据不软化</b> <span data-zh="—— 任何声明为“完成”的东西，都必须给出可重放的命令与输出。" data-en=" — anything declared done must come with a replayable command and its output.">—— 任何声明为“完成”的东西，都必须给出可重放的命令与输出。</span></li>
+              </ul>
+
+              <h2 data-zh="现状基线（实测事实）" data-en="Current baseline (measured)">现状基线（实测事实）</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="面" data-en="Surface">面</th>
+                      <th scope="col" data-zh="现状" data-en="Status">现状</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td data-zh="网卡" data-en="NIC">网卡</td><td data-zh="只有 virtio-net 裸驱动，无协议栈；3 个原语（info / tx / rx）" data-en="Bare virtio-net only, no protocol stack; 3 primitives (info / tx / rx)">只有 virtio-net 裸驱动，无协议栈；3 个原语（info / tx / rx）</td></tr>
+                    <tr><td data-zh="用户 ABI" data-en="User ABI">用户 ABI</td><td class="num" data-zh="原生 opcode 0x8A04–06（帧级 tx/rx ≤ 1514 B）" data-en="Native opcodes 0x8A04–06 (frame-level tx/rx ≤ 1514 B)">原生 opcode 0x8A04–06（帧级 tx/rx ≤ 1514 B）</td></tr>
+                    <tr><td data-zh="POSIX socket" data-en="POSIX sockets">POSIX socket</td><td data-zh="仅名字占位，dispatch 返回 -ENOSYS" data-en="Name placeholders only; dispatch returns -ENOSYS">仅名字占位，dispatch 返回 -ENOSYS</td></tr>
+                    <tr><td data-zh="服务模型" data-en="Service model">服务模型</td><td data-zh="srv_net 只存在于文档里" data-en="srv_net exists only in documentation">srv_net 只存在于文档里</td></tr>
+                    <tr><td data-zh="端口 / socket 能力" data-en="Port / socket capability">端口 / socket 能力</td><td data-zh="无——现有能力表只管 AI 动作" data-en="None — the capability table covers AI actions only">无——现有能力表只管 AI 动作</td></tr>
+                    <tr><td data-zh="回归" data-en="Regression">回归</td><td data-zh="UDP 回环 PASS；宿主→客体 TCP PASS；出向 TCP 响应被 slirp 丢弃（已记录）" data-en="UDP loopback PASS; host→guest TCP PASS; outbound TCP responses dropped by slirp (documented)">UDP 回环 PASS；宿主→客体 TCP PASS；出向 TCP 响应被 slirp 丢弃（已记录）</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 data-zh="范围（明确写出不做什么）" data-en="Scope (what is explicitly out)">范围（明确写出不做什么）</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="在范围内" data-en="In scope">在范围内</th>
+                      <th scope="col" data-zh="不在范围内" data-en="Out of scope">不在范围内</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td data-zh="用户态网络层：编解码、校验和、UDP 往返" data-en="User-space network layer: codec, checksums, UDP round-trip">用户态网络层：编解码、校验和、UDP 往返</td>
+                      <td data-zh="内核协议栈的 Loment 化（受阻，见网络线宪章）" data-en="Converting the kernel protocol stack (blocked; see the network-line charter)">内核协议栈的 Loment 化（受阻，见网络线宪章）</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="用 .lom 单源生成头部布局与常量" data-en="Generating header layouts and constants from .lom">用 .lom 单源生成头部布局与常量</td>
+                      <td data-zh="内核侧 net.rs 的改动（属既有独占范围）" data-en="Changes to kernel-side net.rs (owned elsewhere)">内核侧 net.rs 的改动（属既有独占范围）</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="用 capability 声明的端口与目标域" data-en="Port and destination domains declared with capability">用 capability 声明的端口与目标域</td>
+                      <td data-zh="完整 TCP 状态机与拥塞控制" data-en="A full TCP state machine and congestion control">完整 TCP 状态机与拥塞控制</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="note note--steel">
+                <strong data-zh="一句话：" data-en="In one line: ">一句话：</strong>
+                <span data-zh-html="网络线是语言线的压力测试场，不是第二份内核工程。内核侧的网络现状另见 <a href=&quot;../architecture/network.html&quot;>架构 · 网络栈</a>。" data-en-html="the network line is a stress-test ground for the language line, not a second kernel effort. The kernel-side state of networking is under <a href=&quot;../architecture/network.html&quot;>Architecture · Network stack</a>.">网络线是语言线的压力测试场，不是第二份内核工程。内核侧的网络现状另见 <a href="../architecture/network.html">架构 · 网络栈</a>。</span>
+              </div>

@@ -1,0 +1,54 @@
+<!--{"zh":"四套加载器","en":"Four loaders","desc":"ELF、PE32+、Mach-O 与 FUJR 容器：四套格式各自的规模、定位与已知边界。","banner_zh":"加载器 · 四套格式，一个入口","banner_en":"Loaders · four formats, one entry point"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="四套加载器" data-en="Four loaders">四套加载器</h1>
+
+              <div class="prose">
+                <p data-zh="四种可执行格式各自有一套加载路径。它们是独立实现的——PE 的节区与重定位和 ELF 的段完全不是一回事，硬套一个抽象只会更糟。" data-en="Four executable formats, four loading paths. They are implemented independently: PE sections and relocations are nothing like ELF segments, and forcing one abstraction over both would only make things worse.">
+                  四种可执行格式各自有一套加载路径。它们是独立实现的——PE 的节区与重定位和 ELF 的段完全不是一回事，硬套一个抽象只会更糟。
+                </p>
+              </div>
+
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="格式" data-en="Format">格式</th>
+                      <th scope="col" data-zh="实现" data-en="Implementation">实现</th>
+                      <th scope="col" data-zh="定位与边界" data-en="Role and boundary">定位与边界</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>ELF64</strong> <span class="dim">Linux</span></td>
+                      <td class="docs">elf_loader.rs <span class="dim">7.0 K</span></td>
+                      <td data-zh="第一公民，走得最远。45 个系统调用臂原生执行、零垫片；小体积静态样例直接原地运行。" data-en="The first-class citizen, and the most developed. 45 syscall arms execute natively with no shims; small static samples run in place.">第一公民，走得最远。45 个系统调用臂原生执行、零垫片；小体积静态样例直接原地运行。</td>
+                    </tr>
+                    <tr>
+                      <td><strong>PE32+</strong> <span class="dim">Windows</span></td>
+                      <td class="docs">pe_loader.rs <span class="dim">17.4 K</span></td>
+                      <td data-zh="体量最大的一个，因为 Windows 需要一张 97 条的 SHIM_TABLE 加导入表处理。已知缺口：LoadLibraryA 返回假句柄、无真实动态 CRT。" data-en="The largest of the four, because Windows needs a 97-entry SHIM_TABLE plus import handling. Known gaps: LoadLibraryA returns a fake handle, and there is no real dynamic CRT.">体量最大的一个，因为 Windows 需要一张 97 条的 SHIM_TABLE 加导入表处理。已知缺口：LoadLibraryA 返回假句柄、无真实动态 CRT。</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Mach-O</strong> <span class="dim">darwin</span></td>
+                      <td class="docs">macho_loader.rs <span class="dim">4.2 K</span></td>
+                      <td data-zh="最薄的一层：8 个 BSD syscall 加 mach-trap 垫片。样本只有 2 个——这一面是验证性的，不是主力。" data-en="The thinnest layer: 8 BSD syscalls plus mach-trap shims. Only 2 samples — this surface is demonstrative, not the main line.">最薄的一层：8 个 BSD syscall 加 mach-trap 垫片。样本只有 2 个——这一面是验证性的，不是主力。</td>
+                    </tr>
+                    <tr>
+                      <td><strong>FUJR</strong> <span class="dim">.run</span></td>
+                      <td class="docs">fujr.rs <span class="dim">11.8 K</span></td>
+                      <td data-zh="不是 CPU 的执行格式，是本项目自己的容器：MAGIC + MANIFEST + EMBED + DATA（≤8 资源）+ FNV 校验。.shell 走 EMBED 首行 shebang。" data-en="Not a CPU execution format but this project's own container: MAGIC + MANIFEST + EMBED + DATA (≤8 resources) + FNV checksum. A .shell runs via a shebang on the first EMBED line.">不是 CPU 的执行格式，是本项目自己的容器：MAGIC + MANIFEST + EMBED + DATA（≤8 资源）+ FNV 校验。.shell 走 EMBED 首行 shebang。</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 data-zh="一个反复出现的取舍" data-en="A recurring trade-off">一个反复出现的取舍</h2>
+              <div class="prose">
+                <p data-zh="四种格式有一个共同的诱惑：为它们做一个统一的“可执行文件”抽象。项目没有这么做，理由和语言那一节是同一条——把不同的事实强行合并，换来的是一个谁都不像的中间层，以及一堆“这个字段对 PE 没意义”的特例。" data-en="All four formats tempt you toward one unified “executable” abstraction. The project declines, for the same reason as in the language section: merging unlike facts yields a middle layer that resembles none of them, plus a pile of “this field means nothing for PE” special cases.">
+                  四种格式有一个共同的诱惑：为它们做一个统一的“可执行文件”抽象。项目没有这么做，理由和语言那一节是同一条——把不同的事实强行合并，换来的是一个谁都不像的中间层，以及一堆“这个字段对 PE 没意义”的特例。
+                </p>
+              </div>
+
+              <div class="note note--steel">
+                <strong data-zh="容器格式的细节：" data-en="Container details: ">容器格式的细节：</strong>
+                <span data-zh-html="FUJR 的字段布局见 <a href=&quot;fujr.html&quot;>FUJR 容器</a>；这张地图（.run）与进程隔离（fujo-sandbox）的关系见 <a href=&quot;../architecture/process.html&quot;>架构 · 进程与隔离</a>。" data-en-html="the FUJR field layout is under <a href=&quot;fujr.html&quot;>FUJR containers</a>; how packaging relates to fujo-sandbox isolation is under <a href=&quot;../architecture/process.html&quot;>Architecture · Processes and isolation</a>.">FUJR 的字段布局见 <a href="fujr.html">FUJR 容器</a>；这张地图（.run）与进程隔离（fujo-sandbox）的关系见 <a href="../architecture/process.html">架构 · 进程与隔离</a>。</span>
+              </div>

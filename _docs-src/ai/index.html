@@ -1,0 +1,56 @@
+<!--{"zh":"AI 层总览","en":"AI layer overview","desc":"FUAI：把信任变成参数、把边界变成结构。S1/S2/S3 分解、A1–A4 公理、能力域、模型卡、信任自适应、运行时与证据链。","banner_zh":"AI 层 · 模型是提示来源，不是权威来源","banner_en":"AI layer · a source of hints, not of authority"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="AI 层总览" data-en="AI layer overview">AI 层总览</h1>
+
+              <div class="prose">
+                <p data-zh="如果说内核那一节讲的是“机器怎么运转”，这一节讲的是“一个不可信的东西怎么被允许在这台机器上做有限的事”。整个 AI 层只有一句主张：模型是提示来源，不是权威来源。" data-en="If the architecture section describes how the machine runs, this section describes how something untrusted is allowed to do a bounded set of things on it. The whole AI layer reduces to one claim: the model is a source of hints, not of authority.">
+                  如果说内核那一节讲的是“机器怎么运转”，这一节讲的是“一个不可信的东西怎么被允许在这台机器上做有限的事”。整个 AI 层只有一句主张：模型是提示来源，不是权威来源。
+                </p>
+              </div>
+
+              <div class="grid grid--2">
+                <a class="card card--link" href="proposition.html">
+                  <span class="card__k" data-zh="起点" data-en="Starting point">起点</span>
+                  <h3 class="h3" data-zh="命题与 S1/S2/S3" data-en="Proposition and S1/S2/S3">命题与 S1/S2/S3</h3>
+                  <p data-zh="安全 = α（无越界，S1）× 域宽 = f(S2)。三层各管一件事，不能混。" data-en="Safety = α (no out-of-bounds, S1) × domain width = f(S2). Three layers, one job each.">安全 = α（无越界，S1）× 域宽 = f(S2)。三层各管一件事，不能混。</p>
+                </a>
+                <a class="card card--link" href="axioms.html">
+                  <span class="card__k" data-zh="约束" data-en="Constraints">约束</span>
+                  <h3 class="h3" data-zh="A1–A4 公理" data-en="Axioms A1–A4">A1–A4 公理</h3>
+                  <p data-zh="机制必须满足的四条，而且每一条都能从形式对象直接判定。" data-en="Four properties the mechanism must hold, each decidable straight from the formal object.">机制必须满足的四条，而且每一条都能从形式对象直接判定。</p>
+                </a>
+                <a class="card card--link" href="capability.html">
+                  <span class="card__k" data-zh="机制" data-en="Mechanism">机制</span>
+                  <h3 class="h3" data-zh="能力域与审计环" data-en="Capability domains and audit">能力域与审计环</h3>
+                  <p data-zh="内核怎么记住“谁被允许碰什么”，以及每一次使用如何留痕。" data-en="How the kernel remembers who may touch what, and how every use leaves a trace.">内核怎么记住“谁被允许碰什么”，以及每一次使用如何留痕。</p>
+                </a>
+                <a class="card card--link" href="model-card.html">
+                  <span class="card__k" data-zh="元数据" data-en="Metadata">元数据</span>
+                  <h3 class="h3" data-zh="模型卡" data-en="Model cards">模型卡</h3>
+                  <p data-zh="模型在系统里的身份：权限、计费、审计三样元数据装在一张 120 字节的卡上。" data-en="A model's identity in the system: permission, billing and audit metadata on one 120-byte card.">模型在系统里的身份：权限、计费、审计三样元数据装在一张 120 字节的卡上。</p>
+                </a>
+                <a class="card card--link" href="duties.html">
+                  <span class="card__k" data-zh="分工" data-en="Division of labour">分工</span>
+                  <h3 class="h3" data-zh="模型五职责" data-en="The five duties">模型五职责</h3>
+                  <p data-zh="接入内核的模型具体干什么：哨兵、规划、I/O 预测、自然语言配置、环境扫描。" data-en="What an attached model actually does: sentinel, planner, I/O prediction, natural-language configuration, environment scan.">接入内核的模型具体干什么：哨兵、规划、I/O 预测、自然语言配置、环境扫描。</p>
+                </a>
+                <a class="card card--link" href="trust.html">
+                  <span class="card__k" data-zh="测量" data-en="Measurement">测量</span>
+                  <h3 class="h3" data-zh="信任自适应域宽" data-en="Trust-adaptive width">信任自适应域宽</h3>
+                  <p data-zh="域宽是测量结果，不是配置项。τ 阈值、质量台账与 T* 区间。" data-en="Domain width is a measurement result, not a config flag. τ thresholds, the quality ledger, the T* interval.">域宽是测量结果，不是配置项。τ 阈值、质量台账与 T* 区间。</p>
+                </a>
+                <a class="card card--link" href="runtime.html">
+                  <span class="card__k" data-zh="部署" data-en="Deployment">部署</span>
+                  <h3 class="h3" data-zh="运行时与证据链" data-en="Runtime and evidence chain">运行时与证据链</h3>
+                  <p data-zh="fuai-run 守护进程、append-only 哈希链、带外验证器，以及判据 A–E。" data-en="The fuai-run daemon, the append-only hash chain, the out-of-band verifier, and criteria A–E.">fuai-run 守护进程、append-only 哈希链、带外验证器，以及判据 A–E。</p>
+                </a>
+                <a class="card card--link" href="box-bridge.html">
+                  <span class="card__k" data-zh="宿主扩展" data-en="Host extension">宿主扩展</span>
+                  <h3 class="h3" data-zh="盒桥" data-en="Box bridge">盒桥</h3>
+                  <p data-zh="让模型隔着进程边界操作宿主应用，以及为什么它被排除在核心契约之外。" data-en="Letting a model drive a host application across a process boundary — and why it is excluded from the core contract.">让模型隔着进程边界操作宿主应用，以及为什么它被排除在核心契约之外。</p>
+                </a>
+              </div>
+
+              <div class="note note--steel">
+                <strong data-zh="两条线要分开看：" data-en="Two lines to keep apart: ">两条线要分开看：</strong>
+                <span data-zh-html="FUAI 在 FujoOS 内核里的实现（第一实现）和 LinuxFUAI（第二实现）是同一份契约的两个实现。契约规范在 <a href=&quot;../language/potato.html&quot;>语言 · Potato</a> 那一侧有形式化描述，差分结果在 <a href=&quot;runtime.html&quot;>运行时与证据链</a>。" data-en-html="FUAI's implementation inside the FujoOS kernel (the first) and LinuxFUAI (the second) are two implementations of one contract. The contract's formal description lives under <a href=&quot;../language/potato.html&quot;>Language · Potato</a>, and the differ results under <a href=&quot;runtime.html&quot;>Runtime and evidence chain</a>.">FUAI 在 FujoOS 内核里的实现（第一实现）和 LinuxFUAI（第二实现）是同一份契约的两个实现。契约规范在 <a href="../language/potato.html">语言 · Potato</a> 那一侧有形式化描述，差分结果在 <a href="runtime.html">运行时与证据链</a>。</span>
+              </div>

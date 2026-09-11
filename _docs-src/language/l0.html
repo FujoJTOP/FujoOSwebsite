@@ -1,0 +1,80 @@
+<!--{"zh":"L0 单一真源","en":"L0 source of truth","desc":"一份 .lom 声明生成 Rust / C / Python / JSON，以及一致性检查器。漂移在生成期就不可能发生。","banner_zh":"L0 · 一处声明，多处生成","banner_en":"L0 · declare once, generate many"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="L0 单一真源" data-en="L0 source of truth">L0 单一真源</h1>
+
+              <div class="prose">
+                <p data-zh="L0 是整个语言计划里唯一“现在就该做”的一层，因为它不依赖任何语言设计决策，只依赖一件已经存在的事实：同一个接口被写了很多遍。" data-en="L0 is the one layer of the language plan that should be built now, because it depends on no language-design decisions — only on a fact that already exists: the same interface written many times over.">
+                  L0 是整个语言计划里唯一“现在就该做”的一层，因为它不依赖任何语言设计决策，只依赖一件已经存在的事实：同一个接口被写了很多遍。
+                </p>
+              </div>
+
+              <h2 data-zh="它要收掉的重复" data-en="The duplication it removes">它要收掉的重复</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="事实" data-en="Fact">事实</th>
+                      <th scope="col" data-zh="此前存在几处" data-en="Used to live in">此前存在几处</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td data-zh="FUAI 操作码表" data-en="FUAI opcode table">FUAI 操作码表</td>
+                      <td data-zh="spec.json · 内核 syscall.rs · LinuxFUAI 头文件 —— 三处，且常量已经实际漂移" data-en="spec.json · kernel syscall.rs · LinuxFUAI header — three places, and the constants had already drifted">spec.json · 内核 syscall.rs · LinuxFUAI 头文件 —— 三处，且常量已经实际漂移</td>
+                    </tr>
+                    <tr>
+                      <td data-zh=".fuc 节点布局（64 字节记录）" data-en=".fuc node layout (64-byte record)">.fuc 节点布局（64 字节记录）</td>
+                      <td data-zh="打包器 struct.pack · 内核 NODE_SIZE · 文档 —— 改一处忘两处" data-en="packer struct.pack · kernel NODE_SIZE · documentation — change one, forget two">打包器 struct.pack · 内核 NODE_SIZE · 文档 —— 改一处忘两处</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="FUJR .run 容器格式" data-en="FUJR .run container format">FUJR .run 容器格式</td>
+                      <td data-zh="五处实现，合计约 39 KB 平行代码" data-en="five implementations, roughly 39 KB of parallel code">五处实现，合计约 39 KB 平行代码</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="契约谓词" data-en="Contract predicates">契约谓词</td>
+                      <td data-zh="生成脚本里的 dict · 内核里的 match —— 顺序与编号靠人工对齐" data-en="a dict in the generator · a match in the kernel — order and numbering aligned by hand">生成脚本里的 dict · 内核里的 match —— 顺序与编号靠人工对齐</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 data-zh="形态" data-en="The shape">形态</h2>
+              <div class="code">
+                <div class="code__bar">
+                  <span class="lang-tag">lom</span>
+                  <span class="docs">lom/fuc.lom · lom/fuai.lom</span>
+                  <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+                </div>
+                <pre><span class="c">// .fuc 节点布局：此前散落在打包器、内核与新文档三处</span>
+record FucNode layout(packed, size=64) {
+  kind:  u16 @0
+  flags: u16 @2
+  x:     i16 @4
+  y:     i16 @6
+}
+
+<span class="c">// 46 个契约原语与部署参数</span>
+enum Opcode: u16 {
+  cfg_get = 0x8106 {
+    sig: <span class="s">"a0=key"</span>, fujo: <span class="s">"fujo_cfg_get"</span>, linux: <span class="s">"fuai_cfg_get"</span>,
+    semantics: <span class="s">"config read (defaults 1-&gt;50 2-&gt;0 7-&gt;45 8-&gt;35)"</span>
+  }
+}</pre>
+              </div>
+
+              <div class="prose">
+                <p data-zh="生成物：Rust 常量与解码器、C 头文件、Python 打包器、JSON 规范，以及一个漂移检查器。判据是那个漂移检查器可以退役——因为漂移在生成期就不可能发生了。" data-en="Generated: Rust constants and decoders, C headers, the Python packer, the JSON spec, and a drift checker. The criterion is that the drift checker can be retired — because drift becomes impossible at generation time.">
+                  生成物：Rust 常量与解码器、C 头文件、Python 打包器、JSON 规范，以及一个漂移检查器。判据是那个漂移检查器可以退役——因为漂移在生成期就不可能发生了。
+                </p>
+              </div>
+
+              <h2 data-zh="一个被抓出来的真实缺陷" data-en="One real defect it caught">一个被抓出来的真实缺陷</h2>
+              <div class="prose">
+                <p data-zh="首次运行就抓到：capability.rs 的第 68 行注释写着 τ_high = 46，而同文件的代码是 45。这不是“意外漂移”——部署参数本来就允许两个实现不同（FujoOS 45 / LinuxFUAI 46）。真正的缺陷是那行注释没跟着代码走，属于陈旧注释，正是 L0 要消除的那一类东西。" data-en="The first run caught it: a comment on line 68 of capability.rs said τ_high = 46 while the code in the same file said 45. This is not “accidental drift” — deployment parameters are allowed to differ between implementations (FujoOS 45 / LinuxFUAI 46). The actual defect is that the comment did not follow the code: a stale comment, exactly the category L0 exists to eliminate.">
+                  首次运行就抓到：capability.rs 的第 68 行注释写着 τ_high = 46，而同文件的代码是 45。这不是“意外漂移”——部署参数本来就允许两个实现不同（FujoOS 45 / LinuxFUAI 46）。真正的缺陷是那行注释没跟着代码走，属于陈旧注释，正是 L0 要消除的那一类东西。
+                </p>
+              </div>
+
+              <div class="note note--steel">
+                <strong data-zh="下一步：" data-en="Next: ">下一步：</strong>
+                <span data-zh-html="L0 是 L1 的必要前提。语言本身见 <a href=&quot;loment.html&quot;>Loment 语言</a>；编译器强制导出的那半边见 <a href=&quot;potato.html&quot;>Potato 形式对象</a>。" data-en-html="L0 is a precondition for L1. The language itself is under <a href=&quot;loment.html&quot;>The Loment language</a>; the mandatory-export half is under <a href=&quot;potato.html&quot;>The Potato object</a>.">L0 是 L1 的必要前提。语言本身见 <a href="loment.html">Loment 语言</a>；编译器强制导出的那半边见 <a href="potato.html">Potato 形式对象</a>。</span>
+              </div>

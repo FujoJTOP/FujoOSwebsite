@@ -1,0 +1,42 @@
+<!--{"zh":"Linux ABI","en":"Linux ABI","desc":"45 个 dispatch 臂一等公民、原生执行零垫片，以及命名表与实现面曾经不一致的那段历史。","banner_zh":"Linux ABI · 原生执行，零垫片","banner_en":"Linux ABI · native execution, no shims"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="Linux ABI" data-en="Linux ABI">Linux ABI</h1>
+
+              <div class="prose">
+                <p data-zh="Linux 面是这个项目走得最远的一条兼容路径，理由很实际：Linux 的 syscall 编号稳定且公开，所以可以直接把编号映射到内核服务面，不需要用户态垫片。glibc 直接 syscall，跑原生速度。" data-en="The Linux surface is the furthest-developed compatibility path, for a practical reason: Linux syscall numbers are stable and public, so numbers can be mapped straight onto the kernel service surface with no user-space shim. glibc issues syscalls directly at native speed.">
+                  Linux 面是这个项目走得最远的一条兼容路径，理由很实际：Linux 的 syscall 编号稳定且公开，所以可以直接把编号映射到内核服务面，不需要用户态垫片。glibc 直接 syscall，跑原生速度。
+                </p>
+              </div>
+
+              <div class="stats" style="margin-top: var(--s4)">
+                <div class="stat">
+                  <span class="stat__v">45</span>
+                  <span class="stat__k" data-zh="dispatch 臂，一等公民。命名表已同步为实现面。" data-en="Dispatch arms, first-class. The name table is synced to the implemented surface.">dispatch 臂，一等公民。命名表已同步为实现面。</span>
+                </div>
+                <div class="stat">
+                  <span class="stat__v">119</span>
+                  <span class="stat__k" data-zh="Linux demo 数量" data-en="Linux demos">Linux demo 数量</span>
+                </div>
+              </div>
+
+              <h2 data-zh="一次被度量抓出来的不一致" data-en="An inconsistency the measurement caught">一次被度量抓出来的不一致</h2>
+              <div class="prose">
+                <p data-zh-html="在 C12 首次对 Linux 面做度量时，发现命名表与 dispatch 臂对不上：<b>15 条臂没有名字</b>（getpid / gettid / getuid / getgid / geteuid / getegid / time / futex / clock_gettime / set_tid_address / set_robust_list / get_robust_list / prlimit64 / rseq / unlink），另有 <b>10 条表项没有实现</b>（poll / ioctl / pread64 / readv / select / sched_yield / socket / connect / accept / wait4）。" data-en-html="When the Linux surface was first measured under C12, the name table and the dispatch arms disagreed: <b>15 arms had no name</b> (getpid / gettid / getuid / getgid / geteuid / getegid / time / futex / clock_gettime / set_tid_address / set_robust_list / get_robust_list / prlimit64 / rseq / unlink), and <b>10 table entries had no implementation</b> (poll / ioctl / pread64 / readv / select / sched_yield / socket / connect / accept / wait4).">
+                  在 C12 首次对 Linux 面做度量时，发现命名表与 dispatch 臂对不上：<b>15 条臂没有名字</b>（getpid / gettid / getuid / getgid / geteuid / getegid / time / futex / clock_gettime / set_tid_address / set_robust_list / get_robust_list / prlimit64 / rseq / unlink），另有 <b>10 条表项没有实现</b>（poll / ioctl / pread64 / readv / select / sched_yield / socket / connect / accept / wait4）。
+                </p>
+              </div>
+              <div class="note note--amber">
+                <strong data-zh="处理方式：" data-en="How it was handled: ">处理方式：</strong>
+                <span data-zh="命名表同步为实现面的 45 条（让表描述事实，而不是描述愿望）；未实现的 10 条移入 C01 / C08 目标集。其中 socket 族是网络线的前置条件，因此它的优先级比看起来高。" data-en="the name table was synced to the 45 implemented entries, so the table describes the fact rather than the wish; the 10 unimplemented entries moved into the C01 / C08 target set. The socket family is a prerequisite for the network line, which makes it higher priority than it looks.">命名表同步为实现面的 45 条（让表描述事实，而不是描述愿望）；未实现的 10 条移入 C01 / C08 目标集。其中 socket 族是网络线的前置条件，因此它的优先级比看起来高。</span>
+              </div>
+
+              <h2 data-zh="这条路径为什么值得投入" data-en="Why this path is worth the effort">这条路径为什么值得投入</h2>
+              <div class="prose">
+                <p data-zh="因为验证成本最低。Linux 面有真实世界的测试语料（LTP 子集）、有大量现成二进制、有明确的接口规范。这意味着“兼容到什么程度”这个问题在这里第一次变得可以回答，而不是靠举例。" data-en="Because verification is cheapest here. The Linux surface has real-world test material (the LTP subset), plenty of existing binaries, and a clear interface specification. That means “how compatible is it” becomes answerable here for the first time, rather than argued by anecdote.">
+                  因为验证成本最低。Linux 面有真实世界的测试语料（LTP 子集）、有大量现成二进制、有明确的接口规范。这意味着“兼容到什么程度”这个问题在这里第一次变得可以回答，而不是靠举例。
+                </p>
+              </div>
+
+              <div class="note note--steel">
+                <strong data-zh="相关：" data-en="Related: ">相关：</strong>
+                <span data-zh-html="闸门本身的设计见 <a href=&quot;../architecture/syscall-gate.html&quot;>架构 · 系统调用闸门</a>；编号表见 <a href=&quot;../reference/syscalls.html&quot;>参考 · 系统调用</a>；加固计划见 <a href=&quot;plan.html&quot;>C01–C15</a>。" data-en-html="the gate's design is under <a href=&quot;../architecture/syscall-gate.html&quot;>Architecture · The syscall gate</a>; the number table under <a href=&quot;../reference/syscalls.html&quot;>Reference · Syscalls</a>; the hardening plan under <a href=&quot;plan.html&quot;>C01–C15</a>.">闸门本身的设计见 <a href="../architecture/syscall-gate.html">架构 · 系统调用闸门</a>；编号表见 <a href="../reference/syscalls.html">参考 · 系统调用</a>；加固计划见 <a href="plan.html">C01–C15</a>。</span>
+              </div>

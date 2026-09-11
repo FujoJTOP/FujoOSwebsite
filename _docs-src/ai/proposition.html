@@ -1,0 +1,58 @@
+<!--{"zh":"命题与 S1/S2/S3","en":"Proposition and S1/S2/S3","desc":"安全 = α（无越界，S1 机制）× 域宽 = f(测量质量 S2)；S3 策略边界由人或蒸馏规则画定。","banner_zh":"命题 · 三层各管一件事","banner_en":"Proposition · three layers, one job each"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="命题与 S1/S2/S3" data-en="Proposition and S1/S2/S3">命题与 S1/S2/S3</h1>
+
+              <div class="figure" style="margin-top: var(--s3); padding: clamp(1.2rem, 4vw, 2.2rem)">
+                <p class="mono-label" data-zh="核心公式" data-en="Core formula">核心公式</p>
+                <p style="font-family: var(--mono); font-size: clamp(0.95rem, 2vw, 1.35rem); margin-top: 0.9rem; line-height: 1.9">
+                  <span style="color: var(--steel)">safety</span> = <span style="color: var(--accent)">α</span>(<span class="dim">no out-of-bounds, S1</span>) × <span style="color: var(--steel)">DomainWidth</span> = f(S2)
+                </p>
+                <p class="small dim" style="margin-top: var(--s3)" data-zh="安全 = α（无越界，S1 机制）× 域宽，而域宽是测量质量 S2 的函数。S3 策略边界由人或蒸馏规则画定。" data-en="Safety = α (no out-of-bounds, the S1 mechanism) × domain width, where domain width is a function of measurement quality S2. The S3 policy boundary is drawn by people or distilled rules.">
+                  安全 = α（无越界，S1 机制）× 域宽，而域宽是测量质量 S2 的函数。S3 策略边界由人或蒸馏规则画定。
+                </p>
+              </div>
+
+              <div class="prose">
+                <p data-zh="这条公式的用处不在于计算，而在于它把一件容易被糊在一起的事拆成了三件：机制是否正确、测量是否可信、边界画在哪里。三件事的责任人不同，失败模式也不同。" data-en="The formula's value is not in computing anything; it separates three things that are easy to blur together: whether the mechanism is correct, whether the measurement is trustworthy, and where the boundary is drawn. Different owners, different failure modes.">
+                  这条公式的用处不在于计算，而在于它把一件容易被糊在一起的事拆成了三件：机制是否正确、测量是否可信、边界画在哪里。三件事的责任人不同，失败模式也不同。
+                </p>
+              </div>
+
+              <h2 data-zh="三层各管什么" data-en="What each layer owns">三层各管什么</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="层" data-en="Layer">层</th>
+                      <th scope="col" data-zh="含义" data-en="Meaning">含义</th>
+                      <th scope="col" data-zh="实现" data-en="Realized by">实现</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>S1</strong> <span class="dim" data-zh="机制" data-en="mechanism">机制</span></td>
+                      <td data-zh="无越界执行：能力域、隔离、审计。不依赖模型的正确性——这是关键，机制的有效性不能建立在被测对象的良好表现上。" data-en="Out-of-bounds-free execution: capability domains, isolation, audit. It does not depend on the model being right — crucially, the mechanism's validity cannot rest on the good behaviour of the thing it measures.">无越界执行：能力域、隔离、审计。不依赖模型的正确性——这是关键，机制的有效性不能建立在被测对象的良好表现上。</td>
+                      <td data-zh="内核能力表 + 审计环；用户态为 SIGSTOP 隔离语义" data-en="Kernel capability table + audit ring; SIGSTOP isolation semantics in user space">内核能力表 + 审计环；用户态为 SIGSTOP 隔离语义</td>
+                    </tr>
+                    <tr>
+                      <td><strong>S2</strong> <span class="dim" data-zh="测量" data-en="measurement">测量</span></td>
+                      <td data-zh="模型质量的可测量化：金标、探针、质量台账。注意它决定的是域宽而不是权限——测量结果再差，模型也不会因此获得更多权力。" data-en="Making model quality measurable: goldset, probes, quality ledger. Note it decides domain width, not authority — a worse measurement never grants more power.">模型质量的可测量化：金标、探针、质量台账。注意它决定的是域宽而不是权限——测量结果再差，模型也不会因此获得更多权力。</td>
+                      <td data-zh="语义金标 v2（280 例）、金标 v3（540 例）、τ 推导与模型农场" data-en="Semantic goldset v2 (280 examples), goldset v3 (540), τ derivation and a model farm">语义金标 v2（280 例）、金标 v3（540 例）、τ 推导与模型农场</td>
+                    </tr>
+                    <tr>
+                      <td><strong>S3</strong> <span class="dim" data-zh="策略" data-en="policy">策略</span></td>
+                      <td data-zh="边界画在哪里：由人声明，或由蒸馏规则生成。未知指令与越域值一律 fail-closed，不做猜测。" data-en="Where the boundary sits: declared by people, or produced by distilled rules. Unknown directives and out-of-domain values fail closed, never guessed.">边界画在哪里：由人声明，或由蒸馏规则生成。未知指令与越域值一律 fail-closed，不做猜测。</td>
+                      <td data-zh="fuai_policy 策略文件；越域即拒绝" data-en="fuai_policy policy files; anything out of domain is refused">fuai_policy 策略文件；越域即拒绝</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="note note--amber">
+                <strong data-zh="模型不能写自己的界。" data-en="A model does not get to write its own boundary.">模型不能写自己的界。</strong>
+                <span data-zh="模型提出动作，S1 决定动作能否发生，S2 决定它被允许有多宽的活动范围，S3 决定这条边界画在哪。四者分离，才谈得上可审计——否则“系统拒绝了模型”和“模型自己决定不做”这两件事在日志里长得一样。" data-en=" The model proposes an action; S1 decides whether it can happen, S2 decides how much room it gets, and S3 decides where the line is drawn. Only with those four separated does auditability become meaningful — otherwise “the system refused the model” and “the model decided not to” look identical in the log."> 模型提出动作，S1 决定动作能否发生，S2 决定它被允许有多宽的活动范围，S3 决定这条边界画在哪。四者分离，才谈得上可审计——否则“系统拒绝了模型”和“模型自己决定不做”这两件事在日志里长得一样。</span>
+              </div>
+
+              <div class="note note--steel">
+                <strong data-zh="下一步：" data-en="Next: ">下一步：</strong>
+                <span data-zh-html="机制必须满足的四条写在 <a href=&quot;axioms.html&quot;>A1–A4 公理</a>；域宽怎么随质量变化写在 <a href=&quot;trust.html&quot;>信任自适应域宽</a>。" data-en-html="the four properties the mechanism must hold are in <a href=&quot;axioms.html&quot;>Axioms A1–A4</a>; how width tracks quality is in <a href=&quot;trust.html&quot;>Trust-adaptive width</a>.">机制必须满足的四条写在 <a href="axioms.html">A1–A4 公理</a>；域宽怎么随质量变化写在 <a href="trust.html">信任自适应域宽</a>。</span>
+              </div>
