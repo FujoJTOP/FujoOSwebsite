@@ -37,6 +37,15 @@
           令牌不加密，只存在这台设备的浏览器里，也只会发往 <code>api.github.com</code>。
           <strong>任何拿到它的人都能写这个仓库。</strong>
         </p>
+        <p class="adm__hint">
+          还有一条容易漏掉：<strong>同源不按路径隔离</strong>。
+          <code>fujojtop.github.io</code> 下所有站点共享同一个 origin，所以这个账号里
+          <em>任何一个</em> Pages 站上运行的脚本，都能读到存在这里的令牌。眼下另一个站是零脚本的静态页，
+          所以这条还不成立——但它成立与否，取决于「永远不给同源站点加第三方脚本」，
+          而那是一条会一直需要遵守的约束。
+          <br />因此：给令牌设一个过期时间；不需要长期挂着时就<strong>不要勾「记住」</strong>，
+          这样它只活到这个标签页关闭为止。
+        </p>
         <label class="field">
           <span class="field__label">GitHub 令牌</span>
           <input
