@@ -350,6 +350,14 @@ hr {
   border-radius: 50%;
   background: #ffffff7a;
 }
+/* The separator gap is sized against the marquee window, which collapses to
+   ~220px on a phone while the notice itself stays ~206px wide — so the wide
+   desktop gap would leave the bar briefly all gap and no text. */
+@media (max-width: 40rem) {
+  .ticker__item::after {
+    margin-inline: 1.7rem;
+  }
+}
 @keyframes ticker-crawl {
   from {
     transform: translateX(0);
