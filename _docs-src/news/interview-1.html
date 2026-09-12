@@ -1,0 +1,97 @@
+<!--{"zh":"FujoOS / Loment 开发访谈 · 第一弹","en":"FujoOS / Loment development interview · part 1","date":"2026-09-11","desc":"为什么要造一门语言、内核怎么自己编译、Loment 现在能用到什么程度、下一步做什么。五个问题，答案都对着能重跑的证据。","desc_en":"Why build a language at all, how the kernel compiles on its own, how far Loment actually works today, and what comes next. Five questions, answered against evidence you can re-run.","banner_zh":"开发访谈 · 第一弹","banner_en":"Development interview · part 1"}-->
+              <p data-zh="这是开发访谈的第一弹。五个问题都是我们自己想问的，答案都对着仓库里能重跑的证据——不是转述，能查。" data-en="The first of a series. Five questions we wanted to ask ourselves; every answer points at evidence in the repository that you can re-run.">
+                这是开发访谈的第一弹。五个问题都是我们自己想问的，答案都对着仓库里能重跑的证据——不是转述，能查。
+              </p>
+
+              <div class="qa">
+                <p class="qa__q" data-zh="问：为什么要设计 Loment？FujoOS 不是已经用 Rust 写了吗？" data-en="Q: Why design Loment at all? FujoOS is already written in Rust.">
+                  问：为什么要设计 Loment？FujoOS 不是已经用 Rust 写了吗？
+                </p>
+                <div class="qa__a">
+                  <p data-zh-html="因为痛点不在 Rust。立项时列了十个具体的痛点，其中七个是同一件事：<strong>同一个接口被 N 种语言各写一遍</strong>。同一个操作码表躺在 spec.json、内核的 syscall.rs 和另一个实现的头文件里；同一个 64 字节节点布局写在打包器、内核常量和新文档三处。" data-en-html="Because the pain is not Rust. Ten concrete pain points were listed at the start; seven of them are one thing: <strong>the same interface written once per language</strong>. The same opcode table sits in spec.json, in the kernel's syscall.rs, and in another implementation's header. The same 64-byte node layout is written in a packer, a kernel constant, and a document.">
+                    因为痛点不在 Rust。立项时列了十个具体的痛点，其中七个是同一件事：<strong>同一个接口被 N 种语言各写一遍</strong>。同一个操作码表躺在 spec.json、内核的 syscall.rs 和另一个实现的头文件里；同一个 64 字节节点布局写在打包器、内核常量和新文档三处。
+                  </p>
+                  <p data-zh="换掉内核语言不解决这个，只会让 N 变成 N+1。真正缺的是一个接口层：平台定义“怎么在它上面写东西”，语言只是外壳。Windows 就是这么做的——先有稳定的接口面，再让语言和工具去消费它。" data-en="Replacing the kernel language would not fix that; it would only turn N into N+1. What is missing is an interface layer: the platform defining how you write things on it, with the language as one of several skins. That is what Windows did — a stable interface surface first, then languages and tools that consume it.">
+                    换掉内核语言不解决这个，只会让 N 变成 N+1。真正缺的是一个接口层：平台定义“怎么在它上面写东西”，语言只是外壳。Windows 就是这么做的——先有稳定的接口面，再让语言和工具去消费它。
+                  </p>
+                </div>
+              </div>
+
+              <div class="qa">
+                <p class="qa__q" data-zh="问：「FujoOS 自己编」是什么意思？" data-en="Q: What does “FujoOS builds it itself” mean?">
+                  问：「FujoOS 自己编」是什么意思？
+                </p>
+                <div class="qa__a">
+                  <p data-zh="两层意思，都指向同一件事：不依赖宿主。" data-en="Two things, both pointing at the same property: no host dependency.">
+                    两层意思，都指向同一件事：不依赖宿主。
+                  </p>
+                  <p data-zh="内核里自带一套工具链——汇编器、链接器、C 子集编译器，全链产出 ELF64。它已经构建并运行过自己的 hello。这不是演示：如果内核里的东西必须靠宿主上的工具链才能编译，那这个系统就还没站起来。" data-en="The kernel carries its own toolchain — assembler, linker, C-subset compiler — with the full chain emitting ELF64. It has already built and run its own hello. That is not a demo: if anything inside the kernel needs a host toolchain to compile, the system is not standing up on its own yet.">
+                    内核里自带一套工具链——汇编器、链接器、C 子集编译器，全链产出 ELF64。它已经构建并运行过自己的 hello。这不是演示：如果内核里的东西必须靠宿主上的工具链才能编译，那这个系统就还没站起来。
+                  </p>
+                  <p data-zh="Loment 走到了同一层：编译器能编译自身，三阶段产物的 IR 逐字节相同（1002385 B）。也就是说，Loment 的编译器已经是一段能独立跑的 ELF，可以编译自己的单元，再用自己的产物链一次，结果还是逐字节相同。" data-en="Loment reached the same layer: the compiler compiles itself, and the IR from the three bootstrap stages is byte-identical (1002385 B). The Loment compiler is itself a standalone ELF that can compile its own units, and linking again with its own output still gives the same bytes.">
+                    Loment 走到了同一层：编译器能编译自身，三阶段产物的 IR 逐字节相同（1002385 B）。也就是说，Loment 的编译器已经是一段能独立跑的 ELF，可以编译自己的单元，再用自己的产物链一次，结果还是逐字节相同。
+                  </p>
+                  <p data-zh="所以「FujoOS 上跑一个 Loment 程序」，不需要你先在自己机器上装一套交叉工具链。" data-en="So running a Loment program on FujoOS does not require you to install a cross toolchain on your own machine first.">
+                    所以「FujoOS 上跑一个 Loment 程序」，不需要你先在自己机器上装一套交叉工具链。
+                  </p>
+                </div>
+              </div>
+
+              <div class="qa">
+                <p class="qa__q" data-zh="问：Loment 对 FujoOS 意味着什么？" data-en="Q: What does Loment mean for FujoOS?">
+                  问：Loment 对 FujoOS 意味着什么？
+                </p>
+                <div class="qa__a">
+                  <p data-zh="这是这个项目第一次有了「母语」。" data-en="It is the first time this project has a mother tongue.">
+                    这是这个项目第一次有了「母语」。
+                  </p>
+                  <p data-zh-html="在此之前，FUAI 的能力域是内核里的一组机制——用 C 或者别的语言手写去调用它。有了 Loment，能力域变成<strong>语法的一部分</strong>：capability 声明、guard 语句、编译期边界检查、运行期 trap、审计计数。同一条声明，既生成运行期的域表，也生成内核读得懂的形式对象。" data-en-html="Until now, a FUAI capability domain was a mechanism inside the kernel, called by hand from C or whatever else. With Loment it becomes <strong>part of the grammar</strong>: a capability declaration, a guard statement, compile-time bounds checking, a runtime trap, an audit count. One declaration produces both the runtime domain table and a formal object the kernel can read.">
+                    在此之前，FUAI 的能力域是内核里的一组机制——用 C 或者别的语言手写去调用它。有了 Loment，能力域变成<strong>语法的一部分</strong>：capability 声明、guard 语句、编译期边界检查、运行期 trap、审计计数。同一条声明，既生成运行期的域表，也生成内核读得懂的形式对象。
+                  </p>
+                  <p data-zh="区别在这里：内核第一次能「读懂」一段程序被允许做什么，而不是只能相信它说自己要做什么。这是整条 FUAI 主张能不能落地的地方。" data-en="The difference is this: for the first time the kernel can read what a program is allowed to do, rather than having to take the program's word for it. That is where the whole FUAI claim either lands or does not.">
+                    区别在这里：内核第一次能「读懂」一段程序被允许做什么，而不是只能相信它说自己要做什么。这是整条 FUAI 主张能不能落地的地方。
+                  </p>
+                </div>
+              </div>
+
+              <div class="qa">
+                <p class="qa__q" data-zh="问：现在能用了么？" data-en="Q: Is it usable now?">
+                  问：现在能用了么？
+                </p>
+                <div class="qa__a">
+                  <p data-zh="能跑通，但还没冻结——这两件事要分开说。" data-en="It runs end to end, but it is not frozen — and those are two different things.">
+                    能跑通，但还没冻结——这两件事要分开说。
+                  </p>
+                  <p data-zh="能跑的：写、转译、编译、运行、导出形式对象，端到端闭环；25 个示例；系统调用层 46/46 覆盖；工具链齐了——格式化器、语言服务、包管理器、文档生成器、DWARF 语句级行表，增量构建从冷 82.6 ms 到热 9.0 ms。" data-en="What runs: write, transpile, compile, run, emit a formal object — a closed loop end to end; 25 examples; 46/46 syscall coverage; and a full toolchain — formatter, language server, package manager, doc generator, DWARF statement-level line tables, incremental builds from 82.6 ms cold to 9.0 ms warm.">
+                    能跑的：写、转译、编译、运行、导出形式对象，端到端闭环；25 个示例；系统调用层 46/46 覆盖；工具链齐了——格式化器、语言服务、包管理器、文档生成器、DWARF 语句级行表，增量构建从冷 82.6 ms 到热 9.0 ms。
+                  </p>
+                  <p data-zh="没冻结的：100 个里程碑完成 79 个，1.0 的冻结和发布审计都没过。现在接手的人要有准备——语法和参数还会变。上手文档我们写了，标的是 Beta，就是这个意思。" data-en="What is not frozen: 79 of 100 milestones done, and neither the 1.0 freeze nor the release audit is passed. Anyone picking this up now should expect the syntax and the flags to move. The quickstart page is marked Beta for exactly that reason.">
+                    没冻结的：100 个里程碑完成 79 个，1.0 的冻结和发布审计都没过。现在接手的人要有准备——语法和参数还会变。上手文档我们写了，标的是 Beta，就是这个意思。
+                  </p>
+                </div>
+              </div>
+
+              <div class="qa">
+                <p class="qa__q" data-zh="问：接下来做什么？" data-en="Q: What comes next?">
+                  问：接下来做什么？
+                </p>
+                <div class="qa__a">
+                  <p data-zh="三件，按依赖排。" data-en="Three things, in dependency order.">三件，按依赖排。</p>
+                  <p data-zh="一、把自举补完。自举版编译器的符号表还是全单元扁平的，兄弟模块里同名的私有函数会撞名；子集检查器目前只有四条规则，会把合法程序判错。这两个不解决，自举版就不能当闸门用——能编译自己，和能守住自己的规矩，是两回事。" data-en="One: finish self-hosting. The self-hosted compiler's symbol table is flat across units, so identically named private functions in sibling modules collide; and the subset checker implements only four rules, so it rejects legal programs. Until both are fixed it cannot serve as a gate — compiling yourself and holding your own rules are two different achievements.">
+                    一、把自举补完。自举版编译器的符号表还是全单元扁平的，兄弟模块里同名的私有函数会撞名；子集检查器目前只有四条规则，会把合法程序判错。这两个不解决，自举版就不能当闸门用——能编译自己，和能守住自己的规矩，是两回事。
+                  </p>
+                  <p data-zh="二、内核侧接入。A1–A4 的运行时断言、能力域与内核域模型对齐、撤销语义由内核真正实施。现在那张断言表还停在产物层，没有进内核。" data-en="Two: kernel-side integration. Runtime assertions for A1–A4, aligning the capability domain with the kernel's own domain model, and revocation actually enforced by the kernel. The assertion table is still at the artifact layer; it does not reach the kernel yet.">
+                    二、内核侧接入。A1–A4 的运行时断言、能力域与内核域模型对齐、撤销语义由内核真正实施。现在那张断言表还停在产物层，没有进内核。
+                  </p>
+                  <p data-zh="三、网络。让 Loment 的第一个真应用是网络，而不是又一个玩具样例——它同时提供字节级的精确契约和能力边界，是这门语言最合适的压力面。" data-en="Three: networking. Making Loment's first real application networking rather than another toy sample — it supplies both byte-exact contracts and capability boundaries, which makes it the right stress surface for this language.">
+                    三、网络。让 Loment 的第一个真应用是网络，而不是又一个玩具样例——它同时提供字节级的精确契约和能力边界，是这门语言最合适的压力面。
+                  </p>
+                  <p data-zh="面向开发者的第一个版本，计划最早十月初。" data-en="The first developer-facing release is planned for early October at the earliest.">
+                    面向开发者的第一个版本，计划最早十月初。
+                  </p>
+                </div>
+              </div>
+
+              <p data-zh-html="想先动手的话，<a href=&quot;../docs/language/quickstart.html&quot;>上手文档（Beta）</a>里有从零到跑通的第一条命令。第二弹见。" data-en-html="If you would rather try it first, the <a href=&quot;../docs/language/quickstart.html&quot;>quickstart (Beta)</a> starts from the first command that works. Part two to follow.">
+                想先动手的话，<a href="../docs/language/quickstart.html">上手文档（Beta）</a>里有从零到跑通的第一条命令。第二弹见。
+              </p>

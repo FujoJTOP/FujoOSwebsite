@@ -1386,6 +1386,10 @@ pre .s {
 .news__title {
   margin-top: var(--s3);
   max-width: 22ch;
+  /* CJK breaks anywhere by default, which split "开发访谈" across two lines.
+     keep-all confines breaks to spaces so the title breaks where it reads. */
+  word-break: keep-all;
+  text-wrap: balance;
 }
 .news__body {
   margin-top: var(--s5);
@@ -1408,6 +1412,27 @@ pre .s {
   line-height: 1.6;
   color: var(--fg);
 }
+/* interview layout: a question, then its answer */
+.qa + .qa {
+  margin-top: var(--s5);
+  padding-top: var(--s5);
+  border-top: 1px solid var(--rule);
+}
+.qa__q {
+  font-size: var(--t-lg);
+  font-weight: 600;
+  line-height: 1.45;
+  letter-spacing: -0.015em;
+  color: var(--fg);
+  text-wrap: balance;
+}
+.qa__a {
+  margin-top: var(--s2);
+}
+.qa__a p + p {
+  margin-top: var(--s2);
+}
+
 .news__pager {
   max-width: 62ch;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);

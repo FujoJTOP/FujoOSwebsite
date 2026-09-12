@@ -17,6 +17,7 @@
  */
 
 import { readFileSync, writeFileSync, mkdirSync, existsSync, rmSync, readdirSync } from "node:fs";
+import { createHash } from "node:crypto";
 import { dirname, join, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -133,6 +134,20 @@ const SITE = "https://fujojtop.github.io/FujoOSwebsite/";
 const SITE_NAME = "FujoOS";
 const DESC_FALLBACK =
   "FujoOS：从零写起的 x86_64 操作系统内核，以及一套把大语言模型放进内核强制、可撤销信封里的安全体系。";
+
+/* Asset versions are content hashes. A manual number gets forgotten — one
+   page shipped asking for v=3 while every other page asked for v=4, which is
+   exactly the stale-cache case the version exists to prevent. Hashing the file
+   means it cannot be forgotten and cannot disagree between pages. */
+function assetVersion(file) {
+  return createHash("sha256").update(readFileSync(file)).digest("hex").slice(0, 8);
+}
+const CSS_V = assetVersion(join(ROOT, "assets", "style.css"));
+const JS_V = assetVersion(join(ROOT, "assets", "site.js"));
+
+/* Pages that are written by hand but reference those assets. The generator
+   keeps their query strings in step rather than leaving it to memory. */
+const HAND_WRITTEN = ["index.html", "fuai.html", "loment.html"];
 
 /* -------------------------------------------------------------- helpers */
 
@@ -280,7 +295,7 @@ function headBlock({ titleZh, desc, pagePath, up, type = "website" }) {
       href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="${up}assets/style.css?v=3" />
+    <link rel="stylesheet" href="${up}assets/style.css?v=${CSS_V}" />
     <link rel="icon" href="${up}favicon.ico" sizes="48x48" />
     <link rel="icon" type="image/svg+xml" href="${up}assets/favicon.svg" sizes="any" />
     <link rel="icon" type="image/png" href="${up}assets/favicon-32.png" sizes="32x32" />
@@ -401,7 +416,7 @@ ${pagerBlock}
       </div>
     </footer>
 
-    <script src="${up}assets/site.js?v=4"></script>
+    <script src="${up}assets/site.js?v=${JS_V}"></script>
   </body>
 </html>
 `;
@@ -474,7 +489,9 @@ function loadPosts() {
       const { meta, body } = parseFragment(readFileSync(join(NEWS_SRC, f), "utf8"));
       return { slug: f.replace(/\.html$/, ""), meta, body, date: meta.date || "" };
     })
-    .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : a.slug < b.slug ? -1 : 1));
+    /* Newest first. Posts sharing a date break on slug descending, which puts
+       sequentially named slugs (talk-2 before talk-1) in the right order. */
+    .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : a.slug < b.slug ? 1 : -1));
 }
 
 function newsChrome({ titleZh, titleEn, desc, pagePath, up, current, inner }) {
@@ -532,7 +549,7 @@ ${inner}
       </div>
     </footer>
 
-    <script src="${up}assets/site.js?v=4"></script>
+    <script src="${up}assets/site.js?v=${JS_V}"></script>
   </body>
 </html>
 `;
@@ -625,6 +642,22 @@ ${items}
     } else {
       writeFileSync(outFile, html);
       written++;
+    }
+  }
+}
+
+/* Keep the hand-written pages' asset query strings in step with the hashes.
+   Touching only the version token, so nothing else in those files moves. */
+{
+  for (const name of HAND_WRITTEN) {
+    const f = join(ROOT, name);
+    const s = readFileSync(f, "utf8");
+    const next = s
+      .replace(/(assets\/style\.css\?v=)[0-9a-f]+/g, `$1${CSS_V}`)
+      .replace(/(assets\/site\.js\?v=)[0-9a-f]+/g, `$1${JS_V}`);
+    if (next !== s) {
+      if (check) problems.push(`${name}: asset version out of date`);
+      else writeFileSync(f, next);
     }
   }
 }
