@@ -1,0 +1,34 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 252 64"
+  width="252"
+  height="64"
+  class="fuji-lockup"
+  role="img"
+  aria-labelledby="fuji-lockup-title"
+>
+  <title id="fuji-lockup-title">FujoOS</title>
+  <style>
+    .fuji-lockup .rock { fill: var(--mark-rock, #5aa6c4); }
+    .fuji-lockup .snow { fill: var(--mark-snow, #e3e9f1); }
+    .fuji-lockup .wm {
+      font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 41px;
+      font-weight: 500;
+      letter-spacing: -0.5px;
+      fill: var(--fuji-fg, #e3e9f1);
+    }
+    .fuji-lockup .wm-os { fill: var(--mark-rock, #5aa6c4); }
+    @media (prefers-color-scheme: light) {
+      .fuji-lockup .rock { fill: var(--mark-rock, #266b87); }
+      .fuji-lockup .snow { fill: var(--mark-snow, #ffffff); }
+      .fuji-lockup .wm { fill: var(--fuji-fg, #131a24); }
+      .fuji-lockup .wm-os { fill: var(--mark-rock, #266b87); }
+    }
+  </style>
+  <g>
+    <path class="rock" d="M3,58 Q11,38 26,16 Q32,19 38,16 Q53,38 61,58 Z" />
+    <path class="snow" d="M15.9,32 Q18,22 26,16 Q32,19 38,16 Q46,22 48.1,32 L40,36 L31,28 Z" />
+  </g>
+  <text class="wm" x="86" y="45">Fujo<tspan class="wm-os">OS</tspan></text>
+</svg>

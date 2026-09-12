@@ -1,0 +1,28 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 64 64"
+  width="64"
+  height="64"
+  class="fuji"
+  role="img"
+  aria-labelledby="fuji-title"
+>
+  <title id="fuji-title">FujoOS</title>
+  <desc id="fuji-desc">
+    Mount Fuji: long concave flanks and a shallow crater, with a jagged snow line.
+    Steel is the site's kernel colour; the snow cap is the neutral it already uses
+    for solid fills.
+  </desc>
+  <style>
+    /* Inline, the mark reads the page's own tokens; as an <img> it falls back
+       to the values below and follows prefers-color-scheme. */
+    .fuji .rock { fill: var(--mark-rock, #5aa6c4); }
+    .fuji .snow { fill: var(--mark-snow, #e3e9f1); }
+    @media (prefers-color-scheme: light) {
+      .fuji .rock { fill: var(--mark-rock, #266b87); }
+      .fuji .snow { fill: var(--mark-snow, #ffffff); }
+    }
+  </style>
+  <path class="rock" d="M3,58 Q11,38 26,16 Q32,19 38,16 Q53,38 61,58 Z" />
+  <path class="snow" d="M15.9,32 Q18,22 26,16 Q32,19 38,16 Q46,22 48.1,32 L40,36 L31,28 Z" />
+</svg>

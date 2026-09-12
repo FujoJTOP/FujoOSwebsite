@@ -257,7 +257,9 @@ function shell({ sec, slug, depth, meta, body, hub }) {
       href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="${up}assets/style.css" />
+    <link rel="stylesheet" href="${up}assets/style.css?v=2" />
+    <link rel="icon" type="image/svg+xml" href="${up}assets/favicon.svg" />
+    <link rel="apple-touch-icon" href="${up}assets/fuji-tile.svg" />
     <script>
       document.documentElement.classList.add("js");
       /* If site.js never runs, reveal everything instead of leaving it hidden. */
@@ -285,11 +287,12 @@ function shell({ sec, slug, depth, meta, body, hub }) {
     <header class="nav">
       <div class="wrap nav__inner">
         <a class="nav__brand" href="${up}index.html">
-          <svg viewBox="0 0 32 32" aria-hidden="true">
-            <rect x="4.5" y="4.5" width="23" height="23" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6" />
-            <path d="M4.5 12.5h23" fill="none" stroke="currentColor" stroke-width="1.6" />
-            <circle cx="16" cy="19.5" r="3.1" fill="none" stroke="#b4702a" stroke-width="1.6" />
-            <path d="M19.5 19.5h8" fill="none" stroke="#b4702a" stroke-width="1.6" />
+          <svg viewBox="0 14 64 46" aria-hidden="true">
+            <path d="M3,58 Q11,38 26,16 Q32,19 38,16 Q53,38 61,58 Z" fill="var(--mark-rock)" />
+            <path
+              d="M15.9,32 Q18,22 26,16 Q32,19 38,16 Q46,22 48.1,32 L40,36 L31,28 Z"
+              fill="var(--mark-snow)"
+            />
           </svg>
           FujoOS
         </a>
@@ -343,7 +346,7 @@ ${pagerBlock}
       </div>
     </footer>
 
-    <script src="${up}assets/site.js"></script>
+    <script src="${up}assets/site.js?v=2"></script>
   </body>
 </html>
 `;

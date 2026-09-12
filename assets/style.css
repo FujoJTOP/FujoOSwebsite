@@ -59,6 +59,11 @@
   --amber-soft: #e29a4a26;
   --steel: #7fc4dc;
   --steel-soft: #7fc4dc1f;
+  /* The mark's two tones. --steel is tuned for hairlines and small text on a
+     dark ground; a large solid area of it reads far lighter, so the rock is
+     one step deeper while staying in the same hue family. */
+  --mark-rock: #5aa6c4;
+  --mark-snow: #e3e9f1;
   --grid: #7fc4dc0d;
   --shadow: 0 18px 40px -24px #000a;
   color-scheme: dark;
@@ -79,6 +84,8 @@
   --amber-soft: #a8651f1a;
   --steel: #266b87;
   --steel-soft: #266b8714;
+  --mark-rock: #266b87;
+  --mark-snow: #ffffff;
   --grid: #266b870f;
   --shadow: 0 14px 34px -26px #22303f47;
   color-scheme: light;

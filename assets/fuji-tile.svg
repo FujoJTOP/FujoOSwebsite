@@ -1,0 +1,21 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 512 512"
+  width="512"
+  height="512"
+  role="img"
+  aria-labelledby="fuji-tile-title"
+>
+  <title id="fuji-tile-title">FujoOS</title>
+  <defs>
+    <linearGradient id="fuji-tile-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#152233" />
+      <stop offset="1" stop-color="#0a111c" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="116" fill="url(#fuji-tile-bg)" />
+  <g transform="translate(64,34) scale(6)">
+    <path d="M3,58 Q11,38 26,16 Q32,19 38,16 Q53,38 61,58 Z" fill="#5aa6c4" />
+    <path d="M15.9,32 Q18,22 26,16 Q32,19 38,16 Q46,22 48.1,32 L40,36 L31,28 Z" fill="#e3e9f1" />
+  </g>
+</svg>
