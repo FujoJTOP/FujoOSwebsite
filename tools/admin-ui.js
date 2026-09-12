@@ -37,6 +37,112 @@
     else el.removeAttribute("data-kind");
   }
 
+  /* ---------------------------------------------------------- 简洁 markup */
+  /* A deliberately tiny subset: blank-line paragraphs, ## and ### headings,
+     and three inline forms. It covers everything the existing posts use
+     except the interview's Q/A layout — which is exactly why raw mode still
+     exists, and why openEditor falls back to it rather than mangling a post
+     it cannot represent. */
+
+  function inlineToHtml(s) {
+    var h = String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    h = h.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+    h = h.replace(/`([^`]+)`/g, "<code>$1</code>");
+    h = h.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2">$1</a>');
+    return h;
+  }
+
+  function inlineToText(html) {
+    return String(html)
+      .replace(/<strong>([\s\S]*?)<\/strong>/g, "**$1**")
+      .replace(/<em>([\s\S]*?)<\/em>/g, "*$1*")
+      .replace(/<code>([\s\S]*?)<\/code>/g, "`$1`")
+      .replace(/<a\s+[^>]*href="([^"]*)"[^>]*>([\s\S]*?)<\/a>/g, "[$2]($1)")
+      .replace(/<[^>]+>/g, "");
+  }
+
+  /* A hard-wrapped line should join with a space only where two Latin words
+     meet; a wrapped Chinese paragraph must not grow stray spaces. */
+  function joinLines(lines) {
+    return lines.reduce(function (acc, ln) {
+      if (!acc) return ln;
+      return acc + (/[A-Za-z0-9]$/.test(acc) && /^[A-Za-z0-9]/.test(ln) ? " " : "") + ln;
+    }, "");
+  }
+
+  function parseDoc(text) {
+    return String(text || "")
+      .split(/\n\s*\n/)
+      .map(function (b) {
+        return b.trim();
+      })
+      .filter(Boolean)
+      .map(function (b) {
+        var m;
+        if ((m = b.match(/^###\s+([\s\S]*)$/))) return { tag: "h3", html: inlineToHtml(joinLines(m[1].split("\n"))) };
+        if ((m = b.match(/^##\s+([\s\S]*)$/))) return { tag: "h2", html: inlineToHtml(joinLines(m[1].split("\n"))) };
+        return { tag: "p", html: inlineToHtml(joinLines(b.split("\n"))) };
+      });
+  }
+
+  function docToText(blocks) {
+    return blocks
+      .map(function (b) {
+        var t = inlineToText(b.html);
+        return b.tag === "h2" ? "## " + t : b.tag === "h3" ? "### " + t : t;
+      })
+      .join("\n\n");
+  }
+
+  var INDENT = "              ";
+
+  function buildBody(zhText, enText) {
+    var zh = parseDoc(zhText);
+    var en = enText.trim() ? parseDoc(enText) : [];
+    if (!zh.length && !en.length) return "";
+    var n = Math.max(zh.length, en.length);
+    var out = [];
+    for (var i = 0; i < n; i++) {
+      var z = zh[i] || en[i];
+      var e = en[i] || zh[i];
+      /* an element carries either data-zh or data-zh-html, never both, and
+         the two languages have to agree on which */
+      var suffix = /<[a-z]/.test(z.html) || /<[a-z]/.test(e.html) ? "-html" : "";
+      var q = function (s) {
+        return s.replace(/"/g, "&quot;");
+      };
+      /* Block text on its own line, matching how the existing fragments are
+         written. Putting it on the tag's line renders identically but rewrites
+         every paragraph on every save, and a diff that reformats the whole
+         post hides the one sentence that actually changed. */
+      out.push(
+        INDENT + "<" + z.tag + " data-zh" + suffix + '="' + q(z.html) + '" data-en' + suffix + '="' + q(e.html) + '">\n' +
+          INDENT + "  " + z.html + "\n" +
+          INDENT + "</" + z.tag + ">"
+      );
+    }
+    return out.join("\n");
+  }
+
+  /* The reverse, for editing an existing post. Returns simple:false when the
+     fragment contains something this subset cannot express. */
+  var SIMPLE = { P: 1, H2: 1, H3: 1 };
+  function bodyToDoc(bodyHtml) {
+    var d = document.createElement("div");
+    d.innerHTML = bodyHtml || "";
+    var blocks = [];
+    for (var i = 0; i < d.children.length; i++) {
+      var el = d.children[i];
+      if (!SIMPLE[el.tagName]) return { simple: false, blocks: [] };
+      blocks.push({
+        tag: el.tagName.toLowerCase(),
+        zh: el.getAttribute("data-zh-html") || el.getAttribute("data-zh") || el.innerHTML,
+        en: el.getAttribute("data-en-html") || el.getAttribute("data-en") || "",
+      });
+    }
+    return { simple: true, blocks: blocks };
+  }
+
   function api(path, body) {
     return fetch(BASE + "api/" + path, {
       method: body ? "POST" : "GET",
@@ -99,6 +205,40 @@
       .join("");
   }
 
+  function currentMode() {
+    var picked = $$('input[name="bodymode"]').filter(function (r) {
+      return r.checked;
+    })[0];
+    return picked ? picked.value : "text";
+  }
+
+  function setMode(mode) {
+    $$('input[name="bodymode"]').forEach(function (r) {
+      r.checked = r.value === mode;
+    });
+    $("[data-mode-text]").hidden = mode !== "text";
+    $("[data-mode-raw]").hidden = mode !== "raw";
+    updateCount();
+  }
+
+  function updateCount() {
+    var el = $("[data-count-note]");
+    if (!el) return;
+    if (currentMode() !== "text") {
+      el.textContent = "";
+      return;
+    }
+    var z = parseDoc($("[data-f-body-zh]").value).length;
+    var e = parseDoc($("[data-f-body-en]").value).length;
+    if (!z && !e) {
+      el.textContent = "";
+    } else if (!e || z === e) {
+      el.textContent = "  中文 " + z + " 段，英文 " + e + " 段。";
+    } else {
+      el.textContent = "  中文 " + z + " 段、英文 " + e + " 段，数目不一致——多出来的段两种语言都会显示中文。";
+    }
+  }
+
   function openEditor(post) {
     var ed = $("[data-news-editor]");
     if (!ed) return;
@@ -113,6 +253,26 @@
     $("[data-f-desc]").value = m.desc || "";
     $("[data-f-desc-en]").value = m.desc_en || "";
     $("[data-f-body]").value = (post && post.body) || "";
+
+    /* Split an existing fragment back into the two languages. If it uses
+       anything the subset cannot express — the interview's Q/A blocks, say —
+       fall back to raw HTML rather than quietly reshaping the post. */
+    var conv = post ? bodyToDoc(post.body) : { simple: true, blocks: [] };
+    if (conv.simple) {
+      var pick = function (key) {
+        return conv.blocks.map(function (b) {
+          return { tag: b.tag, html: b[key] };
+        });
+      };
+      $("[data-f-body-zh]").value = docToText(pick("zh"));
+      $("[data-f-body-en]").value = docToText(pick("en"));
+      setMode("text");
+    } else {
+      setMode("raw");
+      $("[data-raw-note]").textContent =
+        "这篇用了简洁模式表达不了的结构（例如访谈的问答版式），所以按原始 HTML 编辑。改成简洁模式会丢掉版式。";
+    }
+
     say($("[data-news-status]"), "");
     var box = $("[data-news-preview-box]");
     if (box) box.setAttribute("hidden", "");
@@ -142,8 +302,15 @@
     meta.desc = $("[data-f-desc]").value.trim();
     meta.desc_en = $("[data-f-desc-en]").value.trim() || meta.desc;
 
-    var body = $("[data-f-body]").value;
-    var text = "<!--" + JSON.stringify(meta) + "-->\n" + body.trim() + "\n";
+    var body =
+      currentMode() === "raw"
+        ? $("[data-f-body]").value
+        : buildBody($("[data-f-body-zh]").value, $("[data-f-body-en]").value);
+    if (!body.trim()) {
+      say(status, "正文是空的。", "bad");
+      return;
+    }
+    var text = "<!--" + JSON.stringify(meta) + "-->\n" + body.replace(/\s+$/, "") + "\n";
     api("write", { path: "news/" + slug + ".html", text })
       .then(function (r) {
         say(status, "已写入 " + r.wrote + "\n在下面的「发布」里提交。", "good");
@@ -158,13 +325,17 @@
     var frame = $("[data-news-frame]");
     var box = $("[data-news-preview-box]");
     if (!frame || !box) return;
+    var body =
+      currentMode() === "raw"
+        ? $("[data-f-body]").value
+        : buildBody($("[data-f-body-zh]").value, $("[data-f-body-en]").value);
     var doc =
       '<!DOCTYPE html><html lang="zh-CN" class="theme-instrument"><head>' +
       '<meta charset="utf-8"><link rel="stylesheet" href="' +
       BASE +
       'assets/style.css"><style>body{padding:1.5rem}</style></head><body>' +
       '<div class="prose news__body">' +
-      $("[data-f-body]").value +
+      body +
       "</div></body></html>";
     frame.setAttribute("srcdoc", doc);
     box.removeAttribute("hidden");
@@ -315,10 +486,19 @@
     if (!box) return;
     return api("diff")
       .then(function (d) {
-        var lines = [d.status, d.stat].filter(Boolean).join("\n\n");
-        box.innerHTML = lines
-          ? "<pre>" + esc(lines) + "</pre>"
-          : '<p class="adm__hint">工作区干净，没有待发布的改动。</p>';
+        var parts = [];
+        if (d.status || d.stat) {
+          parts.push("<pre>" + esc([d.status, d.stat].filter(Boolean).join("\n\n")) + "</pre>");
+        } else {
+          parts.push('<p class="adm__hint">没有待发布的改动。</p>');
+        }
+        if (d.other) {
+          parts.push(
+            '<p class="adm__hint">下面这些<strong>不属于发布范围</strong>，提交时会留在工作区：</p>' +
+              "<pre>" + esc(d.other) + "</pre>"
+          );
+        }
+        box.innerHTML = parts.join("");
       })
       .catch(function (err) {
         box.innerHTML = '<p class="adm__hint">读取 git 状态失败：' + esc(err.message) + "</p>";
@@ -327,15 +507,29 @@
 
   function publish() {
     var status = $("[data-publish-status]");
-    say(status, "生成并推送中…");
-    api("publish", { message: $("[data-message]").value })
-      .then(function (r) {
-        var head = r.ok ? (r.changed ? "已推送。" : "工作区没有改动，无需推送。") : "在「" + r.step + "」这一步失败。";
-        say(status, head + "\n\n" + r.output, r.ok ? "good" : "bad");
-        if (r.ok && r.changed) {
-          say(status, head + "\nCI 正在让线上生效，约半分钟后可见。\n\n" + r.output, "good");
+    /* Show what will be committed before committing it. The first version of
+       this went straight to the push, and a publish from someone else's
+       session carried away work that was not theirs. */
+    api("diff")
+      .then(function (d) {
+        if (!d.status) {
+          say(status, "没有待发布的改动。", "bad");
+          return;
         }
-        return loadState();
+        var names = d.status
+          .split("\n")
+          .map(function (l) {
+            return "  " + l.slice(3);
+          })
+          .join("\n");
+        if (!window.confirm("将要生成并推送这些文件：\n\n" + names + "\n\n继续？")) return;
+        say(status, "生成并推送中…");
+        return api("publish", { message: $("[data-message]").value }).then(function (r) {
+          var head = r.ok ? (r.changed ? "已推送。" : "没有需要提交的改动。") : "在「" + r.step + "」这一步失败。";
+          var tail = r.ok && r.changed ? "\nCI 正在让线上生效，约半分钟后可见。" : "";
+          say(status, head + tail + "\n\n" + r.output, r.ok ? "good" : "bad");
+          return loadState();
+        });
       })
       .catch(function (err) {
         say(status, "失败：" + err.message, "bad");
@@ -353,6 +547,18 @@
       openEditor(null);
     });
     on("[data-news-preview]", "click", previewNews);
+
+    /* the body format switch, and a live count so a mismatch between the two
+       languages is visible while writing rather than after publishing */
+    $$('input[name="bodymode"]').forEach(function (r) {
+      r.addEventListener("change", function () {
+        setMode(this.value);
+      });
+    });
+    ["[data-f-body-zh]", "[data-f-body-en]"].forEach(function (sel) {
+      var el = $(sel);
+      if (el) el.addEventListener("input", updateCount);
+    });
     on("[data-news-save]", "click", saveNews);
     on("[data-news-cancel]", "click", function () {
       $("[data-news-editor]").setAttribute("hidden", "");

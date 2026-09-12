@@ -39,6 +39,26 @@ function writable(target) {
   return p.startsWith(resolve(NEWS_DIR) + sep);
 }
 
+/* What a publish is allowed to commit: the two places this tool writes, plus
+   everything the generator emits from them. Anything else in the working tree
+   belongs to whoever is editing it and is left alone.
+ *
+ * This is not a nicety. Publishing used to run `git add -A`, and the first
+ * time someone else published while I had half-finished work in the tree,
+ * their commit swept it up under their name. A publish must commit what the
+ * publish did and nothing more. */
+const PUBLISH_PATHS = [
+  "_docs-src/news",
+  "content/announcements.json",
+  "docs",
+  "news",
+  "index.html",
+  "fuai",
+  "loment",
+  "sitemap.xml",
+  "robots.txt",
+];
+
 const HOST = "127.0.0.1";
 /* A random path segment. Without it any page in any browser could POST to
    this server — localhost is reachable from anywhere the browser goes, so a
@@ -151,10 +171,21 @@ const routes = {
     return { deleted: "news/" + slug };
   },
 
+  /* Two lists on purpose: what a publish would carry, and what it would leave
+     alone. Seeing them apart is how you notice that you are about to publish
+     somebody else's unfinished work — which is exactly what went wrong the
+     first time this ran. */
   "GET /api/diff": async () => {
-    const st = await run("git", ["status", "--short"]);
-    const df = await run("git", ["diff", "--stat"]);
-    return { status: st.stdout.trim(), stat: df.stdout.trim() };
+    const mine = await run("git", ["status", "--short", "--", ...PUBLISH_PATHS]);
+    const others = await run("git", [
+      "status",
+      "--short",
+      "--",
+      ".",
+      ...PUBLISH_PATHS.map((p) => ":(exclude)" + p),
+    ]);
+    const df = await run("git", ["diff", "--stat", "--", ...PUBLISH_PATHS]);
+    return { status: mine.stdout.trim(), stat: df.stdout.trim(), other: others.stdout.trim() };
   },
 
   /* Regenerate, then commit and push with whatever credentials this machine
@@ -164,23 +195,30 @@ const routes = {
     if (gen.code !== 0) {
       return { ok: false, step: "generate", output: (gen.stdout + gen.stderr).trim() };
     }
-    const st = await run("git", ["status", "--short"]);
-    if (!st.stdout.trim()) {
+    const staged = await run("git", ["add", "-A", "--", ...PUBLISH_PATHS]);
+    if (staged.code !== 0) return { ok: false, step: "add", output: staged.stderr };
+
+    /* anything staged now is a consequence of this publish; anything else in
+       the tree is somebody else's and stays out of the commit */
+    const mine = await run("git", ["status", "--short", "--", ...PUBLISH_PATHS]);
+    if (!mine.stdout.trim()) {
       return { ok: true, changed: false, output: gen.stdout.trim() };
     }
-    const stages = await run("git", ["add", "-A"]);
-    if (stages.code !== 0) return { ok: false, step: "add", output: stages.stderr };
+    const theirs = await run("git", ["status", "--short", "--", ".", ...PUBLISH_PATHS.map((p) => ":(exclude)" + p)]);
     const msg = (message || "").trim() || "Publish from the local console";
-    const commit = await run("git", ["commit", "-m", msg]);
+    const commit = await run("git", ["commit", "-m", msg, "--", ...PUBLISH_PATHS]);
     if (commit.code !== 0) {
       return { ok: false, step: "commit", output: (commit.stdout + commit.stderr).trim() };
     }
     const push = await run("git", ["push"]);
+    const left = theirs.stdout.trim();
     return {
       ok: push.code === 0,
       changed: true,
       step: push.code === 0 ? "done" : "push",
-      output: (commit.stdout + "\n" + push.stdout + push.stderr).trim(),
+      output:
+        (commit.stdout + "\n" + push.stdout + push.stderr).trim() +
+        (left ? "\n\n未提交的改动（不属于本次发布，已留在工作区）：\n" + left : ""),
     };
   },
 };
@@ -252,6 +290,19 @@ const server = createServer(async (req, res) => {
   } catch (err) {
     json(res, 400, { error: String(err && err.message ? err.message : err) });
   }
+});
+
+server.on("error", (err) => {
+  if (err.code === "EADDRINUSE") {
+    console.error("");
+    console.error(`  Port ${PORT} is already in use — probably an earlier run of this tool.`);
+    console.error(`  Close it, or start this one on another port:`);
+    console.error("");
+    console.error(`      PORT=4320 node tools/admin.mjs`);
+    console.error("");
+    process.exit(1);
+  }
+  throw err;
 });
 
 server.listen(PORT, HOST, () => {

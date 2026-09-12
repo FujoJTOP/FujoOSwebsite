@@ -146,6 +146,17 @@
   grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
 }
 
+/* a row of mutually exclusive choices, e.g. the body format */
+.adm__modes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s3);
+  margin-bottom: 0.35rem;
+}
+.adm__modes .check {
+  margin-top: 0;
+}
+
 .check {
   display: flex;
   align-items: center;
