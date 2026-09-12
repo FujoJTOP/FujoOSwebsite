@@ -1,5 +1,5 @@
 {
-  "_comment": "Announcements shown at the top of every page. Edited from /admin/, but it is an ordinary file — edit it by hand and re-run tools/docs.gen.mjs if you prefer. Only the first pinned entry is honoured: two pinned bars would both claim the top of the viewport.",
+  "_comment": "Announcements shown at the top of every page. Edited from tools/admin.mjs, but it is an ordinary file — edit it by hand and re-run tools/docs.gen.mjs if you prefer. Only the first pinned entry is honoured: two pinned bars would both claim the top of the viewport.",
   "announcements": [
     {
       "id": "release-delay",
@@ -9,6 +9,18 @@
       "dismissible": false,
       "zh": "FujoOS公布日延期，以仓库发布为准",
       "en": "FujoOS release date postponed — the repository is authoritative",
+      "href": "",
+      "from": "",
+      "to": ""
+    },
+    {
+      "id": "notice-2026-09-12",
+      "level": "notice",
+      "mode": "static",
+      "pinned": false,
+      "dismissible": false,
+      "zh": "我们正在确认 Loment 源代码的问题",
+      "en": "We are checking the issue with the Loment source code",
       "href": "",
       "from": "",
       "to": ""
