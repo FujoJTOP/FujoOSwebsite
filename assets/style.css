@@ -57,10 +57,18 @@
   --radius-card: 10px; /* cards */
   --radius-panel: 20px; /* the largest surfaces */
 
-  /* One curve. The spec wants a switch flipping, not a layered animation. */
+  /* Two curves, because there are two kinds of movement here and the two
+     supplied specs each describe one of them.
+
+     --ease is for state: a hover, an open, a focus. Its spec asks for "the
+     feel of a CLI tool" — quick out, quick in, a switch flipping.
+
+     --ease-out is for arrivals: the hero sequence and the diagram drawing
+     itself. Nothing here is being switched; something is arriving, and an
+     arrival that decelerates into place reads as weight rather than as a snap.
+     That is the second spec's curve, kept for the one job it describes. */
   --ease: cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-out: cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0.625, 0.05, 0, 1);
 }
 
 /* One palette, two class names. Pages still carry theme-instrument or
@@ -187,6 +195,33 @@ a {
   outline: 2px solid var(--fg);
   outline-offset: 3px;
   border-radius: var(--radius);
+}
+
+/* Every state change moves the same way. One spec asks for "a single switch
+   flipping, not a layered animation", and the only way to get that is for
+   everything that changes on hover to share one transition — seven elements
+   were cutting instantly while six eased, and that mixture is what reads as
+   unfinished rather than fast.
+
+   Listed rather than `*`: a transition on every element fires on layout-only
+   changes too and spends frames on nothing. Components with their own rule
+   keep it and win on specificity, which is correct — they declare exactly the
+   properties they move. */
+a,
+button,
+summary,
+input,
+select,
+textarea,
+tr,
+.card,
+.tag,
+.pager__link,
+.notice__toggle,
+.notice__close,
+.code__copy {
+  transition: color 0.15s var(--ease), background-color 0.15s var(--ease),
+    border-color 0.15s var(--ease), opacity 0.15s var(--ease);
 }
 
 h1,
@@ -1922,7 +1957,7 @@ pre .s {
   background: #101010d9;
 }
 .modal[open] {
-  animation: modalin 0.18s var(--ease);
+  animation: modalin 0.18s var(--ease-out);
 }
 @keyframes modalin {
   from {
