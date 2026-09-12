@@ -32,7 +32,7 @@
       href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="assets/style.css?v=5276e489" />
+    <link rel="stylesheet" href="assets/style.css?v=773c29a8" />
     <link rel="icon" href="favicon.ico" sizes="48x48" />
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" sizes="any" />
     <link rel="icon" type="image/png" href="assets/favicon-32.png" sizes="32x32" />
@@ -69,11 +69,11 @@
     <div class="banner" role="note">
       <div class="banner__inner">
         <b>FUAI</b>
-        <span class="sep">|</span>
+        <span class="sep" aria-hidden="true">|</span>
         <span data-zh="契约 46 原语 · core 40 / host-ext 6" data-en="contract 46 primitives · core 40 / host-ext 6">契约 46 原语 · core 40 / host-ext 6</span>
-        <span class="sep">|</span>
+        <span class="sep" aria-hidden="true">|</span>
         <span data-zh="双实现 0 差异" data-en="two implementations · 0 drift">双实现 0 差异</span>
-        <span class="sep">|</span>
+        <span class="sep" aria-hidden="true">|</span>
         <span data-zh="证据链 append-only + SHA-256" data-en="evidence chain append-only + SHA-256">证据链 append-only + SHA-256</span>
         <span class="cadence"
           ><span class="dot" aria-hidden="true"></span
@@ -124,7 +124,7 @@
         <div class="wrap">
           <p class="crumbs fade-step" style="--delay: 0.02s">
             <a href="index.html" data-zh="首页" data-en="Home">首页</a>
-            <span class="sep">/</span>
+            <span class="sep" aria-hidden="true">/</span>
             <span data-zh="FUAI 安全体系" data-en="FUAI safety system">FUAI 安全体系</span>
           </p>
           <div class="grid grid--2" style="margin-top: var(--s4); align-items: start">
@@ -162,10 +162,10 @@
       </section>
 
       <!-- ====================================================== proposition -->
-      <section class="section anchor" id="proposition">
+      <section class="section anchor" id="proposition" data-motion>
         <div class="wrap">
-          <h2 class="h2" data-zh="命题" data-en="The proposition">命题</h2>
-          <div class="figure" style="margin-top: var(--s4); padding: clamp(1.2rem, 4vw, 2.4rem)">
+          <h2 class="h2 fade-step" data-zh="命题" data-en="The proposition">命题</h2>
+          <div class="figure fade-step" style="margin-top: var(--s4); padding: clamp(1.2rem, 4vw, 2.4rem); --delay: 0.14s">
             <p class="mono-label" data-zh="核心公式" data-en="Core formula">核心公式</p>
             <p style="font-family: var(--mono); font-size: clamp(1rem, 2.2vw, 1.5rem); margin-top: 0.9rem; line-height: 1.9">
               <span style="color: var(--steel)">safety</span> = <span style="color: var(--amber)">α</span>(<span class="dim">no out-of-bounds, S1</span>) × <span style="color: var(--steel)">DomainWidth</span> = f(S2)
@@ -213,10 +213,10 @@
       </section>
 
       <!-- ========================================================= axioms -->
-      <section class="section anchor" id="axioms">
+      <section class="section anchor" id="axioms" data-motion>
         <div class="wrap">
-          <h2 class="h2" data-zh="A1–A4：机制必须满足的四条" data-en="A1–A4: four properties the mechanism must hold">A1–A4：机制必须满足的四条</h2>
-          <p class="muted prose" style="margin-top: var(--s2)" data-zh="这四条是接口性质，不是实现细节——这也是第二实现能照契约重写的前提。" data-en="These four are interface properties, not implementation details — which is exactly why a second implementation can be rewritten against the contract.">
+          <h2 class="h2 fade-step" data-zh="A1–A4：机制必须满足的四条" data-en="A1–A4: four properties the mechanism must hold">A1–A4：机制必须满足的四条</h2>
+          <p class="muted prose fade-step" style="margin-top: var(--s2); --delay: 0.07s" data-zh="这四条是接口性质，不是实现细节——这也是第二实现能照契约重写的前提。" data-en="These four are interface properties, not implementation details — which is exactly why a second implementation can be rewritten against the contract.">
             这四条是接口性质，不是实现细节——这也是第二实现能照契约重写的前提。
           </p>
 
@@ -263,10 +263,10 @@
       </section>
 
       <!-- ================================================ trust-adaptive width -->
-      <section class="section anchor" id="trust">
+      <section class="section anchor" id="trust" data-motion>
         <div class="wrap">
-          <h2 class="h2" data-zh="信任自适应域宽" data-en="Trust-adaptive domain width">信任自适应域宽</h2>
-          <p class="muted prose" style="margin-top: var(--s2)" data-zh="域宽不是一个配置项，而是一个测量结果。质量台账记录模型在语义金标上的表现，两个阈值 τ_low 与 τ_high 把质量分成三段，域宽随之变化；连续 K 次确认后才允许放宽。" data-en="Domain width is not a configuration flag; it is a measurement result. A quality ledger records how the model does on the semantic goldset, two thresholds τ_low and τ_high cut quality into three bands, and the domain width follows. Widening requires K consecutive confirmations.">
+          <h2 class="h2 fade-step" data-zh="信任自适应域宽" data-en="Trust-adaptive domain width">信任自适应域宽</h2>
+          <p class="muted prose fade-step" style="margin-top: var(--s2); --delay: 0.07s" data-zh="域宽不是一个配置项，而是一个测量结果。质量台账记录模型在语义金标上的表现，两个阈值 τ_low 与 τ_high 把质量分成三段，域宽随之变化；连续 K 次确认后才允许放宽。" data-en="Domain width is not a configuration flag; it is a measurement result. A quality ledger records how the model does on the semantic goldset, two thresholds τ_low and τ_high cut quality into three bands, and the domain width follows. Widening requires K consecutive confirmations.">
             域宽不是一个配置项，而是一个测量结果。质量台账记录模型在语义金标上的表现，两个阈值 τ_low 与 τ_high 把质量分成三段，域宽随之变化；连续 K 次确认后才允许放宽。
           </p>
 
@@ -324,8 +324,8 @@
       <!-- ====================================================== runtime -->
       <section class="section anchor" id="runtime" data-motion>
         <div class="wrap">
-          <h2 class="h2" data-zh="FUAI-OS：主机无关的监督安全运行时" data-en="FUAI-OS: a host-agnostic supervisory runtime">FUAI-OS：主机无关的监督安全运行时</h2>
-          <p class="muted prose" style="margin-top: var(--s2)" data-zh="要证实“这套机制不是某个内核的私产”，只把设计写在论文里不够——需要在没有 FujoOS 的机器上把它跑起来。fuai-run 是一个独立二进制：加载 S3 策略文件，监督目标进程树，写出证据链。" data-en="To show this mechanism is not the private property of one kernel, writing the design down is not enough — it has to run on a machine with no FujoOS. fuai-run is a standalone binary: it loads an S3 policy file, supervises a target process tree, and writes an evidence chain.">
+          <h2 class="h2 fade-step" data-zh="FUAI-OS：主机无关的监督安全运行时" data-en="FUAI-OS: a host-agnostic supervisory runtime">FUAI-OS：主机无关的监督安全运行时</h2>
+          <p class="muted prose fade-step" style="margin-top: var(--s2); --delay: 0.07s" data-zh="要证实“这套机制不是某个内核的私产”，只把设计写在论文里不够——需要在没有 FujoOS 的机器上把它跑起来。fuai-run 是一个独立二进制：加载 S3 策略文件，监督目标进程树，写出证据链。" data-en="To show this mechanism is not the private property of one kernel, writing the design down is not enough — it has to run on a machine with no FujoOS. fuai-run is a standalone binary: it loads an S3 policy file, supervises a target process tree, and writes an evidence chain.">
             要证实“这套机制不是某个内核的私产”，只把设计写在论文里不够——需要在没有 FujoOS 的机器上把它跑起来。fuai-run 是一个独立二进制：加载 S3 策略文件，监督目标进程树，写出证据链。
           </p>
 
@@ -416,10 +416,10 @@
       </section>
 
       <!-- ================================================== two implementations -->
-      <section class="section anchor" id="two-impl">
+      <section class="section anchor" id="two-impl" data-motion>
         <div class="wrap">
-          <h2 class="h2" data-zh="两个实现，一份契约" data-en="Two implementations, one contract">两个实现，一份契约</h2>
-          <p class="muted prose" style="margin-top: var(--s2)" data-zh="契约规范是唯一权威，两个实现从它派生或对它校验。契约分两层：核心层是主机无关的监督原语，宿主扩展层是实现特有的部分（比如 Windows 盒桥），差分只对核心层断言。" data-en="The contract specification is the sole authority; both implementations either derive from it or are checked against it. The contract has two layers: a core layer of host-agnostic supervisory primitives, and a host-extension layer for implementation-specific parts (the Windows box bridge, say). The differ asserts on the core layer only.">
+          <h2 class="h2 fade-step" data-zh="两个实现，一份契约" data-en="Two implementations, one contract">两个实现，一份契约</h2>
+          <p class="muted prose fade-step" style="margin-top: var(--s2); --delay: 0.07s" data-zh="契约规范是唯一权威，两个实现从它派生或对它校验。契约分两层：核心层是主机无关的监督原语，宿主扩展层是实现特有的部分（比如 Windows 盒桥），差分只对核心层断言。" data-en="The contract specification is the sole authority; both implementations either derive from it or are checked against it. The contract has two layers: a core layer of host-agnostic supervisory primitives, and a host-extension layer for implementation-specific parts (the Windows box bridge, say). The differ asserts on the core layer only.">
             契约规范是唯一权威，两个实现从它派生或对它校验。契约分两层：核心层是主机无关的监督原语，宿主扩展层是实现特有的部分（比如 Windows 盒桥），差分只对核心层断言。
           </p>
 
@@ -455,10 +455,10 @@
       </section>
 
       <!-- ========================================================= limits -->
-      <section class="section anchor" id="limits">
+      <section class="section anchor" id="limits" data-motion>
         <div class="wrap">
-          <h2 class="h2" data-zh="诚实的边界" data-en="Honest limits">诚实的边界</h2>
-          <div class="grid grid--2" style="margin-top: var(--s4); align-items: start">
+          <h2 class="h2 fade-step" data-zh="诚实的边界" data-en="Honest limits">诚实的边界</h2>
+          <div class="grid grid--2 fade-step" style="margin-top: var(--s4); align-items: start; --delay: 0.14s">
             <ul class="list list--check">
               <li><b data-zh="LLM 臂尚未运行" data-en="LLM arm not yet run">LLM 臂尚未运行</b> <span data-zh="—— 波 C 主表的“两臂”是工具链的严格/宽松两档，不得在论文中当作 LLM 对照。" data-en=" — the two arms in the wave-C table are the toolchain's strict/lenient settings; they must not be presented as an LLM comparison in the paper.">—— 波 C 主表的“两臂”是工具链的严格/宽松两档，不得在论文中当作 LLM 对照。</span></li>
               <li><b data-zh="A1–A4 只到产物层" data-en="A1–A4 reach the artifact layer only">A1–A4 只到产物层</b> <span data-zh="—— 生成的断言表尚未被内核 include!，运行时断言要等内核侧接入。" data-en=" — the generated assertion table is not yet include!'d by the kernel; runtime assertions await kernel-side integration.">—— 生成的断言表尚未被内核 include!，运行时断言要等内核侧接入。</span></li>

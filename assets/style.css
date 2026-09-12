@@ -56,7 +56,10 @@
   --rule-soft: #1a2939;
   --fg: #e3e9f1;
   --fg-2: #a3b1c3;
-  --fg-3: #6b7c91;
+  /* --fg-3 carries real small text (banner telemetry, stat labels), so it is
+     held to 4.5:1 against the *lightest* surface it lands on, not the page
+     ground. The old value measured 4.33 there and 4.01 on --bg-3. */
+  --fg-3: #7b8ca1;
   --accent: var(--amber);
   --amber: #e29a4a;
   --amber-soft: #e29a4a26;
@@ -84,8 +87,13 @@
   --rule-soft: #e3e8ef;
   --fg: #101822;
   --fg-2: #4a5666;
-  --fg-3: #78869a;
-  --accent: #b4702a;
+  /* same reasoning as the dark theme: the old value was 3.36:1 on --bg and
+     3.7:1 inside code blocks, both under the floor for text this small */
+  --fg-3: #5d6b80;
+  /* --accent is also the active rail heading's text colour, so it has to clear
+     4.5:1 on --bg rather than only work as a hairline. The old #b4702a was
+     3.6:1; the borders it also draws get slightly firmer as a side effect. */
+  --accent: #9c5d1b;
   --amber: #a8651f;
   --amber-soft: #a8651f1a;
   --steel: #266b87;
@@ -332,12 +340,15 @@ hr {
 .ticker__item::after {
   content: "";
   display: inline-block;
-  width: 4px;
-  height: 4px;
-  margin-inline: 2.4rem;
+  width: 5px;
+  height: 5px;
+  /* wide enough that the repeats read as separate notices — the message is
+     short, so a tight gap shows three near-identical copies at once and the
+     bar looks like a wall of text rather than a crawl */
+  margin-inline: 3.6rem;
   vertical-align: middle;
   border-radius: 50%;
-  background: #ffffff66;
+  background: #ffffff7a;
 }
 @keyframes ticker-crawl {
   from {
@@ -926,6 +937,10 @@ button.btn {
   .nav__drawer[data-open="true"] {
     animation: none !important;
   }
+  /* the card lift is a transition, not an animation, so it needs its own guard */
+  .card--link:hover {
+    transform: none;
+  }
 }
 
 /* ---------------------------------------------------------------- stats */
@@ -1058,7 +1073,8 @@ td strong {
   border-radius: var(--radius);
   background: var(--panel);
   padding: var(--s3);
-  transition: border-color 0.18s var(--ease);
+  transition: border-color 0.18s var(--ease), transform 0.18s var(--ease),
+    box-shadow 0.18s var(--ease);
 }
 .card:hover {
   border-color: var(--fg-3);
@@ -1071,6 +1087,13 @@ td strong {
 }
 .card--link {
   display: block;
+}
+/* A card that is a link should look like one under the cursor; the border
+   alone reads as a static panel. */
+.card--link:hover {
+  border-color: var(--fg-3);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
 }
 .card h3 {
   margin-bottom: 0.5rem;
@@ -1301,7 +1324,10 @@ pre .s {
     max-height: calc(100vh - 6.5rem);
     overflow-y: auto;
     overscroll-behavior-y: contain;
+    /* a default OS scrollbar reads as an unstyled seam down the rail; thinning
+       it and tinting the thumb to --rule makes it part of the page */
     scrollbar-width: thin;
+    scrollbar-color: var(--rule) transparent;
     padding-right: 0.5rem;
   }
 }
@@ -1592,7 +1618,11 @@ pre .s {
   padding-top: var(--s5);
   border-top: 1px solid var(--rule);
 }
-.qa__q {
+/* Qualified by .qa on purpose: .news__body p is (0,1,1) and the bare .qa__q was
+   (0,1,0), so the body rule silently won and the questions came out in the
+   answers' colour. Raising the selector keeps the question the brightest line
+   without loosening the body rule. */
+.qa .qa__q {
   font-size: var(--t-lg);
   font-weight: 600;
   line-height: 1.45;

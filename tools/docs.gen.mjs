@@ -288,13 +288,13 @@ function crumbs(sec, slug, depth) {
   const p = s.pages.find((x) => x.slug === slug);
   const out = [
     `              <a href="${upFrom(depth)}docs/index.html" data-zh="文档" data-en="Docs">文档</a>`,
-    `              <span class="sep">/</span>`,
+    `              <span class="sep" aria-hidden="true">/</span>`,
     `              <a href="${docHref(sec, depth, sec, "index")}" data-zh="${esc(s.zh)}" data-en="${esc(s.en)}">${esc(
       s.zh
     )}</a>`,
   ];
   if (slug !== "index") {
-    out.push(`              <span class="sep">/</span>`);
+    out.push(`              <span class="sep" aria-hidden="true">/</span>`);
     out.push(`              <span data-zh="${esc(p.zh)}" data-en="${esc(p.en)}">${esc(p.zh)}</span>`);
   }
   return out.join("\n");
@@ -382,7 +382,7 @@ ${ticker()}
     <div class="banner" role="note">
       <div class="banner__inner">
         <b>FujoOS docs</b>
-        <span class="sep">|</span>
+        <span class="sep" aria-hidden="true">|</span>
         <span data-zh="${esc(bannerZh)}" data-en="${esc(bannerEn)}">${esc(bannerZh)}</span>
         <span class="cadence"
           ><span class="dot" aria-hidden="true"></span
@@ -604,7 +604,7 @@ const POSTS = loadPosts();
         <div class="wrap">
           <p class="crumbs">
             <a href="index.html" data-zh="新闻" data-en="News">新闻</a>
-            <span class="sep">/</span>
+            <span class="sep" aria-hidden="true">/</span>
             <time datetime="${esc(p.date)}">${esc(p.date)}</time>
           </p>
           <h1 class="display news__title" data-zh="${esc(p.meta.zh)}" data-en="${esc(p.meta.en || p.meta.zh)}">${esc(p.meta.zh)}</h1>
