@@ -16,7 +16,7 @@
     {
       "id": "notice-2026-09-12",
       "level": "notice",
-      "mode": "static",
+      "mode": "scroll",
       "pinned": false,
       "dismissible": false,
       "zh": "我们正在确认 Loment 源代码的问题",
