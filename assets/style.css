@@ -1648,6 +1648,23 @@ pre .s {
   line-height: 1.6;
   color: var(--fg);
 }
+/* The docs scope sizes its own h2; a post needs the same or a heading drops
+   back to body size. */
+.news__body h2 {
+  margin-top: var(--s5);
+  font-size: var(--t-xl);
+  letter-spacing: -0.022em;
+  color: var(--fg);
+}
+.news__body h2:first-child {
+  margin-top: 0;
+}
+.news__body code {
+  font-size: 0.92em;
+  padding: 0.1em 0.35em;
+  border-radius: var(--radius);
+  background: var(--bg-3);
+}
 /* interview layout: a question, then its answer */
 .qa + .qa {
   margin-top: var(--s5);
