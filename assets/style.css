@@ -1057,14 +1057,63 @@ button.btn {
 .built {
   padding-block: var(--s6);
 }
+/* The band drifts. It is the one long-duration motion on the site besides the
+   notice — slow enough to read as a ribbon rather than as a message, and it
+   stops the moment a pointer or a keyboard rests on it. */
+.built__band {
+  position: relative;
+  overflow: hidden;
+  margin-top: var(--s3);
+  /* names enter and leave under a fade rather than being cut off, which also
+     hides the seam where the last copy meets the first */
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 3rem, #000 calc(100% - 3rem), transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 3rem, #000 calc(100% - 3rem), transparent);
+}
+.built__track {
+  display: flex;
+  width: max-content;
+  /* --built-dur is measured in site.js from the real track width, so the band
+     drifts at one speed on every viewport instead of one per screen */
+  animation: built-scroll var(--built-dur, 90s) linear infinite;
+}
+.built__band:hover .built__track,
+.built__band:focus-within .built__track {
+  animation-play-state: paused;
+}
+@keyframes built-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
 .built__list {
   display: flex;
-  flex-wrap: wrap;
   align-items: baseline;
-  gap: var(--s2) var(--s5);
-  margin: var(--s3) 0 0;
-  padding: 0;
+  gap: var(--s6);
+  margin: 0;
+  /* the trailing space is part of the copy, so every repeat is the same width
+     and the -50% translation lands exactly on the next one */
+  padding: 0 var(--s6) 0 0;
   list-style: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  /* no crawl: the band becomes a plain row that wraps */
+  .built__band {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .built__track {
+    animation: none;
+  }
+  .built__list {
+    flex-wrap: wrap;
+    padding-right: 0;
+  }
+  .built__track > .built__list[aria-hidden="true"] {
+    display: none;
+  }
 }
 .built__list li {
   font-family: var(--mono);

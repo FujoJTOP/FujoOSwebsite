@@ -60,7 +60,7 @@
       href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Geist+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="assets/style.css?v=53e34ff9" />
+    <link rel="stylesheet" href="assets/style.css?v=65169bd2" />
     <link rel="icon" href="favicon.ico" sizes="48x48" />
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" sizes="any" />
     <link rel="icon" type="image/png" href="assets/favicon-32.png" sizes="32x32" />
@@ -265,14 +265,18 @@
       <section class="section section--flush built">
         <div class="wrap">
           <p class="mono-label" data-zh="构建所用的工具与模型" data-en="Tools and models this was built with">构建所用的工具与模型</p>
-          <ul class="built__list">
-            <li>Zcode</li>
-            <li>Claude Code</li>
-            <li>Codex</li>
-            <li>DeepSeek Harness</li>
-            <li>DeepSeek</li>
-            <li>GLM</li>
-          </ul>
+          <div class="built__band" data-marquee>
+            <div class="built__track">
+              <ul class="built__list">
+                <li>Zcode</li>
+                <li>Claude Code</li>
+                <li>Codex</li>
+                <li>DeepSeek Harness</li>
+                <li>DeepSeek</li>
+                <li>GLM</li>
+              </ul>
+            </div>
+          </div>
           <p class="built__note" data-zh="开发过程中使用的工具。系统与站点在运行时不依赖其中任何一个。" data-en="The tooling used while building this. Neither the system nor the site depends on any of them at runtime.">
             开发过程中使用的工具。系统与站点在运行时不依赖其中任何一个。
           </p>
@@ -664,6 +668,6 @@ python tools/fujoregress.py --accel whpx   <span class="c"># 第二执行模式<
       </div>
     </dialog>
 
-    <script src="assets/site.js?v=616536cb"></script>
+    <script src="assets/site.js?v=bbeb6d68"></script>
   </body>
 </html>

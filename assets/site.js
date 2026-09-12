@@ -195,61 +195,85 @@
   var years = document.querySelectorAll("[data-year]");
   for (var y = 0; y < years.length; y++) years[y].textContent = new Date().getFullYear();
 
-  /* ---- announcements ---- */
-  /* A crawl only loops without a visible gap when the track covers the window
-     twice over, and how many copies of the notice that takes depends on the
-     reader's viewport — nothing the build can know. So the copies are measured
-     in here, and the duration is derived from the distance travelled so the
-     notice moves at one speed everywhere rather than one speed per screen. */
-  var CRAWL_PX_PER_S = 52;
+  /* ---- marquees ---- */
+  /* A loop only closes without a visible gap when the track covers its window
+     twice over, and how many copies that takes depends on the reader's
+     viewport — nothing the build can know. So the copies are measured in here,
+     and the duration is derived from the distance travelled, so a strip moves
+     at one speed everywhere instead of one speed per screen.
+
+     Two strips use this: the notice bar, which repeats a text span, and the
+     tooling band, which repeats a whole list. Hence `unit`: what gets cloned. */
   var crawlOK = !(
     window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches
   );
+
+  function marquee(root, opts) {
+    var view = opts.view ? root.querySelector(opts.view) : root;
+    var track = root.querySelector(opts.track);
+    var unit = track && track.querySelector(opts.unit);
+    if (!crawlOK || !view || !track || !unit) return;
+    var originals = track.children.length;
+
+    function build() {
+      /* back to what the markup ships, so a rebuild after a resize cannot stack
+         clones on top of clones */
+      while (track.children.length > originals) track.removeChild(track.lastChild);
+      /* -50% only lands on a copy boundary when the copy count is even */
+      if (track.children.length % 2) {
+        var pad = unit.cloneNode(true);
+        pad.setAttribute("aria-hidden", "true");
+        track.appendChild(pad);
+      }
+      var need = view.clientWidth * 2;
+      var guard = 0;
+      do {
+        var before = track.scrollWidth;
+        var a = unit.cloneNode(true);
+        var b = unit.cloneNode(true);
+        a.setAttribute("aria-hidden", "true");
+        b.setAttribute("aria-hidden", "true");
+        track.appendChild(a);
+        track.appendChild(b);
+        var added = track.scrollWidth - before;
+        guard++;
+        /* copies are added in pairs so the -50% translation always lands
+           exactly on a copy boundary; `added` is the width of that pair */
+      } while (track.scrollWidth - added < need && guard < 24);
+      var distance = track.scrollWidth / 2;
+      if (distance > 0) {
+        track.style.setProperty(opts.durVar, (distance / opts.speed).toFixed(1) + "s");
+      }
+    }
+    /* Watching the element itself, not the window. A page can reach this code
+       with the strip at zero width — an unlaid-out container, a background tab,
+       a pane that has not been sized — and a build measured against zero
+       under-copies and leaves a gap in the loop. The observer fires the moment
+       it has a real width, and again on rotation or resize.
+
+       The clones live inside an overflow-hidden track, so building cannot
+       change the observed element's own size and this cannot loop. */
+    if ("ResizeObserver" in window) {
+      new ResizeObserver(function () {
+        build();
+      }).observe(view);
+    } else {
+      window.addEventListener("resize", build);
+    }
+    build();
+  }
+
   var noticeNodes = document.querySelectorAll("[data-notice]");
   for (var ti = 0; ti < noticeNodes.length; ti++) {
     (function (root) {
-      var view = root.querySelector(".notice__view");
-      var track = root.querySelector(".notice__track");
-      var item = track && track.querySelector(".notice__item");
-      var toggle = root.querySelector("[data-ticker-toggle]");
-
-      function build() {
-        if (!crawlOK || !view || !track || !item) return;
-        /* back to the two copies the markup ships, so a rebuild after a resize
-           cannot stack clones on top of clones */
-        while (track.children.length > 2) track.removeChild(track.lastChild);
-        var need = view.clientWidth * 2;
-        var guard = 0;
-        do {
-          var before = track.scrollWidth;
-          var a = item.cloneNode(true);
-          var b = item.cloneNode(true);
-          a.setAttribute("aria-hidden", "true");
-          b.setAttribute("aria-hidden", "true");
-          track.appendChild(a);
-          track.appendChild(b);
-          var added = track.scrollWidth - before;
-          guard++;
-          /* copies are added in pairs so a -50% translation always lands
-             exactly on a copy boundary; `added` is the width of that pair */
-        } while (track.scrollWidth - added < need && guard < 24);
-        var distance = track.scrollWidth / 2;
-        if (distance > 0) {
-          track.style.setProperty("--notice-dur", (distance / CRAWL_PX_PER_S).toFixed(1) + "s");
-        }
-      }
-      build();
-
-      /* Rotation and window drags change the window width enough to matter;
-         the 24px floor keeps mobile URL-bar jitter from rebuilding on every
-         scroll. */
-      var lastWidth = window.innerWidth;
-      window.addEventListener("resize", function () {
-        if (Math.abs(window.innerWidth - lastWidth) < 24) return;
-        lastWidth = window.innerWidth;
-        build();
+      marquee(root, {
+        view: ".notice__view",
+        track: ".notice__track",
+        unit: ".notice__item",
+        speed: 52,
+        durVar: "--notice-dur",
       });
-
+      var toggle = root.querySelector("[data-ticker-toggle]");
       if (toggle) {
         toggle.addEventListener("click", function () {
           var paused = root.getAttribute("data-paused") === "true";
@@ -258,6 +282,20 @@
         });
       }
     })(noticeNodes[ti]);
+  }
+
+  /* The band runs slower than the notice: it is there to be noticed in passing,
+     and a logo strip that hurries reads as an advertisement. Slow enough to
+     look unhurried, not so slow that it looks stopped — at 30px/s a set of six
+     names passes in about half a minute. */
+  var bands = document.querySelectorAll("[data-marquee]");
+  for (var bi = 0; bi < bands.length; bi++) {
+    marquee(bands[bi], {
+      track: ".built__track",
+      unit: ".built__list",
+      speed: 30,
+      durVar: "--built-dur",
+    });
   }
 
   /* ---- dismissing a notice ---- */
