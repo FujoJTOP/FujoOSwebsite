@@ -16,7 +16,7 @@
  * Zero third-party dependencies, on purpose.
  */
 
-import { readFileSync, writeFileSync, mkdirSync, existsSync, rmSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, existsSync, rmSync, readdirSync } from "node:fs";
 import { dirname, join, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -158,6 +158,26 @@ function parseFragment(raw) {
 
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
+/* Top nav. `current` is the href of the page being rendered, so the marker
+   lands on the right item instead of being hard-coded to Docs. */
+function navLinks(up, current) {
+  const items = [
+    [`${up}index.html`, "首页", "Home"],
+    [`${up}fuai.html`, "FUAI 安全体系", "FUAI safety"],
+    [`${up}loment.html`, "Loment · Potato", "Loment · Potato"],
+    [`${up}docs/index.html`, "文档", "Docs"],
+    [`${up}news/index.html`, "新闻", "News"],
+  ];
+  const links = items.map(([href, zh, en]) => {
+    const here = href === current ? ' aria-current="page"' : "";
+    return `          <a class="nav__link" href="${href}"${here} data-zh="${zh}" data-en="${en}">${zh}</a>`;
+  });
+  links.push(
+    `          <a class="nav__link" href="${PAPER}" rel="noopener" data-zh="论文 ↗" data-en="Paper ↗">论文 ↗</a>`
+  );
+  return links.join("\n");
+}
+
 /* Content lint. Markdown emphasis written into an attribute is invisible until
    it renders as literal asterisks in the browser. */
 function lintFragment(where, body) {
@@ -234,6 +254,48 @@ function crumbs(sec, slug, depth) {
   return out.join("\n");
 }
 
+/* The head is identical on every generated page, so it lives here once. */
+function headBlock({ titleZh, desc, pagePath, up, type = "website" }) {
+  return `  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>${esc(titleZh)}</title>
+    <meta name="description" content="${esc(desc)}" />
+    <link rel="canonical" href="${SITE}${pagePath}" />
+    <meta property="og:type" content="${type}" />
+    <meta property="og:site_name" content="${SITE_NAME}" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:locale:alternate" content="en" />
+    <meta property="og:title" content="${esc(titleZh)}" />
+    <meta property="og:description" content="${esc(desc)}" />
+    <meta property="og:url" content="${SITE}${pagePath}" />
+    <meta property="og:image" content="${SITE}assets/og-card.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="FujoOS — Mount Fuji mark" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="${up}assets/style.css?v=3" />
+    <link rel="icon" href="${up}favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/svg+xml" href="${up}assets/favicon.svg" sizes="any" />
+    <link rel="icon" type="image/png" href="${up}assets/favicon-32.png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="${up}assets/apple-touch-icon.png" />
+    <script>
+      document.documentElement.classList.add("js");
+      /* If site.js never runs, reveal everything instead of leaving it hidden. */
+      setTimeout(function () {
+        var r = document.documentElement;
+        if (!r.hasAttribute("data-motion-on")) r.classList.add("no-motion");
+      }, 1200);
+    </script>
+  </head>`;
+}
+
 function shell({ sec, slug, depth, meta, body, hub }) {
   const s = hub ? null : sectionOf(sec);
   const page = hub ? null : s.pages.find((x) => x.slug === slug);
@@ -265,44 +327,7 @@ function shell({ sec, slug, depth, meta, body, hub }) {
   data-title-zh="${esc(meta.zh || page.zh)}"
   data-title-en="${esc(meta.en || page.en)}"
 >
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>${esc(titleZh)}</title>
-    <meta name="description" content="${esc(meta.desc || "")}" />
-    <link rel="canonical" href="${SITE}${pagePath}" />
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="${SITE_NAME}" />
-    <meta property="og:locale" content="zh_CN" />
-    <meta property="og:locale:alternate" content="en" />
-    <meta property="og:title" content="${esc(meta.zh || "")}" />
-    <meta property="og:description" content="${esc(meta.desc || "")}" />
-    <meta property="og:url" content="${SITE}${pagePath}" />
-    <meta property="og:image" content="${SITE}assets/og-card.png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="FujoOS — Mount Fuji mark" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="${up}assets/style.css?v=2" />
-    <link rel="icon" href="${up}favicon.ico" sizes="48x48" />
-    <link rel="icon" type="image/svg+xml" href="${up}assets/favicon.svg" sizes="any" />
-    <link rel="icon" type="image/png" href="${up}assets/favicon-32.png" sizes="32x32" />
-    <link rel="apple-touch-icon" href="${up}assets/apple-touch-icon.png" />
-    <script>
-      document.documentElement.classList.add("js");
-      /* If site.js never runs, reveal everything instead of leaving it hidden. */
-      setTimeout(function () {
-        var r = document.documentElement;
-        if (!r.hasAttribute("data-motion-on")) r.classList.add("no-motion");
-      }, 1200);
-    </script>
-  </head>
+${headBlock({ titleZh, desc: meta.desc || "", pagePath, up })}
   <body>
     <a class="skip" href="#main" data-zh="跳到主要内容" data-en="Skip to content">跳到主要内容</a>
 
@@ -331,11 +356,7 @@ function shell({ sec, slug, depth, meta, body, hub }) {
           FujoOS
         </a>
         <nav class="nav__links" aria-label="主导航" data-zh-aria="主导航" data-en-aria="Primary">
-          <a class="nav__link" href="${up}index.html" data-zh="首页" data-en="Home">首页</a>
-          <a class="nav__link" href="${up}fuai.html" data-zh="FUAI 安全体系" data-en="FUAI safety">FUAI 安全体系</a>
-          <a class="nav__link" href="${up}loment.html" data-zh="Loment · Potato" data-en="Loment · Potato">Loment · Potato</a>
-          <a class="nav__link" href="${up}docs/index.html" aria-current="page" data-zh="文档" data-en="Docs">文档</a>
-          <a class="nav__link" href="${PAPER}" rel="noopener" data-zh="论文 ↗" data-en="Paper ↗">论文 ↗</a>
+${navLinks(up, `${up}docs/index.html`)}
           <div class="lang" role="group" aria-label="语言" data-zh-aria="语言" data-en-aria="Language">
             <button type="button" data-lang="zh" aria-pressed="true">ZH</button>
             <button type="button" data-lang="en" aria-pressed="false">EN</button>
@@ -438,6 +459,176 @@ for (const s of SECTIONS) {
   }
 }
 
+/* ------------------------------------------------------------------ news */
+
+const NEWS_SRC = join(SRC, "news");
+const NEWS_OUT = join(ROOT, "news");
+
+/* Posts are discovered, not listed: adding a file is the whole workflow, and
+   the index cannot fall out of sync with what exists. */
+function loadPosts() {
+  if (!existsSync(NEWS_SRC)) return [];
+  return readdirSync(NEWS_SRC)
+    .filter((f) => f.endsWith(".html"))
+    .map((f) => {
+      const { meta, body } = parseFragment(readFileSync(join(NEWS_SRC, f), "utf8"));
+      return { slug: f.replace(/\.html$/, ""), meta, body, date: meta.date || "" };
+    })
+    .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : a.slug < b.slug ? -1 : 1));
+}
+
+function newsChrome({ titleZh, titleEn, desc, pagePath, up, current, inner }) {
+  return `<!DOCTYPE html>
+<!-- GENERATED by tools/docs.gen.mjs — edit _docs-src/news/ instead. -->
+<html
+  lang="zh-CN"
+  class="theme-instrument"
+  data-title-zh="${esc(titleZh)}"
+  data-title-en="${esc(titleEn)}"
+>
+${headBlock({ titleZh, desc, pagePath, up, type: "article" })}
+  <body>
+    <a class="skip" href="#main" data-zh="跳到主要内容" data-en="Skip to content">跳到主要内容</a>
+
+    <header class="nav">
+      <div class="wrap nav__inner">
+        <a class="nav__brand" href="${up}index.html">
+          <svg viewBox="0 14 64 46" aria-hidden="true">
+            <path d="M3,58 Q11,38 26,16 Q32,19 38,16 Q53,38 61,58 Z" fill="var(--mark-rock)" />
+            <path d="M15.9,32 Q18,22 26,16 Q32,19 38,16 Q46,22 48.1,32 Q32,38 15.9,32 Z" fill="var(--mark-snow)" />
+          </svg>
+          FujoOS
+        </a>
+        <nav class="nav__links" aria-label="主导航" data-zh-aria="主导航" data-en-aria="Primary">
+${navLinks(up, current)}
+          <div class="lang" role="group" aria-label="语言" data-zh-aria="语言" data-en-aria="Language">
+            <button type="button" data-lang="zh" aria-pressed="true">ZH</button>
+            <button type="button" data-lang="en" aria-pressed="false">EN</button>
+          </div>
+        </nav>
+        <button class="nav__toggle" type="button" aria-expanded="false" data-zh="菜单" data-en="Menu">菜单</button>
+      </div>
+      <div class="wrap">
+        <div class="nav__drawer" data-open="false">
+          <a href="${up}index.html" data-zh="首页" data-en="Home">首页</a>
+          <a href="${up}fuai.html" data-zh="FUAI 安全体系" data-en="FUAI safety system">FUAI 安全体系</a>
+          <a href="${up}loment.html" data-zh="Loment · Potato 语言" data-en="Loment · Potato language">Loment · Potato 语言</a>
+          <a href="${up}docs/index.html" data-zh="文档" data-en="Documentation">文档</a>
+          <a href="${up}news/index.html" data-zh="新闻" data-en="News">新闻</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+${inner}
+    </main>
+
+    <footer class="foot">
+      <div class="wrap">
+        <div class="foot__end" style="border-top: 0; margin-top: 0">
+          <span>© <span data-year>2026</span> Yuxuan Jiang · MIT</span>
+          <span data-zh="新闻按发布时间倒序 · 以仓库为准" data-en="Newest first · the repository is authoritative">新闻按发布时间倒序 · 以仓库为准</span>
+        </div>
+      </div>
+    </footer>
+
+    <script src="${up}assets/site.js?v=4"></script>
+  </body>
+</html>
+`;
+}
+
+const POSTS = loadPosts();
+{
+  const posts = POSTS;
+  if (posts.length) {
+    mkdirSync(NEWS_OUT, { recursive: true });
+  }
+
+  for (const [i, p] of posts.entries()) {
+    problems.push(...lintFragment(`_docs-src/news/${p.slug}.html`, p.body));
+    const older = posts[i + 1];
+    const inner = `      <article class="news">
+        <div class="wrap">
+          <p class="crumbs">
+            <a href="index.html" data-zh="新闻" data-en="News">新闻</a>
+            <span class="sep">/</span>
+            <time datetime="${esc(p.date)}">${esc(p.date)}</time>
+          </p>
+          <h1 class="display news__title" data-zh="${esc(p.meta.zh)}" data-en="${esc(p.meta.en || p.meta.zh)}">${esc(p.meta.zh)}</h1>
+          <div class="prose news__body">
+${p.body}
+          </div>
+          <nav class="pager news__pager" aria-label="新闻翻页" data-zh-aria="新闻翻页" data-en-aria="News paging">
+            <a class="pager__link pager__link--prev" href="index.html">
+              <span class="pager__dir" data-zh="全部新闻" data-en="All news">全部新闻</span>
+              <span class="pager__t" data-zh="新闻列表" data-en="The news list">新闻列表</span>
+            </a>
+${older ? `            <a class="pager__link pager__link--next" href="${esc(older.slug)}.html">
+              <span class="pager__dir" data-zh="上一篇" data-en="Older">上一篇</span>
+              <span class="pager__t" data-zh="${esc(older.meta.zh)}" data-en="${esc(older.meta.en || older.meta.zh)}">${esc(older.meta.zh)}</span>
+            </a>` : ""}
+          </nav>
+        </div>
+      </article>`;
+    const html = newsChrome({
+      titleZh: p.meta.zh,
+      titleEn: p.meta.en || p.meta.zh,
+      desc: p.meta.desc || "",
+      pagePath: `news/${p.slug}.html`,
+      up: "../",
+      current: "../news/index.html",
+      inner,
+    });
+    const outFile = join(NEWS_OUT, `${p.slug}.html`);
+    if (check) {
+      if (!existsSync(outFile) || readFileSync(outFile, "utf8") !== html)
+        problems.push(`stale: news/${p.slug}.html`);
+    } else {
+      writeFileSync(outFile, html);
+      written++;
+    }
+  }
+
+  if (posts.length) {
+    const items = posts
+      .map(
+        (p) => `        <li>
+          <time datetime="${esc(p.date)}">${esc(p.date)}</time>
+          <a href="${esc(p.slug)}.html" data-zh="${esc(p.meta.zh)}" data-en="${esc(p.meta.en || p.meta.zh)}">${esc(p.meta.zh)}</a>
+          <p data-zh="${esc(p.meta.desc || "")}" data-en="${esc(p.meta.desc_en || p.meta.desc || "")}">${esc(p.meta.desc || "")}</p>
+        </li>`
+      )
+      .join("\n");
+    const inner = `      <section class="section section--flush news-index">
+        <div class="wrap">
+          <h1 class="display news__title" data-zh="新闻" data-en="News">新闻</h1>
+          <p class="lede" style="margin-top: var(--s3)" data-zh="关于 FujoOS 的进展、发布与思考。" data-en="Progress, releases and notes on FujoOS.">关于 FujoOS 的进展、发布与思考。</p>
+          <ul class="news-list">
+${items}
+          </ul>
+        </div>
+      </section>`;
+    const html = newsChrome({
+      titleZh: "新闻 — FujoOS",
+      titleEn: "News — FujoOS",
+      desc: "FujoOS 的进展、发布与思考。",
+      pagePath: "news/index.html",
+      up: "../",
+      current: "../news/index.html",
+      inner,
+    });
+    const outFile = join(NEWS_OUT, "index.html");
+    if (check) {
+      if (!existsSync(outFile) || readFileSync(outFile, "utf8") !== html)
+        problems.push("stale: news/index.html");
+    } else {
+      writeFileSync(outFile, html);
+      written++;
+    }
+  }
+}
+
 /* sitemap + robots, generated from the same tree so they cannot drift */
 {
   const today = new Date().toISOString().slice(0, 10);
@@ -447,6 +638,7 @@ for (const s of SECTIONS) {
     "loment.html",
     "docs/index.html",
     ...flat.map((p) => `docs/${p.section}/${p.slug}.html`),
+    ...(POSTS.length ? ["news/index.html", ...POSTS.map((p) => `news/${p.slug}.html`)] : []),
   ];
   const sitemap =
     `<?xml version="1.0" encoding="UTF-8"?>\n` +
