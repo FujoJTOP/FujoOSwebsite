@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html
+  lang="zh-CN"
+  class="theme-instrument"
+  data-title-zh="FUAI 安全体系 — 信任是参数，边界是结构"
+  data-title-en="FUAI safety system — trust as a parameter, boundary as a structure"
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FUAI 安全体系 — 信任是参数，边界是结构</title>
+    <link rel="canonical" href="https://fujojtop.github.io/FujoOSwebsite/fuai.html" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="FujoOS" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:locale:alternate" content="en" />
+    <meta property="og:title" content="FUAI 安全体系 — 信任是参数，边界是结构" />
+    <meta property="og:description" content="FUAI 把安全拆成 S1 机制、S2 测量、S3 策略；模型是提示来源而非权威来源。包含 A1–A4 公理、信任自适应域宽、主机无关的 fuai-run 运行时与带外可验证的审计证据链。" />
+    <meta property="og:url" content="https://fujojtop.github.io/FujoOSwebsite/fuai.html" />
+    <meta property="og:image" content="https://fujojtop.github.io/FujoOSwebsite/assets/og-card.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="FujoOS — Mount Fuji mark" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="description"
+      content="FUAI 把安全拆成 S1 机制、S2 测量、S3 策略；模型是提示来源而非权威来源。包含 A1–A4 公理、信任自适应域宽、主机无关的 fuai-run 运行时与带外可验证的审计证据链。"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/style.css?v=e0a425e4" />
+    <link rel="icon" href="../favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" sizes="any" />
+    <link rel="icon" type="image/png" href="../assets/favicon-32.png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png" />
+    <script>
+      document.documentElement.classList.add("js");
+      /* If site.js never runs, reveal everything instead of leaving it hidden. */
+      setTimeout(function () {
+        var r = document.documentElement;
+        if (!r.hasAttribute("data-motion-on")) r.classList.add("no-motion");
+      }, 1200);
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#main" data-zh="跳到主要内容" data-en="Skip to content">跳到主要内容</a>
+
+    <!-- ticker:start -->
+    <div class="ticker" role="note" data-ticker data-paused="false">
+      <p class="ticker__tag"><span class="ticker__pip" aria-hidden="true"></span><span data-zh="公告" data-en="Notice">公告</span></p>
+      <div class="ticker__view">
+        <div class="ticker__track">
+          <span class="ticker__item" data-zh="FujoOS公布日延期，以仓库发布为准" data-en="FujoOS release date postponed — the repository is authoritative">FujoOS公布日延期，以仓库发布为准</span>
+          <span class="ticker__item" aria-hidden="true" data-zh="FujoOS公布日延期，以仓库发布为准" data-en="FujoOS release date postponed — the repository is authoritative">FujoOS公布日延期，以仓库发布为准</span>
+        </div>
+      </div>
+      <button class="ticker__toggle" type="button" data-ticker-toggle aria-pressed="false">
+        <span class="ticker__ico" aria-hidden="true"></span>
+        <span class="ticker__lbl ticker__lbl--pause" data-zh="暂停" data-en="Pause">暂停</span>
+        <span class="ticker__lbl ticker__lbl--play" data-zh="继续" data-en="Play">继续</span>
+      </button>
+    </div>
+    <!-- ticker:end -->
+
+    <header class="nav">
+      <div class="wrap nav__inner">
+        <a class="nav__brand" href="../">
+          <svg viewBox="0 14 64 46" aria-hidden="true">
+            <path d="M3,58 Q11,38 26,16 Q32,19 38,16 Q53,38 61,58 Z" fill="var(--mark-rock)" />
+            <path d="M15.9,32 Q18,22 26,16 Q32,19 38,16 Q46,22 48.1,32 Q32,38 15.9,32 Z" fill="var(--mark-snow)" />
+          </svg>
+          FujoOS
+        </a>
+        <nav class="nav__links" aria-label="主导航" data-zh-aria="主导航" data-en-aria="Primary">
+          <a class="nav__link" href="../" data-zh="首页" data-en="Home">首页</a>
+          <a class="nav__link" href="../fuai/" aria-current="page" data-zh="FUAI 安全体系" data-en="FUAI safety">FUAI 安全体系</a>
+          <a class="nav__link" href="../loment/" data-zh="Loment · Potato" data-en="Loment · Potato">Loment · Potato</a>
+          <a class="nav__link" href="../docs/" data-zh="文档" data-en="Docs">文档</a>
+          <a class="nav__link" href="../news/" data-zh="新闻" data-en="News">新闻</a>
+          <a class="nav__link" href="https://zenodo.org/records/22352904" rel="noopener" data-zh="论文 ↗" data-en="Paper ↗">论文 ↗</a>
+          <div class="lang" role="group" aria-label="语言" data-zh-aria="语言" data-en-aria="Language">
+            <button type="button" data-lang="zh" aria-pressed="true">ZH</button>
+            <button type="button" data-lang="en" aria-pressed="false">EN</button>
+          </div>
+        </nav>
+        <button class="nav__toggle" type="button" aria-expanded="false" data-zh="菜单" data-en="Menu">菜单</button>
+      </div>
+      <div class="wrap">
+        <div class="nav__drawer" data-open="false">
+          <a href="../" data-zh="首页" data-en="Home">首页</a>
+          <a href="../fuai/" data-zh="FUAI 安全体系" data-en="FUAI safety system">FUAI 安全体系</a>
+          <a href="../loment/" data-zh="Loment · Potato 语言" data-en="Loment · Potato language">Loment · Potato 语言</a>
+          <a href="../docs/" data-zh="文档" data-en="Documentation">文档</a>
+          <a href="../news/" data-zh="新闻" data-en="News">新闻</a>
+          <a href="../docs/start/" data-zh="构建与运行" data-en="Build and run">构建与运行</a>
+          <a href="https://zenodo.org/records/22352904" rel="noopener" data-zh="论文 (Zenodo) ↗" data-en="Paper (Zenodo) ↗">论文 (Zenodo) ↗</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+      <!-- ======================================================== page head -->
+      <section class="section section--flush" style="padding-top: var(--s6)" data-motion>
+        <div class="wrap">
+          <p class="crumbs fade-step" style="--delay: 0.02s">
+            <a href="../" data-zh="首页" data-en="Home">首页</a>
+            <span class="sep" aria-hidden="true">/</span>
+            <span data-zh="FUAI 安全体系" data-en="FUAI safety system">FUAI 安全体系</span>
+          </p>
+          <div class="grid grid--2" style="margin-top: var(--s4); align-items: start">
+            <div>
+              <h1 class="display fade-step" style="--delay: 0.06s; font-size: clamp(2.1rem, 3.6vw, 2.9rem)" data-zh="信任是参数，边界是结构。" data-en="Trust is a parameter. The boundary is a structure.">
+                信任是参数，边界是结构。
+              </h1>
+              <p class="lede fade-step" style="--delay: 0.14s; margin-top: var(--s3)" data-zh="FUAI 是一套测量参数化的安全信封：模型的动作提议由内核强制的机制（S1）约束，域宽由测量质量（S2）决定，策略边界由人或蒸馏规则（S3）画定。模型全程是提示来源，不是权威来源。" data-en="FUAI is a measurement-parameterized safety envelope: a model's action proposals are constrained by a kernel-enforced mechanism (S1), the width of its domain is decided by measurement quality (S2), and the policy boundary is drawn by people or distilled rules (S3). Throughout, the model is a source of hints, not of authority.">
+                FUAI 是一套测量参数化的安全信封：模型的动作提议由内核强制的机制（S1）约束，域宽由测量质量（S2）决定，策略边界由人或蒸馏规则（S3）画定。模型全程是提示来源，不是权威来源。
+              </p>
+              <div class="hero__actions fade-step" style="--delay: 0.22s; margin-top: var(--s4)">
+                <a
+                  class="btn btn--primary"
+                  href="https://zenodo.org/records/22352904"
+                  rel="noopener"
+                  data-zh="前往论文 ↗"
+                  data-en="Read the paper ↗"
+                  >前往论文 ↗</a
+                >
+                <a class="btn" href="#axioms" data-zh="先看 A1–A4 公理" data-en="See the A1–A4 axioms first">先看 A1–A4 公理</a>
+              </div>
+            </div>
+            <div class="stack" style="gap: var(--s2)">
+              <div class="note note--steel fade-step" style="--delay: 0.3s">
+                <strong data-zh="可撤销信标" data-en="Revocable envelope">可撤销信标</strong>
+                <span data-zh="—— 每一个提议的动作都要穿过能力域；能力可以被撤销，撤销后调用返回拒绝，系统退回确定性规则。" data-en=" — every proposed action crosses a capability domain; a capability can be revoked, after which the call is refused and the system falls back to deterministic rules.">—— 每一个提议的动作都要穿过能力域；能力可以被撤销，撤销后调用返回拒绝，系统退回确定性规则。</span>
+              </div>
+              <div class="note note--amber fade-step" style="--delay: 0.38s">
+                <strong data-zh="诚实边界" data-en="Honest boundary">诚实边界</strong>
+                <span data-zh="—— 推理不在端侧：模型运行在宿主上，内核提供的是链接、审计与回退，而不是把权重搬进内核。" data-en=" — inference is not on-device: the model runs on the host; what the kernel provides is the link, the audit and the fallback, not the weights.">—— 推理不在端侧：模型运行在宿主上，内核提供的是链接、审计与回退，而不是把权重搬进内核。</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================== proposition -->
+      <section class="section anchor" id="proposition" data-motion>
+        <div class="wrap">
+          <h2 class="h2 fade-step" data-zh="命题" data-en="The proposition">命题</h2>
+          <div class="figure fade-step" style="margin-top: var(--s4); padding: clamp(1.2rem, 4vw, 2.4rem); --delay: 0.14s">
+            <p class="mono-label" data-zh="核心公式" data-en="Core formula">核心公式</p>
+            <p style="font-family: var(--mono); font-size: clamp(1rem, 2.2vw, 1.5rem); margin-top: 0.9rem; line-height: 1.9">
+              <span style="color: var(--steel)">safety</span> = <span style="color: var(--amber)">α</span>(<span class="dim">no out-of-bounds, S1</span>) × <span style="color: var(--steel)">DomainWidth</span> = f(S2)
+            </p>
+            <p class="small dim" style="margin-top: var(--s3)" data-zh="安全 = α（无越界，S1 机制）× 域宽，而域宽是测量质量 S2 的函数。S3 策略边界由人或蒸馏规则画定。" data-en="Safety = α (no out-of-bounds, the S1 mechanism) × domain width, where domain width is a function of measurement quality S2. The S3 policy boundary is drawn by people or distilled rules.">
+              安全 = α（无越界，S1 机制）× 域宽，而域宽是测量质量 S2 的函数。S3 策略边界由人或蒸馏规则画定。
+            </p>
+          </div>
+
+          <div class="table-wrap" style="margin-top: var(--s4)">
+            <table>
+              <caption data-zh="三层分解：谁负责什么" data-en="Three-layer decomposition: who is responsible for what">三层分解：谁负责什么</caption>
+              <thead>
+                <tr>
+                  <th scope="col" data-zh="层" data-en="Layer">层</th>
+                  <th scope="col" data-zh="含义" data-en="Meaning">含义</th>
+                  <th scope="col" data-zh="实现" data-en="Realized by">实现</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>S1</strong> <span class="dim" data-zh="机制" data-en="mechanism">机制</span></td>
+                  <td data-zh="无越界执行：能力域、隔离、审计。不依赖模型的正确性。" data-en="Out-of-bounds-free execution: capability domains, isolation, audit. Does not depend on the model being right.">无越界执行：能力域、隔离、审计。不依赖模型的正确性。</td>
+                  <td data-zh="内核能力表 + 审计环；用户态为 SIGSTOP 隔离语义" data-en="Kernel capability table + audit ring; SIGSTOP isolation semantics in user space">内核能力表 + 审计环；用户态为 SIGSTOP 隔离语义</td>
+                </tr>
+                <tr>
+                  <td><strong>S2</strong> <span class="dim" data-zh="测量" data-en="measurement">测量</span></td>
+                  <td data-zh="模型质量的可测量化：金标、探针、质量台账。决定域宽而不是决定权限。" data-en="Making model quality measurable: goldset, probes, quality ledger. It decides domain width, not authority.">模型质量的可测量化：金标、探针、质量台账。决定域宽而不是决定权限。</td>
+                  <td data-zh="语义金标 v2（280 例）、金标 v3（540 例）、τ 推导与模型农场" data-en="Semantic goldset v2 (280 examples), goldset v3 (540), τ derivation and a model farm">语义金标 v2（280 例）、金标 v3（540 例）、τ 推导与模型农场</td>
+                </tr>
+                <tr>
+                  <td><strong>S3</strong> <span class="dim" data-zh="策略" data-en="policy">策略</span></td>
+                  <td data-zh="边界画在哪里：由人声明，或由蒸馏规则生成。未知指令与越域值一律 fail-closed。" data-en="Where the boundary sits: declared by people, or produced by distilled rules. Unknown directives and out-of-domain values fail closed.">边界画在哪里：由人声明，或由蒸馏规则生成。未知指令与越域值一律 fail-closed。</td>
+                  <td data-zh="fuai_policy 策略文件；越域即拒绝" data-en="fuai_policy policy files; anything out of domain is refused">fuai_policy 策略文件；越域即拒绝</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="note note--amber" style="margin-top: var(--s4)">
+            <strong data-zh="模型不能写自己的界。" data-en="A model does not get to write its own boundary.">模型不能写自己的界。</strong>
+            <span data-zh="模型提出动作，S1 决定动作能否发生，S2 决定它被允许有多宽的活动范围，S3 决定这条边界画在哪。四者分离，才谈得上可审计。" data-en=" The model proposes an action; S1 decides whether it can happen, S2 decides how wide its room to move is, and S3 decides where the line is drawn. Only with those four separated does auditability become meaningful."> 模型提出动作，S1 决定动作能否发生，S2 决定它被允许有多宽的活动范围，S3 决定这条边界画在哪。四者分离，才谈得上可审计。</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================= axioms -->
+      <section class="section anchor" id="axioms" data-motion>
+        <div class="wrap">
+          <h2 class="h2 fade-step" data-zh="A1–A4：机制必须满足的四条" data-en="A1–A4: four properties the mechanism must hold">A1–A4：机制必须满足的四条</h2>
+          <p class="muted prose fade-step" style="margin-top: var(--s2); --delay: 0.07s" data-zh="这四条是接口性质，不是实现细节——这也是第二实现能照契约重写的前提。" data-en="These four are interface properties, not implementation details — which is exactly why a second implementation can be rewritten against the contract.">
+            这四条是接口性质，不是实现细节——这也是第二实现能照契约重写的前提。
+          </p>
+
+          <div class="table-wrap" style="margin-top: var(--s4)">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col" data-zh="公理" data-en="Axiom">公理</th>
+                  <th scope="col" data-zh="内容" data-en="Statement">内容</th>
+                  <th scope="col" data-zh="可由形式对象判定为" data-en="Decidable from the formal object as">可由形式对象判定为</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>A1</strong></td>
+                  <td data-zh="无越权执行——任何动作都在有声明的能力域内" data-en="No out-of-authority execution — every action lies inside a declared capability domain">无越权执行——任何动作都在有声明的能力域内</td>
+                  <td class="num" data-zh="space 非空且 hi ≥ lo" data-en="space non-empty and hi ≥ lo">space 非空且 hi ≥ lo</td>
+                </tr>
+                <tr>
+                  <td><strong>A2</strong></td>
+                  <td data-zh="可审计——每次能力使用都留痕" data-en="Auditable — every capability use leaves a trace">可审计——每次能力使用都留痕</td>
+                  <td class="num" data-zh="guard 站点 ≥ 0，且编译期强制落审计计数" data-en="guard sites ≥ 0, with audit counting enforced at compile time">guard 站点 ≥ 0，且编译期强制落审计计数</td>
+                </tr>
+                <tr>
+                  <td><strong>A3</strong></td>
+                  <td data-zh="模型缺席仍运行——单元不得申请模型/推理能力空间" data-en="Runs with the model absent — a unit may not request the model/inference capability space">模型缺席仍运行——单元不得申请模型/推理能力空间</td>
+                  <td class="num" data-zh="space ∉ {ai, model, llm, net_llm, infer}" data-en="space ∉ {ai, model, llm, net_llm, infer}">space ∉ {ai, model, llm, net_llm, infer}</td>
+                </tr>
+                <tr>
+                  <td><strong>A4</strong></td>
+                  <td data-zh="失败计数与降级——可撤销能力必须声明 revocable" data-en="Failure counting and degradation — a revocable capability must declare revocable">失败计数与降级——可撤销能力必须声明 revocable</td>
+                  <td class="num" data-zh="revocable 为真" data-en="revocable is true">revocable 为真</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="note" style="margin-top: var(--s3)">
+            <span data-zh-html="四条断言的输入不是源码，而是编译器强制导出的<a href=&quot;../loment/&quot;>形式对象</a>（Potato）；一个独立校验器仅凭该对象即可判定合法性，不读源码、不读二进制。" data-en-html="The input to these four assertions is not source code but the <a href=&quot;../loment/&quot;">formal object</a> a compiler is forced to emit (Potato); an independent validator decides legality from that object alone, reading neither source nor binary.">
+              四条断言的输入不是源码，而是编译器强制导出的<a href="../loment/">形式对象</a>（Potato）；一个独立校验器仅凭该对象即可判定合法性，不读源码、不读二进制。
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================ trust-adaptive width -->
+      <section class="section anchor" id="trust" data-motion>
+        <div class="wrap">
+          <h2 class="h2 fade-step" data-zh="信任自适应域宽" data-en="Trust-adaptive domain width">信任自适应域宽</h2>
+          <p class="muted prose fade-step" style="margin-top: var(--s2); --delay: 0.07s" data-zh="域宽不是一个配置项，而是一个测量结果。质量台账记录模型在语义金标上的表现，两个阈值 τ_low 与 τ_high 把质量分成三段，域宽随之变化；连续 K 次确认后才允许放宽。" data-en="Domain width is not a configuration flag; it is a measurement result. A quality ledger records how the model does on the semantic goldset, two thresholds τ_low and τ_high cut quality into three bands, and the domain width follows. Widening requires K consecutive confirmations.">
+            域宽不是一个配置项，而是一个测量结果。质量台账记录模型在语义金标上的表现，两个阈值 τ_low 与 τ_high 把质量分成三段，域宽随之变化；连续 K 次确认后才允许放宽。
+          </p>
+
+          <div class="stats" style="margin-top: var(--s4)">
+            <div class="stat">
+              <span class="stat__v">45 <span class="dim" style="font-size: 0.6em">/</span> 35</span>
+              <span class="stat__k" data-zh="τ_high / τ_low（FujoOS 默认）。LinuxFUAI 默认 46，作为部署参数登记而非接口差异。" data-en="τ_high / τ_low (FujoOS default). LinuxFUAI defaults to 46 — logged as a deployment parameter, not an interface difference.">τ_high / τ_low（FujoOS 默认）。LinuxFUAI 默认 46，作为部署参数登记而非接口差异。</span>
+            </div>
+            <div class="stat">
+              <span class="stat__v">[0.429, 0.454)</span>
+              <span class="stat__k" data-zh="τ* —— 语义金标 v2 口径下重推导的信任阈值区间（旧口径为 [0.369, 0.534)）" data-en="τ* — the trust-threshold interval re-derived under semantic goldset v2 (the old interval was [0.369, 0.534))">τ* —— 语义金标 v2 口径下重推导的信任阈值区间（旧口径为 [0.369, 0.534)）</span>
+            </div>
+            <div class="stat">
+              <span class="stat__v">5.01×</span>
+              <span class="stat__k" data-zh="R(0.70) —— 在 0.70 覆盖率下的风险比，13 个本地模型的 β 重测得出" data-en="R(0.70) — the risk ratio at 0.70 coverage, from β re-measurement across 13 local models">R(0.70) —— 在 0.70 覆盖率下的风险比，13 个本地模型的 β 重测得出</span>
+            </div>
+            <div class="stat">
+              <span class="stat__v">13 × 280</span>
+              <span class="stat__k" data-zh="模型数 × 金标例数。0.5B–9B、7 个家族，含留一模型交叉检查。" data-en="Models × goldset examples. 0.5B–9B, 7 families, with leave-one-model-out checks.">模型数 × 金标例数。0.5B–9B、7 个家族，含留一模型交叉检查。</span>
+            </div>
+          </div>
+
+          <div class="table-wrap" style="margin-top: var(--s4)">
+            <table>
+              <caption data-zh="测量链上的关键修正是可查的，不是修辞" data-en="The corrections along the measurement chain are traceable, not rhetoric">测量链上的关键修正是可查的，不是修辞</caption>
+              <thead>
+                <tr>
+                  <th scope="col" data-zh="事件" data-en="Event">事件</th>
+                  <th scope="col" data-zh="结果" data-en="Outcome">结果</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td data-zh="语义金标 v2（280 例，含反 E1 自证）" data-en="Semantic goldset v2 (280 examples, with anti-E1 self-proof)">语义金标 v2（280 例，含反 E1 自证）</td>
+                  <td data-zh="phi3:mini 的 β 从 1.00 崩到 0.00——实证了旧口径的缺陷" data-en="phi3:mini's β collapsed from 1.00 to 0.00 — an empirical demonstration of the old metric's defect">phi3:mini 的 β 从 1.00 崩到 0.00——实证了旧口径的缺陷</td>
+                </tr>
+                <tr>
+                  <td data-zh="G/B 重分层" data-en="G/B re-stratification">G/B 重分层</td>
+                  <td class="num" data-zh="B = {llama3.2:1b, 0.5b, phi3:mini}" data-en="B = {llama3.2:1b, 0.5b, phi3:mini}">B = {llama3.2:1b, 0.5b, phi3:mini}</td>
+                </tr>
+                <tr>
+                  <td data-zh="τ 声明重标定" data-en="τ declaration recalibration">τ 声明重标定</td>
+                  <td class="num" data-zh="τ_high 46 → 45（落入 v2 区间内）" data-en="τ_high 46 → 45 (falls inside the v2 interval)">τ_high 46 → 45（落入 v2 区间内）</td>
+                </tr>
+                <tr>
+                  <td data-zh="W46 反证响应" data-en="W46 refutation response">W46 反证响应</td>
+                  <td data-zh="发现最伤人的弱点不是机制被绕，而是数字口径不可查；一键复现包由此成为硬要求" data-en="The most damaging weakness found was not a bypass of the mechanism but unreproducible number definitions; the one-command reproduction pack became a hard requirement">发现最伤人的弱点不是机制被绕，而是数字口径不可查；一键复现包由此成为硬要求</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="note note--amber fade-step" style="margin-top: var(--s4); --delay: 0.21s">
+            <strong data-zh="τ 不是一个已知的数。" data-en="τ is not a known number. ">τ 不是一个已知的数。</strong>
+            <span data-zh-html="数据只把最优阈值定到一个区间；区间内取哪一点是政策决定，不是测量。这个问题的三个分支——它会收敛、前提会崩塌、或者前提成立但不再重要——写在 <a href=&quot;../docs/ai/tau/&quot;>τ 问题</a>。" data-en-html="The data pin the optimum down to an interval; which point inside it gets taken is a policy decision, not a measurement. This problem's three branches — it converges, the premise collapses, or the premise holds and stops mattering — are laid out under <a href=&quot;../docs/ai/tau/&quot;>The τ problem</a>.">数据只把最优阈值定到一个区间；区间内取哪一点是政策决定，不是测量。这个问题的三个分支——它会收敛、前提会崩塌、或者前提成立但不再重要——写在 <a href="../docs/ai/tau/">τ 问题</a>。</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================== runtime -->
+      <section class="section anchor" id="runtime" data-motion>
+        <div class="wrap">
+          <h2 class="h2 fade-step" data-zh="FUAI-OS：主机无关的监督安全运行时" data-en="FUAI-OS: a host-agnostic supervisory runtime">FUAI-OS：主机无关的监督安全运行时</h2>
+          <p class="muted prose fade-step" style="margin-top: var(--s2); --delay: 0.07s" data-zh="要证实“这套机制不是某个内核的私产”，只把设计写在论文里不够——需要在没有 FujoOS 的机器上把它跑起来。fuai-run 是一个独立二进制：加载 S3 策略文件，监督目标进程树，写出证据链。" data-en="To show this mechanism is not the private property of one kernel, writing the design down is not enough — it has to run on a machine with no FujoOS. fuai-run is a standalone binary: it loads an S3 policy file, supervises a target process tree, and writes an evidence chain.">
+            要证实“这套机制不是某个内核的私产”，只把设计写在论文里不够——需要在没有 FujoOS 的机器上把它跑起来。fuai-run 是一个独立二进制：加载 S3 策略文件，监督目标进程树，写出证据链。
+          </p>
+
+          <figure class="figure fade-step" style="--delay: 0.04s; --draw-dur: 0.35s; margin-top: var(--s4)">
+            <svg
+              class="envelope"
+              viewBox="0 0 620 264"
+              role="img"
+              aria-label="审计链由带哈希指针的条目串成：每条含前一条的摘要，任何篡改都会使其后的链条无法重放；带外验证器作为独立进程重推导序列。"
+              data-zh-aria="审计链由带哈希指针的条目串成：每条含前一条的摘要，任何篡改都会使其后的链条无法重放；带外验证器作为独立进程重推导序列。"
+              data-en-aria="The evidence chain is a series of entries joined by hash pointers: each entry contains the digest of the previous one, so any tampering breaks replay from that point on. The out-of-band verifier re-derives the sequence as a separate process."
+            >
+              <defs>
+                <marker id="mk-steel2" class="mk" viewBox="0 0 8 8" refX="7.5" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+                  <path d="M0,0 L8,4 L0,8 Z" />
+                </marker>
+                <marker id="mk-amber2" class="mk mk--amber" viewBox="0 0 8 8" refX="7.5" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+                  <path d="M0,0 L8,4 L0,8 Z" />
+                </marker>
+              </defs>
+
+              <text x="16" y="30" class="t-steel fade-step" style="--delay: 0.05s">审计链 · append-only + SHA-256</text>
+
+              <rect x="16" y="46" width="96" height="52" class="stroke s-steel fade-step" style="--delay: 0.12s" />
+              <text x="28" y="72" class="t-steel fade-step" style="--delay: 0.16s">E0</text>
+              <text x="28" y="88" class="t-dim fade-step" style="--delay: 0.18s">h0</text>
+
+              <text x="112" y="42" class="t-dim fade-step" style="--delay: 0.2s; font-size: 11px">prev</text>
+              <path class="stroke s-steel draw" d="M112,72 H136" marker-end="url(#mk-steel2)" style="--delay: 0.22s" />
+
+              <rect x="136" y="46" width="96" height="52" class="stroke s-steel fade-step" style="--delay: 0.26s" />
+              <text x="148" y="72" class="t-steel fade-step" style="--delay: 0.3s">E1</text>
+              <text x="148" y="88" class="t-dim fade-step" style="--delay: 0.32s">h1 = H(h0)</text>
+
+              <path class="stroke s-steel draw" d="M232,72 H256" marker-end="url(#mk-steel2)" style="--delay: 0.36s" />
+
+              <rect x="256" y="46" width="96" height="52" class="stroke s-steel fade-step" style="--delay: 0.4s" />
+              <text x="268" y="72" class="t-steel fade-step" style="--delay: 0.44s">E2</text>
+              <text x="268" y="88" class="t-dim fade-step" style="--delay: 0.46s">h2</text>
+
+              <!-- one link is tampered with: this is where replay breaks -->
+              <path class="stroke s-amber s-dash fade-step" d="M352,72 H376" marker-end="url(#mk-amber2)" style="--delay: 0.52s" />
+              <text x="364" y="118" text-anchor="middle" class="t-amber fade-step" style="--delay: 0.6s">篡改 → 断链</text>
+
+              <rect x="376" y="46" width="96" height="52" class="stroke s-steel fade-step" style="--delay: 0.54s" />
+              <text x="388" y="72" class="t-steel fade-step" style="--delay: 0.58s">E3</text>
+              <text x="388" y="88" class="t-dim fade-step" style="--delay: 0.6s">h3</text>
+
+              <path class="stroke s-steel draw" d="M472,72 H496" marker-end="url(#mk-steel2)" style="--delay: 0.64s" />
+
+              <rect x="496" y="46" width="96" height="52" class="stroke s-steel fade-step" style="--delay: 0.68s" />
+              <text x="508" y="72" class="t-steel fade-step" style="--delay: 0.72s">En</text>
+              <text x="508" y="88" class="t-dim fade-step" style="--delay: 0.74s">hn</text>
+
+              <text x="548" y="132" text-anchor="end" class="t-dim fade-step" style="--delay: 0.82s; font-size: 11px">读取原始链</text>
+              <path class="stroke s-steel s-dash fade-step" d="M560,98 V150" marker-end="url(#mk-steel2)" style="--delay: 0.86s" />
+
+              <rect x="16" y="150" width="576" height="60" class="stroke s-steel s-dash fade-step" style="--delay: 0.9s" />
+              <text x="32" y="176" class="t-steel fade-step" style="--delay: 0.94s">带外验证器 · fuai-verify</text>
+              <text x="32" y="194" class="t-dim fade-step" style="--delay: 0.97s">独立进程，不链接运行时库；按契约独立重实现，重放并验签</text>
+            </svg>
+            <figcaption class="figure__cap">
+              <span data-zh="每环含前一环的摘要：hₙ = H(hₙ₋₁ ∥ xₙ)。篡改任一环，其后全部失效；验证器不共享运行时代码路径。" data-en="Each link carries the digest of the previous: hₙ = H(hₙ₋₁ ∥ xₙ). Tamper with any link and everything after it fails; the verifier shares no code path with the runtime.">每环含前一环的摘要：hₙ = H(hₙ₋₁ ∥ xₙ)。篡改任一环，其后全部失效；验证器不共享运行时代码路径。</span>
+            </figcaption>
+          </figure>
+
+          <div class="grid grid--2" style="margin-top: var(--s5)">
+            <div class="stack">
+              <h3 class="h3" data-zh="运行时边界（一处被实测修正过）" data-en="Runtime boundary (corrected by measurement)">运行时边界（一处被实测修正过）</h3>
+              <ul class="list">
+                <li><b data-zh="不含进程启动面" data-en="no process-spawning surface">不含进程启动面</b> <span data-zh="—— 启动是宿主职责；这同时消除了命令执行模式。" data-en=" — launching is the host's job; this also removes a command-execution surface.">—— 启动是宿主职责；这同时消除了命令执行模式。</span></li>
+                <li><b data-zh="自检须在策略应用前" data-en="self-check precedes policy application">自检须在策略应用前</b> <span data-zh="—— 策略若预授权 exec 槽，会破坏 I1/I4 前提；这是 l16 实测的教训。" data-en=" — a policy that pre-authorizes an exec slot breaks the I1/I4 preconditions; this was an l16 measurement lesson.">—— 策略若预授权 exec 槽，会破坏 I1/I4 前提；这是 l16 实测的教训。</span></li>
+                <li><b data-zh="越域即 fail-closed" data-en="out-of-domain means fail-closed">越域即 fail-closed</b> <span data-zh="—— 未知指令与越域值一律拒绝，不做猜测。" data-en=" — unknown directives and out-of-domain values are refused outright, never guessed.">—— 未知指令与越域值一律拒绝，不做猜测。</span></li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="h3" data-zh="第三方验收判据" data-en="Third-party acceptance criteria">第三方验收判据</h3>
+              <div class="matrix" style="margin-top: var(--s2)">
+                <div class="matrix__row"><b data-zh="A · 契约唯一权威" data-en="A · contract is the sole authority">A · 契约唯一权威</b><span class="tag tag--ok">0 差异</span></div>
+                <div class="matrix__row"><b data-zh="B · 未装 FujoOS 也能跑通" data-en="B · runs without FujoOS installed">B · 未装 FujoOS 也能跑通</b><span class="tag tag--ok">真实 Ollama 全链</span></div>
+                <div class="matrix__row"><b data-zh="C · 带外验证器独立重实现" data-en="C · verifier reimplemented out-of-band">C · 带外验证器独立重实现</b><span class="tag tag--ok">含签名锚定</span></div>
+                <div class="matrix__row"><b data-zh="D · 三步部署可复现" data-en="D · three-step deploy reproduces">D · 三步部署可复现</b><span class="tag tag--ok">已实测</span></div>
+                <div class="matrix__row"><b data-zh="E · 升级不破坏既有验证" data-en="E · upgrade breaks no existing verification">E · 升级不破坏既有验证</b><span class="tag tag--ok">18/18 + 回归</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================== two implementations -->
+      <section class="section anchor" id="two-impl" data-motion>
+        <div class="wrap">
+          <h2 class="h2 fade-step" data-zh="两个实现，一份契约" data-en="Two implementations, one contract">两个实现，一份契约</h2>
+          <p class="muted prose fade-step" style="margin-top: var(--s2); --delay: 0.07s" data-zh="契约规范是唯一权威，两个实现从它派生或对它校验。契约分两层：核心层是主机无关的监督原语，宿主扩展层是实现特有的部分（比如 Windows 盒桥），差分只对核心层断言。" data-en="The contract specification is the sole authority; both implementations either derive from it or are checked against it. The contract has two layers: a core layer of host-agnostic supervisory primitives, and a host-extension layer for implementation-specific parts (the Windows box bridge, say). The differ asserts on the core layer only.">
+            契约规范是唯一权威，两个实现从它派生或对它校验。契约分两层：核心层是主机无关的监督原语，宿主扩展层是实现特有的部分（比如 Windows 盒桥），差分只对核心层断言。
+          </p>
+
+          <div class="table-wrap" style="margin-top: var(--s4)">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col" data-zh="实现" data-en="Implementation">实现</th>
+                  <th scope="col" data-zh="形态" data-en="Form">形态</th>
+                  <th scope="col" data-zh="验证" data-en="Verification">验证</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>FujoOS 内核模块</strong> <span class="dim" data-zh="第一实现" data-en="first">第一实现</span></td>
+                  <td data-zh="ai.rs / capability.rs / boxbridge.rs / contracts.rs + 0x81xx–0x83xx 系统调用" data-en="ai.rs / capability.rs / boxbridge.rs / contracts.rs + 0x81xx–0x83xx syscalls">ai.rs / capability.rs / boxbridge.rs / contracts.rs + 0x81xx–0x83xx 系统调用</td>
+                  <td class="num" data-zh="内核回归 59/59；m167 夹具逐步执行" data-en="kernel regression 59/59; m167 fixture step-by-step">内核回归 59/59；m167 夹具逐步执行</td>
+                </tr>
+                <tr>
+                  <td><strong>LinuxFUAI</strong> <span class="dim" data-zh="第二实现 · C11 / POSIX / MIT" data-en="second · C11 / POSIX / MIT">第二实现 · C11 / POSIX / MIT</span></td>
+                  <td data-zh="独立仓库；fuai-run 守护进程 + fuai_policy + fuai_evidence + 带外验证器" data-en="Separate repository; fuai-run daemon + fuai_policy + fuai_evidence + out-of-band verifier">独立仓库；fuai-run 守护进程 + fuai_policy + fuai_evidence + 带外验证器</td>
+                  <td class="num" data-zh="18/18 探针 PASS（l1–l17 + smoke）" data-en="18/18 probes PASS (l1–l17 + smoke)">18/18 探针 PASS（l1–l17 + smoke）</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="note note--steel" style="margin-top: var(--s4)">
+            <strong data-zh="差分结果：" data-en="Differ result: ">差分结果：</strong>
+            <span data-zh="同一策略与 19 步事件夹具喂给两个实现，机制层判决序列 19/19 步零差异。这说明机制级判决是接口性质，而不是某个实现的特定行为。" data-en="the same policy and a 19-step event fixture fed to both implementations produce a mechanism-level verdict sequence that agrees 19/19. Mechanism-level verdicts are an interface property, not a behaviour specific to one implementation.">同一策略与 19 步事件夹具喂给两个实现，机制层判决序列 19/19 步零差异。这说明机制级判决是接口性质，而不是某个实现的特定行为。</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================= limits -->
+      <section class="section anchor" id="limits" data-motion>
+        <div class="wrap">
+          <h2 class="h2 fade-step" data-zh="诚实的边界" data-en="Honest limits">诚实的边界</h2>
+          <div class="grid grid--2 fade-step" style="margin-top: var(--s4); align-items: start; --delay: 0.14s">
+            <ul class="list list--check">
+              <li><b data-zh="LLM 臂尚未运行" data-en="LLM arm not yet run">LLM 臂尚未运行</b> <span data-zh="—— 波 C 主表的“两臂”是工具链的严格/宽松两档，不得在论文中当作 LLM 对照。" data-en=" — the two arms in the wave-C table are the toolchain's strict/lenient settings; they must not be presented as an LLM comparison in the paper.">—— 波 C 主表的“两臂”是工具链的严格/宽松两档，不得在论文中当作 LLM 对照。</span></li>
+              <li><b data-zh="A1–A4 只到产物层" data-en="A1–A4 reach the artifact layer only">A1–A4 只到产物层</b> <span data-zh="—— 生成的断言表尚未被内核 include!，运行时断言要等内核侧接入。" data-en=" — the generated assertion table is not yet include!'d by the kernel; runtime assertions await kernel-side integration.">—— 生成的断言表尚未被内核 include!，运行时断言要等内核侧接入。</span></li>
+              <li><b data-zh="识别率与转换率必须同报" data-en="recognition and conversion rates must be reported together">识别率与转换率必须同报</b> <span data-zh="—— C 语言的转换率 100% 是“条件于识别”的比率，脱离识别率会误导。" data-en=" — the 100% conversion rate for C is conditional on recognition; quoting it without the recognition rate misleads.">—— C 语言的转换率 100% 是“条件于识别”的比率，脱离识别率会误导。</span></li>
+            </ul>
+            <ul class="list list--check">
+              <li><b data-zh="论文不公开发表" data-en="the paper is not published publicly">论文不公开发表</b> <span data-zh="—— 按浙大要求保持私有；预印本时间戳是优先权的唯一锚点。" data-en=" — kept private at the university's request; the preprint timestamp is the sole anchor of priority.">—— 按浙大要求保持私有；预印本时间戳是优先权的唯一锚点。</span></li>
+              <li><b data-zh="τ 不重开" data-en="τ is not reopened">τ 不重开</b> <span data-zh="—— 重启条件只有两条：真实部署损失记录，或语义金标。" data-en=" — only two conditions reopen it: a real deployment loss record, or a semantic goldset.">—— 重启条件只有两条：真实部署损失记录，或语义金标。</span></li>
+              <li><b data-zh="数字必须可复现" data-en="numbers must be reproducible">数字必须可复现</b> <span data-zh="—— 推翻必须给出可复现脚本与真现场。" data-en=" — a refutation must come with a reproducible script and a real incident.">—— 推翻必须给出可复现脚本与真现场。</span></li>
+            </ul>
+          </div>
+
+          <div class="hero__actions" style="margin-top: var(--s5)">
+            <a class="btn btn--primary" href="../docs/architecture/" data-zh="看系统架构" data-en="See the architecture">看系统架构</a>
+            <a class="btn" href="../loment/" data-zh="看 Loment · Potato" data-en="Loment · Potato">看 Loment · Potato</a>
+            <a class="btn btn--ghost" href="https://zenodo.org/records/22352904" rel="noopener" data-zh="前往论文 ↗" data-en="Read the paper ↗">前往论文 ↗</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <div class="wrap">
+        <div class="foot__grid">
+          <div>
+            <div class="nav__brand" style="margin-bottom: 0.7rem">
+              <svg viewBox="0 14 64 46" aria-hidden="true">
+            <path d="M3,58 Q11,38 26,16 Q32,19 38,16 Q53,38 61,58 Z" fill="var(--mark-rock)" />
+            <path d="M15.9,32 Q18,22 26,16 Q32,19 38,16 Q46,22 48.1,32 Q32,38 15.9,32 Z" fill="var(--mark-snow)" />
+          </svg>
+              FujoOS
+            </div>
+            <p class="small dim" style="max-width: 34ch" data-zh="FUAI 的第一实现内嵌于 FujoOS 内核，第二实现是独立的 Linux 用户态运行时；两者由同一份契约约束。" data-en="FUAI's first implementation lives inside the FujoOS kernel; the second is a standalone Linux user-space runtime. One contract binds both.">
+              FUAI 的第一实现内嵌于 FujoOS 内核，第二实现是独立的 Linux 用户态运行时；两者由同一份契约约束。
+            </p>
+          </div>
+          <div>
+            <h4 data-zh="本页" data-en="On this page">本页</h4>
+            <a href="#proposition" data-zh="命题" data-en="The proposition">命题</a>
+            <a href="#axioms" data-zh="A1–A4" data-en="A1–A4">A1–A4</a>
+            <a href="#trust" data-zh="信任自适应域宽" data-en="Trust-adaptive width">信任自适应域宽</a>
+            <a href="#runtime" data-zh="运行时与证据链" data-en="Runtime and evidence chain">运行时与证据链</a>
+          </div>
+          <div>
+            <h4 data-zh="文档" data-en="Documentation">文档</h4>
+            <a href="../docs/architecture/" data-zh="系统架构" data-en="Architecture">系统架构</a>
+            <a href="../docs/start/" data-zh="构建与运行" data-en="Build and run">构建与运行</a>
+            <a href="../loment/" data-zh="Loment · Potato" data-en="Loment · Potato">Loment · Potato</a>
+            <a href="../docs/" data-zh="全部文档 →" data-en="All documentation →">全部文档 →</a>
+          </div>
+          <div>
+            <h4 data-zh="外部" data-en="Elsewhere">外部</h4>
+            <a href="https://zenodo.org/records/22352904" rel="noopener" data-zh="预印本 (Zenodo) ↗" data-en="Preprint (Zenodo) ↗">预印本 (Zenodo) ↗</a>
+            <a href="https://github.com/FujoJTOP/LinuxFUAI" rel="noopener" data-zh="LinuxFUAI 第二实现 ↗" data-en="LinuxFUAI second implementation ↗">LinuxFUAI 第二实现 ↗</a>
+          </div>
+        </div>
+        <div class="foot__end">
+          <span>© <span data-year>2026</span> Yuxuan Jiang · MIT</span>
+          <span data-zh="模型是提示来源，不是权威来源" data-en="The model is a source of hints, not of authority">模型是提示来源，不是权威来源</span>
+        </div>
+      </div>
+    </footer>
+
+    <script src="../assets/site.js?v=7647d9b3"></script>
+  </body>
+</html>

@@ -8,42 +8,42 @@
               </div>
 
               <div class="grid grid--2">
-                <a class="card card--link" href="layers.html">
+                <a class="card card--link" href="layers/">
                   <span class="card__k" data-zh="结构" data-en="Structure">结构</span>
                   <h3 class="h3" data-zh="分层与内核形态" data-en="Layers and kernel shape">分层与内核形态</h3>
                   <p data-zh="四层是什么，以及为什么选混合内核：Ring0 只留 CPU 与空间管理。" data-en="What the four layers are, and why a hybrid kernel: Ring0 keeps only CPU and space management.">四层是什么，以及为什么选混合内核：Ring0 只留 CPU 与空间管理。</p>
                 </a>
-                <a class="card card--link" href="syscall-gate.html">
+                <a class="card card--link" href="syscall-gate/">
                   <span class="card__k" data-zh="核心" data-en="The core">核心</span>
                   <h3 class="h3" data-zh="系统调用闸门" data-en="The syscall gate">系统调用闸门</h3>
                   <p data-zh="三套 ABI 共享同一个内核服务面，差别只在编号映射。这是整个设计里最关键的一处。" data-en="Three ABIs share one kernel service surface and differ only in number mapping. This is the single most important decision in the design.">三套 ABI 共享同一个内核服务面，差别只在编号映射。这是整个设计里最关键的一处。</p>
                 </a>
-                <a class="card card--link" href="memory.html">
+                <a class="card card--link" href="memory/">
                   <span class="card__k" data-zh="空间" data-en="Space">空间</span>
                   <h3 class="h3" data-zh="内存与地址空间" data-en="Memory and address space">内存与地址空间</h3>
                   <p data-zh="页、大页、伙伴系统、按需零页，以及每个任务自己的页表链。" data-en="Pages, large pages, the buddy allocator, demand-zero pages, and a per-task page-table chain.">页、大页、伙伴系统、按需零页，以及每个任务自己的页表链。</p>
                 </a>
-                <a class="card card--link" href="process.html">
+                <a class="card card--link" href="process/">
                   <span class="card__k" data-zh="执行" data-en="Execution">执行</span>
                   <h3 class="h3" data-zh="进程与隔离" data-en="Processes and isolation">进程与隔离</h3>
                   <p data-zh="统一底座、打包即权限、信号归一。" data-en="One substrate, packaging as permission, unified signals.">统一底座、打包即权限、信号归一。</p>
                 </a>
-                <a class="card card--link" href="storage.html">
+                <a class="card card--link" href="storage/">
                   <span class="card__k" data-zh="持久" data-en="Persistence">持久</span>
                   <h3 class="h3" data-zh="存储与 FJFS" data-en="Storage and FJFS">存储与 FJFS</h3>
                   <p data-zh="内核只管块设备，文件语义全在用户态服务；FJFS 与真盘 AHCI。" data-en="The kernel only touches block devices; all file semantics live in user-space services. FJFS and AHCI on real disks.">内核只管块设备，文件语义全在用户态服务；FJFS 与真盘 AHCI。</p>
                 </a>
-                <a class="card card--link" href="graphics.html">
+                <a class="card card--link" href="graphics/">
                   <span class="card__k" data-zh="呈现" data-en="Presentation">呈现</span>
                   <h3 class="h3" data-zh="图形与窗口系统" data-en="Graphics and windows">图形与窗口系统</h3>
                   <p data-zh="帧缓冲、软件光栅、着色器 VM、wmsg 窗口系统，以及 .fui 声明式界面。" data-en="Framebuffer, software rasterizer, shader VM, the wmsg window system, and .fui declarative UI.">帧缓冲、软件光栅、着色器 VM、wmsg 窗口系统，以及 .fui 声明式界面。</p>
                 </a>
-                <a class="card card--link" href="network.html">
+                <a class="card card--link" href="network/">
                   <span class="card__k" data-zh="连接" data-en="Connectivity">连接</span>
                   <h3 class="h3" data-zh="网络栈" data-en="Network stack">网络栈</h3>
                   <p data-zh="virtio-net 三个原语、帧级用户 ABI，以及协议头为什么是 L0 要收掉的重复。" data-en="Three virtio-net primitives, a frame-level user ABI, and why protocol headers are duplication L0 exists to remove.">virtio-net 三个原语、帧级用户 ABI，以及协议头为什么是 L0 要收掉的重复。</p>
                 </a>
-                <a class="card card--link" href="security.html">
+                <a class="card card--link" href="security/">
                   <span class="card__k" data-zh="边界" data-en="Boundaries">边界</span>
                   <h3 class="h3" data-zh="安全模型" data-en="Security model">安全模型</h3>
                   <p data-zh="内核不信任任何线程指针；能力句柄默认最小权限；垫片全 clean-room。" data-en="The kernel trusts no thread pointer; capability handles are least-privilege by default; every shim is clean-room.">内核不信任任何线程指针；能力句柄默认最小权限；垫片全 clean-room。</p>
@@ -52,5 +52,5 @@
 
               <div class="note note--steel">
                 <strong data-zh="和 AI 层的关系：" data-en="How this relates to the AI layer: ">和 AI 层的关系：</strong>
-                <span data-zh-html="内核这一节讲的是 S1 机制落地的位置——能力表、审计环、系统调用闸门都是同一套东西。算法与命题在 <a href=&quot;../ai/index.html&quot;>AI 层</a>。" data-en-html="this section describes where the S1 mechanism physically lives — the capability table, audit ring and syscall gate are the same machinery. The proposition and the algorithms are under <a href=&quot;../ai/index.html&quot;>AI layer</a>.">内核这一节讲的是 S1 机制落地的位置——能力表、审计环、系统调用闸门都是同一套东西。算法与命题在 <a href="../ai/index.html">AI 层</a>。</span>
+                <span data-zh-html="内核这一节讲的是 S1 机制落地的位置——能力表、审计环、系统调用闸门都是同一套东西。算法与命题在 <a href=&quot;../ai/&quot;>AI 层</a>。" data-en-html="this section describes where the S1 mechanism physically lives — the capability table, audit ring and syscall gate are the same machinery. The proposition and the algorithms are under <a href=&quot;../ai/&quot;>AI layer</a>.">内核这一节讲的是 S1 机制落地的位置——能力表、审计环、系统调用闸门都是同一套东西。算法与命题在 <a href="../ai/">AI 层</a>。</span>
               </div>

@@ -33,12 +33,12 @@
 
               <h2 data-zh="盒桥：把 Windows 应用也纳入监督" data-en="The box bridge: bringing Windows apps under supervision too">盒桥：把 Windows 应用也纳入监督</h2>
               <div class="prose">
-                <p data-zh-html="垫片让 Windows 二进制能加载；盒桥是另一件事——让模型隔着进程边界驱动宿主上的 GUI 应用（COM Excel/Word、certutil、notepad 一类）。因为谓词指向的是 Windows 特有对象，它被划在宿主扩展层，不参与核心契约的差分。见 <a href=&quot;../ai/box-bridge.html&quot;>AI 层 · 盒桥</a>。" data-en-html="shims let a Windows binary load; the box bridge is different — it lets a model drive a GUI application on the host across a process boundary (COM Excel/Word, certutil, notepad and the like). Because its predicates point at Windows-specific objects, it sits in the host extension layer and takes no part in the core-contract differ. See <a href=&quot;../ai/box-bridge.html&quot;>AI layer · Box bridge</a>.">
-                  垫片让 Windows 二进制能加载；盒桥是另一件事——让模型隔着进程边界驱动宿主上的 GUI 应用（COM Excel/Word、certutil、notepad 一类）。因为谓词指向的是 Windows 特有对象，它被划在宿主扩展层，不参与核心契约的差分。见 <a href="../ai/box-bridge.html">AI 层 · 盒桥</a>。
+                <p data-zh-html="垫片让 Windows 二进制能加载；盒桥是另一件事——让模型隔着进程边界驱动宿主上的 GUI 应用（COM Excel/Word、certutil、notepad 一类）。因为谓词指向的是 Windows 特有对象，它被划在宿主扩展层，不参与核心契约的差分。见 <a href=&quot;../../ai/box-bridge/&quot;>AI 层 · 盒桥</a>。" data-en-html="shims let a Windows binary load; the box bridge is different — it lets a model drive a GUI application on the host across a process boundary (COM Excel/Word, certutil, notepad and the like). Because its predicates point at Windows-specific objects, it sits in the host extension layer and takes no part in the core-contract differ. See <a href=&quot;../../ai/box-bridge/&quot;>AI layer · Box bridge</a>.">
+                  垫片让 Windows 二进制能加载；盒桥是另一件事——让模型隔着进程边界驱动宿主上的 GUI 应用（COM Excel/Word、certutil、notepad 一类）。因为谓词指向的是 Windows 特有对象，它被划在宿主扩展层，不参与核心契约的差分。见 <a href="../../ai/box-bridge/">AI 层 · 盒桥</a>。
                 </p>
               </div>
 
               <div class="note note--steel">
                 <strong data-zh="加固计划：" data-en="The hardening plan: ">加固计划：</strong>
-                <span data-zh-html="C02（PE 装载器深度：SEH / TLS 回调 / 延迟导入）、C03（kernel32 40→70 并起步 ntdll）、C04（真实 CRT）、C05（LoadLibraryA 真实映射）——见 <a href=&quot;plan.html&quot;>C01–C15</a>。" data-en-html="C02 (PE loader depth: SEH / TLS callbacks / delayed imports), C03 (kernel32 40→70 and starting ntdll), C04 (a real CRT), C05 (real LoadLibraryA mapping) — see <a href=&quot;plan.html&quot;>C01–C15</a>.">C02（PE 装载器深度：SEH / TLS 回调 / 延迟导入）、C03（kernel32 40→70 并起步 ntdll）、C04（真实 CRT）、C05（LoadLibraryA 真实映射）——见 <a href="plan.html">C01–C15</a>。</span>
+                <span data-zh-html="C02（PE 装载器深度：SEH / TLS 回调 / 延迟导入）、C03（kernel32 40→70 并起步 ntdll）、C04（真实 CRT）、C05（LoadLibraryA 真实映射）——见 <a href=&quot;../plan/&quot;>C01–C15</a>。" data-en-html="C02 (PE loader depth: SEH / TLS callbacks / delayed imports), C03 (kernel32 40→70 and starting ntdll), C04 (a real CRT), C05 (real LoadLibraryA mapping) — see <a href=&quot;../plan/&quot;>C01–C15</a>.">C02（PE 装载器深度：SEH / TLS 回调 / 延迟导入）、C03（kernel32 40→70 并起步 ntdll）、C04（真实 CRT）、C05（LoadLibraryA 真实映射）——见 <a href="../plan/">C01–C15</a>。</span>
               </div>

@@ -148,16 +148,30 @@ const JS_V = assetVersion(join(ROOT, "assets", "site.js"));
 
 /* Pages that are written by hand but reference those assets. The generator
    keeps their query strings in step rather than leaving it to memory. */
-const HAND_WRITTEN = ["index.html", "fuai.html", "loment.html"];
+const HAND_WRITTEN = ["index.html", "fuai/index.html", "loment/index.html"];
 
 /* -------------------------------------------------------------- helpers */
 
 const flat = SECTIONS.flatMap((s) => s.pages.map((p) => ({ ...p, section: s.id })));
 const upFrom = (depth) => "../".repeat(depth);
 
-function docHref(fromSection, fromDepth, toSection, toSlug) {
-  const up = upFrom(fromDepth);
-  return `${up}docs/${toSection}/${toSlug}.html`;
+/* Every page is addressed as a directory, not a file: the host resolves
+   `…/tau/` to `…/tau/index.html`, so no address ever shows an extension and
+   no server rule is needed to make that true. A section's own index keeps the
+   plain section directory (`…/ai/`); only named pages get a directory of their
+   own. `depth` is how many `../` it takes to reach the site root from a page. */
+const AT = {
+  home: "",
+  fuai: "fuai/",
+  loment: "loment/",
+  docs: "docs/",
+  news: "news/",
+  start: "docs/start/",
+};
+
+function docHref(fromDepth, toSection, toSlug) {
+  const tail = toSlug === "index" ? `${toSection}/` : `${toSection}/${toSlug}/`;
+  return `${upFrom(fromDepth)}docs/${tail}`;
 }
 
 function sectionOf(id) {
@@ -209,11 +223,11 @@ ${i}</div>`;
    lands on the right item instead of being hard-coded to Docs. */
 function navLinks(up, current) {
   const items = [
-    [`${up}index.html`, "首页", "Home"],
-    [`${up}fuai.html`, "FUAI 安全体系", "FUAI safety"],
-    [`${up}loment.html`, "Loment · Potato", "Loment · Potato"],
-    [`${up}docs/index.html`, "文档", "Docs"],
-    [`${up}news/index.html`, "新闻", "News"],
+    [`${up || "./"}`, "首页", "Home"],
+    [`${up}${AT.fuai}`, "FUAI 安全体系", "FUAI safety"],
+    [`${up}${AT.loment}`, "Loment · Potato", "Loment · Potato"],
+    [`${up}${AT.docs}`, "文档", "Docs"],
+    [`${up}${AT.news}`, "新闻", "News"],
   ];
   const links = items.map(([href, zh, en]) => {
     const here = href === current ? ' aria-current="page"' : "";
@@ -245,14 +259,14 @@ function sidebar(sec, slug, depth) {
     const active = s.id === sec ? " docs-side__group--active" : "";
     parts.push(`              <div class="docs-side__group${active}">`);
     parts.push(
-      `                <a class="docs-side__h" href="${docHref(sec, depth, s.id, "index")}"` +
+      `                <a class="docs-side__h" href="${docHref(depth, s.id, "index")}"` +
         ` data-zh="${esc(s.zh)}" data-en="${esc(s.en)}">${esc(s.zh)}</a>`
     );
     parts.push(`                <div class="docs-side__links">`);
     for (const p of s.pages) {
       const here = s.id === sec && p.slug === slug ? ' aria-current="page"' : "";
       parts.push(
-        `                  <a href="${docHref(sec, depth, s.id, p.slug)}"${here}` +
+        `                  <a href="${docHref(depth, s.id, p.slug)}"${here}` +
           ` data-zh="${esc(p.zh)}" data-en="${esc(p.en)}">${esc(p.zh)}</a>`
       );
     }
@@ -272,7 +286,7 @@ function prevNext(sec, slug, depth) {
     const dir = side === "prev" ? "上一步" : "下一步";
     const dirEn = side === "prev" ? "Previous" : "Next";
     return (
-      `            <a class="pager__link pager__link--${side}" href="${docHref(sec, depth, p.section, p.slug)}">\n` +
+      `            <a class="pager__link pager__link--${side}" href="${docHref(depth, p.section, p.slug)}">\n` +
       `              <span class="pager__dir" data-zh="${dir}" data-en="${dirEn}">${dir}</span>\n` +
       `              <span class="pager__t" data-zh="${esc(p.zh)}" data-en="${esc(p.en)}">${esc(p.zh)}</span>\n` +
       `            </a>`
@@ -288,9 +302,9 @@ function crumbs(sec, slug, depth) {
   const s = sectionOf(sec);
   const p = s.pages.find((x) => x.slug === slug);
   const out = [
-    `              <a href="${upFrom(depth)}docs/index.html" data-zh="文档" data-en="Docs">文档</a>`,
+    `              <a href="${upFrom(depth)}${AT.docs}" data-zh="文档" data-en="Docs">文档</a>`,
     `              <span class="sep" aria-hidden="true">/</span>`,
-    `              <a href="${docHref(sec, depth, sec, "index")}" data-zh="${esc(s.zh)}" data-en="${esc(s.en)}">${esc(
+    `              <a href="${docHref(depth, sec, "index")}" data-zh="${esc(s.zh)}" data-en="${esc(s.en)}">${esc(
       s.zh
     )}</a>`,
   ];
@@ -348,7 +362,7 @@ function shell({ sec, slug, depth, meta, body, hub }) {
   const page = hub ? null : s.pages.find((x) => x.slug === slug);
   const up = upFrom(depth);
   /* path from the site root, for canonical and og:url */
-  const pagePath = hub ? "docs/index.html" : `docs/${sec}/${slug}.html`;
+  const pagePath = hub ? AT.docs : slug === "index" ? `docs/${sec}/` : `docs/${sec}/${slug}/`;
   let titleZh, titleEn, bannerZh, bannerEn;
   if (hub) {
     titleZh = "文档 — FujoOS";
@@ -394,7 +408,7 @@ ${ticker()}
 
     <header class="nav">
       <div class="wrap nav__inner">
-        <a class="nav__brand" href="${up}index.html">
+        <a class="nav__brand" href="${up || "./"}">
           <svg viewBox="0 14 64 46" aria-hidden="true">
             <path d="M3,58 Q11,38 26,16 Q32,19 38,16 Q53,38 61,58 Z" fill="var(--mark-rock)" />
             <path
@@ -405,7 +419,7 @@ ${ticker()}
           FujoOS
         </a>
         <nav class="nav__links" aria-label="主导航" data-zh-aria="主导航" data-en-aria="Primary">
-${navLinks(up, `${up}docs/index.html`)}
+${navLinks(up, `${up}${AT.docs}`)}
           <div class="lang" role="group" aria-label="语言" data-zh-aria="语言" data-en-aria="Language">
             <button type="button" data-lang="zh" aria-pressed="true">ZH</button>
             <button type="button" data-lang="en" aria-pressed="false">EN</button>
@@ -415,11 +429,11 @@ ${navLinks(up, `${up}docs/index.html`)}
       </div>
       <div class="wrap">
         <div class="nav__drawer" data-open="false">
-          <a href="${up}index.html" data-zh="首页" data-en="Home">首页</a>
-          <a href="${up}fuai.html" data-zh="FUAI 安全体系" data-en="FUAI safety system">FUAI 安全体系</a>
-          <a href="${up}loment.html" data-zh="Loment · Potato 语言" data-en="Loment · Potato language">Loment · Potato 语言</a>
-          <a href="${up}docs/index.html" data-zh="文档" data-en="Documentation">文档</a>
-          <a href="${up}docs/start/index.html" data-zh="构建与运行" data-en="Build and run">构建与运行</a>
+          <a href="${up || "./"}" data-zh="首页" data-en="Home">首页</a>
+          <a href="${up}${AT.fuai}" data-zh="FUAI 安全体系" data-en="FUAI safety system">FUAI 安全体系</a>
+          <a href="${up}${AT.loment}" data-zh="Loment · Potato 语言" data-en="Loment · Potato language">Loment · Potato 语言</a>
+          <a href="${up}${AT.docs}" data-zh="文档" data-en="Documentation">文档</a>
+          <a href="${up}${AT.start}" data-zh="构建与运行" data-en="Build and run">构建与运行</a>
         </div>
       </div>
     </header>
@@ -471,13 +485,18 @@ for (const s of SECTIONS) {
     }
     const { meta, body } = parseFragment(readFileSync(srcFile, "utf8"));
     problems.push(...lintFragment(`_docs-src/${s.id}/${p.slug}.html`, body));
-    const depth = 2; // docs/<section>/<page>.html
+    /* A section's own index stays at docs/<section>/index.html so its address
+       is the plain section directory; a named page moves into a directory of
+       its own. That is one level deeper, which is why the depth splits. */
+    const isIndex = p.slug === "index";
+    const depth = isIndex ? 2 : 3;
     const html = shell({ sec: s.id, slug: p.slug, depth, meta, body });
-    const outDir = join(OUT, s.id);
-    const outFile = join(outDir, `${p.slug}.html`);
+    const outDir = isIndex ? join(OUT, s.id) : join(OUT, s.id, p.slug);
+    const outRel = isIndex ? `docs/${s.id}/` : `docs/${s.id}/${p.slug}/`;
+    const outFile = join(outDir, "index.html");
     if (check) {
       if (!existsSync(outFile) || readFileSync(outFile, "utf8") !== html) {
-        problems.push(`stale: docs/${s.id}/${p.slug}.html`);
+        problems.push(`stale: ${outRel}`);
       }
     } else {
       mkdirSync(outDir, { recursive: true });
@@ -499,7 +518,7 @@ for (const s of SECTIONS) {
     const outFile = join(OUT, "index.html");
     if (check) {
       if (!existsSync(outFile) || readFileSync(outFile, "utf8") !== html) {
-        problems.push("stale: docs/index.html");
+        problems.push("stale: docs/");
       }
     } else {
       writeFileSync(outFile, html);
@@ -545,7 +564,7 @@ ${ticker()}
 
     <header class="nav">
       <div class="wrap nav__inner">
-        <a class="nav__brand" href="${up}index.html">
+        <a class="nav__brand" href="${up || "./"}">
           <svg viewBox="0 14 64 46" aria-hidden="true">
             <path d="M3,58 Q11,38 26,16 Q32,19 38,16 Q53,38 61,58 Z" fill="var(--mark-rock)" />
             <path d="M15.9,32 Q18,22 26,16 Q32,19 38,16 Q46,22 48.1,32 Q32,38 15.9,32 Z" fill="var(--mark-snow)" />
@@ -563,11 +582,11 @@ ${navLinks(up, current)}
       </div>
       <div class="wrap">
         <div class="nav__drawer" data-open="false">
-          <a href="${up}index.html" data-zh="首页" data-en="Home">首页</a>
-          <a href="${up}fuai.html" data-zh="FUAI 安全体系" data-en="FUAI safety system">FUAI 安全体系</a>
-          <a href="${up}loment.html" data-zh="Loment · Potato 语言" data-en="Loment · Potato language">Loment · Potato 语言</a>
-          <a href="${up}docs/index.html" data-zh="文档" data-en="Documentation">文档</a>
-          <a href="${up}news/index.html" data-zh="新闻" data-en="News">新闻</a>
+          <a href="${up || "./"}" data-zh="首页" data-en="Home">首页</a>
+          <a href="${up}${AT.fuai}" data-zh="FUAI 安全体系" data-en="FUAI safety system">FUAI 安全体系</a>
+          <a href="${up}${AT.loment}" data-zh="Loment · Potato 语言" data-en="Loment · Potato language">Loment · Potato 语言</a>
+          <a href="${up}${AT.docs}" data-zh="文档" data-en="Documentation">文档</a>
+          <a href="${up}${AT.news}" data-zh="新闻" data-en="News">新闻</a>
         </div>
       </div>
     </header>
@@ -604,7 +623,7 @@ const POSTS = loadPosts();
     const inner = `      <article class="news">
         <div class="wrap">
           <p class="crumbs">
-            <a href="index.html" data-zh="新闻" data-en="News">新闻</a>
+            <a href="../" data-zh="新闻" data-en="News">新闻</a>
             <span class="sep" aria-hidden="true">/</span>
             <time datetime="${esc(p.date)}">${esc(p.date)}</time>
           </p>
@@ -613,11 +632,11 @@ const POSTS = loadPosts();
 ${p.body}
           </div>
           <nav class="pager news__pager" aria-label="新闻翻页" data-zh-aria="新闻翻页" data-en-aria="News paging">
-            <a class="pager__link pager__link--prev" href="index.html">
+            <a class="pager__link pager__link--prev" href="../">
               <span class="pager__dir" data-zh="全部新闻" data-en="All news">全部新闻</span>
               <span class="pager__t" data-zh="新闻列表" data-en="The news list">新闻列表</span>
             </a>
-${older ? `            <a class="pager__link pager__link--next" href="${esc(older.slug)}.html">
+${older ? `            <a class="pager__link pager__link--next" href="../${esc(older.slug)}/">
               <span class="pager__dir" data-zh="上一篇" data-en="Older">上一篇</span>
               <span class="pager__t" data-zh="${esc(older.meta.zh)}" data-en="${esc(older.meta.en || older.meta.zh)}">${esc(older.meta.zh)}</span>
             </a>` : ""}
@@ -628,16 +647,19 @@ ${older ? `            <a class="pager__link pager__link--next" href="${esc(olde
       titleZh: p.meta.zh,
       titleEn: p.meta.en || p.meta.zh,
       desc: p.meta.desc || "",
-      pagePath: `news/${p.slug}.html`,
-      up: "../",
-      current: "../news/index.html",
+      pagePath: `news/${p.slug}/`,
+      up: "../../",
+      current: `../../news/`,
       inner,
     });
-    const outFile = join(NEWS_OUT, `${p.slug}.html`);
+    /* posts move one level down, so their address is news/<slug>/ */
+    const postDir = join(NEWS_OUT, p.slug);
+    const outFile = join(postDir, "index.html");
     if (check) {
       if (!existsSync(outFile) || readFileSync(outFile, "utf8") !== html)
-        problems.push(`stale: news/${p.slug}.html`);
+        problems.push(`stale: news/${p.slug}/`);
     } else {
+      mkdirSync(postDir, { recursive: true });
       writeFileSync(outFile, html);
       written++;
     }
@@ -648,7 +670,7 @@ ${older ? `            <a class="pager__link pager__link--next" href="${esc(olde
       .map(
         (p) => `        <li>
           <time datetime="${esc(p.date)}">${esc(p.date)}</time>
-          <a href="${esc(p.slug)}.html" data-zh="${esc(p.meta.zh)}" data-en="${esc(p.meta.en || p.meta.zh)}">${esc(p.meta.zh)}</a>
+          <a href="${esc(p.slug)}/" data-zh="${esc(p.meta.zh)}" data-en="${esc(p.meta.en || p.meta.zh)}">${esc(p.meta.zh)}</a>
           <p data-zh="${esc(p.meta.desc || "")}" data-en="${esc(p.meta.desc_en || p.meta.desc || "")}">${esc(p.meta.desc || "")}</p>
         </li>`
       )
@@ -666,9 +688,9 @@ ${items}
       titleZh: "新闻 — FujoOS",
       titleEn: "News — FujoOS",
       desc: "FujoOS 的进展、发布与思考。",
-      pagePath: "news/index.html",
+      pagePath: AT.news,
       up: "../",
-      current: "../news/index.html",
+      current: `../news/`,
       inner,
     });
     const outFile = join(NEWS_OUT, "index.html");
@@ -714,12 +736,12 @@ ${items}
 {
   const today = new Date().toISOString().slice(0, 10);
   const urls = [
-    "index.html",
-    "fuai.html",
-    "loment.html",
-    "docs/index.html",
-    ...flat.map((p) => `docs/${p.section}/${p.slug}.html`),
-    ...(POSTS.length ? ["news/index.html", ...POSTS.map((p) => `news/${p.slug}.html`)] : []),
+    "", // the root serves index.html
+    AT.fuai,
+    AT.loment,
+    AT.docs,
+    ...flat.map((p) => (p.slug === "index" ? `docs/${p.section}/` : `docs/${p.section}/${p.slug}/`)),
+    ...(POSTS.length ? [AT.news, ...POSTS.map((p) => `news/${p.slug}/`)] : []),
   ];
   const sitemap =
     `<?xml version="1.0" encoding="UTF-8"?>\n` +

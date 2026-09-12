@@ -14,17 +14,17 @@
 
               <h2 data-zh="三条线" data-en="The three lines">三条线</h2>
               <div class="grid grid--3">
-                <a class="card card--link" href="../language/index.html">
+                <a class="card card--link" href="../../language/">
                   <span class="card__k" data-zh="语言线" data-en="Language line">语言线</span>
                   <h3 class="h3">FujoLang-DEV</h3>
                   <p data-zh="Loment 语言与 Potato 表示层。L0 单一真源、L1 编译器与自举、Potato 强制导出与跨实现校验。" data-en="The Loment language and the Potato representation layer: L0 single source of truth, the L1 compiler and self-hosting, Potato's forced export and cross-implementation validation.">Loment 语言与 Potato 表示层。L0 单一真源、L1 编译器与自举、Potato 强制导出与跨实现校验。</p>
                 </a>
-                <a class="card card--link" href="network-line.html">
+                <a class="card card--link" href="../network-line/">
                   <span class="card__k" data-zh="网络线" data-en="Network line">网络线</span>
                   <h3 class="h3">NET-DEV</h3>
                   <p data-zh="Loment 的第一个真应用。基线取自语言线分支；在用户态用 Loment / Potato 写网络层，不碰内核协议栈。" data-en="Loment's first real application. Based on the language line's branch; writes the network layer in user-space Loment / Potato without touching the kernel protocol stack.">Loment 的第一个真应用。基线取自语言线分支；在用户态用 Loment / Potato 写网络层，不碰内核协议栈。</p>
                 </a>
-                <a class="card card--link" href="../compat/index.html">
+                <a class="card card--link" href="../../compat/">
                   <span class="card__k" data-zh="兼容线" data-en="Compatibility line">兼容线</span>
                   <h3 class="h3">compat · FUFORALL</h3>
                   <p data-zh="四套加载器与三套 ABI。按 C01–C15 逐项推进，每项带一条可执行判据；clean-room，表驱动。" data-en="Four loaders and three ABIs. Proceeds item by item C01–C15, each with an executable criterion; clean-room and table-driven.">四套加载器与三套 ABI。按 C01–C15 逐项推进，每项带一条可执行判据；clean-room，表驱动。</p>
@@ -33,8 +33,8 @@
 
               <h2 data-zh="边界是靠“让出清单”划出来的" data-en="Boundaries are drawn by a let-out list">边界是靠“让出清单”划出来的</h2>
               <div class="prose">
-                <p data-zh-html="三条线能并行，不是因为大家靠自觉，而是因为有一条明确的让出清单：某些文件、某个子系统由某条线独占，其他线不得改动，需要改动时走补丁协商而不是直接编辑。网络线的宪章就明确写了内核侧 net.rs 属于独占范围，所以那条线只做用户态部分——见 <a href=&quot;network-line.html&quot;>网络线</a>。" data-en-html="The three lines can run in parallel not because everyone is careful by instinct but because an explicit let-out list exists: certain files and subsystems are owned by one line, others must not modify them, and changes go through patch negotiation rather than direct edits. The network line's charter states outright that kernel-side net.rs is owned elsewhere, which is why that line stays in user space — see <a href=&quot;network-line.html&quot;>The network line</a>.">
-                  三条线能并行，不是因为大家靠自觉，而是因为有一条明确的让出清单：某些文件、某个子系统由某条线独占，其他线不得改动，需要改动时走补丁协商而不是直接编辑。网络线的宪章就明确写了内核侧 net.rs 属于独占范围，所以那条线只做用户态部分——见 <a href="network-line.html">网络线</a>。
+                <p data-zh-html="三条线能并行，不是因为大家靠自觉，而是因为有一条明确的让出清单：某些文件、某个子系统由某条线独占，其他线不得改动，需要改动时走补丁协商而不是直接编辑。网络线的宪章就明确写了内核侧 net.rs 属于独占范围，所以那条线只做用户态部分——见 <a href=&quot;../network-line/&quot;>网络线</a>。" data-en-html="The three lines can run in parallel not because everyone is careful by instinct but because an explicit let-out list exists: certain files and subsystems are owned by one line, others must not modify them, and changes go through patch negotiation rather than direct edits. The network line's charter states outright that kernel-side net.rs is owned elsewhere, which is why that line stays in user space — see <a href=&quot;../network-line/&quot;>The network line</a>.">
+                  三条线能并行，不是因为大家靠自觉，而是因为有一条明确的让出清单：某些文件、某个子系统由某条线独占，其他线不得改动，需要改动时走补丁协商而不是直接编辑。网络线的宪章就明确写了内核侧 net.rs 属于独占范围，所以那条线只做用户态部分——见 <a href="../network-line/">网络线</a>。
                 </p>
               </div>
 

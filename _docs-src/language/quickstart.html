@@ -149,7 +149,7 @@ fn test_double_0() -&gt; bool { return double(0) == 0; }</pre>
               </div>
               <div class="note note--steel">
                 <strong data-zh="为什么值得别扭一下：" data-en="Why it is worth the friction: ">为什么值得别扭一下：</strong>
-                <span data-zh-html="同一个约束在三个层面都不可关闭：编译器内部有错即编译失败；CLI 上要 emit 目标就必须同时 emit 形式对象；仓库里要求每个示例都带一份逐字节一致的对象。这是为了让「内核读得懂这段代码被允许做什么」成为常态而不是努力。见 <a href=&quot;potato.html&quot;>Potato 形式对象</a>。" data-en-html="the same constraint is non-disableable at three levels: inside the compiler any error fails the build; at the CLI emitting a target requires emitting the formal object; at the repository every example must carry a byte-identical object. The point is to make “the kernel can read what this code is allowed to do” the default rather than an effort. See <a href=&quot;potato.html&quot;>The Potato object</a>.">同一个约束在三个层面都不可关闭：编译器内部有错即编译失败；CLI 上要 emit 目标就必须同时 emit 形式对象；仓库里要求每个示例都带一份逐字节一致的对象。这是为了让「内核读得懂这段代码被允许做什么」成为常态而不是努力。见 <a href="potato.html">Potato 形式对象</a>。</span>
+                <span data-zh-html="同一个约束在三个层面都不可关闭：编译器内部有错即编译失败；CLI 上要 emit 目标就必须同时 emit 形式对象；仓库里要求每个示例都带一份逐字节一致的对象。这是为了让「内核读得懂这段代码被允许做什么」成为常态而不是努力。见 <a href=&quot;../potato/&quot;>Potato 形式对象</a>。" data-en-html="the same constraint is non-disableable at three levels: inside the compiler any error fails the build; at the CLI emitting a target requires emitting the formal object; at the repository every example must carry a byte-identical object. The point is to make “the kernel can read what this code is allowed to do” the default rather than an effort. See <a href=&quot;../potato/&quot;>The Potato object</a>.">同一个约束在三个层面都不可关闭：编译器内部有错即编译失败；CLI 上要 emit 目标就必须同时 emit 形式对象；仓库里要求每个示例都带一份逐字节一致的对象。这是为了让「内核读得懂这段代码被允许做什么」成为常态而不是努力。见 <a href="../potato/">Potato 形式对象</a>。</span>
               </div>
 
               <h2 data-zh="形式对象：让机器看懂这段代码" data-en="The formal object: what a machine reads">形式对象：让机器看懂这段代码</h2>
@@ -217,8 +217,8 @@ fn write(slot: u32) -&gt; u32 {
                   </tbody>
                 </table>
               </div>
-              <p class="small dim" data-zh-html="还有一个配套的声明叫 <code>excluded</code>，用来明确写出「本单元不申请哪些能力」。它同样会进入形式对象的 <code>excluded</code> 字段——也就是内核能读到你的边界声明。细节见 <a href=&quot;capability.html&quot;>能力域即语言构造</a>。" data-en-html="There is a companion declaration, <code>excluded</code>, for stating which capabilities a unit does not request. It also lands in the object's <code>excluded</code> field — so the kernel can read your boundary declaration. Details under <a href=&quot;capability.html&quot;>Capability as a construct</a>.">
-                还有一个配套的声明叫 <code>excluded</code>，用来明确写出「本单元不申请哪些能力」。它同样会进入形式对象的 <code>excluded</code> 字段——也就是内核能读到你的边界声明。细节见 <a href="capability.html">能力域即语言构造</a>。
+              <p class="small dim" data-zh-html="还有一个配套的声明叫 <code>excluded</code>，用来明确写出「本单元不申请哪些能力」。它同样会进入形式对象的 <code>excluded</code> 字段——也就是内核能读到你的边界声明。细节见 <a href=&quot;../capability/&quot;>能力域即语言构造</a>。" data-en-html="There is a companion declaration, <code>excluded</code>, for stating which capabilities a unit does not request. It also lands in the object's <code>excluded</code> field — so the kernel can read your boundary declaration. Details under <a href=&quot;../capability/&quot;>Capability as a construct</a>.">
+                还有一个配套的声明叫 <code>excluded</code>，用来明确写出「本单元不申请哪些能力」。它同样会进入形式对象的 <code>excluded</code> 字段——也就是内核能读到你的边界声明。细节见 <a href="../capability/">能力域即语言构造</a>。
               </p>
 
               <h2 data-zh="出错了会看到什么" data-en="What an error looks like">出错了会看到什么</h2>
@@ -286,8 +286,8 @@ fn write(slot: u32) -&gt; u32 {
 <span class="c"># 或者不落盘，只核对磁盘产物是否与生成结果一致：</span>
 python tools/lomc.py lom/fuc.lom --check</pre>
               </div>
-              <p class="small dim" data-zh-html="L1 的源文件可以 <code>use</code> 一个 L0 文件——声明来自 L0，行为来自 <code>.lomt</code>。这是「Loment 是 .lom 的超集」这句话的实际含义。见 <a href=&quot;l0.html&quot;>L0 单一真源</a>。" data-en-html="An L1 source file can <code>use</code> an L0 file — declarations come from L0, behaviour from the <code>.lomt</code>. That is what “Loment is a superset of .lom” means in practice. See <a href=&quot;l0.html&quot;>L0 source of truth</a>.">
-                L1 的源文件可以 <code>use</code> 一个 L0 文件——声明来自 L0，行为来自 <code>.lomt</code>。这是「Loment 是 .lom 的超集」这句话的实际含义。见 <a href="l0.html">L0 单一真源</a>。
+              <p class="small dim" data-zh-html="L1 的源文件可以 <code>use</code> 一个 L0 文件——声明来自 L0，行为来自 <code>.lomt</code>。这是「Loment 是 .lom 的超集」这句话的实际含义。见 <a href=&quot;../l0/&quot;>L0 单一真源</a>。" data-en-html="An L1 source file can <code>use</code> an L0 file — declarations come from L0, behaviour from the <code>.lomt</code>. That is what “Loment is a superset of .lom” means in practice. See <a href=&quot;../l0/&quot;>L0 source of truth</a>.">
+                L1 的源文件可以 <code>use</code> 一个 L0 文件——声明来自 L0，行为来自 <code>.lomt</code>。这是「Loment 是 .lom 的超集」这句话的实际含义。见 <a href="../l0/">L0 单一真源</a>。
               </p>
 
               <h2 data-zh="现在还不能做什么" data-en="What you cannot do yet">现在还不能做什么</h2>
@@ -302,5 +302,5 @@ python tools/lomc.py lom/fuc.lom --check</pre>
 
               <div class="note note--steel">
                 <strong data-zh="接下来：" data-en="Next: ">接下来：</strong>
-                <span data-zh-html="语言的设计取舍见 <a href=&quot;loment.html&quot;>Loment 语言</a>；能力域那一层见 <a href=&quot;capability.html&quot;>能力域即语言构造</a>；编译器强制导出的那半边见 <a href=&quot;potato.html&quot;>Potato 形式对象</a>。" data-en-html="the language's design trade-offs are under <a href=&quot;loment.html&quot;>The Loment language</a>; the capability layer under <a href=&quot;capability.html&quot;>Capability as a construct</a>; the mandatory-export half under <a href=&quot;potato.html&quot;>The Potato object</a>.">语言的设计取舍见 <a href="loment.html">Loment 语言</a>；能力域那一层见 <a href="capability.html">能力域即语言构造</a>；编译器强制导出的那半边见 <a href="potato.html">Potato 形式对象</a>。</span>
+                <span data-zh-html="语言的设计取舍见 <a href=&quot;../loment/&quot;>Loment 语言</a>；能力域那一层见 <a href=&quot;../capability/&quot;>能力域即语言构造</a>；编译器强制导出的那半边见 <a href=&quot;../potato/&quot;>Potato 形式对象</a>。" data-en-html="the language's design trade-offs are under <a href=&quot;../loment/&quot;>The Loment language</a>; the capability layer under <a href=&quot;../capability/&quot;>Capability as a construct</a>; the mandatory-export half under <a href=&quot;../potato/&quot;>The Potato object</a>.">语言的设计取舍见 <a href="../loment/">Loment 语言</a>；能力域那一层见 <a href="../capability/">能力域即语言构造</a>；编译器强制导出的那半边见 <a href="../potato/">Potato 形式对象</a>。</span>
               </div>

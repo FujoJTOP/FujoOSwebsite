@@ -17,8 +17,8 @@
 
               <h2 data-zh="一条设计的对称性" data-en="A symmetry worth noting">一条设计的对称性</h2>
               <div class="prose">
-                <p data-zh-html="内核安全模型与 FUAI 用的是同一个手法：把“必须绝对可靠”的面积压小，其余部分放到可以失败、可以重启的地方。Ring0 只留 CPU 与空间管理，是空间上的压缩；<a href=&quot;../ai/capability.html&quot;>能力域</a>把模型能碰到的对象枚举出来，是权限上的压缩。两者都不是“加一层检查”，而是“减少需要检查的东西”。" data-en-html="The kernel security model and FUAI use the same move: shrink the area that must be absolutely reliable, and push everything else somewhere it may fail and restart. Keeping Ring0 to CPU and space management is compression in space; <a href=&quot;../ai/capability.html&quot;>capability domains</a> enumerate what a model can touch, which is compression in authority. Neither adds a check — both remove things that need checking.">
-                  内核安全模型与 FUAI 用的是同一个手法：把“必须绝对可靠”的面积压小，其余部分放到可以失败、可以重启的地方。Ring0 只留 CPU 与空间管理，是空间上的压缩；<a href="../ai/capability.html">能力域</a>把模型能碰到的对象枚举出来，是权限上的压缩。两者都不是“加一层检查”，而是“减少需要检查的东西”。
+                <p data-zh-html="内核安全模型与 FUAI 用的是同一个手法：把“必须绝对可靠”的面积压小，其余部分放到可以失败、可以重启的地方。Ring0 只留 CPU 与空间管理，是空间上的压缩；<a href=&quot;../../ai/capability/&quot;>能力域</a>把模型能碰到的对象枚举出来，是权限上的压缩。两者都不是“加一层检查”，而是“减少需要检查的东西”。" data-en-html="The kernel security model and FUAI use the same move: shrink the area that must be absolutely reliable, and push everything else somewhere it may fail and restart. Keeping Ring0 to CPU and space management is compression in space; <a href=&quot;../../ai/capability/&quot;>capability domains</a> enumerate what a model can touch, which is compression in authority. Neither adds a check — both remove things that need checking.">
+                  内核安全模型与 FUAI 用的是同一个手法：把“必须绝对可靠”的面积压小，其余部分放到可以失败、可以重启的地方。Ring0 只留 CPU 与空间管理，是空间上的压缩；<a href="../../ai/capability/">能力域</a>把模型能碰到的对象枚举出来，是权限上的压缩。两者都不是“加一层检查”，而是“减少需要检查的东西”。
                 </p>
               </div>
 

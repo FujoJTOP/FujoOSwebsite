@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html
+  lang="zh-CN"
+  class="theme-instrument"
+  data-title-zh="Loment · Potato — 一门写给作者，一份读给机器"
+  data-title-en="Loment · Potato — a language for authors, a formal object for machines"
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Loment · Potato — 一门写给作者，一份读给机器</title>
+    <link rel="canonical" href="https://fujojtop.github.io/FujoOSwebsite/loment.html" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="FujoOS" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:locale:alternate" content="en" />
+    <meta property="og:title" content="Loment · Potato — 一门写给作者，一份读给机器" />
+    <meta property="og:description" content="Loment 是平台的系统语言：Rust 的严格子集，加一等的能力域构造。Potato 不是语言，是编译器的强制输出——一份机器可读的形式对象。" />
+    <meta property="og:url" content="https://fujojtop.github.io/FujoOSwebsite/loment.html" />
+    <meta property="og:image" content="https://fujojtop.github.io/FujoOSwebsite/assets/og-card.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="FujoOS — Mount Fuji mark" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="description"
+      content="Loment 是平台的系统语言：Rust 的严格子集，加一等的能力域构造。Potato 不是语言，是编译器的强制输出——一份机器可读的形式对象，内核、验证器与外部 Agent 读同一份。"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/style.css?v=e0a425e4" />
+    <link rel="icon" href="../favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" sizes="any" />
+    <link rel="icon" type="image/png" href="../assets/favicon-32.png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png" />
+    <script>
+      document.documentElement.classList.add("js");
+      /* If site.js never runs, reveal everything instead of leaving it hidden. */
+      setTimeout(function () {
+        var r = document.documentElement;
+        if (!r.hasAttribute("data-motion-on")) r.classList.add("no-motion");
+      }, 1200);
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#main" data-zh="跳到主要内容" data-en="Skip to content">跳到主要内容</a>
+
+    <!-- ticker:start -->
+    <div class="ticker" role="note" data-ticker data-paused="false">
+      <p class="ticker__tag"><span class="ticker__pip" aria-hidden="true"></span><span data-zh="公告" data-en="Notice">公告</span></p>
+      <div class="ticker__view">
+        <div class="ticker__track">
+          <span class="ticker__item" data-zh="FujoOS公布日延期，以仓库发布为准" data-en="FujoOS release date postponed — the repository is authoritative">FujoOS公布日延期，以仓库发布为准</span>
+          <span class="ticker__item" aria-hidden="true" data-zh="FujoOS公布日延期，以仓库发布为准" data-en="FujoOS release date postponed — the repository is authoritative">FujoOS公布日延期，以仓库发布为准</span>
+        </div>
+      </div>
+      <button class="ticker__toggle" type="button" data-ticker-toggle aria-pressed="false">
+        <span class="ticker__ico" aria-hidden="true"></span>
+        <span class="ticker__lbl ticker__lbl--pause" data-zh="暂停" data-en="Pause">暂停</span>
+        <span class="ticker__lbl ticker__lbl--play" data-zh="继续" data-en="Play">继续</span>
+      </button>
+    </div>
+    <!-- ticker:end -->
+
+    <header class="nav">
+      <div class="wrap nav__inner">
+        <a class="nav__brand" href="../">
+          <svg viewBox="0 14 64 46" aria-hidden="true">
+            <path d="M3,58 Q11,38 26,16 Q32,19 38,16 Q53,38 61,58 Z" fill="var(--mark-rock)" />
+            <path d="M15.9,32 Q18,22 26,16 Q32,19 38,16 Q46,22 48.1,32 Q32,38 15.9,32 Z" fill="var(--mark-snow)" />
+          </svg>
+          FujoOS
+        </a>
+        <nav class="nav__links" aria-label="主导航" data-zh-aria="主导航" data-en-aria="Primary">
+          <a class="nav__link" href="../" data-zh="首页" data-en="Home">首页</a>
+          <a class="nav__link" href="../fuai/" data-zh="FUAI 安全体系" data-en="FUAI safety">FUAI 安全体系</a>
+          <a class="nav__link" href="../loment/" aria-current="page" data-zh="Loment · Potato" data-en="Loment · Potato">Loment · Potato</a>
+          <a class="nav__link" href="../docs/" data-zh="文档" data-en="Docs">文档</a>
+          <a class="nav__link" href="../news/" data-zh="新闻" data-en="News">新闻</a>
+          <a class="nav__link" href="https://zenodo.org/records/22352904" rel="noopener" data-zh="论文 ↗" data-en="Paper ↗">论文 ↗</a>
+          <div class="lang" role="group" aria-label="语言" data-zh-aria="语言" data-en-aria="Language">
+            <button type="button" data-lang="zh" aria-pressed="true">ZH</button>
+            <button type="button" data-lang="en" aria-pressed="false">EN</button>
+          </div>
+        </nav>
+        <button class="nav__toggle" type="button" aria-expanded="false" data-zh="菜单" data-en="Menu">菜单</button>
+      </div>
+      <div class="wrap">
+        <div class="nav__drawer" data-open="false">
+          <a href="../" data-zh="首页" data-en="Home">首页</a>
+          <a href="../fuai/" data-zh="FUAI 安全体系" data-en="FUAI safety system">FUAI 安全体系</a>
+          <a href="../loment/" data-zh="Loment · Potato 语言" data-en="Loment · Potato language">Loment · Potato 语言</a>
+          <a href="../docs/" data-zh="文档" data-en="Documentation">文档</a>
+          <a href="../news/" data-zh="新闻" data-en="News">新闻</a>
+          <a href="../docs/start/" data-zh="构建与运行" data-en="Build and run">构建与运行</a>
+          <a href="https://zenodo.org/records/22352904" rel="noopener" data-zh="论文 (Zenodo) ↗" data-en="Paper (Zenodo) ↗">论文 (Zenodo) ↗</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+      <!-- ======================================================== page head -->
+      <section class="section section--flush" style="padding-top: var(--s6)" data-motion>
+        <div class="wrap">
+          <p class="crumbs fade-step" style="--delay: 0.02s">
+            <a href="../" data-zh="首页" data-en="Home">首页</a>
+            <span class="sep" aria-hidden="true">/</span>
+            <span data-zh="Loment · Potato" data-en="Loment · Potato">Loment · Potato</span>
+          </p>
+          <div class="grid grid--2" style="margin-top: var(--s4); align-items: start">
+            <div>
+              <h1 class="display fade-step" style="--delay: 0.06s; font-size: clamp(2.1rem, 3.6vw, 2.9rem)" data-zh="Loment 管怎么写，Potato 管怎么看。" data-en="Loment governs how you write. Potato governs how a machine reads.">
+                Loment 管怎么写，Potato 管怎么看。
+              </h1>
+              <p class="lede fade-step" style="--delay: 0.14s; margin-top: var(--s3)" data-zh="这不是两门语言在竞争。Loment 是语言：语法、类型、所有权、能力域。Potato 不是语言，是编译流程输出端的形式对象——无语法，只有结构。两者在语义模型处相遇。" data-en="This is not two languages competing. Loment is a language: grammar, types, ownership, capability domains. Potato is not a language — it is the formal object at the output end of the compiler, with no grammar, only structure. The two meet at the semantic model.">
+               这不是两门语言在竞争。Loment 是语言：语法、类型、所有权、能力域。Potato 不是语言，是编译流程输出端的形式对象——无语法，只有结构。两者在语义模型处相遇。
+              </p>
+              <div class="hero__actions fade-step" style="--delay: 0.22s; margin-top: var(--s4)">
+                <button
+                  class="btn btn--primary"
+                  type="button"
+                  data-modal-open="loment-cta"
+                  data-zh="立刻使用 Loment"
+                  data-en="Use Loment now"
+                >
+                  立刻使用 Loment
+                </button>
+                <a class="btn" href="../docs/language/quickstart/" data-zh="读上手文档 (Beta)" data-en="Read the quickstart (Beta)">读上手文档 (Beta)</a>
+              </div>
+              <p class="hero__links fade-step" style="--delay: 0.26s">
+                <a href="#measurement" data-zh="先看波 C 测量" data-en="See the wave-C measurements first">先看波 C 测量</a>
+              </p>
+            </div>
+            <div class="stack" style="gap: var(--s2)">
+              <div class="note note--amber fade-step" style="--delay: 0.3s">
+                <strong data-zh="为什么不用“造一门新语言”作为起点" data-en="Why not start by inventing a new language">为什么不用“造一门新语言”作为起点</strong>
+                <span data-zh="—— 痛点不在 Rust，而在同一个接口被 N 种语言各写一遍。换掉内核语言只会让 N 变成 N+1。" data-en=" — the pain is not Rust; it is the same interface being written once per language. Replacing the kernel language only turns N into N+1.">—— 痛点不在 Rust，而在同一个接口被 N 种语言各写一遍。换掉内核语言只会让 N 变成 N+1。</span>
+              </div>
+              <div class="note note--steel fade-step" style="--delay: 0.38s">
+                <strong data-zh="语法不新，语义才新" data-en="Not new syntax — new semantics">语法不新，语义才新</strong>
+                <span data-zh="—— Loment 的表面语法取 Rust 的严格子集，大模型的 Rust 先验可以直接迁移，绕开“零语料”这道坎。" data-en=" — Loment's surface grammar is a strict subset of Rust, so a model's Rust priors transfer directly. That is how the zero-corpus problem is sidestepped.">—— Loment 的表面语法取 Rust 的严格子集，大模型的 Rust 先验可以直接迁移，绕开“零语料”这道坎。</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================== division -->
+      <section class="section anchor" id="division" data-motion>
+        <div class="wrap">
+          <h2 class="h2 fade-step" data-zh="分工：写与看" data-en="The division: writing and reading">分工：写与看</h2>
+          <p class="muted prose fade-step" style="margin-top: var(--s2); --delay: 0.07s" data-zh="作者面向 Loment 写系统；机器面向 Potato 读系统。编译器是两者的接缝——它为每一个编译单元强制导出形式对象，没有关闭的开关。" data-en="An author writes the system against Loment; a machine reads the system against Potato. The compiler is the seam — it emits a formal object for every compilation unit, with no switch to turn that off.">
+            作者面向 Loment 写系统；机器面向 Potato 读系统。编译器是两者的接缝——它为每一个编译单元强制导出形式对象，没有关闭的开关。
+          </p>
+
+          <figure class="figure fade-step" style="--delay: 0.04s; --draw-dur: 0.45s; margin-top: var(--s4)">
+            <svg
+              class="envelope"
+              viewBox="0 0 620 336"
+              role="img"
+              aria-label="作者写出 Loment 源文件，编译器编译后强制导出 Potato 形式对象；内核能力域、A1–A4 验证器与外部 Agent 读同一份对象。"
+              data-zh-aria="作者写出 Loment 源文件，编译器编译后强制导出 Potato 形式对象；内核能力域、A1–A4 验证器与外部 Agent 读同一份对象。"
+              data-en-aria="An author writes a Loment source file; the compiler emits a Potato formal object as a mandatory output. The kernel capability domain, the A1–A4 verifier and external agents all read that same object."
+            >
+              <defs>
+                <marker id="mkl-s" class="mk" viewBox="0 0 8 8" refX="7.5" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+                  <path d="M0,0 L8,4 L0,8 Z" />
+                </marker>
+                <marker id="mkl-a" class="mk mk--amber" viewBox="0 0 8 8" refX="7.5" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+                  <path d="M0,0 L8,4 L0,8 Z" />
+                </marker>
+              </defs>
+
+              <text x="16" y="22" class="t-amber">写 · Loment（面向作者）</text>
+              <rect x="16" y="36" width="176" height="56" class="stroke s-amber" />
+              <text x="30" y="62" class="t-amber">作者 · 人 / Agent</text>
+              <text x="30" y="80" class="t-dim">writes</text>
+
+              <path class="stroke s-amber s-dash fade-step" d="M192,64 H212" marker-end="url(#mkl-a)" style="--delay: 0.14s" />
+
+              <rect x="212" y="36" width="176" height="56" class="stroke s-steel" />
+              <text x="226" y="62" class="t-steel">Loment 源 .lomt</text>
+              <text x="226" y="80" class="t-dim">Rust 严格子集 · 能力域</text>
+
+              <path class="stroke s-steel draw" d="M388,64 H408" marker-end="url(#mkl-s)" style="--delay: 0.2s" />
+
+              <rect x="408" y="36" width="176" height="56" class="stroke s-steel" />
+              <text x="422" y="62" class="t-steel">编译器 lomentc</text>
+              <text x="422" y="80" class="t-dim">转译 / LLVM IR</text>
+
+              <path class="stroke s-steel draw" d="M496,92 V118 H300 V146" marker-end="url(#mkl-s)" style="--delay: 0.3s" />
+
+              <rect x="150" y="146" width="300" height="56" class="stroke s-steel" />
+              <text x="166" y="172" class="t-steel">形式对象 · Potato</text>
+              <text x="166" y="190" class="t-dim">强制导出，不可关闭</text>
+
+              <path class="stroke s-steel draw" d="M300,202 V234" style="--delay: 0.4s" />
+              <path class="stroke s-steel draw" d="M108,234 H512" style="--delay: 0.46s" />
+              <path class="stroke s-steel draw" d="M108,234 V258" marker-end="url(#mkl-s)" style="--delay: 0.52s" />
+              <path class="stroke s-steel draw" d="M310,234 V258" marker-end="url(#mkl-s)" style="--delay: 0.56s" />
+              <path class="stroke s-steel draw" d="M512,234 V258" marker-end="url(#mkl-s)" style="--delay: 0.6s" />
+
+              <text x="16" y="228" class="t-steel">读 · Potato（面向机器）</text>
+
+              <rect x="16" y="258" width="184" height="56" class="stroke s-rule" />
+              <text x="30" y="292" class="t-dim">内核能力域</text>
+
+              <rect x="218" y="258" width="184" height="56" class="stroke s-rule" />
+              <text x="232" y="292" class="t-dim">A1–A4 验证器</text>
+
+              <rect x="420" y="258" width="184" height="56" class="stroke s-rule" />
+              <text x="434" y="292" class="t-dim">外部 Agent</text>
+            </svg>
+            <figcaption class="figure__cap">
+              <span data-zh="三方读同一份形式对象" data-en="Three readers, one formal object">三方读同一份形式对象</span>
+              <span data-zh="判定无需读源码，无需读二进制" data-en="No source read, no binary read">判定无需读源码，无需读二进制</span>
+            </figcaption>
+          </figure>
+
+          <h3 class="h3" style="margin-top: var(--s5)" data-zh="为什么不能把它俩合并" data-en="Why the two cannot be merged">为什么不能把它俩合并</h3>
+          <div class="grid grid--2" style="margin-top: var(--s3); align-items: start">
+            <div class="note note--amber">
+              <strong data-zh="零语料的问题会回来。" data-en="The zero-corpus problem comes back.">零语料的问题会回来。</strong>
+              <span data-zh="语言要有语料才能被模型书写；表示层不需要语料，它消费结构。把 Potato 变成语言，等于把 Loment 拖回“世俗新语言”的陷阱。" data-en=" A language needs a corpus before a model can write it; a representation layer needs no corpus, it consumes structure. Turning Potato into a language would drag Loment back into the “ordinary new language” trap."> 语言要有语料才能被模型书写；表示层不需要语料，它消费结构。把 Potato 变成语言，等于把 Loment 拖回“世俗新语言”的陷阱。</span>
+            </div>
+            <div class="note note--steel">
+              <strong data-zh="它同时是唯一的战略保留地。" data-en="It is also the one strategic reserve.">它同时是唯一的战略保留地。</strong>
+              <span data-zh="Potato 曾是项目刻意闭源的一层；用户指示改为全部开源。规范与实现都可复现，论文三的测量因此更强。" data-en=" Potato was once the project's deliberately closed layer; a user directive made it fully open. Both spec and implementation become reproducible, which strengthens the paper's measurements."> Potato 曾是项目刻意闭源的一层；用户指示改为全部开源。规范与实现都可复现，论文三的测量因此更强。</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================== L0 -->
+      <section class="section anchor" id="l0" data-motion>
+        <div class="wrap">
+          <h2 class="h2 fade-step" data-zh="L0 · 接口层：现在就能做的那部分" data-en="L0 · the interface layer: the part that can be done now">L0 · 接口层：现在就能做的那部分</h2>
+          <p class="muted prose fade-step" style="margin-top: var(--s2); --delay: 0.07s" data-zh="同一个事实在 JSON、Rust、C、Python 里各写一份——这是当前最实际的成本，也是十个痛点里七个的共同根因。L0 的做法是：一份 .lom 单一真源，生成器产出各类目标，一致性在生成期就被保证。" data-en="The same fact written once each in JSON, Rust, C and Python is today's most concrete cost, and the shared root cause of seven of ten known pain points. L0's answer: one .lom source of truth, generators that emit each target, and consistency guaranteed at generation time.">
+            同一个事实在 JSON、Rust、C、Python 里各写一份——这是当前最实际的成本，也是十个痛点里七个的共同根因。L0 的做法是：一份 .lom 单一真源，生成器产出各类目标，一致性在生成期就被保证。
+          </p>
+
+          <div class="code" style="margin-top: var(--s4)">
+            <div class="code__bar">
+              <span class="lang-tag">lom</span>
+              <span data-zh="单一真源：一处声明，多处生成" data-en="One source of truth: declare once, generate many">单一真源：一处声明，多处生成</span>
+              <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+            </div>
+            <pre><span class="c">// lom/fuc.lom — .fuc 节点布局，此前散落在打包器、内核与新文档三处</span>
+record FucNode layout(packed, size=64) {
+  kind:  u16 @0
+  flags: u16 @2
+  x:     i16 @4
+  y:     i16 @6
+}
+
+<span class="c">// lom/fuai.lom — 46 个契约原语与部署参数</span>
+enum Opcode: u16 {
+  cfg_get = 0x8106 {
+    sig: <span class="s">"a0=key"</span>, fujo: <span class="s">"fujo_cfg_get"</span>, linux: <span class="s">"fuai_cfg_get"</span>,
+    semantics: <span class="s">"config read (defaults 1-&gt;50 2-&gt;0 7-&gt;45 8-&gt;35)"</span>
+  }
+}</pre>
+          </div>
+
+          <p class="small dim" style="margin-top: var(--s3)" data-zh="生成物：Rust 常量与解码器、C 头、Python 打包器、JSON 规范，以及一个漂移检查器。判据是漂移检查器可以退役——漂移在生成期就不可能发生。" data-en="Generated: Rust constants and decoders, C headers, Python packers, the JSON spec, and a drift checker. The criterion is that the drift checker can be retired — drift becomes impossible at generation time.">
+            生成物：Rust 常量与解码器、C 头、Python 打包器、JSON 规范，以及一个漂移检查器。判据是漂移检查器可以退役——漂移在生成期就不可能发生。
+          </p>
+        </div>
+      </section>
+
+      <!-- ============================================================== L1 -->
+      <section class="section anchor" id="l1" data-motion>
+        <div class="wrap">
+          <h2 class="h2 fade-step" data-zh="L1 · 系统语言" data-en="L1 · the system language">L1 · 系统语言</h2>
+          <p class="muted prose fade-step" style="margin-top: var(--s2); --delay: 0.07s" data-zh="设计目标按优先级排：布局与 ABI 是一等公民；确定性（无 GC、显式所有权、no_std 优先）；能力域语法化；每个编译单元导出可审计的语义模型；跨后端。第一版是 Loment → Rust 的转译器，不写后端——先拿到一个能跑、能与 Rust 原版逐位对齐的语言。" data-en="Design goals in priority order: layout and ABI as first-class; determinism (no GC, explicit ownership, no_std first); capability domains as a language construct; a auditable semantic model emitted per unit; multiple backends. The first version is a Loment → Rust transpiler with no backend of its own — get a language that runs and aligns bit-for-bit with the Rust original first.">
+            设计目标按优先级排：布局与 ABI 是一等公民；确定性（无 GC、显式所有权、no_std 优先）；能力域语法化；每个编译单元导出可审计的语义模型；跨后端。第一版是 Loment → Rust 的转译器，不写后端——先拿到一个能跑、能与 Rust 原版逐位对齐的语言。
+          </p>
+
+          <div class="grid grid--2" style="margin-top: var(--s4); align-items: start">
+            <div class="code">
+              <div class="code__bar">
+                <span class="lang-tag">loment</span>
+                <span data-zh="能力域是语言构造，不是库调用" data-en="A capability domain is a language construct, not a library call">能力域是语言构造，不是库调用</span>
+                <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+              </div>
+              <pre><span class="c">// 作者面</span>
+capability blk_write: disk[0..4] revocable {
+  on_revoke =&gt; fallback
+}
+
+export fn flush(req: FlushReq) contract(hex64) {
+  guard blk_write(idx)   <span class="c">// 越界在编译期拒绝</span>
+  ...
+}</pre>
+            </div>
+            <div class="code">
+              <div class="code__bar">
+                <span class="lang-tag">json</span>
+                <span data-zh="机器面：编译器强制产出的形式对象" data-en="Machine side: the formal object the compiler must emit">机器面：编译器强制产出的形式对象</span>
+                <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+              </div>
+              <pre>{"unit": <span class="s">"ahci.flush"</span>,
+ "potato": <span class="s">"v1"</span>,
+ "capabilities": [
+   {"name": <span class="s">"blk_write"</span>, "domain": <span class="s">"disk[0..4]"</span>,
+    "revocable": true, "on_revoke": <span class="s">"fallback"</span>}
+ ],
+ "contracts": [{"pred": <span class="s">"hex64"</span>, "mode": <span class="s">"binary"</span>}],
+ "guards": 1,
+ "excluded": []}</pre>
+            </div>
+          </div>
+
+          <div class="table-wrap" style="margin-top: var(--s4)">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col" data-zh="版本" data-en="Version">版本</th>
+                  <th scope="col" data-zh="覆盖" data-en="Coverage">覆盖</th>
+                  <th scope="col" data-zh="校验" data-en="Validation">校验</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Potato v0</strong></td>
+                  <td data-zh="标量、数组、struct、枚举、布局、能力域" data-en="Scalars, arrays, structs, enums, layout, capability domains">标量、数组、struct、枚举、布局、能力域</td>
+                  <td class="num" data-zh="仍合法，可回放（冻结样本 demo.v0.json）" data-en="still valid, replayable (frozen sample demo.v0.json)">仍合法，可回放（冻结样本 demo.v0.json）</td>
+                </tr>
+                <tr>
+                  <td><strong>Potato v1</strong></td>
+                  <td data-zh="新增泛型与单态化实例、trait/impl、切片、str、ptr、()、guard 审计站点" data-en="Adds generics and monomorphized instances, trait/impl, slices, str, ptr, (), and guard audit sites">新增泛型与单态化实例、trait/impl、切片、str、ptr、()、guard 审计站点</td>
+                  <td class="num" data-zh="7/7 自检 · 33 条反例全被拒 · 跨实现 50/50" data-en="7/7 self-check · 33 counterexamples rejected · 50/50 across implementations">7/7 自检 · 33 条反例全被拒 · 跨实现 50/50</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="note note--steel" style="margin-top: var(--s3)">
+            <strong data-zh="强制导出的三层都不可关闭：" data-en="All three layers of forced export are non-negotiable: ">强制导出的三层都不可关闭：</strong>
+            <span data-zh="编译器内部有错即编译失败；CLI 层要 emit 目标就必须同时 emit 形式对象；仓库层要求每个示例都有逐字节一致的 .potato.json 并通过独立校验器。" data-en="inside the compiler, any error fails the build; at the CLI, emitting a target requires emitting the formal object too; at the repository, every example must carry a byte-identical .potato.json that passes the independent validator.">编译器内部有错即编译失败；CLI 层要 emit 目标就必须同时 emit 形式对象；仓库层要求每个示例都有逐字节一致的 .potato.json 并通过独立校验器。</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================== milestones -->
+      <section class="section anchor" id="progress" data-motion>
+        <div class="wrap">
+          <h2 class="h2 fade-step" data-zh="进度：说清楚哪些没做完" data-en="Progress: which parts are not finished">进度：说清楚哪些没做完</h2>
+          <p class="muted prose fade-step" style="margin-top: var(--s2); --delay: 0.07s" data-zh="100 个里程碑按依赖排序推进。下表由脚本从路线图文档生成，不是手写的摘要。" data-en="A hundred milestones are worked in dependency order. The table below is generated by a script from the roadmap document, not hand-summarised.">
+            100 个里程碑按依赖排序推进。下表由脚本从路线图文档生成，不是手写的摘要。
+          </p>
+
+          <div class="stats" style="margin-top: var(--s4)">
+            <div class="stat">
+              <span class="stat__v">86</span>
+              <span class="stat__k" data-zh="完成" data-en="done">完成</span>
+            </div>
+            <div class="stat">
+              <span class="stat__v">9</span>
+              <span class="stat__k" data-zh="部分完成（边界在文档里逐条写明）" data-en="partially done (each boundary written down)">部分完成（边界在文档里逐条写明）</span>
+            </div>
+            <div class="stat">
+              <span class="stat__v">1</span>
+              <span class="stat__k" data-zh="未达：M100 —— 1.0 的发布与外部审计" data-en="not met: M100 — the 1.0 release and its external audit">未达：M100 —— 1.0 的发布与外部审计</span>
+            </div>
+            <div class="stat">
+              <span class="stat__v">4</span>
+              <span class="stat__k" data-zh="未开始：全部在内核侧（撤销实施、A1–A4 断言、域宽接口、域模型对齐）" data-en="not started: all kernel-side (revocation enforcement, A1–A4 assertions, the width interface, domain-model alignment)">未开始：全部在内核侧（撤销实施、A1–A4 断言、域宽接口、域模型对齐）</span>
+            </div>
+          </div>
+
+          <div class="grid grid--2" style="margin-top: var(--s4); align-items: start">
+            <div>
+              <h3 class="h3" data-zh="已经闭环的几件事" data-en="A few things that are closed">已经闭环的几件事</h3>
+              <ul class="list list--check">
+                <li><b data-zh="自举定点" data-en="Self-host fixpoint">自举定点</b> <span data-zh="—— 编译器编译自身；三阶段产物 IR 逐字节全等（1002385 B）。" data-en=" — the compiler compiles itself; the three-stage IR products are byte-identical (1002385 B).">—— 编译器编译自身；三阶段产物 IR 逐字节全等（1002385 B）。</span></li>
+                <li><b data-zh="原生后端" data-en="Native backend">原生后端</b> <span data-zh="—— LLVM IR 路径与 Rust 转译路径双路径差分，逐值一致；差分曾抓出真实的掩码 bug。" data-en=" — the LLVM IR path and the Rust transpile path are diffed value-by-value; the differ once caught a real mask bug.">—— LLVM IR 路径与 Rust 转译路径双路径差分，逐值一致；差分曾抓出真实的掩码 bug。</span></li>
+                <li><b data-zh="工具链" data-en="Toolchain">工具链</b> <span data-zh="—— lomfmt、LSP、包管理器、文档生成器、DWARF 语句级行表、增量构建（冷 82.6 ms → 热 9.0 ms）。" data-en=" — lomfmt, an LSP, a package manager, a doc generator, DWARF statement-level line tables, incremental builds (82.6 ms cold → 9.0 ms warm).">—— lomfmt、LSP、包管理器、文档生成器、DWARF 语句级行表、增量构建（冷 82.6 ms → 热 9.0 ms）。</span></li>
+                <li><b data-zh="内核内运行" data-en="Runs in the kernel">内核内运行</b> <span data-zh="—— Loment 用户态程序跑在 FujoOS 上；syscall 层由 .lom 生成，46/46 opcode 覆盖。" data-en=" — Loment user-space programs run on FujoOS; the syscall layer is generated from .lom, covering 46/46 opcodes.">—— Loment 用户态程序跑在 FujoOS 上；syscall 层由 .lom 生成，46/46 opcode 覆盖。</span></li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="h3" data-zh="止损线写在前面" data-en="The stop-loss is written down in advance">止损线写在前面</h3>
+              <p class="small muted" data-zh-html="P2 若三个月内无法与 Rust 原版逐位对齐，就回退到“L0 + 代码生成”路线，L1 归档。这条线在立项文档里就写定了，而不是事后追认。<br /><br />当时担心的两件事后来都过了：自举 parser 在全语料上与 Python 版逐字符一致（42/42），检查器的规则等价也到了 63/63。所以 L1 没有触发这条止损线。" data-en-html="If P2 cannot align bit-for-bit with the Rust original within three months, the project falls back to “L0 + code generation” and archives L1. That line was fixed in the founding document, not added retroactively.<br /><br />Both things that worried us at the time have since passed: the self-hosted parser matches the Python one character for character across the whole corpus (42/42), and the checker's rules are equivalent 63/63. So L1 never tripped the stop-loss.">
+                P2 若三个月内无法与 Rust 原版逐位对齐，就回退到“L0 + 代码生成”路线，L1 归档。这条线在立项文档里就写定了，而不是事后追认。<br /><br />当时担心的两件事后来都过了：自举 parser 在全语料上与 Python 版逐字符一致（42/42），检查器的规则等价也到了 63/63。所以 L1 没有触发这条止损线。
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================== wave C -->
+      <section class="section anchor" id="measurement" data-motion>
+        <div class="wrap">
+          <h2 class="h2 fade-step" data-zh="波 C 测量：把“能转写”变成可复现的数字" data-en="Wave-C measurement: turning “it can translate” into reproducible numbers">波 C 测量：把“能转写”变成可复现的数字</h2>
+          <p class="muted prose fade-step" style="margin-top: var(--s2); --delay: 0.07s" data-zh="语料是 12 个仓库真实文件（每语言 4 个），每个文件的 sha256 记入结果文件，测量与内容绑定。两臂是工具链的严格与宽松档——都确定性、可复现，不使用随机数。" data-en="The corpus is 12 real repository files (4 per language); each file's sha256 goes into the results file so the measurement is bound to its content. The two arms are the toolchain's strict and lenient settings — both deterministic and reproducible, neither using randomness.">
+            语料是 12 个仓库真实文件（每语言 4 个），每个文件的 sha256 记入结果文件，测量与内容绑定。两臂是工具链的严格与宽松档——都确定性、可复现，不使用随机数。
+          </p>
+
+          <div class="table-wrap" style="margin-top: var(--s4)">
+            <table>
+              <caption data-zh="识别率与转换率必须一起读——转换率是“条件于识别”的比率" data-en="Recognition and conversion rates must be read together — conversion is conditional on recognition">识别率与转换率必须一起读——转换率是“条件于识别”的比率</caption>
+              <thead>
+                <tr>
+                  <th scope="col" data-zh="语言" data-en="Language">语言</th>
+                  <th scope="col" data-zh="臂" data-en="Arm">臂</th>
+                  <th scope="col" class="num" data-zh="实体" data-en="Entities">实体</th>
+                  <th scope="col" class="num" data-zh="识别率" data-en="Recognition">识别率</th>
+                  <th scope="col" class="num" data-zh="转换率" data-en="Conversion">转换率</th>
+                  <th scope="col" class="num" data-zh="95% CI" data-en="95% CI">95% CI</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td rowspan="2"><strong>Python</strong></td>
+                  <td data-zh="严格" data-en="strict">严格</td>
+                  <td class="num">48</td>
+                  <td class="num">100.0%</td>
+                  <td class="num">27.1%</td>
+                  <td class="num">[16.6, 41.0]</td>
+                </tr>
+                <tr>
+                  <td data-zh="宽松" data-en="lenient">宽松</td>
+                  <td class="num">48</td>
+                  <td class="num">100.0%</td>
+                  <td class="num">93.8%</td>
+                  <td class="num">[83.2, 97.9]</td>
+                </tr>
+                <tr>
+                  <td rowspan="2"><strong>C</strong></td>
+                  <td data-zh="严格" data-en="strict">严格</td>
+                  <td class="num">37</td>
+                  <td class="num">89.2%</td>
+                  <td class="num">100.0%</td>
+                  <td class="num">[89.6, 100.0]</td>
+                </tr>
+                <tr>
+                  <td data-zh="宽松" data-en="lenient">宽松</td>
+                  <td class="num">37</td>
+                  <td class="num">89.2%</td>
+                  <td class="num">100.0%</td>
+                  <td class="num">[89.6, 100.0]</td>
+                </tr>
+                <tr>
+                  <td rowspan="2"><strong>Rust</strong></td>
+                  <td data-zh="严格" data-en="strict">严格</td>
+                  <td class="num">116</td>
+                  <td class="num">98.3%</td>
+                  <td class="num">91.2%</td>
+                  <td class="num">[84.6, 95.2]</td>
+                </tr>
+                <tr>
+                  <td data-zh="宽松" data-en="lenient">宽松</td>
+                  <td class="num">116</td>
+                  <td class="num">98.3%</td>
+                  <td class="num">98.2%</td>
+                  <td class="num">[93.8, 99.5]</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <ul class="list" style="margin-top: var(--s3)">
+            <li><b data-zh="Python 的瓶颈是注解质量" data-en="Python's bottleneck is annotation quality">Python 的瓶颈是注解质量</b> <span data-zh="—— 严格臂 27.1%，主因是 list[str]/dict 这类没有 Potato 对应物的容器类型被跳过。" data-en=" — strict arm 27.1%, mainly because container types like list[str]/dict have no Potato counterpart and are skipped.">—— 严格臂 27.1%，主因是 list[str]/dict 这类没有 Potato 对应物的容器类型被跳过。</span></li>
+            <li><b data-zh="C 的瓶颈是识别器" data-en="C's bottleneck is the recognizer">C 的瓶颈是识别器</b> <span data-zh="—— 识别率 89.2%，4 个多行/宏签名对正则不可见；100% 的转换率不能单独引用。" data-en=" — recognition 89.2%; four multi-line/macro signatures are invisible to the regexes. The 100% conversion rate must not be quoted alone.">—— 识别率 89.2%，4 个多行/宏签名对正则不可见；100% 的转换率不能单独引用。</span></li>
+            <li><b data-zh="Rust 最好转" data-en="Rust translates best">Rust 最好转</b> <span data-zh="—— 静态类型加显式切片；剩余跳过是常量长度数组、never 类型与元组返回。" data-en=" — static types plus explicit slices; what remains skipped is constant-length arrays, the never type and tuple returns.">—— 静态类型加显式切片；剩余跳过是常量长度数组、never 类型与元组返回。</span></li>
+            <li><b data-zh="对象合法率 100%" data-en="Object validity 100%">对象合法率 100%</b> <span data-zh="—— 工具链宁可少转，也不乱转。" data-en=" — the toolchain would rather translate less than translate wrongly.">—— 工具链宁可少转，也不乱转。</span></li>
+          </ul>
+
+          <div class="note note--amber" style="margin-top: var(--s4)">
+            <strong data-zh="一个必须标注的边界：" data-en="One boundary that must be labelled: ">一个必须标注的边界：</strong>
+            <span data-zh="宿主 LLM 臂尚未运行（本环境没有外部模型凭据）。协议已就绪，任何外部转写器按同一报告 schema 产出结果即可并入主表——但当前主表的“两臂”不得在论文中当作 LLM 对照。" data-en="the host-LLM arm has not been run (no external model credentials in this environment). The protocol is ready: any external translator that emits a report against the same schema can join the main table — but the current two arms must not be presented as an LLM comparison in the paper.">宿主 LLM 臂尚未运行（本环境没有外部模型凭据）。协议已就绪，任何外部转写器按同一报告 schema 产出结果即可并入主表——但当前主表的“两臂”不得在论文中当作 LLM 对照。</span>
+          </div>
+
+          <div class="hero__actions" style="margin-top: var(--s5)">
+            <button
+              class="btn btn--primary"
+              type="button"
+              data-modal-open="loment-cta"
+              data-zh="立刻使用 Loment"
+              data-en="Use Loment now"
+            >
+              立刻使用 Loment
+            </button>
+            <a class="btn" href="../docs/project/network-line/" data-zh="看网络线：Loment 的第一个真应用" data-en="The network line: Loment's first real application">看网络线：Loment 的第一个真应用</a>
+            <a class="btn btn--ghost" href="../fuai/" data-zh="看 FUAI 安全体系" data-en="FUAI safety system">看 FUAI 安全体系</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <div class="wrap">
+        <div class="foot__grid">
+          <div>
+            <div class="nav__brand" style="margin-bottom: 0.7rem">
+              <svg viewBox="0 14 64 46" aria-hidden="true">
+            <path d="M3,58 Q11,38 26,16 Q32,19 38,16 Q53,38 61,58 Z" fill="var(--mark-rock)" />
+            <path d="M15.9,32 Q18,22 26,16 Q32,19 38,16 Q46,22 48.1,32 Q32,38 15.9,32 Z" fill="var(--mark-snow)" />
+          </svg>
+              FujoOS
+            </div>
+            <p class="small dim" style="max-width: 34ch" data-zh="Loment 与 Potato 全部开源。规范与实现都可复现，这是论文三测量的前提。" data-en="Loment and Potato are fully open source. Both spec and implementation are reproducible, which is the precondition for the third paper's measurements.">
+              Loment 与 Potato 全部开源。规范与实现都可复现，这是论文三测量的前提。
+            </p>
+          </div>
+          <div>
+            <h4 data-zh="本页" data-en="On this page">本页</h4>
+            <a href="#division" data-zh="写与看的分工" data-en="Writing vs reading">写与看的分工</a>
+            <a href="#l0" data-zh="L0 接口层" data-en="L0 interface layer">L0 接口层</a>
+            <a href="#l1" data-zh="L1 系统语言" data-en="L1 system language">L1 系统语言</a>
+            <a href="#progress" data-zh="里程碑" data-en="Milestones">里程碑</a>
+            <a href="#measurement" data-zh="波 C 测量" data-en="Wave-C measurement">波 C 测量</a>
+          </div>
+          <div>
+            <h4 data-zh="文档" data-en="Documentation">文档</h4>
+            <a href="../docs/architecture/" data-zh="系统架构" data-en="Architecture">系统架构</a>
+            <a href="../docs/project/network-line/" data-zh="网络线" data-en="Network line">网络线</a>
+            <a href="../docs/start/" data-zh="构建与运行" data-en="Build and run">构建与运行</a>
+            <a href="../docs/" data-zh="全部文档 →" data-en="All documentation →">全部文档 →</a>
+          </div>
+          <div>
+            <h4 data-zh="外部" data-en="Elsewhere">外部</h4>
+            <a href="https://zenodo.org/records/22352904" rel="noopener" data-zh="预印本 (Zenodo) ↗" data-en="Preprint (Zenodo) ↗">预印本 (Zenodo) ↗</a>
+            <a href="../docs/project/branches/" data-zh="开发分支 ↗" data-en="Development branches ↗">开发分支 ↗</a>
+          </div>
+        </div>
+        <div class="foot__end">
+          <span>© <span data-year>2026</span> Yuxuan Jiang · MIT</span>
+          <span data-zh="Loment 0.1.3 Alpha · Potato v1" data-en="Loment 0.1.3 Alpha · Potato v1">Loment 0.1.3 Alpha · Potato v1</span>
+        </div>
+      </div>
+    </footer>
+
+    <dialog class="modal" id="loment-cta" aria-labelledby="loment-cta-title">
+      <div class="modal__inner">
+        <span class="modal__k" data-zh="Loment · Potato" data-en="Loment · Potato">Loment · Potato</span>
+        <h2 id="loment-cta-title" data-zh="计划于 9.20 日面向开发者" data-en="Planned for 20 September, opening to developers">计划于 9.20 日面向开发者</h2>
+        <p data-zh="Loment 与 Potato 目前是 0.1.3 Alpha。语言已经跑通端到端闭环——写、转译、编译、运行、导出形式对象——100 个里程碑完成 86 个。编译器还能不经过任何解释器把自己重建出来。首个面向开发者的版本计划于 2026 年 9 月 20 日开放。" data-en="Loment and Potato are at 0.1.3 Alpha. The language already closes the end-to-end loop — write, transpile, compile, run, emit a formal object — with 86 of 100 milestones done. The compiler can also rebuild itself without going through any interpreter. The first developer-facing release is planned for 20 September 2026.">
+          Loment 与 Potato 目前是 0.1.3 Alpha。语言已经跑通端到端闭环——写、转译、编译、运行、导出形式对象——100 个里程碑完成 86 个。编译器还能不经过任何解释器把自己重建出来。首个面向开发者的版本计划于 2026 年 9 月 20 日开放。
+        </p>
+        <div class="modal__actions">
+          <a class="btn btn--primary" href="../docs/language/quickstart/" data-modal-close data-zh="读上手文档 (Beta)" data-en="Read the quickstart (Beta)">读上手文档 (Beta)</a>
+          <button class="btn btn--ghost" type="button" data-modal-close data-zh="知道了" data-en="Got it">知道了</button>
+        </div>
+        <p class="modal__rule" data-zh="日期为计划值，可能调整；以仓库发布为准。" data-en="The date is a plan and may shift; the repository release is authoritative.">日期为计划值，可能调整；以仓库发布为准。</p>
+      </div>
+    </dialog>
+
+    <script src="../assets/site.js?v=7647d9b3"></script>
+  </body>
+</html>

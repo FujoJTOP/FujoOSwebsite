@@ -45,8 +45,8 @@
                 <p data-zh="Ring0 只保留 CPU 相关与空间管理；设备驱动、VFS、网络栈全部下沉到用户态服务——服务进程 + 共享内存 + IRQ fd 硬中断注入。这是 NT / WSL2 式的工程折中：绝大多数“与硬件无关”的代码因此处在可崩溃、可重启、可热升级的环境里。" data-en="Ring0 keeps only CPU-adjacent concerns and space management; device drivers, VFS and the network stack all move down into user-space services — service processes plus shared memory plus IRQ fd injection. This is the NT / WSL2 engineering compromise: the great majority of hardware-independent code then lives in an environment that can crash, restart and be hot-upgraded.">
                   Ring0 只保留 CPU 相关与空间管理；设备驱动、VFS、网络栈全部下沉到用户态服务——服务进程 + 共享内存 + IRQ fd 硬中断注入。这是 NT / WSL2 式的工程折中：绝大多数“与硬件无关”的代码因此处在可崩溃、可重启、可热升级的环境里。
                 </p>
-                <p data-zh-html="代价是 IPC 与共享内存的复杂度，以及内核态到用户态的一次往返。收益是一条清晰的边界：Ring0 里的代码必须无懈可击，而它的面积被压到了很小。这条边界与 <a href=&quot;../ai/index.html&quot;>FUAI 的能力域</a>是同一个思路——把“必须绝对可靠”的部分划小。" data-en-html="The cost is IPC and shared-memory complexity plus one kernel-to-user round trip. The payoff is a clean boundary: code in Ring0 must be flawless, and its surface is kept small. That boundary is the same idea as <a href=&quot;../ai/index.html&quot;>FUAI's capability domains</a> — shrink the part that has to be absolutely reliable.">
-                  代价是 IPC 与共享内存的复杂度，以及内核态到用户态的一次往返。收益是一条清晰的边界：Ring0 里的代码必须无懈可击，而它的面积被压到了很小。这条边界与 <a href="../ai/index.html">FUAI 的能力域</a>是同一个思路——把“必须绝对可靠”的部分划小。
+                <p data-zh-html="代价是 IPC 与共享内存的复杂度，以及内核态到用户态的一次往返。收益是一条清晰的边界：Ring0 里的代码必须无懈可击，而它的面积被压到了很小。这条边界与 <a href=&quot;../../ai/&quot;>FUAI 的能力域</a>是同一个思路——把“必须绝对可靠”的部分划小。" data-en-html="The cost is IPC and shared-memory complexity plus one kernel-to-user round trip. The payoff is a clean boundary: code in Ring0 must be flawless, and its surface is kept small. That boundary is the same idea as <a href=&quot;../../ai/&quot;>FUAI's capability domains</a> — shrink the part that has to be absolutely reliable.">
+                  代价是 IPC 与共享内存的复杂度，以及内核态到用户态的一次往返。收益是一条清晰的边界：Ring0 里的代码必须无懈可击，而它的面积被压到了很小。这条边界与 <a href="../../ai/">FUAI 的能力域</a>是同一个思路——把“必须绝对可靠”的部分划小。
                 </p>
               </div>
 
@@ -58,6 +58,6 @@
                 </div>
                 <div class="note note--steel">
                   <strong data-zh="内存" data-en="Memory">内存</strong>
-                  <span data-zh-html="4 KiB 页加 2 MiB 大页，物理内存以 2 MiB 伙伴系统管理；用户空间共享内存经 fujo-map 零拷贝成对映射，配合 GPU 栅栏同步。细节见 <a href=&quot;memory.html&quot;>内存与地址空间</a>。" data-en-html=" 4 KiB pages plus 2 MiB large pages, with physical memory managed by a 2 MiB buddy allocator; user-space shared memory is mapped in zero-copy pairs via fujo-map with GPU fence synchronisation. Details under <a href=&quot;memory.html&quot;>Memory and address space</a>.">4 KiB 页加 2 MiB 大页，物理内存以 2 MiB 伙伴系统管理；用户空间共享内存经 fujo-map 零拷贝成对映射，配合 GPU 栅栏同步。细节见 <a href="memory.html">内存与地址空间</a>。</span>
+                  <span data-zh-html="4 KiB 页加 2 MiB 大页，物理内存以 2 MiB 伙伴系统管理；用户空间共享内存经 fujo-map 零拷贝成对映射，配合 GPU 栅栏同步。细节见 <a href=&quot;../memory/&quot;>内存与地址空间</a>。" data-en-html=" 4 KiB pages plus 2 MiB large pages, with physical memory managed by a 2 MiB buddy allocator; user-space shared memory is mapped in zero-copy pairs via fujo-map with GPU fence synchronisation. Details under <a href=&quot;../memory/&quot;>Memory and address space</a>.">4 KiB 页加 2 MiB 大页，物理内存以 2 MiB 伙伴系统管理；用户空间共享内存经 fujo-map 零拷贝成对映射，配合 GPU 栅栏同步。细节见 <a href="../memory/">内存与地址空间</a>。</span>
                 </div>
               </div>

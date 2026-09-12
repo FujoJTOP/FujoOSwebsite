@@ -96,7 +96,7 @@
 
     <header class="nav">
       <div class="wrap nav__inner">
-        <a class="nav__brand" href="index.html">
+        <a class="nav__brand" href="./">
           <svg viewBox="0 14 64 46" aria-hidden="true">
             <path d="M3,58 Q11,38 26,16 Q32,19 38,16 Q53,38 61,58 Z" fill="var(--mark-rock)" />
             <path d="M15.9,32 Q18,22 26,16 Q32,19 38,16 Q46,22 48.1,32 Q32,38 15.9,32 Z" fill="var(--mark-snow)" />
@@ -104,11 +104,11 @@
           FujoOS
         </a>
         <nav class="nav__links" aria-label="主导航" data-zh-aria="主导航" data-en-aria="Primary">
-          <a class="nav__link" href="index.html" aria-current="page" data-zh="首页" data-en="Home">首页</a>
-          <a class="nav__link" href="fuai.html" data-zh="FUAI 安全体系" data-en="FUAI safety">FUAI 安全体系</a>
-          <a class="nav__link" href="loment.html" data-zh="Loment · Potato" data-en="Loment · Potato">Loment · Potato</a>
-          <a class="nav__link" href="docs/index.html" data-zh="文档" data-en="Docs">文档</a>
-          <a class="nav__link" href="news/index.html" data-zh="新闻" data-en="News">新闻</a>
+          <a class="nav__link" href="./" aria-current="page" data-zh="首页" data-en="Home">首页</a>
+          <a class="nav__link" href="fuai/" data-zh="FUAI 安全体系" data-en="FUAI safety">FUAI 安全体系</a>
+          <a class="nav__link" href="loment/" data-zh="Loment · Potato" data-en="Loment · Potato">Loment · Potato</a>
+          <a class="nav__link" href="docs/" data-zh="文档" data-en="Docs">文档</a>
+          <a class="nav__link" href="news/" data-zh="新闻" data-en="News">新闻</a>
           <a
             class="nav__link"
             href="https://zenodo.org/records/22352904"
@@ -128,12 +128,12 @@
       </div>
       <div class="wrap">
         <div class="nav__drawer" data-open="false">
-          <a href="index.html" data-zh="首页" data-en="Home">首页</a>
-          <a href="fuai.html" data-zh="FUAI 安全体系" data-en="FUAI safety system">FUAI 安全体系</a>
-          <a href="loment.html" data-zh="Loment · Potato 语言" data-en="Loment · Potato language">Loment · Potato 语言</a>
-          <a href="docs/index.html" data-zh="文档" data-en="Documentation">文档</a>
-          <a href="news/index.html" data-zh="新闻" data-en="News">新闻</a>
-          <a href="docs/start/index.html" data-zh="构建与运行" data-en="Build and run">构建与运行</a>
+          <a href="./" data-zh="首页" data-en="Home">首页</a>
+          <a href="fuai/" data-zh="FUAI 安全体系" data-en="FUAI safety system">FUAI 安全体系</a>
+          <a href="loment/" data-zh="Loment · Potato 语言" data-en="Loment · Potato language">Loment · Potato 语言</a>
+          <a href="docs/" data-zh="文档" data-en="Documentation">文档</a>
+          <a href="news/" data-zh="新闻" data-en="News">新闻</a>
+          <a href="docs/start/" data-zh="构建与运行" data-en="Build and run">构建与运行</a>
           <a href="https://zenodo.org/records/22352904" rel="noopener" data-zh="论文 (Zenodo) ↗" data-en="Paper (Zenodo) ↗">论文 (Zenodo) ↗</a>
         </div>
       </div>
@@ -171,9 +171,9 @@
               </button>
             </div>
             <p class="hero__links fade-step" style="--delay: 0.26s">
-              <a href="docs/start/index.html" data-zh="构建并运行" data-en="Build and run">构建并运行</a>
+              <a href="docs/start/" data-zh="构建并运行" data-en="Build and run">构建并运行</a>
               <span aria-hidden="true">·</span>
-              <a href="fuai.html" data-zh="FUAI 安全体系" data-en="The FUAI safety system">FUAI 安全体系</a>
+              <a href="fuai/" data-zh="FUAI 安全体系" data-en="The FUAI safety system">FUAI 安全体系</a>
               <span aria-hidden="true">·</span>
               <a href="https://zenodo.org/records/22352904" rel="noopener" data-zh="预印本 ↗" data-en="Preprint ↗">预印本 ↗</a>
             </p>
@@ -453,21 +453,21 @@ python tools/fujoregress.py --accel whpx   <span class="c"># 第二执行模式<
           </p>
 
           <div class="grid grid--3" style="margin-top: var(--s4)">
-            <a class="card card--link fade-step" style="--delay: 0.14s" href="loment.html">
+            <a class="card card--link fade-step" style="--delay: 0.14s" href="loment/">
               <span class="card__k">FujoLang-DEV</span>
               <h3 class="h3" data-zh="语言线" data-en="Language line">语言线</h3>
               <p data-zh="Loment 是平台的系统语言（Rust 严格子集 + 一等能力域），Potato 是编译器的强制输出：一份机器可读的形式对象。一个管“怎么写”，一个管“怎么看”。" data-en="Loment is the platform's system language — a strict Rust subset with first-class capability domains. Potato is the compiler's mandatory output: a machine-readable formal object. One governs how you write; the other how a machine reads.">
                 Loment 是平台的系统语言（Rust 严格子集 + 一等能力域），Potato 是编译器的强制输出：一份机器可读的形式对象。一个管“怎么写”，一个管“怎么看”。
               </p>
             </a>
-            <a class="card card--link fade-step" style="--delay: 0.21s" href="docs/project/network-line.html">
+            <a class="card card--link fade-step" style="--delay: 0.21s" href="docs/project/network-line/">
               <span class="card__k">NET-DEV</span>
               <h3 class="h3" data-zh="网络线" data-en="Network line">网络线</h3>
               <p data-zh="让 Loment 的第一个真应用是网络，而不是玩具样例。网络同时提供字节级契约与能力边界，是语言线的理想压力面。" data-en="Making Loment's first real application networking rather than a toy sample. Networking supplies both a byte-level contract and a capability boundary — the ideal stress surface for the language.">
                 让 Loment 的第一个真应用是网络，而不是玩具样例。网络同时提供字节级契约与能力边界，是语言线的理想压力面。
               </p>
             </a>
-            <a class="card card--link fade-step" style="--delay: 0.28s" href="docs/compat/index.html">
+            <a class="card card--link fade-step" style="--delay: 0.28s" href="docs/compat/">
               <span class="card__k">compat · FUFORALL</span>
               <h3 class="h3" data-zh="兼容线" data-en="Compatibility line">兼容线</h3>
               <p data-zh="ELF / PE32+ / Mach-O / FUJR 四套加载器，三套 ABI 共享同一内核服务面。兼容被定义为集合包含，而不是容器模拟。" data-en="Four loaders — ELF, PE32+, Mach-O, FUJR — with three ABIs sharing one kernel service surface. Compatibility is defined as set inclusion, not container emulation.">
@@ -551,14 +551,14 @@ python tools/fujoregress.py --accel whpx   <span class="c"># 第二执行模式<
               </p>
             </div>
             <div class="stack fade-step" style="--delay: 0.1s">
-              <a class="card card--link" href="fuai.html">
+              <a class="card card--link" href="fuai/">
                 <span class="card__k" data-zh="安全体系" data-en="Safety system">安全体系</span>
                 <h3 class="h3" data-zh="FUAI：把信任变成参数，把边界变成结构" data-en="FUAI: trust as a parameter, boundary as a structure">FUAI：把信任变成参数，把边界变成结构</h3>
                 <p data-zh="S1/S2/S3 分解、A1–A4 公理、信任自适应域宽、带外证据链，以及一个不依赖 FujoOS 的独立运行时。" data-en="The S1/S2/S3 decomposition, the A1–A4 axioms, trust-adaptive domain width, an out-of-band evidence chain, and a runtime that does not depend on FujoOS.">
                   S1/S2/S3 分解、A1–A4 公理、信任自适应域宽、带外证据链，以及一个不依赖 FujoOS 的独立运行时。
                 </p>
               </a>
-              <a class="card card--link" href="loment.html">
+              <a class="card card--link" href="loment/">
                 <span class="card__k" data-zh="语言" data-en="Language">语言</span>
                 <h3 class="h3" data-zh="Loment 与 Potato" data-en="Loment and Potato">Loment 与 Potato</h3>
                 <p data-zh="一门面向作者的系统语言，和一份面向机器读者的形式对象；两者在语义模型处相遇。" data-en="A system language for authors, and a formal object for machine readers; the two meet at the semantic model.">
@@ -589,23 +589,23 @@ python tools/fujoregress.py --accel whpx   <span class="c"># 第二执行模式<
           </div>
           <div>
             <h4 data-zh="项目" data-en="Project">项目</h4>
-            <a href="fuai.html" data-zh="FUAI 安全体系" data-en="FUAI safety system">FUAI 安全体系</a>
-            <a href="loment.html" data-zh="Loment · Potato" data-en="Loment · Potato">Loment · Potato</a>
-            <a href="docs/project/branches.html" data-zh="开发分支" data-en="Development branches">开发分支</a>
-            <a href="docs/project/roadmap.html" data-zh="路线图" data-en="Roadmap">路线图</a>
+            <a href="fuai/" data-zh="FUAI 安全体系" data-en="FUAI safety system">FUAI 安全体系</a>
+            <a href="loment/" data-zh="Loment · Potato" data-en="Loment · Potato">Loment · Potato</a>
+            <a href="docs/project/branches/" data-zh="开发分支" data-en="Development branches">开发分支</a>
+            <a href="docs/project/roadmap/" data-zh="路线图" data-en="Roadmap">路线图</a>
           </div>
           <div>
             <h4 data-zh="文档" data-en="Documentation">文档</h4>
-            <a href="docs/start/index.html" data-zh="构建与运行" data-en="Build and run">构建与运行</a>
-            <a href="docs/architecture/index.html" data-zh="系统架构" data-en="Architecture">系统架构</a>
-            <a href="docs/compat/index.html" data-zh="兼容层" data-en="Compatibility layer">兼容层</a>
-            <a href="docs/project/network-line.html" data-zh="网络线" data-en="Network line">网络线</a>
+            <a href="docs/start/" data-zh="构建与运行" data-en="Build and run">构建与运行</a>
+            <a href="docs/architecture/" data-zh="系统架构" data-en="Architecture">系统架构</a>
+            <a href="docs/compat/" data-zh="兼容层" data-en="Compatibility layer">兼容层</a>
+            <a href="docs/project/network-line/" data-zh="网络线" data-en="Network line">网络线</a>
           </div>
           <div>
             <h4 data-zh="外部" data-en="Elsewhere">外部</h4>
             <a href="https://zenodo.org/records/22352904" rel="noopener" data-zh="预印本 (Zenodo) ↗" data-en="Preprint (Zenodo) ↗">预印本 (Zenodo) ↗</a>
             <a href="https://github.com/FujoJTOP/LinuxFUAI" rel="noopener" data-zh="LinuxFUAI 第二实现 ↗" data-en="LinuxFUAI second implementation ↗">LinuxFUAI 第二实现 ↗</a>
-            <a href="docs/index.html" data-zh="全部文档 →" data-en="All documentation →">全部文档 →</a>
+            <a href="docs/" data-zh="全部文档 →" data-en="All documentation →">全部文档 →</a>
           </div>
         </div>
         <div class="foot__end">
