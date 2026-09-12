@@ -69,6 +69,7 @@ const SECTIONS = [
       { slug: "model-card", zh: "模型卡", en: "Model cards" },
       { slug: "duties", zh: "模型五职责", en: "The five duties" },
       { slug: "trust", zh: "信任自适应域宽", en: "Trust-adaptive width" },
+      { slug: "tau", zh: "τ 问题", en: "The τ problem" },
       { slug: "runtime", zh: "运行时与证据链", en: "Runtime and evidence chain" },
       { slug: "box-bridge", zh: "盒桥", en: "Box bridge" },
     ],
