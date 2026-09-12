@@ -1116,12 +1116,26 @@ button.btn {
   }
 }
 .built__list li {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
   font-family: var(--mono);
   font-size: var(--t-sm);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--fg-3);
   white-space: nowrap;
+}
+/* The mark says which kind of thing this is — a command prompt for a coding
+   agent, a node graph for a model. It is not a brand logo, because four of
+   these six have no logo available to use, and because a row where two entries
+   carry a mark and four do not draws attention to the gap rather than the
+   names. Drawn from currentColor, so it cannot be anything but monochrome. */
+.built__g {
+  flex: none;
+  width: 13px;
+  height: 13px;
+  opacity: 0.75;
 }
 .built__note {
   margin-top: var(--s3);
