@@ -1,47 +1,47 @@
-<!--{"zh":"Loment 开发组工具准备完成，9 月 20 日面向开发者社区","en":"Loment's developer tooling is done — opening to the developer community on 20 September","date":"2026-09-12","desc":"写 Loment 这条路不再需要 Python：格式化器、文档生成器、语言服务都有了 Loment 版本，判据是与 Python 版逐字节相同。9 月 20 日面向开发者社区，9 月 15 日开放 Early Use 表单。","desc_en":"The path to writing Loment no longer needs Python: the formatter, doc generator and language server all have Loment versions, judged byte-identical to the Python ones. Opening to the developer community on 20 September, with an Early Use form on the 15th.","banner_zh":"Loment · 工具准备完成","banner_en":"Loment · tooling is done"}-->
-              <p data-zh="Loment 的开发组工具已经准备完成，面向开发者社区的日期定在 9 月 20 日。想提前用的人，9 月 15 日可以填 Early Use 表单拿到 Loment 0.1.3.4 Alpha。" data-en="Loment's developer tooling is finished, and the date for opening to the developer community is set: 20 September. To get in earlier, an Early Use form opens on the 15th for Loment 0.1.3.4 Alpha.">
-                Loment 的开发组工具已经准备完成，面向开发者社区的日期定在 9 月 20 日。想提前用的人，9 月 15 日可以填 Early Use 表单拿到 Loment 0.1.3.4 Alpha。
+<!--{"zh":"Loment 开发组工具准备完成，9 月 20 日面向开发者社区","en":"Loment's developer tooling is done — opening to the developer community on 20 September","date":"2026-09-12","desc":"编写 Loment 的路径已不再依赖 Python 解释器：格式化器、文档生成器、语言服务均已有 Loment 版本，判据是与 Python 版本逐字节相同。9 月 20 日面向开发者社区，9 月 15 日开放 Early Use 表单。","desc_en":"The path to writing Loment no longer depends on a Python interpreter: the formatter, doc generator and language server all have Loment versions, judged byte-identical to the Python ones. Opening to the developer community on 20 September, with an Early Use form on the 15th.","banner_zh":"Loment · 工具准备完成","banner_en":"Loment · tooling is done"}-->
+              <p data-zh="Loment 的开发工具链已经完成。面向开发者社区开放的时间定在 9 月 20 日。希望在该日期之前使用的开发者，可于 9 月 15 日填写 Early Use 表单，获得 Loment 0.1.3.4 Alpha。" data-en="Loment's developer toolchain is complete. It opens to the developer community on 20 September. Developers who would rather not wait until then can fill in an Early Use form on the 15th to receive Loment 0.1.3.4 Alpha.">
+                Loment 的开发工具链已经完成。面向开发者社区开放的时间定在 9 月 20 日。希望在该日期之前使用的开发者，可于 9 月 15 日填写 Early Use 表单，获得 Loment 0.1.3.4 Alpha。
               </p>
 
-              <h2 data-zh="「工具准备完成」指的是什么" data-en="What “tooling is done” means">「工具准备完成」指的是什么</h2>
-              <p data-zh-html="指的是这一件事：<strong>从零开始写 Loment、并在编辑器里用它，这条路上不再需要 Python 解释器。</strong>" data-en-html="It means one thing: <strong>writing Loment from scratch, and using it in an editor, no longer needs a Python interpreter anywhere on the path.</strong>">
-                指的是这一件事：<strong>从零开始写 Loment、并在编辑器里用它，这条路上不再需要 Python 解释器。</strong>
+              <h2 data-zh="「工具准备完成」指的是什么" data-en="What “toolchain is complete” means">「工具准备完成」指的是什么</h2>
+              <p data-zh-html="指的是一个具体的事实：<strong>从零开始编写 Loment、并在编辑器中使用的这条路径，已经不再依赖 Python 解释器。</strong>" data-en-html="It refers to one concrete fact: <strong>the path from writing Loment from scratch to using it in an editor no longer depends on a Python interpreter.</strong>">
+                指的是一个具体的事实：<strong>从零开始编写 Loment、并在编辑器中使用的这条路径，已经不再依赖 Python 解释器。</strong>
               </p>
-              <p data-zh="此前这条路上有三样东西是 Python 写的——格式化器、文档生成器、语言服务。现在三样都有了 Loment 版本，而且判据不是「能跑」：" data-en="Three things on that path used to be written in Python — the formatter, the doc generator, the language server. All three now have Loment versions, and the criterion was not “it runs”:">
-                此前这条路上有三样东西是 Python 写的——格式化器、文档生成器、语言服务。现在三样都有了 Loment 版本，而且判据不是「能跑」：
+              <p data-zh="这条路径上原有三项工具由 Python 实现——格式化器、文档生成器、语言服务。现在三项都有了 Loment 版本。它们承担的判据不是运行通过，而是逐字节一致：" data-en="Three tools on that path were implemented in Python — the formatter, the doc generator, the language server. All three now have Loment versions. The judgement they carry is not that they run, but that they are byte-identical:">
+                这条路径上原有三项工具由 Python 实现——格式化器、文档生成器、语言服务。现在三项都有了 Loment 版本。它们承担的判据不是运行通过，而是逐字节一致：
               </p>
-              <p data-zh-html="<strong>lomfmt</strong>（格式化器）：42 个语料加 4 个边界，再加幂等性，输出与 Python 版逐字节相同。" data-en-html="<strong>lomfmt</strong> (formatter): 42 corpus files plus 4 boundary cases plus idempotence, byte-identical to the Python version.">
-                <strong>lomfmt</strong>（格式化器）：42 个语料加 4 个边界，再加幂等性，输出与 Python 版逐字节相同。
+              <p data-zh-html="<strong>lomfmt</strong>（格式化器）：42 个语料加 4 个边界，再加幂等性，输出与 Python 版本逐字节相同。" data-en-html="<strong>lomfmt</strong> (formatter): 42 corpus files plus four boundary cases plus idempotence, byte-identical to the Python version.">
+                <strong>lomfmt</strong>（格式化器）：42 个语料加 4 个边界，再加幂等性，输出与 Python 版本逐字节相同。
               </p>
-              <p data-zh-html="<strong>lomdoc</strong>（文档生成器）：43 个语料加 1 个边界，同样逐字节相同。重写过程中反过来抓到参考实现一个真 bug——注入的 <code>Result</code> 枚举带着 prelude 的行号，于是它会把上文某条 <code>capability</code> 的注释当成自己的文档。" data-en-html="<strong>lomdoc</strong> (doc generator): 43 corpus files plus one boundary case, likewise byte-identical. Writing it caught a real bug in the reference implementation — the injected <code>Result</code> enum carried the prelude's line numbers, so it would attribute a nearby <code>capability</code> comment to itself as documentation.">
-                <strong>lomdoc</strong>（文档生成器）：43 个语料加 1 个边界，同样逐字节相同。重写过程中反过来抓到参考实现一个真 bug——注入的 <code>Result</code> 枚举带着 prelude 的行号，于是它会把上文某条 <code>capability</code> 的注释当成自己的文档。
+              <p data-zh-html="<strong>lomdoc</strong>（文档生成器）：43 个语料加 1 个边界，同样逐字节相同。编写过程中还发现参考实现的一个缺陷——注入的 <code>Result</code> 枚举携带了 prelude 的行号，因而会把上文某条 <code>capability</code> 的注释当作自身的文档。" data-en-html="<strong>lomdoc</strong> (doc generator): 43 corpus files plus one boundary case, likewise byte-identical. Writing it also surfaced a defect in the reference implementation — the injected <code>Result</code> enum carried the prelude's line numbers, so it attributed a nearby <code>capability</code> comment to itself as documentation.">
+                <strong>lomdoc</strong>（文档生成器）：43 个语料加 1 个边界，同样逐字节相同。编写过程中还发现参考实现的一个缺陷——注入的 <code>Result</code> 枚举携带了 prelude 的行号，因而会把上文某条 <code>capability</code> 的注释当作自身的文档。
               </p>
-              <p data-zh-html="<strong>loment_lsp</strong>（语言服务）：补全、跳转定义、改动后诊断。安装是一条命令 <code>scripts/install-lsp.ps1</code>，由种子加 clang 现场编出来，全程不碰解释器。" data-en-html="<strong>loment_lsp</strong> (language server): completion, go-to-definition, diagnostics on change. It installs with one command, <code>scripts/install-lsp.ps1</code>, compiled on the spot from the seed plus clang — no interpreter involved.">
-                <strong>loment_lsp</strong>（语言服务）：补全、跳转定义、改动后诊断。安装是一条命令 <code>scripts/install-lsp.ps1</code>，由种子加 clang 现场编出来，全程不碰解释器。
+              <p data-zh-html="<strong>loment_lsp</strong>（语言服务）：提供补全、跳转定义与改动后诊断，安装只需一条命令 <code>scripts/install-lsp.ps1</code>，由种子与 clang 现场编译，全程不涉及解释器。" data-en-html="<strong>loment_lsp</strong> (language server): completion, go-to-definition and diagnostics on change. It installs with one command, <code>scripts/install-lsp.ps1</code>, compiled on the spot from the seed and clang, with no interpreter involved.">
+                <strong>loment_lsp</strong>（语言服务）：提供补全、跳转定义与改动后诊断，安装只需一条命令 <code>scripts/install-lsp.ps1</code>，由种子与 clang 现场编译，全程不涉及解释器。
               </p>
-              <p data-zh-html="「逐字节相同」这个判据值得多说一句。它不是「看起来一样」，而是同一个输入喂给两个实现，<code>cmp</code> 报告零字节差异。这是这个项目对「等价」的定义，也决定了这些工具为什么算重写，而不是替代品。" data-en-html="“Byte-identical” is worth spelling out. It does not mean “looks the same”; it means the same input goes to both implementations and <code>cmp</code> reports zero differing bytes. That is this project's definition of equivalence, and it is why these count as rewrites rather than replacements.">
-                「逐字节相同」这个判据值得多说一句。它不是「看起来一样」，而是同一个输入喂给两个实现，<code>cmp</code> 报告零字节差异。这是这个项目对「等价」的定义，也决定了这些工具为什么算重写，而不是替代品。
+              <p data-zh-html="「逐字节相同」这一判据需要明确：它不表示「看起来一致」，而是同一输入送入两个实现后，<code>cmp</code> 报告零字节差异。这是本项目对「等价」的定义，也是上述工具被称为重写、而非替代品的依据。" data-en-html="One clarification on “byte-identical”: it does not mean “looks the same”. It means the same input goes to both implementations and <code>cmp</code> reports zero differing bytes. That is this project's definition of equivalence, and it is why those tools count as rewrites rather than replacements.">
+                「逐字节相同」这一判据需要明确：它不表示「看起来一致」，而是同一输入送入两个实现后，<code>cmp</code> 报告零字节差异。这是本项目对「等价」的定义，也是上述工具被称为重写、而非替代品的依据。
               </p>
 
               <h2 data-zh="对开发者意味着什么" data-en="What it means for a developer">对开发者意味着什么</h2>
-              <p data-zh-html="Windows 上有一条 <code>scripts/lomc.ps1</code>，同样用种子加 clang，不装 Python 就能编译运行；<code>.lomt</code> 与 <code>.lom</code> 的文件类型已经注册。" data-en-html="On Windows there is <code>scripts/lomc.ps1</code>, again seed plus clang: compile and run without installing Python. The <code>.lomt</code> and <code>.lom</code> file types are registered.">
-                Windows 上有一条 <code>scripts/lomc.ps1</code>，同样用种子加 clang，不装 Python 就能编译运行；<code>.lomt</code> 与 <code>.lom</code> 的文件类型已经注册。
+              <p data-zh-html="Windows 上提供 <code>scripts/lomc.ps1</code>，同样基于种子与 clang，无需安装 Python 即可编译运行；<code>.lomt</code> 与 <code>.lom</code> 的文件类型已经注册。" data-en-html="Windows has <code>scripts/lomc.ps1</code>, again seed plus clang: compile and run without installing Python. The <code>.lomt</code> and <code>.lom</code> file types are registered.">
+                Windows 上提供 <code>scripts/lomc.ps1</code>，同样基于种子与 clang，无需安装 Python 即可编译运行；<code>.lomt</code> 与 <code>.lom</code> 的文件类型已经注册。
               </p>
-              <p data-zh-html="语言服务还能当 CI 用：<code>lsp --check FILE</code> 把诊断按「路径:行:列: 错误码 标题」打到标准输出，退出码 0 或 1，可以直接接进编辑器任务或流水线。" data-en-html="The language server also works as a CI step: <code>lsp --check FILE</code> prints diagnostics as <code>path:line:col: E0NN title</code> to stdout with exit code 0 or 1, which drops straight into an editor task or a pipeline.">
-                语言服务还能当 CI 用：<code>lsp --check FILE</code> 把诊断按「路径:行:列: 错误码 标题」打到标准输出，退出码 0 或 1，可以直接接进编辑器任务或流水线。
-              </p>
-
-              <h2 data-zh="还没做到的" data-en="What is not done">还没做到的</h2>
-              <p data-zh-html="一百个里程碑完成 <strong>86 个</strong>。未开始的 4 个（M37、M39、M40、M42）全部在内核侧，等内核线的排期。未达的 1 个是 M100，而它缺的不是门禁——门禁已经齐了，一条 <code>tools/loment_audit.py</code> 能跑完 10 条主张并落盘证据——<strong>缺的是第三方复核本身，而这件事作者无法自证。</strong>" data-en-html="Of the hundred milestones, <strong>86 are done</strong>. The four not started (M37, M39, M40, M42) are all kernel-side and wait on the kernel line's schedule. The one not met is M100, and what it lacks is not gates — those are complete, and a single <code>tools/loment_audit.py</code> runs all ten claims and writes the evidence to disk. <strong>What it lacks is third-party review, which the author cannot self-certify.</strong>">
-                一百个里程碑完成 <strong>86 个</strong>。未开始的 4 个（M37、M39、M40、M42）全部在内核侧，等内核线的排期。未达的 1 个是 M100，而它缺的不是门禁——门禁已经齐了，一条 <code>tools/loment_audit.py</code> 能跑完 10 条主张并落盘证据——<strong>缺的是第三方复核本身，而这件事作者无法自证。</strong>
-              </p>
-              <p data-zh-html="工具链上也还有 Python：包管理器 <code>lompkg</code> 尚未重写，它需要 JSON 解析、目录遍历和 SHA-256，而运行时还缺 <code>getdents</code>；测试侧的判据仍然是 Python，那部分不影响构建和使用 Loment。" data-en-html="There is still Python on the toolchain: the package manager <code>lompkg</code> is not rewritten — it needs JSON parsing, directory traversal and SHA-256, and the runtime still lacks <code>getdents</code>. The test-side criteria are still Python, which does not affect building or using Loment.">
-                工具链上也还有 Python：包管理器 <code>lompkg</code> 尚未重写，它需要 JSON 解析、目录遍历和 SHA-256，而运行时还缺 <code>getdents</code>；测试侧的判据仍然是 Python，那部分不影响构建和使用 Loment。
-              </p>
-              <p data-zh="语言服务目前不提供格式化，也不做跨文件索引；lompkg 只支持本地路径依赖，没有网络仓库。这些边界写在这里，是因为 9 月 20 日交到手上的东西，应该和它声称的一样大。" data-en="The language server does not format, and does not index across files; lompkg resolves local paths only, with no network registry. These limits are written down because what arrives on 20 September should be exactly as large as it claims to be.">
-                语言服务目前不提供格式化，也不做跨文件索引；lompkg 只支持本地路径依赖，没有网络仓库。这些边界写在这里，是因为 9 月 20 日交到手上的东西，应该和它声称的一样大。
+              <p data-zh-html="语言服务亦可作为 CI 环节：<code>lsp --check FILE</code> 将诊断以「路径:行:列: 错误码 标题」写入标准输出，退出码为 0 或 1，可直接接入编辑器任务或流水线。" data-en-html="The language server also works as a CI step: <code>lsp --check FILE</code> writes diagnostics to stdout as <code>path:line:col: E0NN title</code> with exit code 0 or 1, which drops straight into an editor task or a pipeline.">
+                语言服务亦可作为 CI 环节：<code>lsp --check FILE</code> 将诊断以「路径:行:列: 错误码 标题」写入标准输出，退出码为 0 或 1，可直接接入编辑器任务或流水线。
               </p>
 
-              <p data-zh-html="想先动手的话，<a href=&quot;../../docs/language/quickstart/&quot;>上手文档（Beta）</a>里有从零到跑通的第一条命令。" data-en-html="If you would rather start now, the <a href=&quot;../../docs/language/quickstart/&quot;>quickstart (Beta)</a> has the first command that works.">
-                想先动手的话，<a href="../../docs/language/quickstart/">上手文档（Beta）</a>里有从零到跑通的第一条命令。
+              <h2 data-zh="尚未完成的" data-en="What is not finished">尚未完成的</h2>
+              <p data-zh-html="一百个里程碑已完成 <strong>86 个</strong>。未开始的 4 个（M37、M39、M40、M42）均在内核侧，等待内核线排期。未达的 1 个是 M100，其缺口不在门禁——门禁已经齐备，一条 <code>tools/loment_audit.py</code> 即可运行全部 10 条主张并将证据落盘——<strong>而在第三方复核本身，这一点作者无法自证。</strong>" data-en-html="Of the hundred milestones, <strong>86 are complete</strong>. The four not started (M37, M39, M40, M42) are all kernel-side, awaiting the kernel line's schedule. The one not met is M100, and what it lacks is not gates — those are in place, and a single <code>tools/loment_audit.py</code> runs all ten claims and writes the evidence to disk. <strong>What it lacks is third-party review, which the author cannot self-certify.</strong>">
+                一百个里程碑已完成 <strong>86 个</strong>。未开始的 4 个（M37、M39、M40、M42）均在内核侧，等待内核线排期。未达的 1 个是 M100，其缺口不在门禁——门禁已经齐备，一条 <code>tools/loment_audit.py</code> 即可运行全部 10 条主张并将证据落盘——<strong>而在第三方复核本身，这一点作者无法自证。</strong>
+              </p>
+              <p data-zh-html="工具链上仍存在 Python：包管理器 <code>lompkg</code> 尚未重写，它需要 JSON 解析、目录遍历与 SHA-256，而运行时仍缺 <code>getdents</code>；测试侧判据仍为 Python，该部分不影响 Loment 的构建与使用。" data-en-html="Python remains on the toolchain: the package manager <code>lompkg</code> is not yet rewritten — it needs JSON parsing, directory traversal and SHA-256, and the runtime still lacks <code>getdents</code>. The test-side criteria are still Python, which does not affect building or using Loment.">
+                工具链上仍存在 Python：包管理器 <code>lompkg</code> 尚未重写，它需要 JSON 解析、目录遍历与 SHA-256，而运行时仍缺 <code>getdents</code>；测试侧判据仍为 Python，该部分不影响 Loment 的构建与使用。
+              </p>
+              <p data-zh="语言服务目前不提供格式化，也不建立跨文件索引；lompkg 仅解析本地路径依赖，没有网络仓库。这些边界之所以写明，是因为 9 月 20 日交付的内容，应当与它宣称的范围一致。" data-en="The language server does not format and does not index across files; lompkg resolves local path dependencies only, with no network registry. These boundaries are stated because what ships on 20 September should match the scope it claims.">
+                语言服务目前不提供格式化，也不建立跨文件索引；lompkg 仅解析本地路径依赖，没有网络仓库。这些边界之所以写明，是因为 9 月 20 日交付的内容，应当与它宣称的范围一致。
+              </p>
+
+              <p data-zh-html="如需立即开始，<a href=&quot;../../docs/language/quickstart/&quot;>上手文档（Beta）</a>提供了从零到运行的第一条命令。" data-en-html="To start now, the <a href=&quot;../../docs/language/quickstart/&quot;>quickstart (Beta)</a> gives the first command that works.">
+                如需立即开始，<a href="../../docs/language/quickstart/">上手文档（Beta）</a>提供了从零到运行的第一条命令。
               </p>
