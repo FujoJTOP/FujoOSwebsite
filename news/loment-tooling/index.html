@@ -123,8 +123,9 @@
 <p data-zh="Loment 的开发工具链已经完成。面向开发者社区开放的时间定在 9 月 20 日。希望在该日期之前使用的开发者，可于 9 月 15 日填写 Early Use 表单，获得 Loment 0.1.3.4 Alpha。" data-en="Loment's developer toolchain is complete. It opens to the developer community on 20 September. Developers who would rather not wait until then can fill in an Early Use form on the 15th to receive Loment 0.1.3.4 Alpha.">
                 Loment 的开发工具链已经完成。面向开发者社区开放的时间定在 9 月 20 日。希望在该日期之前使用的开发者，可于 9 月 15 日填写 Early Use 表单，获得 Loment 0.1.3.4 Alpha。
               </p>
-
-              <h2 data-zh="「工具准备完成」指的是什么" data-en="What “toolchain is complete” means">「工具准备完成」指的是什么</h2>
+              <h2 data-zh="「工具准备完成」指的是什么" data-en="What “toolchain is complete” means">
+                「工具准备完成」指的是什么
+              </h2>
               <p data-zh-html="指的是一个具体的事实：<strong>从零开始编写 Loment、并在编辑器中使用的这条路径，已经不再依赖 Python 解释器。</strong>" data-en-html="It refers to one concrete fact: <strong>the path from writing Loment from scratch to using it in an editor no longer depends on a Python interpreter.</strong>">
                 指的是一个具体的事实：<strong>从零开始编写 Loment、并在编辑器中使用的这条路径，已经不再依赖 Python 解释器。</strong>
               </p>
@@ -143,16 +144,18 @@
               <p data-zh-html="「逐字节相同」这一判据需要明确：它不表示「看起来一致」，而是同一输入送入两个实现后，<code>cmp</code> 报告零字节差异。这是本项目对「等价」的定义，也是上述工具被称为重写、而非替代品的依据。" data-en-html="One clarification on “byte-identical”: it does not mean “looks the same”. It means the same input goes to both implementations and <code>cmp</code> reports zero differing bytes. That is this project's definition of equivalence, and it is why those tools count as rewrites rather than replacements.">
                 「逐字节相同」这一判据需要明确：它不表示「看起来一致」，而是同一输入送入两个实现后，<code>cmp</code> 报告零字节差异。这是本项目对「等价」的定义，也是上述工具被称为重写、而非替代品的依据。
               </p>
-
-              <h2 data-zh="对开发者意味着什么" data-en="What it means for a developer">对开发者意味着什么</h2>
+              <h2 data-zh="对开发者意味着什么" data-en="What it means for a developer">
+                对开发者意味着什么
+              </h2>
               <p data-zh-html="Windows 上提供 <code>scripts/lomc.ps1</code>，同样基于种子与 clang，无需安装 Python 即可编译运行；<code>.lomt</code> 与 <code>.lom</code> 的文件类型已经注册。" data-en-html="Windows has <code>scripts/lomc.ps1</code>, again seed plus clang: compile and run without installing Python. The <code>.lomt</code> and <code>.lom</code> file types are registered.">
                 Windows 上提供 <code>scripts/lomc.ps1</code>，同样基于种子与 clang，无需安装 Python 即可编译运行；<code>.lomt</code> 与 <code>.lom</code> 的文件类型已经注册。
               </p>
               <p data-zh-html="语言服务亦可作为 CI 环节：<code>lsp --check FILE</code> 将诊断以「路径:行:列: 错误码 标题」写入标准输出，退出码为 0 或 1，可直接接入编辑器任务或流水线。" data-en-html="The language server also works as a CI step: <code>lsp --check FILE</code> writes diagnostics to stdout as <code>path:line:col: E0NN title</code> with exit code 0 or 1, which drops straight into an editor task or a pipeline.">
                 语言服务亦可作为 CI 环节：<code>lsp --check FILE</code> 将诊断以「路径:行:列: 错误码 标题」写入标准输出，退出码为 0 或 1，可直接接入编辑器任务或流水线。
               </p>
-
-              <h2 data-zh="尚未完成的" data-en="What is not finished">尚未完成的</h2>
+              <h2 data-zh="尚未完成的" data-en="What is not finished">
+                尚未完成的
+              </h2>
               <p data-zh-html="一百个里程碑已完成 <strong>86 个</strong>。未开始的 4 个（M37、M39、M40、M42）均在内核侧，等待内核线排期。未达的 1 个是 M100，其缺口不在门禁——门禁已经齐备，一条 <code>tools/loment_audit.py</code> 即可运行全部 10 条主张并将证据落盘——<strong>而在第三方复核本身，这一点作者无法自证。</strong>" data-en-html="Of the hundred milestones, <strong>86 are complete</strong>. The four not started (M37, M39, M40, M42) are all kernel-side, awaiting the kernel line's schedule. The one not met is M100, and what it lacks is not gates — those are in place, and a single <code>tools/loment_audit.py</code> runs all ten claims and writes the evidence to disk. <strong>What it lacks is third-party review, which the author cannot self-certify.</strong>">
                 一百个里程碑已完成 <strong>86 个</strong>。未开始的 4 个（M37、M39、M40、M42）均在内核侧，等待内核线排期。未达的 1 个是 M100，其缺口不在门禁——门禁已经齐备，一条 <code>tools/loment_audit.py</code> 即可运行全部 10 条主张并将证据落盘——<strong>而在第三方复核本身，这一点作者无法自证。</strong>
               </p>
@@ -162,7 +165,6 @@
               <p data-zh="语言服务目前不提供格式化，也不建立跨文件索引；lompkg 仅解析本地路径依赖，没有网络仓库。这些边界之所以写明，是因为 9 月 20 日交付的内容，应当与它宣称的范围一致。" data-en="The language server does not format and does not index across files; lompkg resolves local path dependencies only, with no network registry. These boundaries are stated because what ships on 20 September should match the scope it claims.">
                 语言服务目前不提供格式化，也不建立跨文件索引；lompkg 仅解析本地路径依赖，没有网络仓库。这些边界之所以写明，是因为 9 月 20 日交付的内容，应当与它宣称的范围一致。
               </p>
-
               <p data-zh-html="如需立即开始，<a href=&quot;../../docs/language/quickstart/&quot;>上手文档（Beta）</a>提供了从零到运行的第一条命令。" data-en-html="To start now, the <a href=&quot;../../docs/language/quickstart/&quot;>quickstart (Beta)</a> gives the first command that works.">
                 如需立即开始，<a href="../../docs/language/quickstart/">上手文档（Beta）</a>提供了从零到运行的第一条命令。
               </p>
