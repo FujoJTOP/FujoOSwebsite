@@ -66,14 +66,43 @@
             <span class="field__label">Summary (English)</span>
             <textarea class="textarea" style="min-height: 5rem" data-f-desc-en spellcheck="false"></textarea>
           </label>
-          <label class="field">
-            <span class="field__label">正文（HTML）</span>
-            <textarea class="textarea" data-f-body spellcheck="false"></textarea>
-            <span class="field__note">
-              这是片段正文，不是整页。可用 <code>&lt;h2&gt;</code>、<code>&lt;p&gt;</code>、
-              <code>&lt;strong&gt;</code>、<code>&lt;code&gt;</code>。
+          <div class="field">
+            <span class="field__label">正文格式</span>
+            <div class="adm__modes">
+              <label class="check"><input type="radio" name="bodymode" value="text" checked /> 简洁</label>
+              <label class="check"><input type="radio" name="bodymode" value="raw" /> 原始 HTML</label>
+            </div>
+            <span class="field__note" data-mode-note>
+              空行分段；以 <code>##&nbsp;</code> 开头是二级标题；<code>**加粗**</code>、<code>`代码`</code>、<code>[文字](链接)</code>。
             </span>
-          </label>
+          </div>
+
+          <div data-mode-text>
+            <label class="field">
+              <span class="field__label">正文 · 中文</span>
+              <textarea class="textarea" data-f-body-zh></textarea>
+            </label>
+            <label class="field">
+              <span class="field__label">Body · English</span>
+              <textarea class="textarea" data-f-body-en spellcheck="false"></textarea>
+              <span class="field__note">
+                留空的话，切到英文时也显示中文。两种语言<strong>按段一一对应</strong>——
+                段落数不一致时，多出来的那段两种语言都用中文。
+                <span data-count-note></span>
+              </span>
+            </label>
+          </div>
+
+          <div data-mode-raw hidden>
+            <label class="field">
+              <span class="field__label">正文（HTML）</span>
+              <textarea class="textarea" data-f-body spellcheck="false"></textarea>
+              <span class="field__note" data-raw-note>
+                这是片段正文，不是整页。可用 <code>&lt;h2&gt;</code>、<code>&lt;p&gt;</code>、
+                <code>&lt;strong&gt;</code>、<code>&lt;code&gt;</code>。
+              </span>
+            </label>
+          </div>
           <div class="adm__actions">
             <button class="btn" type="button" data-news-preview>预览</button>
             <button class="btn btn--primary" type="button" data-news-save>保存这一篇</button>
