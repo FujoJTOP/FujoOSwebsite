@@ -150,14 +150,14 @@
       </section>
 
       <!-- ========================================================== division -->
-      <section class="section anchor" id="division">
+      <section class="section anchor" id="division" data-motion>
         <div class="wrap">
-          <h2 class="h2" data-zh="分工：写与看" data-en="The division: writing and reading">分工：写与看</h2>
-          <p class="muted prose" style="margin-top: var(--s2); " data-zh="作者面向 Loment 写系统；机器面向 Potato 读系统。编译器是两者的接缝——它为每一个编译单元强制导出形式对象，没有关闭的开关。" data-en="An author writes the system against Loment; a machine reads the system against Potato. The compiler is the seam — it emits a formal object for every compilation unit, with no switch to turn that off.">
+          <h2 class="h2 fade-step" style="--delay: 0.08s" data-zh="分工：写与看" data-en="The division: writing and reading">分工：写与看</h2>
+          <p class="muted prose fade-step" style="--delay: 0.16s; margin-top: var(--s2); " data-zh="作者面向 Loment 写系统；机器面向 Potato 读系统。编译器是两者的接缝——它为每一个编译单元强制导出形式对象，没有关闭的开关。" data-en="An author writes the system against Loment; a machine reads the system against Potato. The compiler is the seam — it emits a formal object for every compilation unit, with no switch to turn that off.">
             作者面向 Loment 写系统；机器面向 Potato 读系统。编译器是两者的接缝——它为每一个编译单元强制导出形式对象，没有关闭的开关。
           </p>
 
-          <figure class="figure" style="--draw-dur: 0.45s; margin-top: var(--s4)">
+          <figure class="figure fade-step" style="--delay: 0.24s; --draw-dur: 0.45s; margin-top: var(--s4)">
             <svg
               class="envelope"
               viewBox="0 0 620 336"
@@ -221,8 +221,8 @@
             </figcaption>
           </figure>
 
-          <h3 class="h3" style="margin-top: var(--s5)" data-zh="为什么不能把它俩合并" data-en="Why the two cannot be merged">为什么不能把它俩合并</h3>
-          <div class="grid grid--2" style="margin-top: var(--s3); align-items: start">
+          <h3 class="h3 fade-step" style="--delay: 0.36s; margin-top: var(--s5)" data-zh="为什么不能把它俩合并" data-en="Why the two cannot be merged">为什么不能把它俩合并</h3>
+          <div class="grid grid--2 fade-step" style="--delay: 0.48s; margin-top: var(--s3); align-items: start">
             <div class="note note--amber">
               <strong data-zh="零语料的问题会回来。" data-en="The zero-corpus problem comes back.">零语料的问题会回来。</strong>
               <span data-zh="语言要有语料才能被模型书写；表示层不需要语料，它消费结构。把 Potato 变成语言，等于把 Loment 拖回“世俗新语言”的陷阱。" data-en=" A language needs a corpus before a model can write it; a representation layer needs no corpus, it consumes structure. Turning Potato into a language would drag Loment back into the “ordinary new language” trap."> 语言要有语料才能被模型书写；表示层不需要语料，它消费结构。把 Potato 变成语言，等于把 Loment 拖回“世俗新语言”的陷阱。</span>
@@ -236,14 +236,14 @@
       </section>
 
       <!-- ============================================================== L0 -->
-      <section class="section anchor" id="l0">
+      <section class="section anchor" id="l0" data-motion>
         <div class="wrap">
-          <h2 class="h2" data-zh="L0 · 接口层：现在就能做的那部分" data-en="L0 · the interface layer: the part that can be done now">L0 · 接口层：现在就能做的那部分</h2>
-          <p class="muted prose" style="margin-top: var(--s2); " data-zh="同一个事实在 JSON、Rust、C、Python 里各写一份——这是当前最实际的成本，也是十个痛点里七个的共同根因。L0 的做法是：一份 .lom 单一真源，生成器产出各类目标，一致性在生成期就被保证。" data-en="The same fact written once each in JSON, Rust, C and Python is today's most concrete cost, and the shared root cause of seven of ten known pain points. L0's answer: one .lom source of truth, generators that emit each target, and consistency guaranteed at generation time.">
+          <h2 class="h2 fade-step" style="--delay: 0.08s" data-zh="L0 · 接口层：现在就能做的那部分" data-en="L0 · the interface layer: the part that can be done now">L0 · 接口层：现在就能做的那部分</h2>
+          <p class="muted prose fade-step" style="--delay: 0.16s; margin-top: var(--s2); " data-zh="同一个事实在 JSON、Rust、C、Python 里各写一份——这是当前最实际的成本，也是十个痛点里七个的共同根因。L0 的做法是：一份 .lom 单一真源，生成器产出各类目标，一致性在生成期就被保证。" data-en="The same fact written once each in JSON, Rust, C and Python is today's most concrete cost, and the shared root cause of seven of ten known pain points. L0's answer: one .lom source of truth, generators that emit each target, and consistency guaranteed at generation time.">
             同一个事实在 JSON、Rust、C、Python 里各写一份——这是当前最实际的成本，也是十个痛点里七个的共同根因。L0 的做法是：一份 .lom 单一真源，生成器产出各类目标，一致性在生成期就被保证。
           </p>
 
-          <div class="code" style="margin-top: var(--s4)">
+          <div class="code fade-step" style="--delay: 0.24s; margin-top: var(--s4)">
             <div class="code__bar">
               <span class="lang-tag">lom</span>
               <span data-zh="单一真源：一处声明，多处生成" data-en="One source of truth: declare once, generate many">单一真源：一处声明，多处生成</span>
@@ -266,21 +266,21 @@ enum Opcode: u16 {
 }</pre>
           </div>
 
-          <p class="small dim" style="margin-top: var(--s3)" data-zh="生成物：Rust 常量与解码器、C 头、Python 打包器、JSON 规范，以及一个漂移检查器。判据是漂移检查器可以退役——漂移在生成期就不可能发生。" data-en="Generated: Rust constants and decoders, C headers, Python packers, the JSON spec, and a drift checker. The criterion is that the drift checker can be retired — drift becomes impossible at generation time.">
+          <p class="small dim fade-step" style="--delay: 0.36s; margin-top: var(--s3)" data-zh="生成物：Rust 常量与解码器、C 头、Python 打包器、JSON 规范，以及一个漂移检查器。判据是漂移检查器可以退役——漂移在生成期就不可能发生。" data-en="Generated: Rust constants and decoders, C headers, Python packers, the JSON spec, and a drift checker. The criterion is that the drift checker can be retired — drift becomes impossible at generation time.">
             生成物：Rust 常量与解码器、C 头、Python 打包器、JSON 规范，以及一个漂移检查器。判据是漂移检查器可以退役——漂移在生成期就不可能发生。
           </p>
         </div>
       </section>
 
       <!-- ============================================================== L1 -->
-      <section class="section anchor" id="l1">
+      <section class="section anchor" id="l1" data-motion>
         <div class="wrap">
-          <h2 class="h2" data-zh="L1 · 系统语言" data-en="L1 · the system language">L1 · 系统语言</h2>
-          <p class="muted prose" style="margin-top: var(--s2); " data-zh="设计目标按优先级排：布局与 ABI 是一等公民；确定性（无 GC、显式所有权、no_std 优先）；能力域语法化；每个编译单元导出可审计的语义模型；跨后端。第一版是 Loment → Rust 的转译器，不写后端——先拿到一个能跑、能与 Rust 原版逐位对齐的语言。" data-en="Design goals in priority order: layout and ABI as first-class; determinism (no GC, explicit ownership, no_std first); capability domains as a language construct; a auditable semantic model emitted per unit; multiple backends. The first version is a Loment → Rust transpiler with no backend of its own — get a language that runs and aligns bit-for-bit with the Rust original first.">
+          <h2 class="h2 fade-step" style="--delay: 0.08s" data-zh="L1 · 系统语言" data-en="L1 · the system language">L1 · 系统语言</h2>
+          <p class="muted prose fade-step" style="--delay: 0.16s; margin-top: var(--s2); " data-zh="设计目标按优先级排：布局与 ABI 是一等公民；确定性（无 GC、显式所有权、no_std 优先）；能力域语法化；每个编译单元导出可审计的语义模型；跨后端。第一版是 Loment → Rust 的转译器，不写后端——先拿到一个能跑、能与 Rust 原版逐位对齐的语言。" data-en="Design goals in priority order: layout and ABI as first-class; determinism (no GC, explicit ownership, no_std first); capability domains as a language construct; a auditable semantic model emitted per unit; multiple backends. The first version is a Loment → Rust transpiler with no backend of its own — get a language that runs and aligns bit-for-bit with the Rust original first.">
             设计目标按优先级排：布局与 ABI 是一等公民；确定性（无 GC、显式所有权、no_std 优先）；能力域语法化；每个编译单元导出可审计的语义模型；跨后端。第一版是 Loment → Rust 的转译器，不写后端——先拿到一个能跑、能与 Rust 原版逐位对齐的语言。
           </p>
 
-          <div class="grid grid--2" style="margin-top: var(--s4); align-items: start">
+          <div class="grid grid--2 fade-step" style="--delay: 0.24s; margin-top: var(--s4); align-items: start">
             <div class="code">
               <div class="code__bar">
                 <span class="lang-tag">loment</span>
@@ -315,7 +315,7 @@ export fn flush(req: FlushReq) contract(hex64) {
             </div>
           </div>
 
-          <div class="table-wrap" style="margin-top: var(--s4)">
+          <div class="table-wrap fade-step" style="--delay: 0.36s; margin-top: var(--s4)">
             <table>
               <thead>
                 <tr>
@@ -339,7 +339,7 @@ export fn flush(req: FlushReq) contract(hex64) {
             </table>
           </div>
 
-          <div class="note note--steel" style="margin-top: var(--s3)">
+          <div class="note note--steel fade-step" style="--delay: 0.48s; margin-top: var(--s3)">
             <strong data-zh="强制导出的三层都不可关闭：" data-en="All three layers of forced export are non-negotiable: ">强制导出的三层都不可关闭：</strong>
             <span data-zh="编译器内部有错即编译失败；CLI 层要 emit 目标就必须同时 emit 形式对象；仓库层要求每个示例都有逐字节一致的 .potato.json 并通过独立校验器。" data-en="inside the compiler, any error fails the build; at the CLI, emitting a target requires emitting the formal object too; at the repository, every example must carry a byte-identical .potato.json that passes the independent validator.">编译器内部有错即编译失败；CLI 层要 emit 目标就必须同时 emit 形式对象；仓库层要求每个示例都有逐字节一致的 .potato.json 并通过独立校验器。</span>
           </div>
@@ -347,33 +347,33 @@ export fn flush(req: FlushReq) contract(hex64) {
       </section>
 
       <!-- ====================================================== milestones -->
-      <section class="section anchor" id="progress">
+      <section class="section anchor" id="progress" data-motion>
         <div class="wrap">
-          <h2 class="h2" data-zh="进度：说清楚哪些没做完" data-en="Progress: which parts are not finished">进度：说清楚哪些没做完</h2>
-          <p class="muted prose" style="margin-top: var(--s2); " data-zh="100 个里程碑按依赖排序推进。下表由脚本从路线图文档生成，不是手写的摘要。" data-en="A hundred milestones are worked in dependency order. The table below is generated by a script from the roadmap document, not hand-summarised.">
+          <h2 class="h2 fade-step" style="--delay: 0.08s" data-zh="进度：说清楚哪些没做完" data-en="Progress: which parts are not finished">进度：说清楚哪些没做完</h2>
+          <p class="muted prose fade-step" style="--delay: 0.16s; margin-top: var(--s2); " data-zh="100 个里程碑按依赖排序推进。下表由脚本从路线图文档生成，不是手写的摘要。" data-en="A hundred milestones are worked in dependency order. The table below is generated by a script from the roadmap document, not hand-summarised.">
             100 个里程碑按依赖排序推进。下表由脚本从路线图文档生成，不是手写的摘要。
           </p>
 
           <div class="stats" style="margin-top: var(--s4)">
-            <div class="stat">
+            <div class="stat fade-step" style="--delay: 0.24s">
               <span class="stat__v">86</span>
               <span class="stat__k" data-zh="完成" data-en="done">完成</span>
             </div>
-            <div class="stat">
+            <div class="stat fade-step" style="--delay: 0.32s">
               <span class="stat__v">9</span>
               <span class="stat__k" data-zh="部分完成（边界在文档里逐条写明）" data-en="partially done (each boundary written down)">部分完成（边界在文档里逐条写明）</span>
             </div>
-            <div class="stat">
+            <div class="stat fade-step" style="--delay: 0.4s">
               <span class="stat__v">1</span>
               <span class="stat__k" data-zh="未达：M100 —— 1.0 的发布与外部审计" data-en="not met: M100 — the 1.0 release and its external audit">未达：M100 —— 1.0 的发布与外部审计</span>
             </div>
-            <div class="stat">
+            <div class="stat fade-step" style="--delay: 0.48s">
               <span class="stat__v">4</span>
               <span class="stat__k" data-zh="未开始：全部在内核侧（撤销实施、A1–A4 断言、域宽接口、域模型对齐）" data-en="not started: all kernel-side (revocation enforcement, A1–A4 assertions, the width interface, domain-model alignment)">未开始：全部在内核侧（撤销实施、A1–A4 断言、域宽接口、域模型对齐）</span>
             </div>
           </div>
 
-          <div class="grid grid--2" style="margin-top: var(--s4); align-items: start">
+          <div class="grid grid--2 fade-step" style="--delay: 0.6s; margin-top: var(--s4); align-items: start">
             <div>
               <h3 class="h3" data-zh="已经闭环的几件事" data-en="A few things that are closed">已经闭环的几件事</h3>
               <ul class="list list--check">
@@ -394,14 +394,14 @@ export fn flush(req: FlushReq) contract(hex64) {
       </section>
 
       <!-- ========================================================== wave C -->
-      <section class="section anchor" id="measurement">
+      <section class="section anchor" id="measurement" data-motion>
         <div class="wrap">
-          <h2 class="h2" data-zh="波 C 测量：把“能转写”变成可复现的数字" data-en="Wave-C measurement: turning “it can translate” into reproducible numbers">波 C 测量：把“能转写”变成可复现的数字</h2>
-          <p class="muted prose" style="margin-top: var(--s2); " data-zh="语料是 12 个仓库真实文件（每语言 4 个），每个文件的 sha256 记入结果文件，测量与内容绑定。两臂是工具链的严格与宽松档——都确定性、可复现，不使用随机数。" data-en="The corpus is 12 real repository files (4 per language); each file's sha256 goes into the results file so the measurement is bound to its content. The two arms are the toolchain's strict and lenient settings — both deterministic and reproducible, neither using randomness.">
+          <h2 class="h2 fade-step" style="--delay: 0.08s" data-zh="波 C 测量：把“能转写”变成可复现的数字" data-en="Wave-C measurement: turning “it can translate” into reproducible numbers">波 C 测量：把“能转写”变成可复现的数字</h2>
+          <p class="muted prose fade-step" style="--delay: 0.16s; margin-top: var(--s2); " data-zh="语料是 12 个仓库真实文件（每语言 4 个），每个文件的 sha256 记入结果文件，测量与内容绑定。两臂是工具链的严格与宽松档——都确定性、可复现，不使用随机数。" data-en="The corpus is 12 real repository files (4 per language); each file's sha256 goes into the results file so the measurement is bound to its content. The two arms are the toolchain's strict and lenient settings — both deterministic and reproducible, neither using randomness.">
             语料是 12 个仓库真实文件（每语言 4 个），每个文件的 sha256 记入结果文件，测量与内容绑定。两臂是工具链的严格与宽松档——都确定性、可复现，不使用随机数。
           </p>
 
-          <div class="table-wrap" style="margin-top: var(--s4)">
+          <div class="table-wrap fade-step" style="--delay: 0.24s; margin-top: var(--s4)">
             <table>
               <caption data-zh="识别率与转换率必须一起读——转换率是“条件于识别”的比率" data-en="Recognition and conversion rates must be read together — conversion is conditional on recognition">识别率与转换率必须一起读——转换率是“条件于识别”的比率</caption>
               <thead>
@@ -464,19 +464,19 @@ export fn flush(req: FlushReq) contract(hex64) {
             </table>
           </div>
 
-          <ul class="list" style="margin-top: var(--s3)">
+          <ul class="list fade-step" style="--delay: 0.36s; margin-top: var(--s3)">
             <li><b data-zh="Python 的瓶颈是注解质量" data-en="Python's bottleneck is annotation quality">Python 的瓶颈是注解质量</b> <span data-zh="—— 严格臂 27.1%，主因是 list[str]/dict 这类没有 Potato 对应物的容器类型被跳过。" data-en=" — strict arm 27.1%, mainly because container types like list[str]/dict have no Potato counterpart and are skipped.">—— 严格臂 27.1%，主因是 list[str]/dict 这类没有 Potato 对应物的容器类型被跳过。</span></li>
             <li><b data-zh="C 的瓶颈是识别器" data-en="C's bottleneck is the recognizer">C 的瓶颈是识别器</b> <span data-zh="—— 识别率 89.2%，4 个多行/宏签名对正则不可见；100% 的转换率不能单独引用。" data-en=" — recognition 89.2%; four multi-line/macro signatures are invisible to the regexes. The 100% conversion rate must not be quoted alone.">—— 识别率 89.2%，4 个多行/宏签名对正则不可见；100% 的转换率不能单独引用。</span></li>
             <li><b data-zh="Rust 最好转" data-en="Rust translates best">Rust 最好转</b> <span data-zh="—— 静态类型加显式切片；剩余跳过是常量长度数组、never 类型与元组返回。" data-en=" — static types plus explicit slices; what remains skipped is constant-length arrays, the never type and tuple returns.">—— 静态类型加显式切片；剩余跳过是常量长度数组、never 类型与元组返回。</span></li>
             <li><b data-zh="对象合法率 100%" data-en="Object validity 100%">对象合法率 100%</b> <span data-zh="—— 工具链宁可少转，也不乱转。" data-en=" — the toolchain would rather translate less than translate wrongly.">—— 工具链宁可少转，也不乱转。</span></li>
           </ul>
 
-          <div class="note note--amber" style="margin-top: var(--s4)">
+          <div class="note note--amber fade-step" style="--delay: 0.48s; margin-top: var(--s4)">
             <strong data-zh="一个必须标注的边界：" data-en="One boundary that must be labelled: ">一个必须标注的边界：</strong>
             <span data-zh="宿主 LLM 臂尚未运行（本环境没有外部模型凭据）。协议已就绪，任何外部转写器按同一报告 schema 产出结果即可并入主表——但当前主表的“两臂”不得在论文中当作 LLM 对照。" data-en="the host-LLM arm has not been run (no external model credentials in this environment). The protocol is ready: any external translator that emits a report against the same schema can join the main table — but the current two arms must not be presented as an LLM comparison in the paper.">宿主 LLM 臂尚未运行（本环境没有外部模型凭据）。协议已就绪，任何外部转写器按同一报告 schema 产出结果即可并入主表——但当前主表的“两臂”不得在论文中当作 LLM 对照。</span>
           </div>
 
-          <div class="hero__actions" style="margin-top: var(--s5)">
+          <div class="hero__actions fade-step" style="--delay: 0.6s; margin-top: var(--s5)">
             <button
               class="btn btn--primary"
               type="button"

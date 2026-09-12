@@ -146,10 +146,10 @@
       </section>
 
       <!-- ====================================================== proposition -->
-      <section class="section anchor" id="proposition">
+      <section class="section anchor" id="proposition" data-motion>
         <div class="wrap">
-          <h2 class="h2" data-zh="命题" data-en="The proposition">命题</h2>
-          <div class="figure" style="margin-top: var(--s4); padding: clamp(1.2rem, 4vw, 2.4rem); ">
+          <h2 class="h2 fade-step" style="--delay: 0.08s" data-zh="命题" data-en="The proposition">命题</h2>
+          <div class="figure fade-step" style="--delay: 0.16s; margin-top: var(--s4); padding: clamp(1.2rem, 4vw, 2.4rem); ">
             <p class="mono-label" data-zh="核心公式" data-en="Core formula">核心公式</p>
             <p style="font-family: var(--mono); font-size: clamp(1rem, 2.2vw, 1.5rem); margin-top: 0.9rem; line-height: 1.9">
               <span style="color: var(--steel)">safety</span> = <span style="color: var(--amber)">α</span>(<span class="dim">no out-of-bounds, S1</span>) × <span style="color: var(--steel)">DomainWidth</span> = f(S2)
@@ -159,7 +159,7 @@
             </p>
           </div>
 
-          <div class="table-wrap" style="margin-top: var(--s4)">
+          <div class="table-wrap fade-step" style="--delay: 0.24s; margin-top: var(--s4)">
             <table>
               <caption data-zh="三层分解：谁负责什么" data-en="Three-layer decomposition: who is responsible for what">三层分解：谁负责什么</caption>
               <thead>
@@ -189,7 +189,7 @@
             </table>
           </div>
 
-          <div class="note note--amber" style="margin-top: var(--s4)">
+          <div class="note note--amber fade-step" style="--delay: 0.36s; margin-top: var(--s4)">
             <strong data-zh="模型不能写自己的界。" data-en="A model does not get to write its own boundary.">模型不能写自己的界。</strong>
             <span data-zh="模型提出动作，S1 决定动作能否发生，S2 决定它被允许有多宽的活动范围，S3 决定这条边界画在哪。四者分离，才谈得上可审计。" data-en=" The model proposes an action; S1 decides whether it can happen, S2 decides how wide its room to move is, and S3 decides where the line is drawn. Only with those four separated does auditability become meaningful."> 模型提出动作，S1 决定动作能否发生，S2 决定它被允许有多宽的活动范围，S3 决定这条边界画在哪。四者分离，才谈得上可审计。</span>
           </div>
@@ -197,14 +197,14 @@
       </section>
 
       <!-- ========================================================= axioms -->
-      <section class="section anchor" id="axioms">
+      <section class="section anchor" id="axioms" data-motion>
         <div class="wrap">
-          <h2 class="h2" data-zh="A1–A4：机制必须满足的四条" data-en="A1–A4: four properties the mechanism must hold">A1–A4：机制必须满足的四条</h2>
-          <p class="muted prose" style="margin-top: var(--s2); " data-zh="这四条是接口性质，不是实现细节——这也是第二实现能照契约重写的前提。" data-en="These four are interface properties, not implementation details — which is exactly why a second implementation can be rewritten against the contract.">
+          <h2 class="h2 fade-step" style="--delay: 0.08s" data-zh="A1–A4：机制必须满足的四条" data-en="A1–A4: four properties the mechanism must hold">A1–A4：机制必须满足的四条</h2>
+          <p class="muted prose fade-step" style="--delay: 0.16s; margin-top: var(--s2); " data-zh="这四条是接口性质，不是实现细节——这也是第二实现能照契约重写的前提。" data-en="These four are interface properties, not implementation details — which is exactly why a second implementation can be rewritten against the contract.">
             这四条是接口性质，不是实现细节——这也是第二实现能照契约重写的前提。
           </p>
 
-          <div class="table-wrap" style="margin-top: var(--s4)">
+          <div class="table-wrap fade-step" style="--delay: 0.24s; margin-top: var(--s4)">
             <table>
               <thead>
                 <tr>
@@ -238,7 +238,7 @@
             </table>
           </div>
 
-          <div class="note" style="margin-top: var(--s3)">
+          <div class="note fade-step" style="--delay: 0.36s; margin-top: var(--s3)">
             <span data-zh-html="四条断言的输入不是源码，而是编译器强制导出的<a href=&quot;../loment/&quot;>形式对象</a>（Potato）；一个独立校验器仅凭该对象即可判定合法性，不读源码、不读二进制。" data-en-html="The input to these four assertions is not source code but the <a href=&quot;../loment/&quot;">formal object</a> a compiler is forced to emit (Potato); an independent validator decides legality from that object alone, reading neither source nor binary.">
               四条断言的输入不是源码，而是编译器强制导出的<a href="../loment/">形式对象</a>（Potato）；一个独立校验器仅凭该对象即可判定合法性，不读源码、不读二进制。
             </span>
@@ -247,33 +247,33 @@
       </section>
 
       <!-- ================================================ trust-adaptive width -->
-      <section class="section anchor" id="trust">
+      <section class="section anchor" id="trust" data-motion>
         <div class="wrap">
-          <h2 class="h2" data-zh="信任自适应域宽" data-en="Trust-adaptive domain width">信任自适应域宽</h2>
-          <p class="muted prose" style="margin-top: var(--s2); " data-zh="域宽不是一个配置项，而是一个测量结果。质量台账记录模型在语义金标上的表现，两个阈值 τ_low 与 τ_high 把质量分成三段，域宽随之变化；连续 K 次确认后才允许放宽。" data-en="Domain width is not a configuration flag; it is a measurement result. A quality ledger records how the model does on the semantic goldset, two thresholds τ_low and τ_high cut quality into three bands, and the domain width follows. Widening requires K consecutive confirmations.">
+          <h2 class="h2 fade-step" style="--delay: 0.08s" data-zh="信任自适应域宽" data-en="Trust-adaptive domain width">信任自适应域宽</h2>
+          <p class="muted prose fade-step" style="--delay: 0.16s; margin-top: var(--s2); " data-zh="域宽不是一个配置项，而是一个测量结果。质量台账记录模型在语义金标上的表现，两个阈值 τ_low 与 τ_high 把质量分成三段，域宽随之变化；连续 K 次确认后才允许放宽。" data-en="Domain width is not a configuration flag; it is a measurement result. A quality ledger records how the model does on the semantic goldset, two thresholds τ_low and τ_high cut quality into three bands, and the domain width follows. Widening requires K consecutive confirmations.">
             域宽不是一个配置项，而是一个测量结果。质量台账记录模型在语义金标上的表现，两个阈值 τ_low 与 τ_high 把质量分成三段，域宽随之变化；连续 K 次确认后才允许放宽。
           </p>
 
           <div class="stats" style="margin-top: var(--s4)">
-            <div class="stat">
+            <div class="stat fade-step" style="--delay: 0.24s">
               <span class="stat__v">45 <span class="dim" style="font-size: 0.6em">/</span> 35</span>
               <span class="stat__k" data-zh="τ_high / τ_low（FujoOS 默认）。LinuxFUAI 默认 46，作为部署参数登记而非接口差异。" data-en="τ_high / τ_low (FujoOS default). LinuxFUAI defaults to 46 — logged as a deployment parameter, not an interface difference.">τ_high / τ_low（FujoOS 默认）。LinuxFUAI 默认 46，作为部署参数登记而非接口差异。</span>
             </div>
-            <div class="stat">
+            <div class="stat fade-step" style="--delay: 0.32s">
               <span class="stat__v">[0.429, 0.454)</span>
               <span class="stat__k" data-zh="τ* —— 语义金标 v2 口径下重推导的信任阈值区间（旧口径为 [0.369, 0.534)）" data-en="τ* — the trust-threshold interval re-derived under semantic goldset v2 (the old interval was [0.369, 0.534))">τ* —— 语义金标 v2 口径下重推导的信任阈值区间（旧口径为 [0.369, 0.534)）</span>
             </div>
-            <div class="stat">
+            <div class="stat fade-step" style="--delay: 0.4s">
               <span class="stat__v">5.01×</span>
               <span class="stat__k" data-zh="R(0.70) —— 在 0.70 覆盖率下的风险比，13 个本地模型的 β 重测得出" data-en="R(0.70) — the risk ratio at 0.70 coverage, from β re-measurement across 13 local models">R(0.70) —— 在 0.70 覆盖率下的风险比，13 个本地模型的 β 重测得出</span>
             </div>
-            <div class="stat">
+            <div class="stat fade-step" style="--delay: 0.48s">
               <span class="stat__v">13 × 280</span>
               <span class="stat__k" data-zh="模型数 × 金标例数。0.5B–9B、7 个家族，含留一模型交叉检查。" data-en="Models × goldset examples. 0.5B–9B, 7 families, with leave-one-model-out checks.">模型数 × 金标例数。0.5B–9B、7 个家族，含留一模型交叉检查。</span>
             </div>
           </div>
 
-          <div class="table-wrap" style="margin-top: var(--s4)">
+          <div class="table-wrap fade-step" style="--delay: 0.56s; margin-top: var(--s4)">
             <table>
               <caption data-zh="测量链上的关键修正是可查的，不是修辞" data-en="The corrections along the measurement chain are traceable, not rhetoric">测量链上的关键修正是可查的，不是修辞</caption>
               <thead>
@@ -303,7 +303,7 @@
             </table>
           </div>
 
-          <div class="note note--amber" style="margin-top: var(--s4); ">
+          <div class="note note--amber fade-step" style="--delay: 0.68s; margin-top: var(--s4); ">
             <strong data-zh="τ 不是一个已知的数。" data-en="τ is not a known number. ">τ 不是一个已知的数。</strong>
             <span data-zh-html="数据只把最优阈值定到一个区间；区间内取哪一点是政策决定，不是测量。这个问题的三个分支——它会收敛、前提会崩塌、或者前提成立但不再重要——写在 <a href=&quot;../docs/ai/tau/&quot;>τ 问题</a>。" data-en-html="The data pin the optimum down to an interval; which point inside it gets taken is a policy decision, not a measurement. This problem's three branches — it converges, the premise collapses, or the premise holds and stops mattering — are laid out under <a href=&quot;../docs/ai/tau/&quot;>The τ problem</a>.">数据只把最优阈值定到一个区间；区间内取哪一点是政策决定，不是测量。这个问题的三个分支——它会收敛、前提会崩塌、或者前提成立但不再重要——写在 <a href="../docs/ai/tau/">τ 问题</a>。</span>
           </div>
@@ -311,14 +311,14 @@
       </section>
 
       <!-- ====================================================== runtime -->
-      <section class="section anchor" id="runtime">
+      <section class="section anchor" id="runtime" data-motion>
         <div class="wrap">
-          <h2 class="h2" data-zh="FUAI-OS：主机无关的监督安全运行时" data-en="FUAI-OS: a host-agnostic supervisory runtime">FUAI-OS：主机无关的监督安全运行时</h2>
-          <p class="muted prose" style="margin-top: var(--s2); " data-zh="要证实“这套机制不是某个内核的私产”，只把设计写在论文里不够——需要在没有 FujoOS 的机器上把它跑起来。fuai-run 是一个独立二进制：加载 S3 策略文件，监督目标进程树，写出证据链。" data-en="To show this mechanism is not the private property of one kernel, writing the design down is not enough — it has to run on a machine with no FujoOS. fuai-run is a standalone binary: it loads an S3 policy file, supervises a target process tree, and writes an evidence chain.">
+          <h2 class="h2 fade-step" style="--delay: 0.08s" data-zh="FUAI-OS：主机无关的监督安全运行时" data-en="FUAI-OS: a host-agnostic supervisory runtime">FUAI-OS：主机无关的监督安全运行时</h2>
+          <p class="muted prose fade-step" style="--delay: 0.16s; margin-top: var(--s2); " data-zh="要证实“这套机制不是某个内核的私产”，只把设计写在论文里不够——需要在没有 FujoOS 的机器上把它跑起来。fuai-run 是一个独立二进制：加载 S3 策略文件，监督目标进程树，写出证据链。" data-en="To show this mechanism is not the private property of one kernel, writing the design down is not enough — it has to run on a machine with no FujoOS. fuai-run is a standalone binary: it loads an S3 policy file, supervises a target process tree, and writes an evidence chain.">
             要证实“这套机制不是某个内核的私产”，只把设计写在论文里不够——需要在没有 FujoOS 的机器上把它跑起来。fuai-run 是一个独立二进制：加载 S3 策略文件，监督目标进程树，写出证据链。
           </p>
 
-          <figure class="figure" style="--draw-dur: 0.35s; margin-top: var(--s4)">
+          <figure class="figure fade-step" style="--delay: 0.24s; --draw-dur: 0.35s; margin-top: var(--s4)">
             <svg
               class="envelope"
               viewBox="0 0 620 264"
@@ -381,7 +381,7 @@
             </figcaption>
           </figure>
 
-          <div class="grid grid--2" style="margin-top: var(--s5)">
+          <div class="grid grid--2 fade-step" style="--delay: 0.36s; margin-top: var(--s5)">
             <div class="stack">
               <h3 class="h3" data-zh="运行时边界（一处被实测修正过）" data-en="Runtime boundary (corrected by measurement)">运行时边界（一处被实测修正过）</h3>
               <ul class="list">
@@ -405,14 +405,14 @@
       </section>
 
       <!-- ================================================== two implementations -->
-      <section class="section anchor" id="two-impl">
+      <section class="section anchor" id="two-impl" data-motion>
         <div class="wrap">
-          <h2 class="h2" data-zh="两个实现，一份契约" data-en="Two implementations, one contract">两个实现，一份契约</h2>
-          <p class="muted prose" style="margin-top: var(--s2); " data-zh="契约规范是唯一权威，两个实现从它派生或对它校验。契约分两层：核心层是主机无关的监督原语，宿主扩展层是实现特有的部分（比如 Windows 盒桥），差分只对核心层断言。" data-en="The contract specification is the sole authority; both implementations either derive from it or are checked against it. The contract has two layers: a core layer of host-agnostic supervisory primitives, and a host-extension layer for implementation-specific parts (the Windows box bridge, say). The differ asserts on the core layer only.">
+          <h2 class="h2 fade-step" style="--delay: 0.08s" data-zh="两个实现，一份契约" data-en="Two implementations, one contract">两个实现，一份契约</h2>
+          <p class="muted prose fade-step" style="--delay: 0.16s; margin-top: var(--s2); " data-zh="契约规范是唯一权威，两个实现从它派生或对它校验。契约分两层：核心层是主机无关的监督原语，宿主扩展层是实现特有的部分（比如 Windows 盒桥），差分只对核心层断言。" data-en="The contract specification is the sole authority; both implementations either derive from it or are checked against it. The contract has two layers: a core layer of host-agnostic supervisory primitives, and a host-extension layer for implementation-specific parts (the Windows box bridge, say). The differ asserts on the core layer only.">
             契约规范是唯一权威，两个实现从它派生或对它校验。契约分两层：核心层是主机无关的监督原语，宿主扩展层是实现特有的部分（比如 Windows 盒桥），差分只对核心层断言。
           </p>
 
-          <div class="table-wrap" style="margin-top: var(--s4)">
+          <div class="table-wrap fade-step" style="--delay: 0.24s; margin-top: var(--s4)">
             <table>
               <thead>
                 <tr>
@@ -436,7 +436,7 @@
             </table>
           </div>
 
-          <div class="note note--steel" style="margin-top: var(--s4)">
+          <div class="note note--steel fade-step" style="--delay: 0.36s; margin-top: var(--s4)">
             <strong data-zh="差分结果：" data-en="Differ result: ">差分结果：</strong>
             <span data-zh="同一策略与 19 步事件夹具喂给两个实现，机制层判决序列 19/19 步零差异。这说明机制级判决是接口性质，而不是某个实现的特定行为。" data-en="the same policy and a 19-step event fixture fed to both implementations produce a mechanism-level verdict sequence that agrees 19/19. Mechanism-level verdicts are an interface property, not a behaviour specific to one implementation.">同一策略与 19 步事件夹具喂给两个实现，机制层判决序列 19/19 步零差异。这说明机制级判决是接口性质，而不是某个实现的特定行为。</span>
           </div>
@@ -444,10 +444,10 @@
       </section>
 
       <!-- ========================================================= limits -->
-      <section class="section anchor" id="limits">
+      <section class="section anchor" id="limits" data-motion>
         <div class="wrap">
-          <h2 class="h2" data-zh="诚实的边界" data-en="Honest limits">诚实的边界</h2>
-          <div class="grid grid--2" style="margin-top: var(--s4); align-items: start; ">
+          <h2 class="h2 fade-step" style="--delay: 0.08s" data-zh="诚实的边界" data-en="Honest limits">诚实的边界</h2>
+          <div class="grid grid--2 fade-step" style="--delay: 0.2s; margin-top: var(--s4); align-items: start; ">
             <ul class="list list--check">
               <li><b data-zh="LLM 臂尚未运行" data-en="LLM arm not yet run">LLM 臂尚未运行</b> <span data-zh="—— 波 C 主表的“两臂”是工具链的严格/宽松两档，不得在论文中当作 LLM 对照。" data-en=" — the two arms in the wave-C table are the toolchain's strict/lenient settings; they must not be presented as an LLM comparison in the paper.">—— 波 C 主表的“两臂”是工具链的严格/宽松两档，不得在论文中当作 LLM 对照。</span></li>
               <li><b data-zh="A1–A4 只到产物层" data-en="A1–A4 reach the artifact layer only">A1–A4 只到产物层</b> <span data-zh="—— 生成的断言表尚未被内核 include!，运行时断言要等内核侧接入。" data-en=" — the generated assertion table is not yet include!'d by the kernel; runtime assertions await kernel-side integration.">—— 生成的断言表尚未被内核 include!，运行时断言要等内核侧接入。</span></li>
@@ -460,7 +460,7 @@
             </ul>
           </div>
 
-          <div class="hero__actions" style="margin-top: var(--s5)">
+          <div class="hero__actions fade-step" style="--delay: 0.32s; margin-top: var(--s5)">
             <a class="btn btn--primary" href="../docs/architecture/" data-zh="看系统架构" data-en="See the architecture">看系统架构</a>
             <a class="btn" href="../loment/" data-zh="看 Loment · Potato" data-en="Loment · Potato">看 Loment · Potato</a>
             <a class="btn btn--ghost" href="https://zenodo.org/records/22352904" rel="noopener" data-zh="前往论文 ↗" data-en="Read the paper ↗">前往论文 ↗</a>
