@@ -108,36 +108,6 @@ R(τ) = L(τ) / L_min
                 </p>
               </div>
 
-              <h2 data-zh="像 π 的地方，和不像的地方" data-en="Where it is like π, and where it is not">像 π 的地方，和不像的地方</h2>
-              <div class="table-wrap">
-                <table>
-                  <thead>
-                    <tr>
-                      <th scope="col" data-zh="维度" data-en="Aspect">维度</th>
-                      <th scope="col">π</th>
-                      <th scope="col">τ</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td data-zh="能不能写完整" data-en="Can we write it out">能不能写完整</td>
-                      <td data-zh="不能，但它存在且唯一" data-en="No, but it exists and is unique">不能，但它存在且唯一</td>
-                      <td data-zh="不能——而且目前连“它是否存在且唯一”都没有答案" data-en="No — and whether it even exists and is unique is currently unanswered">不能——而且目前连“它是否存在且唯一”都没有答案</td>
-                    </tr>
-                    <tr>
-                      <td data-zh="测量加密会怎样" data-en="What refining the measurement does">测量加密会怎样</td>
-                      <td data-zh="逼近同一个值" data-en="Approaches the same value">逼近同一个值</td>
-                      <td data-zh="区间变窄；但如果信号本身不分离，变窄也不收敛到一点" data-en="The interval narrows; but if the signal does not separate at all, narrowing does not converge to a point">区间变窄；但如果信号本身不分离，变窄也不收敛到一点</td>
-                    </tr>
-                    <tr>
-                      <td data-zh="它是不是世界的性质" data-en="Is it a property of the world">它是不是世界的性质</td>
-                      <td data-zh="是" data-en="Yes">是</td>
-                      <td data-zh="不一定——损失里含 π 与 C_s/C_w，两者都不是观测量" data-en="Not necessarily — the loss contains π and C_s/C_w, neither of which is observable">不一定——损失里含 π 与 C_s/C_w，两者都不是观测量</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-
               <h2 data-zh="可识别性：数据只能定到区间" data-en="Identifiability: the data pin down an interval only">可识别性：数据只能定到区间</h2>
               <div class="prose">
                 <p data-zh-html="论文把这条写成了显式声明：数据只识别出区间 τ*(π̂, r)；<strong>在区间内取哪一点是一个声明的 (S3) 政策决定，永远不是一次测量</strong>。在没有出现下列两件事之前，“不支持任何点估计”，τ 就冻结在声明的区间内取值。<br />可以正当重启的只有两件事：一是真实的部署损失记录（那时 C_s/C_w 与 π 从假设变成观测），二是语义金标本身被重新定义——现在的 novel 集是一个生成器的比率窗口。" data-en-html="The paper states this explicitly: the data identify only the interval τ*(π̂, r); <strong>a choice inside it is a declared (S3) decision, never a further measurement</strong>. Until one of two events occurs, “no point estimate is supportable”, and τ stays frozen at the declared in-interval choice.<br />Exactly two events may legitimately reopen it: a real deployment loss record (at which point C_s/C_w and π become observations rather than assumptions), or a redefinition of the semantic goldset itself — today's novel set is a generator's rate window.">
@@ -187,57 +157,27 @@ R(τ) = L(τ) / L_min
 
               <div class="note note--amber">
                 <strong data-zh="作者判断 —— 这一节是推测，不是测量。" data-en="The author's position — this section is conjecture, not measurement. ">作者判断 —— 这一节是推测，不是测量。</strong>
-                <span data-zh-html="本站其余部分只写能重放的东西；下面三句不是，它们是对未来的下注，列在这里是为了可被将来证伪：<br />一、若某一代人真把 τ 算成了一个精确的数，那么这条研究路径走到头也不会出现 AGI。<br />二、若公式的前提先崩塌，那么 AGI 会出现。<br />三、或者前提没有崩塌、AGI 照样出现——那样的话，AGI 也不是 AI 研究的终点。<br />我原本在这里写了一句把它们串起来的话——「它们共同的前提是：τ 能否被定死，是这套体系能走多远的探针」——下一节说明它为什么也站不住。" data-en-html="The rest of this site states only what can be replayed; the three sentences below do not. They are bets on the future, recorded so they can be falsified later:<br />One: if some generation does compute τ as an exact number, then this research path will not produce AGI even at its end.<br />Two: if the premise of the formula collapses first, AGI will appear.<br />Three: or the premise holds and AGI appears anyway — in which case AGI is not the endpoint of AI research.<br />I originally tried to tie them together with one sentence — "their shared premise: whether τ can be pinned down is the probe for how far this system can go" — and the next section is about why that falls down too.">本站其余部分只写能重放的东西；下面三句不是，它们是对未来的下注，列在这里是为了可被将来证伪：<br />一、若某一代人真把 τ 算成了一个精确的数，那么这条研究路径走到头也不会出现 AGI。<br />二、若公式的前提先崩塌，那么 AGI 会出现。<br />三、或者前提没有崩塌、AGI 照样出现——那样的话，AGI 也不是 AI 研究的终点。<br />我原本在这里写了一句把它们串起来的话——「它们共同的前提是：τ 能否被定死，是这套体系能走多远的探针」——下一节说明它为什么也站不住。</span>
+                <span data-zh-html="本站其余部分只写能重放的东西；下面三句不是，它们是对未来的下注，列在这里是为了可被将来证伪：<br />一、若某一代人真把 τ 算成了一个精确的数，那么这条研究路径走到头也不会出现 AGI。<br />二、若公式的前提先崩塌，那么 AGI 会出现。<br />三、或者前提没有崩塌、AGI 照样出现——那样的话，AGI 也不是 AI 研究的终点。<br />这三句共享一个隐含前提：把「τ 能不能被定死」当作「智能能走多远」的探针。下一节把这个前提本身推一遍。" data-en-html="The rest of this site states only what can be replayed; the three sentences below do not. They are bets on the future, recorded so they can be falsified later:<br />One: if some generation does compute τ as an exact number, then this research path will not produce AGI even at its end.<br />Two: if the premise of the formula collapses first, AGI will appear.<br />Three: or the premise holds and AGI appears anyway — in which case AGI is not the endpoint of AI research.<br />The three share one unstated premise: that whether τ can be pinned down is a probe for how far intelligence can go. The next section takes that premise apart.">本站其余部分只写能重放的东西；下面三句不是，它们是对未来的下注，列在这里是为了可被将来证伪：<br />一、若某一代人真把 τ 算成了一个精确的数，那么这条研究路径走到头也不会出现 AGI。<br />二、若公式的前提先崩塌，那么 AGI 会出现。<br />三、或者前提没有崩塌、AGI 照样出现——那样的话，AGI 也不是 AI 研究的终点。<br />这三句共享一个隐含前提：把「τ 能不能被定死」当作「智能能走多远」的探针。下一节把这个前提本身推一遍。</span>
               </div>
 
-              <h2 data-zh="自己先打一轮" data-en="The first swing, taken at ourselves">自己先打一轮</h2>
+              <h2 data-zh="所以 τ 像 π 吗" data-en="So is τ like π?">所以 τ 像 π 吗</h2>
               <div class="prose">
-                <p data-zh-html="这个项目有一条纪律：反证要记录，不能抹掉——W46 那轮就是这么处理的。所以上面三句写完，先自己打一轮。<strong>结果是三句都不成立</strong>；而且不是因为想错了，是因为它们把一件关于<em>测量有效性</em>的事，投影成了一句关于<em>智能终点</em>的话，而两者之间没有任何桥。" data-en-html="This project has one discipline: a refutation gets recorded, not erased — that is how the W46 round was handled. So the three sentences above were given the first swing.<strong>All three fail</strong> — not because the intuition is wrong, but because they project a finding about <em>whether a measurement works</em> onto a claim about <em>where intelligence ends</em>, with no bridge between the two.">
-                  这个项目有一条纪律：反证要记录，不能抹掉——W46 那轮就是这么处理的。所以上面三句写完，先自己打一轮。<strong>结果是三句都不成立</strong>；而且不是因为想错了，是因为它们把一件关于<em>测量有效性</em>的事，投影成了一句关于<em>智能终点</em>的话，而两者之间没有任何桥。
+                <p data-zh-html="不像，而且不是「数据还不够」那种不像。把损失式摊开：τ 往右走，F_G(τ) 上升（越多好模型被误收缩）、1 − F_B(τ) 下降（越少坏模型被误放宽）——<strong>这是一条权衡曲线，τ 只是曲线上的一个操作点</strong>。取哪个点由 π 与 C_s/C_w 决定，而这两个，一个是政策变量，一个是不可观测的成本比。所以不存在「那个 τ」——一如统计检验里不存在「那个显著性水平 α」。" data-en-html="It is not — and not in the “we need more data” sense. Lay the loss out: as τ moves right, F_G(τ) rises (more good models wrongly shrunk) while 1 − F_B(τ) falls (fewer bad models wrongly widened). <strong>That is a trade-off curve, and τ is one point on it.</strong> Which point gets taken is decided by π and C_s/C_w — one a policy variable, one an unobservable cost ratio. So there is no “the τ”, exactly as there is no “the significance level α” in a hypothesis test.">
+                  不像，而且不是「数据还不够」那种不像。把损失式摊开：τ 往右走，F_G(τ) 上升（越多好模型被误收缩）、1 − F_B(τ) 下降（越少坏模型被误放宽）——<strong>这是一条权衡曲线，τ 只是曲线上的一个操作点</strong>。取哪个点由 π 与 C_s/C_w 决定，而这两个，一个是政策变量，一个是不可观测的成本比。所以不存在「那个 τ」——一如统计检验里不存在「那个显著性水平 α」。
+                </p>
+                <p data-zh-html="真正属于世界的量不是 τ，而是<strong>那条曲线本身</strong>：Q 究竟能不能把 G 和 B 分开。它是可估的，模型越多估得越准，所以它也不是 π 型的。π 有一个确定的值、只是写不完；这里没有任何一个量具有那个性质。" data-en-html="The quantity that belongs to the world is not τ but <strong>the curve itself</strong>: whether Q can separate G from B at all. That one is estimable — more models estimate it better — so it is not π-shaped either. π has a definite value that we simply cannot write out; nothing here has that property.">
+                  真正属于世界的量不是 τ，而是<strong>那条曲线本身</strong>：Q 究竟能不能把 G 和 B 分开。它是可估的，模型越多估得越准，所以它也不是 π 型的。π 有一个确定的值、只是写不完；这里没有任何一个量具有那个性质。
                 </p>
               </div>
 
-              <div class="table-wrap" style="margin-top: var(--s4)">
-                <table>
-                  <thead>
-                    <tr>
-                      <th scope="col" data-zh="着力点" data-en="Where the swing lands">着力点</th>
-                      <th scope="col" data-zh="反证" data-en="The refutation">反证</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td data-zh="论文里 AGI 出现过几次" data-en="How often the paper says AGI">论文里 AGI 出现过几次</td>
-                      <td data-zh-html="<strong>0 次。</strong>而且摘要正面写着：阈值「是推导出来的政策参数，<em>不是常数</em>」。三句的主语在正文里没有落点。" data-en-html="<strong>Zero.</strong> And the abstract says outright that the thresholds are “derived policy parameters, <em>not constants</em>”. The subject of all three sentences has no footing in the manuscript."><strong>0 次。</strong>而且摘要正面写着：阈值「是推导出来的政策参数，<em>不是常数</em>」。三句的主语在正文里没有落点。</td>
-                    </tr>
-                    <tr>
-                      <td data-zh="第一句的「若」" data-en="The “if” of sentence one">第一句的「若」</td>
-                      <td data-zh-html="前提不存在。τ 按定义是政策变量 π 与成本比 C_s/C_w 的函数（τ(π) 是一条两级阶梯），所以「一个精确的 τ」只能是「某个已声明的政策下精确的 τ」。附录 B 说得更直：区间内取哪一点是声明的 (S3) 决定，<em>永远不是一次测量</em>。前件不可能，整句就空真——空真不携带信息。" data-en-html="The antecedent does not exist. τ is by definition a function of the policy variable π and the cost ratio C_s/C_w (τ(π) is a two-level step), so “an exact τ” can only mean “an exact τ under some already-declared policy”. Appendix B is blunter: a point inside the interval is a declared (S3) decision, <em>never a further measurement</em>. An impossible antecedent makes the sentence vacuously true — and vacuous truth carries nothing."/>
-                    </tr>
-                    <tr>
-                      <td data-zh="第二句的「则」" data-en="The “then” of sentence two">第二句的「则」</td>
-                      <td data-zh-html="前提崩塌所证明的，是「这把尺子量的是生成器，不是模型」——一个关于<strong>仪器</strong>的负结论。而 W46 同时证明了机制核心（能力域门、审计环、规则兜底）<em>不依赖</em> τ 的推导，原样存活。于是崩塌的合理读法是：系统仍然安全，只是「自适应域宽是测出来的」这个说法要收回。从仪器失效推不出智能出现——尺子量不准，不会造出被量的那个东西。" data-en-html="What a collapse proves is “this instrument is measuring the generator, not the models” — a negative result about <strong>an instrument</strong>. And W46 showed at the same time that the mechanism core (capability gate, audit ring, rule fallback) does <em>not</em> depend on τ’s derivation and survived intact. The sane reading of a collapse is therefore: the system stays safe, but the claim that the adaptive width is <em>measured</em> has to be withdrawn. An instrument failing does not conjure the thing it failed to measure."/>
-                    </tr>
-                    <tr>
-                      <td data-zh="第三句的证伪条件" data-en="Sentence three’s falsification condition">第三句的证伪条件</td>
-                      <td data-zh-html="没有。「终点」没有被定义，于是没有任何观测能把它排除。按本站自己的标准——任何主张都要能给出可重放的检验——一句不排除任何可能世界的句子不是断言，是安心的说法。" data-en-html="There isn’t one. “Endpoint” is never defined, so no observation could rule it out. By this site’s own standard — a claim must come with a replayable check — a sentence that excludes no possible world is not a claim; it is reassurance.">没有。「终点」没有被定义，于是没有任何观测能把它排除。按本站自己的标准——任何主张都要能给出可重放的检验——一句不排除任何可能世界的句子不是断言，是安心的说法。</td>
-                    </tr>
-                    <tr>
-                      <td data-zh="三句合起来是不是分支" data-en="Do the three form branches">三句合起来是不是分支</td>
-                      <td data-zh-html="也不是。「τ 精确」与「前提崩塌」不是互补事件——「Q 确实有区分力，但支撑仍是离散的、区间永远不闭合」这个世界三句都没覆盖。而第二、三句区分的是<em>前提</em>状态、不是 <em>AGI</em> 状态，按结果变量看，是一个分支加两条附注。" data-en-html="They do not. “τ is exact” and “the premise collapses” are not complementary events — the world where Q does separate but the support stays discrete so the interval never closes is covered by none of the three. And sentences two and three differ over the <em>premise</em>, not over <em>AGI</em>; read on the outcome variable that is one branch with two footnotes."/>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-
               <div class="note note--steel" style="margin-top: var(--s4)">
-                <strong data-zh="把 AGI 拿掉之后，剩下的是这句：" data-en="Take AGI out, and this is what is left: ">把 AGI 拿掉之后，剩下的是这句：</strong>
-                <span data-zh-html="<em>τ 能否被定死，是这套安全信封的自适应主张能否成立的探针。</em>它有数据（前面那张 G 与 B 完全重叠的表）、有可被反证攻击的形状、而且已经被攻击过一次。原来那三句比它大得多，也轻得多。" data-en-html="<em>Whether τ can be pinned down is the probe for whether this safety envelope’s claim to adaptivity holds.</em> It has data behind it (the table above, where G and B overlap completely), it has a shape that can be attacked, and it has been attacked once already. The original three sentences were far larger, and far lighter.">「τ 能否被定死，是这套安全信封的自适应主张能否成立的探针。」它有数据（前面那张 G 与 B 完全重叠的表）、有可被反证攻击的形状、而且已经被攻击过一次。原来那三句比它大得多，也轻得多。</span>
+                <strong data-zh="真正算不完的是另一个东西。" data-en="The thing that really cannot be finished is something else. ">真正算不完的是另一个东西。</strong>
+                <span data-zh-html="β 的分母是一个有限的 novelSet（现在 120 例），而模型将来会遇到的情境空间是<strong>开放的</strong>。于是「这个模型值多少信任」不是一个有确定值的函数，而是一个开放域上的判断。<strong>这才是这套体系真正的边界，而且它比 τ 严重得多</strong>：任何金标都是有限样本，部署空间不是。" data-en-html="β’s denominator is a finite novelSet (120 examples today), while the space of situations the model will actually meet is <strong>open</strong>. So “how much should this model be trusted” is not a function with a definite value; it is a judgement over an open domain. <strong>That is this system’s real boundary, and it is far more serious than τ</strong>: every goldset is a finite sample, and the deployment space is not.">β 的分母是一个有限的 novelSet（现在 120 例），而模型将来会遇到的情境空间是<strong>开放的</strong>。于是「这个模型值多少信任」不是一个有确定值的函数，而是一个开放域上的判断。<strong>这才是这套体系真正的边界，而且它比 τ 严重得多</strong>：任何金标都是有限样本，部署空间不是。</span>
               </div>
 
               <div class="note note--amber">
-                <strong data-zh="还有一条项目自己的规矩挡着。" data-en="One of the project’s own rules stands in the way too. ">还有一条项目自己的规矩挡着。</strong>
-                <span data-zh-html="研究计划里，FUAI × 未来 AGI 是一条<strong>独立支线</strong>，并且带着隔离规则：支线 B 的探索性结论<strong>不直接进论文</strong>，要走「证据链 → 反证 → 闭合」，闭合之后才允许成为声明。这三句还没走完这条流程——所以它们只该待在琥珀色方块里，不该被当成结论读。" data-en-html="In the research plan, FUAI × future AGI is a <strong>separate line</strong>, and it carries an isolation rule: that line’s exploratory conclusions <strong>do not go straight into the paper</strong> — they go through evidence → refutation → closure, and only after closure may they be stated as claims. These three have not been through that process, which is exactly why they belong in an amber block and must not be read as conclusions.">研究计划里，FUAI × 未来 AGI 是一条<strong>独立支线</strong>，并且带着隔离规则：支线 B 的探索性结论<strong>不直接进论文</strong>，要走「证据链 → 反证 → 闭合」，闭合之后才允许成为声明。这三句还没走完这条流程——所以它们只该待在琥珀色方块里，不该被当成结论读。</span>
+                <strong data-zh="于是那三句该这样读：" data-en="Which leaves the three sentences reading like this: ">于是那三句该这样读：</strong>
+                <span data-zh-html="第一句要的「精确 τ」按构造不存在，所以它空转；但它背后的直觉有一个真内核——<strong>信任若可被预先测量，能力就是有界的</strong>，而「有界」与「通用」张力。只是触发条件不是 τ 被算准，而是信任在开放情境空间上可被预先测量。<br />第二句的发现是真的（重叠是实测，W46 也判定金标可能构造性可分），但那是关于<strong>仪器</strong>的负结论；从「尺子量不准」推不出「智能会出现」。何况 S1 模型无关——它对任何模型成立，前提崩不崩它都在。前提崩塌真正证明的是：S2 在以测量的名义做政策的工作。<br />第三句没有可观测的证伪条件，它是立场，不是断言。<br /><br /><strong>修正后立得住的是这一句：</strong><em>信任能否在开放情境空间上被预先测量，才是探针。</em>能，则能力有界、可预先刻画，与「通用」张力；不能，则 S2 的自适应主张失去测量基础——系统仍然安全，但「自适应」是政策修辞。它可证伪、有数据（就是上面那张重叠表），问的也是对的问题。" data-en-html="Sentence one’s “exact τ” cannot exist by construction, so it idles — but the intuition under it has a real core: <strong>if trust is pre-measurable, capability is bounded</strong>, and boundedness is in tension with generality. The trigger, though, is not τ being computed exactly; it is trust being pre-measurable over an open space of situations.<br />Sentence two’s finding is real (the overlap is measured, and W46 found the goldset possibly constructively separable), but it is a negative result about <strong>an instrument</strong>; “the ruler is inaccurate” does not give you “intelligence will appear”. S1 is model-agnostic besides — it holds for any model, premise or no premise. What a collapse actually proves is that S2 is doing policy work under the name of measurement.<br />Sentence three has no observable falsification condition. It is a stance, not a claim.<br /><br /><strong>What holds after the correction is this:</strong> <em>whether trust can be pre-measured over an open space of situations is the probe.</em> If it can, capability is bounded and pre-characterisable, in tension with generality. If it cannot, S2’s claim to adaptivity loses its measuring basis — the system stays safe, but “adaptive” is policy rhetoric. It is falsifiable, it has data behind it (the overlap table above), and it asks the right question.">第一句要的「精确 τ」按构造不存在，所以它空转；但它背后的直觉有一个真内核——<strong>信任若可被预先测量，能力就是有界的</strong>，而「有界」与「通用」张力。只是触发条件不是 τ 被算准，而是信任在开放情境空间上可被预先测量。<br />第二句的发现是真的（重叠是实测，W46 也判定金标可能构造性可分），但那是关于<strong>仪器</strong>的负结论；从「尺子量不准」推不出「智能会出现」。何况 S1 模型无关——它对任何模型成立，前提崩不崩它都在。前提崩塌真正证明的是：S2 在以测量的名义做政策的工作。<br />第三句没有可观测的证伪条件，它是立场，不是断言。<br /><br /><strong>修正后立得住的是这一句：</strong><em>信任能否在开放情境空间上被预先测量，才是探针。</em>能，则能力有界、可预先刻画，与「通用」张力；不能，则 S2 的自适应主张失去测量基础——系统仍然安全，但「自适应」是政策修辞。它可证伪、有数据（就是上面那张重叠表），问的也是对的问题。</span>
               </div>
 
               <div class="note note--steel">
