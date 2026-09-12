@@ -1,16 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img"
      aria-label="FujoOS">
   <title>FujoOS</title>
-  <!-- Favicon cut: the snow line sits lower and the zigzag is gentler, so the
-       two-tone still reads after the browser has rasterised it at 16 px. -->
-  <style>
-    .fav-rock { fill: #5aa6c4; }
-    .fav-snow { fill: #e3e9f1; }
-    @media (prefers-color-scheme: light) {
-      .fav-rock { fill: #266b87; }
-      .fav-snow { fill: #ffffff; }
-    }
-  </style>
-  <path class="fav-rock" d="M2,59 Q11,38 26,15 Q32,18 38,15 Q53,38 62,59 Z" />
-  <path class="fav-snow" d="M14.6,35 Q17.5,22 26,15 Q32,18 38,15 Q46.5,22 49.4,35 L40,39 L31,30 Z" />
+  <!-- Opaque tile, on purpose. A transparent favicon would leave the near-white
+       snow cap with nothing to sit on, and it would vanish into a light tab bar
+       (the tab bar follows the OS theme, not the page). The mark is also drawn
+       a little larger than in fuji-mark.svg, because at 16 px every unit counts.
+       Colours are fixed rather than theme-aware: SVG favicons are rendered in
+       the browser chrome, where prefers-color-scheme does not reliably reach. -->
+  <rect width="64" height="64" rx="14" fill="#1b2b40" />
+  <g transform="translate(4.5,0.2) scale(0.86)">
+    <path d="M3,58 Q11,38 26,16 Q32,19 38,16 Q53,38 61,58 Z" fill="#6cb6d4" />
+    <path d="M15.9,32 Q18,22 26,16 Q32,19 38,16 Q46,22 48.1,32 Q32,38 15.9,32 Z" fill="#eef3f8" />
+  </g>
 </svg>

@@ -85,7 +85,9 @@
   --steel: #266b87;
   --steel-soft: #266b8714;
   --mark-rock: #266b87;
-  --mark-snow: #ffffff;
+  /* Not pure white: on a light ground the cap would disappear and the summit
+     would read as a chunk cut out of the mountain. */
+  --mark-snow: #d9e7ee;
   --grid: #266b870f;
   --shadow: 0 14px 34px -26px #22303f47;
   color-scheme: light;

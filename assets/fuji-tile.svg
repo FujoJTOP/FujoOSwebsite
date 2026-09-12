@@ -16,6 +16,6 @@
   <rect width="512" height="512" rx="116" fill="url(#fuji-tile-bg)" />
   <g transform="translate(64,34) scale(6)">
     <path d="M3,58 Q11,38 26,16 Q32,19 38,16 Q53,38 61,58 Z" fill="#5aa6c4" />
-    <path d="M15.9,32 Q18,22 26,16 Q32,19 38,16 Q46,22 48.1,32 L40,36 L31,28 Z" fill="#e3e9f1" />
+    <path d="M15.9,32 Q18,22 26,16 Q32,19 38,16 Q46,22 48.1,32 Q32,38 15.9,32 Z" fill="#e3e9f1" />
   </g>
 </svg>

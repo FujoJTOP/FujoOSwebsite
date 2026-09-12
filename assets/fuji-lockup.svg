@@ -21,14 +21,14 @@
     .fuji-lockup .wm-os { fill: var(--mark-rock, #5aa6c4); }
     @media (prefers-color-scheme: light) {
       .fuji-lockup .rock { fill: var(--mark-rock, #266b87); }
-      .fuji-lockup .snow { fill: var(--mark-snow, #ffffff); }
+      .fuji-lockup .snow { fill: var(--mark-snow, #d9e7ee); }
       .fuji-lockup .wm { fill: var(--fuji-fg, #131a24); }
       .fuji-lockup .wm-os { fill: var(--mark-rock, #266b87); }
     }
   </style>
   <g>
     <path class="rock" d="M3,58 Q11,38 26,16 Q32,19 38,16 Q53,38 61,58 Z" />
-    <path class="snow" d="M15.9,32 Q18,22 26,16 Q32,19 38,16 Q46,22 48.1,32 L40,36 L31,28 Z" />
+    <path class="snow" d="M15.9,32 Q18,22 26,16 Q32,19 38,16 Q46,22 48.1,32 Q32,38 15.9,32 Z" />
   </g>
   <text class="wm" x="86" y="45">Fujo<tspan class="wm-os">OS</tspan></text>
 </svg>

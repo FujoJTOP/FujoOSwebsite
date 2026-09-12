@@ -128,6 +128,10 @@ const SECTIONS = [
 ];
 
 const PAPER = "https://zenodo.org/records/22352904";
+const SITE = "https://fujojtop.github.io/FujoOSwebsite/";
+const SITE_NAME = "FujoOS";
+const DESC_FALLBACK =
+  "FujoOS：从零写起的 x86_64 操作系统内核，以及一套把大语言模型放进内核强制、可撤销信封里的安全体系。";
 
 /* -------------------------------------------------------------- helpers */
 
@@ -221,6 +225,8 @@ function shell({ sec, slug, depth, meta, body, hub }) {
   const s = hub ? null : sectionOf(sec);
   const page = hub ? null : s.pages.find((x) => x.slug === slug);
   const up = upFrom(depth);
+  /* path from the site root, for canonical and og:url */
+  const pagePath = hub ? "docs/index.html" : `docs/${sec}/${slug}.html`;
   let titleZh, titleEn, bannerZh, bannerEn;
   if (hub) {
     titleZh = "文档 — FujoOS";
@@ -251,6 +257,19 @@ function shell({ sec, slug, depth, meta, body, hub }) {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>${esc(titleZh)}</title>
     <meta name="description" content="${esc(meta.desc || "")}" />
+    <link rel="canonical" href="${SITE}${pagePath}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="${SITE_NAME}" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:locale:alternate" content="en" />
+    <meta property="og:title" content="${esc(meta.zh || "")}" />
+    <meta property="og:description" content="${esc(meta.desc || "")}" />
+    <meta property="og:url" content="${SITE}${pagePath}" />
+    <meta property="og:image" content="${SITE}assets/og-card.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="FujoOS — Mount Fuji mark" />
+    <meta name="twitter:card" content="summary_large_image" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -258,8 +277,10 @@ function shell({ sec, slug, depth, meta, body, hub }) {
       rel="stylesheet"
     />
     <link rel="stylesheet" href="${up}assets/style.css?v=2" />
-    <link rel="icon" type="image/svg+xml" href="${up}assets/favicon.svg" />
-    <link rel="apple-touch-icon" href="${up}assets/fuji-tile.svg" />
+    <link rel="icon" href="${up}favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/svg+xml" href="${up}assets/favicon.svg" sizes="any" />
+    <link rel="icon" type="image/png" href="${up}assets/favicon-32.png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="${up}assets/apple-touch-icon.png" />
     <script>
       document.documentElement.classList.add("js");
       /* If site.js never runs, reveal everything instead of leaving it hidden. */
@@ -290,7 +311,7 @@ function shell({ sec, slug, depth, meta, body, hub }) {
           <svg viewBox="0 14 64 46" aria-hidden="true">
             <path d="M3,58 Q11,38 26,16 Q32,19 38,16 Q53,38 61,58 Z" fill="var(--mark-rock)" />
             <path
-              d="M15.9,32 Q18,22 26,16 Q32,19 38,16 Q46,22 48.1,32 L40,36 L31,28 Z"
+              d="M15.9,32 Q18,22 26,16 Q32,19 38,16 Q46,22 48.1,32 Q32,38 15.9,32 Z"
               fill="var(--mark-snow)"
             />
           </svg>
@@ -397,6 +418,44 @@ for (const s of SECTIONS) {
       }
     } else {
       writeFileSync(outFile, html);
+      written++;
+    }
+  }
+}
+
+/* sitemap + robots, generated from the same tree so they cannot drift */
+{
+  const today = new Date().toISOString().slice(0, 10);
+  const urls = [
+    "index.html",
+    "fuai.html",
+    "loment.html",
+    "docs/index.html",
+    ...flat.map((p) => `docs/${p.section}/${p.slug}.html`),
+  ];
+  const sitemap =
+    `<?xml version="1.0" encoding="UTF-8"?>\n` +
+    `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
+    urls
+      .map(
+        (u) =>
+          `  <url>\n    <loc>${SITE}${u}</loc>\n    <lastmod>${today}</lastmod>\n  </url>`
+      )
+      .join("\n") +
+    `\n</urlset>\n`;
+
+  const robots = `User-agent: *\nAllow: /\n\nSitemap: ${SITE}sitemap.xml\n`;
+
+  for (const [file, content] of [
+    [join(ROOT, "sitemap.xml"), sitemap],
+    [join(ROOT, "robots.txt"), robots],
+  ]) {
+    if (check) {
+      if (!existsSync(file) || readFileSync(file, "utf8") !== content) {
+        problems.push(`stale: ${file.replace(ROOT, "").replace(/\\/g, "/")}`);
+      }
+    } else {
+      writeFileSync(file, content);
       written++;
     }
   }

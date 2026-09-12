@@ -20,9 +20,11 @@
     .fuji .snow { fill: var(--mark-snow, #e3e9f1); }
     @media (prefers-color-scheme: light) {
       .fuji .rock { fill: var(--mark-rock, #266b87); }
-      .fuji .snow { fill: var(--mark-snow, #ffffff); }
+      /* Not pure white: on a light ground the cap would vanish and the summit
+         would read as a chunk cut out of the mountain. */
+      .fuji .snow { fill: var(--mark-snow, #d9e7ee); }
     }
   </style>
   <path class="rock" d="M3,58 Q11,38 26,16 Q32,19 38,16 Q53,38 61,58 Z" />
-  <path class="snow" d="M15.9,32 Q18,22 26,16 Q32,19 38,16 Q46,22 48.1,32 L40,36 L31,28 Z" />
+  <path class="snow" d="M15.9,32 Q18,22 26,16 Q32,19 38,16 Q46,22 48.1,32 Q32,38 15.9,32 Z" />
 </svg>
