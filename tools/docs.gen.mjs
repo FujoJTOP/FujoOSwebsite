@@ -346,7 +346,7 @@ ${pagerBlock}
       </div>
     </footer>
 
-    <script src="${up}assets/site.js?v=2"></script>
+    <script src="${up}assets/site.js?v=4"></script>
   </body>
 </html>
 `;

@@ -120,8 +120,28 @@
               FujoOS 是一套从零写起的 x86_64 操作系统：内核、驱动、窗口系统、文件系统、网络栈与编译器全部自研，零第三方依赖、无 std。大语言模型可以作为系统部件接入内核，接受内核的结构化视野并提出动作建议——而每一个动作都要穿过权限域、留下审计、可被撤销。
             </p>
             <div class="hero__actions fade-step" style="--delay: 0.18s">
-              <a class="btn btn--primary" href="docs/start/index.html" data-zh="构建并运行" data-en="Build and run">构建并运行</a>
-              <a class="btn" href="fuai.html" data-zh="FUAI 安全体系" data-en="The FUAI safety system">FUAI 安全体系</a>
+              <button
+                class="btn btn--primary"
+                type="button"
+                data-modal-open="use-fujoos"
+                data-zh="立刻使用 FujoOS For Free！"
+                data-en="Get FujoOS — for free"
+              >
+                立刻使用 FujoOS For Free！
+              </button>
+              <button
+                class="btn"
+                type="button"
+                data-modal-open="fujoos-download"
+                data-zh="立刻下载 FujoOS 开源版本"
+                data-en="Download the FujoOS open source build"
+              >
+                立刻下载 FujoOS 开源版本
+              </button>
+            </div>
+            <div class="hero__actions fade-step" style="--delay: 0.22s; margin-top: 0.55rem">
+              <a class="btn btn--ghost" href="docs/start/index.html" data-zh="构建并运行" data-en="Build and run">构建并运行</a>
+              <a class="btn btn--ghost" href="fuai.html" data-zh="FUAI 安全体系" data-en="The FUAI safety system">FUAI 安全体系</a>
               <a class="btn btn--ghost" href="https://zenodo.org/records/22352904" rel="noopener" data-zh="预印本 ↗" data-en="Preprint ↗">预印本 ↗</a>
             </div>
           </div>
@@ -562,6 +582,37 @@ python tools/fujoregress.py --accel whpx   <span class="c"># 第二执行模式<
       </div>
     </footer>
 
-    <script src="assets/site.js?v=2"></script>
+    <dialog class="modal" id="use-fujoos" aria-labelledby="use-fujoos-title">
+      <div class="modal__inner">
+        <span class="modal__k" data-zh="FujoOS" data-en="FujoOS">FujoOS</span>
+        <h2 id="use-fujoos-title" data-zh="面向普通使用者版尚未准备完成" data-en="The end-user build is not ready yet">
+          面向普通使用者版尚未准备完成
+        </h2>
+        <p data-zh="若你是开发者，请下载开源版本。" data-en="If you are a developer, download the open source build instead.">
+          若你是开发者，请下载开源版本。
+        </p>
+        <div class="modal__actions">
+          <button class="btn btn--primary" type="button" data-modal-close data-zh="知道了" data-en="Got it">知道了</button>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog class="modal" id="fujoos-download" aria-labelledby="fujoos-download-title">
+      <div class="modal__inner">
+        <span class="modal__k" data-zh="开源版本" data-en="Open source">开源版本</span>
+        <h2 id="fujoos-download-title" data-zh="我们已经准备好面向开发者" data-en="We are ready for developers">
+          我们已经准备好面向开发者
+        </h2>
+        <p data-zh="预计最早 10 月初面向开发者。" data-en="Opening to developers as early as early October.">
+          预计最早 10 月初面向开发者。
+        </p>
+        <div class="modal__actions">
+          <button class="btn btn--primary" type="button" data-modal-close data-zh="知道了" data-en="Got it">知道了</button>
+        </div>
+        <p class="modal__rule" data-zh="日期为计划值，可能调整；以仓库发布为准。" data-en="The date is a plan and may shift; the repository release is authoritative.">日期为计划值，可能调整；以仓库发布为准。</p>
+      </div>
+    </dialog>
+
+    <script src="assets/site.js?v=3"></script>
   </body>
 </html>
