@@ -30,7 +30,7 @@
       href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="../assets/style.css?v=6277d4ee" />
+    <link rel="stylesheet" href="../assets/style.css?v=5276e489" />
     <link rel="icon" href="../favicon.ico" sizes="48x48" />
     <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" sizes="any" />
     <link rel="icon" type="image/png" href="../assets/favicon-32.png" sizes="32x32" />
@@ -46,6 +46,21 @@
   </head>
   <body>
     <a class="skip" href="#main" data-zh="跳到主要内容" data-en="Skip to content">跳到主要内容</a>
+
+    <div class="ticker" role="note" data-ticker data-paused="false">
+      <p class="ticker__tag"><span class="ticker__pip" aria-hidden="true"></span><span data-zh="公告" data-en="Notice">公告</span></p>
+      <div class="ticker__view">
+        <div class="ticker__track">
+          <span class="ticker__item" data-zh="FujoOS公布日延期，以仓库发布为准" data-en="FujoOS release date postponed — the repository is authoritative">FujoOS公布日延期，以仓库发布为准</span>
+          <span class="ticker__item" aria-hidden="true" data-zh="FujoOS公布日延期，以仓库发布为准" data-en="FujoOS release date postponed — the repository is authoritative">FujoOS公布日延期，以仓库发布为准</span>
+        </div>
+      </div>
+      <button class="ticker__toggle" type="button" data-ticker-toggle aria-pressed="false">
+        <span class="ticker__ico" aria-hidden="true"></span>
+        <span class="ticker__lbl ticker__lbl--pause" data-zh="暂停" data-en="Pause">暂停</span>
+        <span class="ticker__lbl ticker__lbl--play" data-zh="继续" data-en="Play">继续</span>
+      </button>
+    </div>
 
     <div class="banner" role="note">
       <div class="banner__inner">
@@ -305,6 +320,6 @@
       </div>
     </footer>
 
-    <script src="../assets/site.js?v=b65ce0df"></script>
+    <script src="../assets/site.js?v=7647d9b3"></script>
   </body>
 </html>

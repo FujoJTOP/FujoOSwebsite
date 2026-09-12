@@ -173,6 +173,37 @@ function parseFragment(raw) {
 
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
+/* The red announcement bar. Generated rather than hand-written for the reason
+   the rest of the chrome is: one message, sixty-ish pages, and a date that
+   will move again. Retiring the notice means deleting this function, not
+   chasing the markup across the site. */
+const NOTICE = {
+  zh: "FujoOS公布日延期，以仓库发布为准",
+  en: "FujoOS release date postponed — the repository is authoritative",
+};
+
+function ticker(indent = "    ") {
+  const i = indent;
+  const item = (hidden) =>
+    `${i}      <span class="ticker__item"${hidden ? ' aria-hidden="true"' : ""} data-zh="${esc(
+      NOTICE.zh
+    )}" data-en="${esc(NOTICE.en)}">${esc(NOTICE.zh)}</span>`;
+  return `${i}<div class="ticker" role="note" data-ticker data-paused="false">
+${i}  <p class="ticker__tag"><span class="ticker__pip" aria-hidden="true"></span><span data-zh="公告" data-en="Notice">公告</span></p>
+${i}  <div class="ticker__view">
+${i}    <div class="ticker__track">
+${item(false)}
+${item(true)}
+${i}    </div>
+${i}  </div>
+${i}  <button class="ticker__toggle" type="button" data-ticker-toggle aria-pressed="false">
+${i}    <span class="ticker__ico" aria-hidden="true"></span>
+${i}    <span class="ticker__lbl ticker__lbl--pause" data-zh="暂停" data-en="Pause">暂停</span>
+${i}    <span class="ticker__lbl ticker__lbl--play" data-zh="继续" data-en="Play">继续</span>
+${i}  </button>
+${i}</div>`;
+}
+
 /* Top nav. `current` is the href of the page being rendered, so the marker
    lands on the right item instead of being hard-coded to Docs. */
 function navLinks(up, current) {
@@ -346,6 +377,8 @@ ${headBlock({ titleZh, desc: meta.desc || "", pagePath, up })}
   <body>
     <a class="skip" href="#main" data-zh="跳到主要内容" data-en="Skip to content">跳到主要内容</a>
 
+${ticker()}
+
     <div class="banner" role="note">
       <div class="banner__inner">
         <b>FujoOS docs</b>
@@ -507,6 +540,8 @@ ${headBlock({ titleZh, desc, pagePath, up, type: "article" })}
   <body>
     <a class="skip" href="#main" data-zh="跳到主要内容" data-en="Skip to content">跳到主要内容</a>
 
+${ticker()}
+
     <header class="nav">
       <div class="wrap nav__inner">
         <a class="nav__brand" href="${up}index.html">
@@ -649,14 +684,26 @@ ${items}
 /* Keep the hand-written pages' asset query strings in step with the hashes.
    Touching only the version token, so nothing else in those files moves. */
 {
+  const TICKER_MARKERS = /([ \t]*)<!-- ticker:start -->[\s\S]*?<!-- ticker:end -->/;
   for (const name of HAND_WRITTEN) {
     const f = join(ROOT, name);
     const s = readFileSync(f, "utf8");
+    /* Delimited rather than pattern-matched: the notice is chrome, so it is
+       written once above and spliced in here, and the anchors make removing it
+       later a one-line change. A page that quietly lost its markers would
+       silently lose the notice, so that is a build failure, not a no-op. */
+    if (!TICKER_MARKERS.test(s)) {
+      problems.push(`${name}: missing <!-- ticker:start --> / <!-- ticker:end --> markers`);
+      continue;
+    }
     const next = s
       .replace(/(assets\/style\.css\?v=)[0-9a-f]+/g, `$1${CSS_V}`)
-      .replace(/(assets\/site\.js\?v=)[0-9a-f]+/g, `$1${JS_V}`);
+      .replace(/(assets\/site\.js\?v=)[0-9a-f]+/g, `$1${JS_V}`)
+      .replace(TICKER_MARKERS, (m, indent) =>
+        `${indent}<!-- ticker:start -->\n${ticker(indent)}\n${indent}<!-- ticker:end -->`
+      );
     if (next !== s) {
-      if (check) problems.push(`${name}: asset version out of date`);
+      if (check) problems.push(`${name}: asset version or ticker out of date`);
       else writeFileSync(f, next);
     }
   }

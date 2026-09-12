@@ -5,6 +5,9 @@
    Two semantic accents, never decorative:
      --amber  the model / a proposal / untrusted
      --steel  the kernel / verified / mechanism
+   Plus one stop colour, --alert, claimed by exactly one element: the
+   announcement bar. It is not a third accent — it is there because that bar
+   contradicts dates printed everywhere else on the site.
 */
 
 /* ---------------------------------------------------------------- tokens */
@@ -59,6 +62,9 @@
   --amber-soft: #e29a4a26;
   --steel: #7fc4dc;
   --steel-soft: #7fc4dc1f;
+  /* 6.7:1 against --alert-fg, so the notice clears AA at its smallest size */
+  --alert: #b02a2f;
+  --alert-fg: #fff4f3;
   /* The mark's two tones. --steel is tuned for hairlines and small text on a
      dark ground; a large solid area of it reads far lighter, so the rock is
      one step deeper while staying in the same hue family. */
@@ -84,6 +90,8 @@
   --amber-soft: #a8651f1a;
   --steel: #266b87;
   --steel-soft: #266b8714;
+  --alert: #a01f24;
+  --alert-fg: #fff4f3;
   --mark-rock: #266b87;
   /* Not pure white: on a light ground the cap would disappear and the summit
      would read as a chunk cut out of the mountain. */
@@ -253,6 +261,172 @@ hr {
 }
 .skip:focus {
   left: 0;
+}
+
+/* ------------------------------------------------- announcement ticker */
+/* The only moving thing on the site that is not an entrance, so it is also the
+   only thing with a pause control (WCAG 2.2.2) and the only thing that stops
+   entirely under reduced-motion. Its inner edges are aligned to the page
+   gutter rather than bled to the viewport, so the red band lines up with the
+   text under it instead of with the window. */
+.ticker {
+  /* percentage, not vw: the band spans the body, which excludes the scrollbar,
+     while 50vw does not — the two disagree by the scrollbar's width and the
+     tag drifts off the gutter. Both the tag and the toggle resolve this
+     against the band's own width. */
+  --ticker-pad: max(var(--gutter), calc(50% - var(--page) / 2 + var(--gutter)));
+  display: flex;
+  align-items: stretch;
+  min-height: 2.1rem;
+  background: var(--alert);
+  color: var(--alert-fg);
+  border-bottom: 1px solid #00000033;
+  font-family: var(--mono);
+  font-size: var(--t-xs);
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+}
+.ticker__tag {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0 var(--s2) 0 var(--ticker-pad);
+  background: #0000002e;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+}
+.ticker__pip {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.ticker__view {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  /* The crawl enters and leaves under a fade. That is the look, but it also
+     covers the seam where the last duplicated copy meets the first. */
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 2.2rem, #000 calc(100% - 2.2rem), transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 2.2rem, #000 calc(100% - 2.2rem), transparent);
+}
+.ticker__track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  /* --ticker-dur is measured in site.js from the real track width, so the
+     notice travels at one speed on every viewport instead of one per screen. */
+  animation: ticker-crawl var(--ticker-dur, 26s) linear infinite;
+}
+.ticker__item {
+  white-space: nowrap;
+}
+/* A dot rather than a character: the repeats are a crawl artifact, and text
+   separators get read aloud by screen readers as punctuation. */
+.ticker__item::after {
+  content: "";
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  margin-inline: 2.4rem;
+  vertical-align: middle;
+  border-radius: 50%;
+  background: #ffffff66;
+}
+@keyframes ticker-crawl {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.ticker[data-paused="true"] .ticker__track {
+  animation-play-state: paused;
+}
+.ticker__toggle {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 0;
+  border-left: 1px solid #ffffff33;
+  padding: 0 var(--ticker-pad) 0 var(--s3);
+  background: #0000002e;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+.ticker__toggle:hover {
+  background: #0000004a;
+}
+.ticker__toggle:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -3px;
+}
+.ticker__ico {
+  position: relative;
+  flex: none;
+  width: 8px;
+  height: 9px;
+}
+.ticker__ico::before,
+.ticker__ico::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: currentColor;
+}
+.ticker__ico::before {
+  left: 0;
+}
+.ticker__ico::after {
+  right: 0;
+}
+/* pressed = paused, so the glyph shows what a click gives you back */
+.ticker[data-paused="true"] .ticker__ico {
+  width: 0;
+  height: 0;
+  border-left: 8px solid currentColor;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+}
+.ticker[data-paused="true"] .ticker__ico::before,
+.ticker[data-paused="true"] .ticker__ico::after {
+  display: none;
+}
+.ticker__lbl--play {
+  display: none;
+}
+.ticker[data-paused="true"] .ticker__lbl--pause {
+  display: none;
+}
+.ticker[data-paused="true"] .ticker__lbl--play {
+  display: inline;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ticker__view {
+    -webkit-mask-image: none;
+    mask-image: none;
+    justify-content: center;
+  }
+  .ticker__track {
+    animation: none;
+  }
+  /* site.js does not clone under reduced-motion; this drops the copy that the
+     markup ships so the notice reads as one static line */
+  .ticker__item[aria-hidden="true"],
+  .ticker__toggle {
+    display: none;
+  }
 }
 
 .banner {

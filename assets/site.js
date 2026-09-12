@@ -195,6 +195,71 @@
   var years = document.querySelectorAll("[data-year]");
   for (var y = 0; y < years.length; y++) years[y].textContent = new Date().getFullYear();
 
+  /* ---- announcement ticker ---- */
+  /* A crawl only loops without a visible gap when the track covers the window
+     twice over, and how many copies of the notice that takes depends on the
+     reader's viewport — nothing the build can know. So the copies are measured
+     in here, and the duration is derived from the distance travelled so the
+     notice moves at one speed everywhere rather than one speed per screen. */
+  var CRAWL_PX_PER_S = 52;
+  var crawlOK = !(
+    window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
+  var tickerNodes = document.querySelectorAll("[data-ticker]");
+  for (var ti = 0; ti < tickerNodes.length; ti++) {
+    (function (root) {
+      var view = root.querySelector(".ticker__view");
+      var track = root.querySelector(".ticker__track");
+      var item = track && track.querySelector(".ticker__item");
+      var toggle = root.querySelector("[data-ticker-toggle]");
+
+      function build() {
+        if (!crawlOK || !view || !track || !item) return;
+        /* back to the two copies the markup ships, so a rebuild after a resize
+           cannot stack clones on top of clones */
+        while (track.children.length > 2) track.removeChild(track.lastChild);
+        var need = view.clientWidth * 2;
+        var guard = 0;
+        do {
+          var before = track.scrollWidth;
+          var a = item.cloneNode(true);
+          var b = item.cloneNode(true);
+          a.setAttribute("aria-hidden", "true");
+          b.setAttribute("aria-hidden", "true");
+          track.appendChild(a);
+          track.appendChild(b);
+          var added = track.scrollWidth - before;
+          guard++;
+          /* copies are added in pairs so a -50% translation always lands
+             exactly on a copy boundary; `added` is the width of that pair */
+        } while (track.scrollWidth - added < need && guard < 24);
+        var distance = track.scrollWidth / 2;
+        if (distance > 0) {
+          track.style.setProperty("--ticker-dur", (distance / CRAWL_PX_PER_S).toFixed(1) + "s");
+        }
+      }
+      build();
+
+      /* Rotation and window drags change the window width enough to matter;
+         the 24px floor keeps mobile URL-bar jitter from rebuilding on every
+         scroll. */
+      var lastWidth = window.innerWidth;
+      window.addEventListener("resize", function () {
+        if (Math.abs(window.innerWidth - lastWidth) < 24) return;
+        lastWidth = window.innerWidth;
+        build();
+      });
+
+      if (toggle) {
+        toggle.addEventListener("click", function () {
+          var paused = root.getAttribute("data-paused") === "true";
+          root.setAttribute("data-paused", paused ? "false" : "true");
+          toggle.setAttribute("aria-pressed", paused ? "false" : "true");
+        });
+      }
+    })(tickerNodes[ti]);
+  }
+
   /* apply saved language now that content above is parsed */
   FJ.applyLang(FJ.saved());
 })();
