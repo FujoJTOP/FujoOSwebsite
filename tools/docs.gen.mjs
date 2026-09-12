@@ -77,6 +77,7 @@ const SECTIONS = [
     zh: "语言",
     en: "Language",
     pages: [
+      { slug: "quickstart", zh: "快速上手 (Beta)", en: "Quickstart (Beta)" },
       { slug: "index", zh: "总览", en: "Overview" },
       { slug: "loment", zh: "Loment 语言", en: "The Loment language" },
       { slug: "l0", zh: "L0 单一真源", en: "L0 source of truth" },
@@ -156,6 +157,18 @@ function parseFragment(raw) {
 }
 
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+/* Content lint. Markdown emphasis written into an attribute is invisible until
+   it renders as literal asterisks in the browser. */
+function lintFragment(where, body) {
+  const problems = [];
+  for (const m of body.matchAll(/\sdata-(zh|en)(-html|-aria|-alt)?="([^"]*)"/g)) {
+    if (m[3].includes("**")) {
+      problems.push(`${where}: data-${m[1]}${m[2] || ""} contains markdown ** — write <strong>`);
+    }
+  }
+  return problems;
+}
 
 /* ------------------------------------------------------------ rendering */
 
@@ -387,6 +400,7 @@ for (const s of SECTIONS) {
       continue;
     }
     const { meta, body } = parseFragment(readFileSync(srcFile, "utf8"));
+    problems.push(...lintFragment(`_docs-src/${s.id}/${p.slug}.html`, body));
     const depth = 2; // docs/<section>/<page>.html
     const html = shell({ sec: s.id, slug: p.slug, depth, meta, body });
     const outDir = join(OUT, s.id);
@@ -410,6 +424,7 @@ for (const s of SECTIONS) {
     problems.push("missing source: _docs-src/_hub.html");
   } else {
     const { meta, body } = parseFragment(readFileSync(srcFile, "utf8"));
+    problems.push(...lintFragment("_docs-src/_hub.html", body));
     const html = shell({ hub: true, depth: 1, meta, body });
     const outFile = join(OUT, "index.html");
     if (check) {
