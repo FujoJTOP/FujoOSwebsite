@@ -579,34 +579,10 @@ hr {
   background: var(--amber);
   border-radius: 50%;
 }
-/* a ring on the compositor: transform + opacity only, never box-shadow */
-.banner .dot::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: var(--amber);
-  opacity: 0;
-  animation: ping 2.8s var(--ease-out) infinite;
-  will-change: transform, opacity;
-}
-@keyframes ping {
-  0% {
-    transform: scale(1);
-    opacity: 0.6;
-  }
-  70%,
-  100% {
-    transform: scale(3.4);
-    opacity: 0;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .banner .dot::after {
-    animation: none;
-    opacity: 0;
-  }
-}
+/* The dot used to emit an infinite ping ring. It was the only thing on the
+   site that moved without being asked to, and it moved forever: motion that
+   never stops stops meaning anything. The spec's own Status Pulse says "no
+   animation required". A filled circle is enough. */
 
 .nav {
   position: sticky;
@@ -715,7 +691,7 @@ hr {
 }
 .nav__drawer[data-open="true"] {
   display: block;
-  animation: drawerin 0.24s var(--ease-out);
+  animation: drawerin 0.18s var(--ease-out);
 }
 @keyframes drawerin {
   from {
@@ -845,12 +821,15 @@ hr {
   border: 1px solid var(--rule);
   color: var(--fg);
   background: var(--panel);
-  transition: border-color 0.15s var(--ease), background 0.15s var(--ease),
-    transform 0.15s var(--ease);
+  /* colour, background and border move together, so a hover reads as one
+     switch flipping rather than as a layered little animation */
+  transition: border-color 0.15s var(--ease), background 0.15s var(--ease);
 }
 .btn:hover {
+  /* A border that brightens, rather than a button that rises. The spec builds
+     depth from contrast; a 1px lift is a shadow's ghost. */
   border-color: var(--fg-3);
-  transform: translateY(-1px);
+  background: var(--bg-2);
 }
 .btn--primary {
   background: var(--chalk);
@@ -1001,12 +980,16 @@ button.btn {
   opacity: 0;
 }
 .js [data-motion].is-loaded .draw {
-  animation: draw var(--draw-dur, 0.8s) var(--ease-out) forwards;
-  animation-delay: var(--delay, 0s);
+  animation: draw var(--draw-dur, 0.5s) var(--ease-out) forwards;
+  /* Every delay on the page is scaled here rather than in two dozen inline
+     attributes. The hero carries about that many staggered elements, and at
+     their authored spacing the last one lands 1.1s in — which is a wait, not
+     a moment. Halving keeps the cascade legible and ends it inside 600ms. */
+  animation-delay: calc(var(--delay, 0s) * 0.5);
 }
 .js [data-motion].is-loaded .fade-step {
-  animation: stepin 0.5s var(--ease-out) forwards;
-  animation-delay: var(--delay, 0s);
+  animation: stepin 0.28s var(--ease-out) forwards;
+  animation-delay: calc(var(--delay, 0s) * 0.5);
 }
 @keyframes draw {
   to {
@@ -1059,6 +1042,43 @@ button.btn {
   .card--link:hover {
     transform: none;
   }
+}
+
+/* ----------------------------------------------------------- built with */
+/* The spec's logo strip, used for something it can be honest about: not
+   "trusted by", just the tooling this was made with. Monochrome wordmarks in
+   one row, no cards, no dividers, floating in negative space.
+
+   The spec renders these as type rather than as images, and that is also the
+   right call here for two reasons of its own: six brand marks would put six
+   more colours into a system that allows two, and it would mean shipping
+   third-party binaries in a repository whose whole claim is that it carries
+   nothing it did not build. */
+.built {
+  padding-block: var(--s6);
+}
+.built__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--s2) var(--s5);
+  margin: var(--s3) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.built__list li {
+  font-family: var(--mono);
+  font-size: var(--t-sm);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+  white-space: nowrap;
+}
+.built__note {
+  margin-top: var(--s3);
+  font-size: var(--t-xs);
+  color: var(--fg-3);
+  max-width: 62ch;
 }
 
 /* ---------------------------------------------------------------- stats */
@@ -1191,7 +1211,7 @@ td strong {
   border-radius: var(--radius-card);
   background: var(--panel);
   padding: var(--s3);
-  transition: border-color 0.18s var(--ease), transform 0.18s var(--ease);
+  transition: border-color 0.15s var(--ease);
 }
 .card:hover {
   border-color: var(--fg-3);
@@ -1209,7 +1229,6 @@ td strong {
    alone reads as a static panel. */
 .card--link:hover {
   border-color: var(--fg-3);
-  transform: translateY(-2px);
 }
 .card h3 {
   margin-bottom: 0.5rem;
@@ -1840,7 +1859,7 @@ pre .s {
   background: #101010d9;
 }
 .modal[open] {
-  animation: modalin 0.24s var(--ease);
+  animation: modalin 0.18s var(--ease);
 }
 @keyframes modalin {
   from {
