@@ -57,10 +57,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Geist+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="assets/style.css?v=b7b288b3" />
+    <link rel="stylesheet" href="assets/style.css?v=e8fa6467" />
     <link rel="icon" href="favicon.ico" sizes="48x48" />
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" sizes="any" />
     <link rel="icon" type="image/png" href="assets/favicon-32.png" sizes="32x32" />
@@ -262,22 +262,22 @@
       </section>
 
       <!-- =========================================================== stats -->
-      <section class="section section--tight" data-motion>
+      <section class="section section--tight">
         <div class="wrap">
           <div class="stats">
-            <div class="stat fade-step" style="--delay: 0.15s">
+            <div class="stat" style="">
               <span class="stat__v">59<em>/59</em></span>
               <span class="stat__k" data-zh="回归用例（TCG）；WHPX/KVM 为 49/51，两处差异已记录" data-en="Regression cases (TCG); 49/51 on WHPX/KVM, both differences documented">回归用例（TCG）；WHPX/KVM 为 49/51，两处差异已记录</span>
             </div>
-            <div class="stat fade-step" style="--delay: 0.22s">
+            <div class="stat" style="">
               <span class="stat__v">46</span>
               <span class="stat__k" data-zh="契约原语（core 40 · host-ext 6），两实现对账 0 差异" data-en="Contract primitives (core 40 · host-ext 6), 0 drift across two implementations">契约原语（core 40 · host-ext 6），两实现对账 0 差异</span>
             </div>
-            <div class="stat fade-step" style="--delay: 0.29s">
+            <div class="stat" style="">
               <span class="stat__v">τ* ∈ [0.429, 0.454)</span>
               <span class="stat__k" data-zh="语义金标 v2（280 例）推导的信任阈值区间" data-en="Trust-threshold interval derived from semantic goldset v2 (280 examples)">语义金标 v2（280 例）推导的信任阈值区间</span>
             </div>
-            <div class="stat fade-step" style="--delay: 0.36s">
+            <div class="stat" style="">
               <span class="stat__v">18<em>/18</em></span>
               <span class="stat__k" data-zh="LinuxFUAI 第二实现探针，含带外验证器" data-en="Probes in the LinuxFUAI second implementation, incl. out-of-band verifier">LinuxFUAI 第二实现探针，含带外验证器</span>
             </div>
@@ -286,10 +286,10 @@
       </section>
 
       <!-- ======================================================== what it is -->
-      <section class="section anchor" id="what" data-motion>
+      <section class="section anchor" id="what">
         <div class="wrap">
           <div class="grid grid--2">
-            <div class="prose fade-step">
+            <div class="prose">
               <h2 class="h2" data-zh="一套完整的系统，而不是一个内核原型" data-en="A whole system, not a kernel prototype">
                 一套完整的系统，而不是一个内核原型
               </h2>
@@ -297,7 +297,7 @@
                 四层结构：Ring0 只保留 CPU 相关与空间管理，设备驱动、VFS、网络栈下沉到可崩溃、可热升级的用户态服务。兼容性被当作内核的一等能力，而不是补丁。
               </p>
             </div>
-            <div class="prose fade-step" style="--delay: 0.09s">
+            <div class="prose" style="">
               <h2 class="h2" data-zh="不寻常的地方在 AI 层" data-en="What is unusual is the AI layer">
                 不寻常的地方在 AI 层
               </h2>
@@ -307,7 +307,7 @@
             </div>
           </div>
 
-          <div class="table-wrap fade-step" style="margin-top: var(--s5); --delay: 0.18s">
+          <div class="table-wrap" style="margin-top: var(--s5); ">
             <table>
               <caption data-zh="子系统现状（实测事实）" data-en="Subsystem status (measured facts)">子系统现状（实测事实）</caption>
               <thead>
@@ -356,36 +356,36 @@
       </section>
 
       <!-- ==================================================== boot sequence -->
-      <section class="section anchor" id="boot" data-motion>
+      <section class="section anchor" id="boot">
         <div class="wrap">
-          <h2 class="h2 fade-step" data-zh="从加电到桌面" data-en="From power-on to desktop">从加电到桌面</h2>
-          <p class="muted prose fade-step" style="margin-top: var(--s2); --delay: 0.07s" data-zh="下面是一条真实顺序：每一步都可以用仓库里的脚本重放。" data-en="This is a real order of events — every step is replayable with scripts in the repository.">
+          <h2 class="h2" data-zh="从加电到桌面" data-en="From power-on to desktop">从加电到桌面</h2>
+          <p class="muted prose" style="margin-top: var(--s2); " data-zh="下面是一条真实顺序：每一步都可以用仓库里的脚本重放。" data-en="This is a real order of events — every step is replayable with scripts in the repository.">
             下面是一条真实顺序：每一步都可以用仓库里的脚本重放。
           </p>
 
           <div class="boot" style="margin-top: var(--s4)">
-            <div class="stage fade-step" style="--delay: 0.1s">
+            <div class="stage" style="">
               <span class="stage__n">01</span>
               <h3 class="stage__t" data-zh="固件交接" data-en="Firmware handoff">固件交接</h3>
               <p class="stage__d" data-zh="GRUB multiboot、直接 -kernel，或从可引导 ISO 链式加载；进入长模式并建立恒等映射。" data-en="GRUB multiboot, direct -kernel, or chain-load from a bootable ISO; enter long mode and establish the identity map.">
                 GRUB multiboot、直接 -kernel，或从可引导 ISO 链式加载；进入长模式并建立恒等映射。
               </p>
             </div>
-            <div class="stage fade-step" style="--delay: 0.17s">
+            <div class="stage" style="">
               <span class="stage__n">02</span>
               <h3 class="stage__t" data-zh="内核初始化" data-en="Kernel bring-up">内核初始化</h3>
               <p class="stage__d" data-zh="IDT/GDT/TSS、PIT 100Hz、虚拟内存与帧分配器就位，抢占式多任务开始调度。" data-en="IDT/GDT/TSS, 100 Hz PIT, virtual memory and frame allocator come up; preemptive multitasking starts scheduling.">
                 IDT/GDT/TSS、PIT 100Hz、虚拟内存与帧分配器就位，抢占式多任务开始调度。
               </p>
             </div>
-            <div class="stage fade-step" style="--delay: 0.24s">
+            <div class="stage" style="">
               <span class="stage__n">03</span>
               <h3 class="stage__t" data-zh="服务与桌面" data-en="Services and desktop">服务与桌面</h3>
               <p class="stage__d" data-zh="VBE 帧缓冲点亮，PS/2 输入就绪，wmsg 窗口系统按 .fui 文档绘制壁纸、图标、面板与窗口。" data-en="The VBE framebuffer lights up, PS/2 input comes alive, and the wmsg window system draws wallpaper, icons, panel and windows from a .fui document.">
                 VBE 帧缓冲点亮，PS/2 输入就绪，wmsg 窗口系统按 .fui 文档绘制壁纸、图标、面板与窗口。
               </p>
             </div>
-            <div class="stage fade-step" style="--delay: 0.31s">
+            <div class="stage" style="">
               <span class="stage__n">04</span>
               <h3 class="stage__t" data-zh="部件就位" data-en="Components online">部件就位</h3>
               <p class="stage__d" data-zh="FJFS 卷、AHCI/SATA 真盘、virtio-net 可用；可选地把宿主 LLM 接入内核——它拿到的是一道能力域和一条审计链，而不是一台机器。" data-en="FJFS volumes, AHCI/SATA real disks and virtio-net become available. Optionally, a host LLM is attached to the kernel — what it receives is a capability domain and an audit trail, not a machine.">
@@ -394,7 +394,7 @@
             </div>
           </div>
 
-          <div class="code fade-step" style="margin-top: var(--s5); --delay: 0.21s">
+          <div class="code" style="margin-top: var(--s5); ">
             <div class="code__bar">
               <span class="lang-tag">bash</span>
               <span data-zh="构建、启动、跑回归" data-en="build, boot, run regression">构建、启动、跑回归</span>
@@ -418,14 +418,14 @@ python tools/fujoregress.py --accel whpx   <span class="c"># 第二执行模式<
       </section>
 
       <!-- ==================================================== what it looks like -->
-      <section class="section anchor" id="look" data-motion>
+      <section class="section anchor" id="look">
         <div class="wrap">
-          <h2 class="h2 fade-step" data-zh="它现在长什么样" data-en="What it looks like now">它现在长什么样</h2>
-          <p class="muted prose fade-step" style="margin-top: var(--s2); --delay: 0.07s" data-zh="这是 QEMU 里一次真实运行的原样截图。桌面由内核里的软件光栅绘制，界面本身是一份 .fui 声明式文档；右侧 Control Center 读的是真实的 CPU、内存与存储状态，以及当前自适应出来的 AI 域宽。" data-en="An unretouched capture from a real run in QEMU. The desktop is drawn by the in-kernel software rasterizer, and the interface itself is a .fui declarative document. The Control Center on the right reads live CPU, memory and storage state, along with the AI domain width that trust adaptation currently allows.">
+          <h2 class="h2" data-zh="它现在长什么样" data-en="What it looks like now">它现在长什么样</h2>
+          <p class="muted prose" style="margin-top: var(--s2); " data-zh="这是 QEMU 里一次真实运行的原样截图。桌面由内核里的软件光栅绘制，界面本身是一份 .fui 声明式文档；右侧 Control Center 读的是真实的 CPU、内存与存储状态，以及当前自适应出来的 AI 域宽。" data-en="An unretouched capture from a real run in QEMU. The desktop is drawn by the in-kernel software rasterizer, and the interface itself is a .fui declarative document. The Control Center on the right reads live CPU, memory and storage state, along with the AI domain width that trust adaptation currently allows.">
             这是 QEMU 里一次真实运行的原样截图。桌面由内核里的软件光栅绘制，界面本身是一份 .fui 声明式文档；右侧 Control Center 读的是真实的 CPU、内存与存储状态，以及当前自适应出来的 AI 域宽。
           </p>
 
-          <figure class="figure fade-step" style="margin-top: var(--s4); --delay: 0.14s">
+          <figure class="figure" style="margin-top: var(--s4); ">
             <img
               src="assets/shots/desktop.png"
               width="1280"
@@ -445,29 +445,29 @@ python tools/fujoregress.py --accel whpx   <span class="c"># 第二执行模式<
       </section>
 
       <!-- ================================================== development lines -->
-      <section class="section anchor" id="lines" data-motion>
+      <section class="section anchor" id="lines">
         <div class="wrap">
-          <h2 class="h2 fade-step" data-zh="三条并行开发线" data-en="Three parallel development lines">三条并行开发线</h2>
-          <p class="muted prose fade-step" style="margin-top: var(--s2); --delay: 0.07s" data-zh="语言、网络、兼容三条线各自有独立分支与判据；任何“完成”都必须给出可重放的命令与输出。" data-en="Language, network and compatibility each run on their own branch with their own criteria. Any claim of done must come with a replayable command and its output.">
+          <h2 class="h2" data-zh="三条并行开发线" data-en="Three parallel development lines">三条并行开发线</h2>
+          <p class="muted prose" style="margin-top: var(--s2); " data-zh="语言、网络、兼容三条线各自有独立分支与判据；任何“完成”都必须给出可重放的命令与输出。" data-en="Language, network and compatibility each run on their own branch with their own criteria. Any claim of done must come with a replayable command and its output.">
             语言、网络、兼容三条线各自有独立分支与判据；任何“完成”都必须给出可重放的命令与输出。
           </p>
 
           <div class="grid grid--3" style="margin-top: var(--s4)">
-            <a class="card card--link fade-step" style="--delay: 0.14s" href="loment/">
+            <a class="card card--link" style="" href="loment/">
               <span class="card__k">FujoLang-DEV</span>
               <h3 class="h3" data-zh="语言线" data-en="Language line">语言线</h3>
               <p data-zh="Loment 是平台的系统语言（Rust 严格子集 + 一等能力域），Potato 是编译器的强制输出：一份机器可读的形式对象。一个管“怎么写”，一个管“怎么看”。" data-en="Loment is the platform's system language — a strict Rust subset with first-class capability domains. Potato is the compiler's mandatory output: a machine-readable formal object. One governs how you write; the other how a machine reads.">
                 Loment 是平台的系统语言（Rust 严格子集 + 一等能力域），Potato 是编译器的强制输出：一份机器可读的形式对象。一个管“怎么写”，一个管“怎么看”。
               </p>
             </a>
-            <a class="card card--link fade-step" style="--delay: 0.21s" href="docs/project/network-line/">
+            <a class="card card--link" style="" href="docs/project/network-line/">
               <span class="card__k">NET-DEV</span>
               <h3 class="h3" data-zh="网络线" data-en="Network line">网络线</h3>
               <p data-zh="让 Loment 的第一个真应用是网络，而不是玩具样例。网络同时提供字节级契约与能力边界，是语言线的理想压力面。" data-en="Making Loment's first real application networking rather than a toy sample. Networking supplies both a byte-level contract and a capability boundary — the ideal stress surface for the language.">
                 让 Loment 的第一个真应用是网络，而不是玩具样例。网络同时提供字节级契约与能力边界，是语言线的理想压力面。
               </p>
             </a>
-            <a class="card card--link fade-step" style="--delay: 0.28s" href="docs/compat/">
+            <a class="card card--link" style="" href="docs/compat/">
               <span class="card__k">compat · FUFORALL</span>
               <h3 class="h3" data-zh="兼容线" data-en="Compatibility line">兼容线</h3>
               <p data-zh="ELF / PE32+ / Mach-O / FUJR 四套加载器，三套 ABI 共享同一内核服务面。兼容被定义为集合包含，而不是容器模拟。" data-en="Four loaders — ELF, PE32+, Mach-O, FUJR — with three ABIs sharing one kernel service surface. Compatibility is defined as set inclusion, not container emulation.">
@@ -479,14 +479,14 @@ python tools/fujoregress.py --accel whpx   <span class="c"># 第二执行模式<
       </section>
 
       <!-- ======================================================= verification -->
-      <section class="section anchor" id="verified" data-motion>
+      <section class="section anchor" id="verified">
         <div class="wrap">
-          <h2 class="h2 fade-step" data-zh="验证方式" data-en="How it is verified">验证方式</h2>
-          <p class="muted prose fade-step" style="margin-top: var(--s2); --delay: 0.07s" data-zh="仓库里的每一个主张都绑在一条可复现的测试上。数字都可以用 tools/ 里的脚本重新跑出来。" data-en="Every claim in this repository is tied to a reproducible test. The numbers can all be regenerated with scripts under tools/.">
+          <h2 class="h2" data-zh="验证方式" data-en="How it is verified">验证方式</h2>
+          <p class="muted prose" style="margin-top: var(--s2); " data-zh="仓库里的每一个主张都绑在一条可复现的测试上。数字都可以用 tools/ 里的脚本重新跑出来。" data-en="Every claim in this repository is tied to a reproducible test. The numbers can all be regenerated with scripts under tools/.">
             仓库里的每一个主张都绑在一条可复现的测试上。数字都可以用 tools/ 里的脚本重新跑出来。
           </p>
 
-          <div class="table-wrap fade-step" style="margin-top: var(--s4); --delay: 0.14s">
+          <div class="table-wrap" style="margin-top: var(--s4); ">
             <table>
               <thead>
                 <tr>
@@ -530,7 +530,7 @@ python tools/fujoregress.py --accel whpx   <span class="c"># 第二执行模式<
             </table>
           </div>
 
-          <div class="note note--steel fade-step" style="margin-top: var(--s4); --delay: 0.21s">
+          <div class="note note--steel" style="margin-top: var(--s4); ">
             <strong data-zh="已知边界（不做过度声明）" data-en="Known limits (no overclaiming)">已知边界（不做过度声明）</strong>
             <span data-zh="：推理不在端侧——模型跑在宿主上，内核提供链接、审计与回退规则；“兼容”指的是加载器与垫片面，不是完整用户态模拟；FJFS 多簇写入目前支持到 32 KiB 的文件。" data-en=": inference is not on-device — the model runs on the host while the kernel supplies the link, the audit and the fallback rules. “Compatibility” means the loader and shim surface, not full user-space emulation. FJFS multi-cluster writes currently cover files up to 32 KiB.">：推理不在端侧——模型跑在宿主上，内核提供链接、审计与回退规则；“兼容”指的是加载器与垫片面，不是完整用户态模拟；FJFS 多簇写入目前支持到 32 KiB 的文件。</span>
           </div>
@@ -538,10 +538,10 @@ python tools/fujoregress.py --accel whpx   <span class="c"># 第二执行模式<
       </section>
 
       <!-- ============================================================= paper -->
-      <section class="section anchor" id="paper" data-motion>
+      <section class="section anchor" id="paper">
         <div class="wrap">
           <div class="grid grid--2" style="align-items: start">
-            <div class="prose fade-step">
+            <div class="prose">
               <h2 class="h2" data-zh="设计背后的论文" data-en="The paper behind the design">设计背后的论文</h2>
               <p class="muted" data-zh-html="<em>FUAI: A Measurement-Parameterized Safety Envelope for AI-Integrated Operating Systems</em>。核心命题：安全 = α（无越界，S1 机制）× 域宽，而域宽是测量质量 S2 的函数；S3 策略边界由人或蒸馏规则画定。" data-en-html="<em>FUAI: A Measurement-Parameterized Safety Envelope for AI-Integrated Operating Systems</em>. The core proposition: safety = α (no out-of-bounds, the S1 mechanism) × domain width, where domain width is a function of measurement quality S2; the S3 policy boundary is drawn by people or distilled rules.">
                 <em>FUAI: A Measurement-Parameterized Safety Envelope for AI-Integrated Operating Systems</em>。核心命题：安全 = α（无越界，S1 机制）× 域宽，而域宽是测量质量 S2 的函数；S3 策略边界由人或蒸馏规则画定。
@@ -550,7 +550,7 @@ python tools/fujoregress.py --accel whpx   <span class="c"># 第二执行模式<
                 预印本已锚定 Zenodo（10.5281/zenodo.22352904），作者 Yuxuan Jiang。论文按浙大要求保持私有，不以期刊公开投稿；预印本时间戳是优先权的唯一锚点。
               </p>
             </div>
-            <div class="stack fade-step" style="--delay: 0.1s">
+            <div class="stack" style="">
               <a class="card card--link" href="fuai/">
                 <span class="card__k" data-zh="安全体系" data-en="Safety system">安全体系</span>
                 <h3 class="h3" data-zh="FUAI：把信任变成参数，把边界变成结构" data-en="FUAI: trust as a parameter, boundary as a structure">FUAI：把信任变成参数，把边界变成结构</h3>

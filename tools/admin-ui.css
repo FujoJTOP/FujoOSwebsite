@@ -42,7 +42,7 @@
   background: var(--fg-3);
 }
 .adm__dot[data-state="ok"] {
-  background: #2e7d4f;
+  background: var(--steel);
 }
 .adm__dot[data-state="bad"] {
   background: var(--alert);
@@ -249,7 +249,7 @@
   border-left-color: var(--alert);
 }
 .adm__status[data-kind="good"] {
-  border-left-color: #2e7d4f;
+  border-left-color: var(--steel);
 }
 .adm__status:empty {
   display: none;

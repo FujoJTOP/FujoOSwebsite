@@ -1,119 +1,140 @@
 /* FujoOS — design system
-   Concept: "The Envelope". Two registers:
-     .theme-instrument  dark  — the machine's face (marketing pages)
-     .theme-datasheet   light — the printed manual (documentation)
-   Two semantic accents, never decorative:
-     --amber  the model / a proposal / untrusted
-     --steel  the kernel / verified / mechanism
-   Plus one stop colour, --alert, claimed by exactly one element: the
-   announcement bar. It is not a third accent — it is there because that bar
-   contradicts dates printed everywhere else on the site.
+   Concept: "The Envelope". One canvas: near-black, everywhere. The light
+   surface is not a second theme, it is an object on that canvas — a #eeeeee
+   card landing on #101010, which is the whole figure/ground move.
+
+   Two functional accents, used only where they name a trust state or plot
+   data — never as chrome:
+     --amber  the model / a proposal / untrusted   (the spec's "signal")
+     --steel  the kernel / verified / mechanism    (the spec's "metric")
+   The names are historical. The spec calls these signal and metric; renaming
+   them here would touch 56 colour-class references across three hand-written
+   pages for no visual gain, so the mapping is recorded instead of applied.
+
+   One sanctioned extension to the spec's palette: --alert and --warn, the
+   announcement severities. Severity is a status, and status is the one thing
+   the spec allows colour for. Nothing else may join them.
 */
 
 /* ---------------------------------------------------------------- tokens */
 
 :root {
-  --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", "PingFang SC",
-    "Microsoft YaHei", "Noto Sans SC", sans-serif;
-  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas,
-    "Courier New", monospace;
+  --sans: "Geist", "Noto Sans SC", ui-sans-serif, system-ui, -apple-system,
+    "PingFang SC", "Microsoft YaHei", sans-serif;
+  --mono: "Geist Mono", ui-monospace, SFMono-Regular, "IBM Plex Mono", Menlo,
+    Consolas, "Courier New", monospace;
 
-  --t-xs: 0.76rem;
-  --t-sm: 0.875rem;
-  --t-base: 1.0625rem;
-  --t-lg: 1.28rem;
-  --t-xl: 1.62rem;
-  --t-2xl: 2.25rem;
-  --t-3xl: 3.1rem;
-  --t-4xl: 4.4rem;
-  --t-5xl: 6rem;
+  /* The spec's six steps, plus two. It was written for a marketing page; this
+     site carries tables, an API reference and long-form documentation, and
+     the spec's jump from 16 straight to 36 would leave every mid-level
+     heading sitting at body size. */
+  --t-xs: 12px;
+  --t-sm: 14px;
+  --t-base: 16px;
+  --t-lg: 20px;
+  --t-xl: 28px;
+  --t-2xl: 36px;
+  --t-3xl: 44px;
+  --t-4xl: 72px;
 
   --measure: 68ch;
-  --page: 1180px;
-  --gutter: clamp(1.15rem, 4vw, 3rem);
+  --page: 1200px;
+  --gutter: clamp(16px, 4vw, 48px);
 
-  --s1: 0.4rem;
-  --s2: 0.8rem;
-  --s3: 1.4rem;
-  --s4: 2.2rem;
-  --s5: 3.4rem;
-  --s6: 5.2rem;
-  --s7: 7.6rem;
+  /* 8px base unit, per the spec */
+  --s1: 8px;
+  --s2: 16px;
+  --s3: 24px;
+  --s4: 32px;
+  --s5: 40px;
+  --s6: 56px;
+  --s7: 80px;
+  --s8: 96px;
+  --s9: 120px;
 
-  --radius: 2px;
-  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
-  /* entrances settle faster; expo-out reads snappier at the same duration */
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  /* The spec has no single radius: corners are sized by what they are. */
+  --radius: 3px; /* controls, nav, tags */
+  --radius-card: 10px; /* cards */
+  --radius-panel: 20px; /* the largest surfaces */
+
+  /* One curve. The spec wants a switch flipping, not a layered animation. */
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.theme-instrument {
-  --bg: #0c1420;
-  --bg-2: #101a28;
-  --bg-3: #16222f;
-  --panel: #111c2b;
-  --rule: #223448;
-  --rule-soft: #1a2939;
-  --fg: #e3e9f1;
-  --fg-2: #a3b1c3;
-  /* --fg-3 carries real small text (banner telemetry, stat labels), so it is
-     held to 4.5:1 against the *lightest* surface it lands on, not the page
-     ground. The old value measured 4.33 there and 4.01 on --bg-3. */
-  --fg-3: #7b8ca1;
-  --accent: var(--amber);
-  --amber: #e29a4a;
-  --amber-soft: #e29a4a26;
-  --steel: #7fc4dc;
-  --steel-soft: #7fc4dc1f;
-  /* 6.7:1 against --alert-fg, so the notice clears AA at its smallest size */
-  --alert: #b02a2f;
+/* One palette, two class names. Pages still carry theme-instrument or
+   theme-datasheet from when there were two registers; the light reading
+   surface is the card below, not a theme. */
+.theme-instrument,
+.theme-datasheet {
+  --bg: #101010; /* the canvas */
+  --bg-2: #1d1a18; /* raised: nav well, button fills, inline fills */
+  --bg-3: #1d1a18; /* the site had a third step; the spec has one lift */
+  --panel: #1d1a18;
+  --rule: #3d3a39; /* hairlines */
+  --rule-soft: #262322; /* a derived step down from --rule, for row separators */
+  --fg: #eeeeee; /* bone — primary text, and the light card's own surface */
+  --fg-2: #b8b3b0; /* pale stone — secondary. 9.2:1 on canvas */
+  --fg-3: #8a8380; /* warm granite — tertiary. 5.1:1 on canvas */
+  /* The active marker in the docs rail: a brightness step, not a colour. It
+     used to point at the accent, which made "you are here" the loudest thing
+     in a navigation column. */
+  --marker: var(--fg-2);
+  --amber: #ee6018; /* the spec's signal orange — model / untrusted */
+  --amber-soft: #ee601826;
+  --steel: #a0ca92; /* the spec's metric green — kernel / verified */
+  --steel-soft: #a0ca921f;
+  /* Announcement severities. The only colours here the spec does not have;
+     see the header comment for why they are allowed to exist. */
+  --alert: #c23a34;
   --alert-fg: #fff4f3;
-  /* The second severity: a caution tape, dark text on saturated yellow. It is
-     deliberately not a lighter red — at a glance the two must not be confusable.
-     8.2:1 against --warn-fg. */
   --warn: #d9a326;
   --warn-fg: #1a1206;
-  /* The mark's two tones. --steel is tuned for hairlines and small text on a
-     dark ground; a large solid area of it reads far lighter, so the rock is
-     one step deeper while staying in the same hue family. */
-  --mark-rock: #5aa6c4;
-  --mark-snow: #e3e9f1;
-  --grid: #7fc4dc0d;
-  --shadow: 0 18px 40px -24px #000a;
+  /* Ink is text that lands on the bone card. The spec's warm granite is only
+     3.2:1 there, so the second and third steps are darkened until they clear
+     4.5:1 on #eeeeee. */
+  --ink: #101010;
+  --ink-2: #4d4947; /* 7.8:1 on bone */
+  --ink-3: #6b6663; /* 4.9:1 on bone */
+  --bone: #eeeeee;
+  --chalk: #fafafa;
+  /* The mark is chrome, and chrome does not carry accent colour. Two neutral
+     tones keep the mountain readable without competing with the envelope. */
+  --mark-rock: #b8b3b0;
+  --mark-snow: #eeeeee;
+  --grid: #eeeeee0a;
   color-scheme: dark;
 }
 
-.theme-datasheet {
-  --bg: #f2f4f8;
-  --bg-2: #ffffff;
-  --bg-3: #eaeef4;
-  --panel: #ffffff;
-  --rule: #d3dae3;
-  --rule-soft: #e3e8ef;
-  --fg: #101822;
-  --fg-2: #4a5666;
-  /* same reasoning as the dark theme: the old value was 3.36:1 on --bg and
-     3.7:1 inside code blocks, both under the floor for text this small */
-  --fg-3: #5d6b80;
-  /* --accent is also the active rail heading's text colour, so it has to clear
-     4.5:1 on --bg rather than only work as a hairline. The old #b4702a was
-     3.6:1; the borders it also draws get slightly firmer as a side effect. */
-  --accent: #9c5d1b;
-  --amber: #a8651f;
-  --amber-soft: #a8651f1a;
-  --steel: #266b87;
-  --steel-soft: #266b8714;
-  --alert: #a01f24;
-  --alert-fg: #fff4f3;
-  --warn: #e0ac2c;
-  --warn-fg: #211604;
-  --mark-rock: #266b87;
-  /* Not pure white: on a light ground the cap would disappear and the summit
-     would read as a chunk cut out of the mountain. */
-  --mark-snow: #d9e7ee;
-  --grid: #266b870f;
-  --shadow: 0 14px 34px -26px #22303f47;
-  color-scheme: light;
+/* --------------------------------------------------------- the light card */
+/* One object is allowed to be bright: a #eeeeee card on the #101010 canvas.
+   Anything inside it re-resolves the same token names, so tables, code, tags,
+   callouts and the pager all adapt without a single component needing to know
+   it has landed on light ground. Set the tokens, not the components.
+
+   The two lower ink steps are darker than the spec's warm granite, which only
+   reaches 3.2:1 on bone. For a light reading surface, text has to clear 4.5. */
+.card,
+.docs-body,
+.modal {
+  --bg: #eeeeee;
+  --bg-2: #fafafa;
+  --bg-3: #e4e0dd;
+  --panel: #eeeeee;
+  --rule: #d6d1ce;
+  --rule-soft: #e4e0dd;
+  --fg: #101010;
+  --fg-2: #4d4947;
+  --fg-3: #625d5a;
+  /* The two accents are tuned to read on #101010. On bone they fail badly —
+     a syntax string in orange measured 3.2:1 and a keyword in green 1.8:1.
+     Darkened here so the same semantic pair survives the light card. */
+  --amber: #b8440c;
+  --amber-soft: #b8440c1a;
+  --steel: #3f6b34;
+  --steel-soft: #3f6b341a;
+  color: var(--fg);
 }
 
 /* ---------------------------------------------------------------- base */
@@ -158,12 +179,12 @@ a {
 }
 
 ::selection {
-  background: var(--steel);
+  background: var(--fg);
   color: var(--bg);
 }
 
 :focus-visible {
-  outline: 2px solid var(--steel);
+  outline: 2px solid var(--fg);
   outline-offset: 3px;
   border-radius: var(--radius);
 }
@@ -173,7 +194,9 @@ h2,
 h3,
 h4 {
   margin: 0;
-  font-weight: 600;
+  /* Display type earns its presence from size and tight tracking, not weight.
+     If a CJK heading reads too soft at 400, the answer is 500 — never 600. */
+  font-weight: 400;
   line-height: 1.12;
   letter-spacing: -0.021em;
   text-wrap: balance;
@@ -223,8 +246,11 @@ hr {
 }
 
 .section {
-  padding-block: var(--s6);
-  border-top: 1px solid var(--rule);
+  /* Separation is done by space, not by a rule. The spec builds depth from
+     figure/ground and 96px gaps; a hairline between every band is the tell of
+     a layout that does not trust its own spacing. */
+  padding-block: var(--s8);
+  border-top: 0;
 }
 
 .section--flush {
@@ -268,7 +294,7 @@ hr {
   left: -9999px;
   top: 0;
   z-index: 100;
-  background: var(--steel);
+  background: var(--chalk);
   color: var(--bg);
   padding: 0.6rem 1rem;
   font-family: var(--mono);
@@ -323,7 +349,7 @@ hr {
   margin: 0;
   padding: 0 var(--s2) 0 var(--notice-pad);
   background: #0000002e;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.14em;
 }
 .notice__pip {
@@ -537,7 +563,7 @@ hr {
   color: var(--rule);
 }
 .banner .mode {
-  color: var(--steel);
+  color: var(--fg-3);
 }
 .banner .cadence {
   margin-left: auto;
@@ -550,7 +576,7 @@ hr {
   flex: none;
   width: 6px;
   height: 6px;
-  background: var(--steel);
+  background: var(--amber);
   border-radius: 50%;
 }
 /* a ring on the compositor: transform + opacity only, never box-shadow */
@@ -559,7 +585,7 @@ hr {
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  background: var(--steel);
+  background: var(--amber);
   opacity: 0;
   animation: ping 2.8s var(--ease-out) infinite;
   will-change: transform, opacity;
@@ -602,7 +628,7 @@ hr {
   align-items: center;
   gap: 0.6rem;
   font-family: var(--mono);
-  font-weight: 600;
+  font-weight: 500;
   font-size: var(--t-sm);
   letter-spacing: 0.02em;
   color: var(--fg);
@@ -627,11 +653,11 @@ hr {
 }
 .nav__link:hover {
   color: var(--fg);
-  border-bottom-color: var(--steel);
+  border-bottom-color: var(--fg);
 }
 .nav__link[aria-current="page"] {
   color: var(--fg);
-  border-bottom-color: var(--amber);
+  border-bottom-color: var(--fg);
 }
 @media (min-width: 62rem) {
   .nav__links {
@@ -717,7 +743,7 @@ hr {
 
 .display {
   font-size: clamp(2.35rem, 4.4vw, 3.45rem);
-  font-weight: 600;
+  font-weight: 400;
   line-height: 1.06;
   letter-spacing: -0.03em;
 }
@@ -827,13 +853,13 @@ hr {
   transform: translateY(-1px);
 }
 .btn--primary {
-  background: var(--fg);
+  background: var(--chalk);
   color: var(--bg);
-  border-color: var(--fg);
+  border-color: var(--chalk);
 }
 .btn--primary:hover {
-  background: var(--steel);
-  border-color: var(--steel);
+  background: var(--fg);
+  border-color: var(--fg);
   color: var(--bg);
 }
 /* Tertiary entry points. These were three more buttons, which put five
@@ -855,7 +881,7 @@ hr {
 }
 .hero__links a:hover {
   color: var(--fg);
-  border-bottom-color: var(--steel);
+  border-bottom-color: var(--fg);
 }
 .btn--ghost {
   background: transparent;
@@ -871,8 +897,7 @@ button.btn {
 .figure {
   border: 1px solid var(--rule);
   background: var(--panel);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
+  border-radius: var(--radius-panel);
 }
 .figure img {
   display: block;
@@ -957,7 +982,7 @@ button.btn {
   stroke: var(--steel);
 }
 .mk path {
-  fill: var(--steel);
+  fill: var(--mark-rock);
 }
 .mk--amber path {
   fill: var(--amber);
@@ -1044,7 +1069,7 @@ button.btn {
   gap: 1px;
   background: var(--rule-soft);
   border: 1px solid var(--rule);
-  border-radius: var(--radius);
+  border-radius: var(--radius-panel);
   overflow: hidden;
 }
 @media (min-width: 52rem) {
@@ -1082,7 +1107,7 @@ button.btn {
 .table-wrap {
   overflow-x: auto;
   border: 1px solid var(--rule);
-  border-radius: var(--radius);
+  border-radius: var(--radius-panel);
   background: var(--panel);
 }
 table {
@@ -1132,7 +1157,7 @@ td.docs {
   overflow-wrap: anywhere;
 }
 td strong {
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .tag {
@@ -1163,11 +1188,10 @@ td strong {
 
 .card {
   border: 1px solid var(--rule);
-  border-radius: var(--radius);
+  border-radius: var(--radius-card);
   background: var(--panel);
   padding: var(--s3);
-  transition: border-color 0.18s var(--ease), transform 0.18s var(--ease),
-    box-shadow 0.18s var(--ease);
+  transition: border-color 0.18s var(--ease), transform 0.18s var(--ease);
 }
 .card:hover {
   border-color: var(--fg-3);
@@ -1175,7 +1199,7 @@ td strong {
 .card__k {
   font-family: var(--mono);
   font-size: var(--t-xs);
-  color: var(--steel);
+  color: var(--fg-3);
   letter-spacing: 0.04em;
 }
 .card--link {
@@ -1186,7 +1210,6 @@ td strong {
 .card--link:hover {
   border-color: var(--fg-3);
   transform: translateY(-2px);
-  box-shadow: var(--shadow);
 }
 .card h3 {
   margin-bottom: 0.5rem;
@@ -1224,12 +1247,12 @@ td strong {
 .stage__n {
   font-family: var(--mono);
   font-size: var(--t-xs);
-  color: var(--amber);
+  color: var(--fg-3);
   letter-spacing: 0.04em;
 }
 .stage__t {
   font-size: var(--t-lg);
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: -0.018em;
 }
 .stage__d {
@@ -1243,7 +1266,7 @@ td strong {
 .code {
   position: relative;
   border: 1px solid var(--rule);
-  border-radius: var(--radius);
+  border-radius: var(--radius-panel);
   background: var(--bg-2);
   overflow: hidden;
 }
@@ -1258,7 +1281,7 @@ td strong {
   color: var(--fg-3);
 }
 .code__bar .lang-tag {
-  color: var(--steel);
+  color: var(--fg-3);
 }
 .code__copy {
   margin-left: auto;
@@ -1312,7 +1335,7 @@ pre .s {
 }
 .note strong {
   color: var(--fg);
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .rule-note {
@@ -1349,14 +1372,14 @@ pre .s {
   top: 1.02rem;
   width: 6px;
   height: 6px;
-  border: 1px solid var(--steel);
+  border: 1px solid var(--fg-3);
 }
 .list li b {
   color: var(--fg);
-  font-weight: 600;
+  font-weight: 500;
 }
 .list--check li::before {
-  background: var(--steel);
+  background: var(--fg-3);
 }
 
 /* ---------------------------------------------------------------- docs */
@@ -1388,8 +1411,8 @@ pre .s {
   border-bottom: 1px solid var(--rule-soft);
 }
 .docs-side__group--active .docs-side__h {
-  color: var(--accent);
-  border-bottom-color: var(--accent);
+  color: var(--marker);
+  border-bottom-color: var(--marker);
 }
 .docs-side__links a {
   display: block;
@@ -1404,8 +1427,8 @@ pre .s {
 }
 .docs-side__links a[aria-current="page"] {
   color: var(--fg);
-  border-left-color: var(--accent);
-  font-weight: 600;
+  border-left-color: var(--marker);
+  font-weight: 500;
 }
 
 @media (min-width: 62rem) {
@@ -1464,11 +1487,11 @@ pre .s {
     white-space: nowrap;
   }
   .docs-side__group--active .docs-side__h {
-    border-color: var(--accent);
+    border-color: var(--marker);
   }
   .docs-side__links a[aria-current="page"] {
-    border-color: var(--accent);
-    background: var(--amber-soft);
+    border-color: var(--marker);
+    background: var(--bg-3);
   }
 }
 
@@ -1486,7 +1509,7 @@ pre .s {
   display: block;
   padding: 0.7rem 0.9rem;
   border: 1px solid var(--rule);
-  border-radius: var(--radius);
+  border-radius: var(--radius-card);
   transition: border-color 0.15s var(--ease);
 }
 .pager__link:hover {
@@ -1505,10 +1528,17 @@ pre .s {
 }
 .pager__t {
   color: var(--fg);
-  font-weight: 600;
+  font-weight: 500;
 }
 .docs-body {
   min-width: 0;
+  /* The sheet of paper on the war-room floor. The documentation used to be a
+     whole light theme of its own; it is now an object sitting on the canvas,
+     which is the spec's figure/ground move applied to something rather than
+     used as decoration. */
+  background: var(--bg);
+  border-radius: var(--radius-panel);
+  padding: clamp(24px, 4vw, 56px);
 }
 .docs-body .prose {
   max-width: 72ch;
@@ -1579,7 +1609,7 @@ pre .s {
   color: var(--fg-2);
   letter-spacing: 0.01em;
   margin-bottom: 0.7rem;
-  font-weight: 600;
+  font-weight: 500;
 }
 .foot a {
   display: block;
@@ -1633,7 +1663,7 @@ pre .s {
   gap: 2px;
   background: var(--rule-soft);
   border: 1px solid var(--rule);
-  border-radius: var(--radius);
+  border-radius: var(--radius-panel);
   overflow: hidden;
 }
 .matrix__row {
@@ -1646,7 +1676,7 @@ pre .s {
   align-items: center;
 }
 .matrix__row b {
-  font-weight: 600;
+  font-weight: 500;
 }
 .matrix__row span {
   color: var(--fg-3);
@@ -1697,7 +1727,7 @@ pre .s {
 }
 .news__body strong {
   color: var(--fg);
-  font-weight: 600;
+  font-weight: 500;
 }
 /* the opening line carries the greeting, so it reads as a lede */
 .news__body > p:first-child {
@@ -1734,7 +1764,7 @@ pre .s {
    without loosening the body rule. */
 .qa .qa__q {
   font-size: var(--t-lg);
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1.45;
   letter-spacing: -0.015em;
   color: var(--fg);
@@ -1781,12 +1811,12 @@ pre .s {
 }
 .news-list a {
   font-size: var(--t-xl);
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: -0.02em;
   transition: color 0.15s var(--ease);
 }
 .news-list a:hover {
-  color: var(--steel);
+  color: var(--fg);
 }
 .news-list p {
   margin-top: 0.5rem;
@@ -1801,14 +1831,13 @@ pre .s {
   margin: auto;
   padding: 0;
   border: 1px solid var(--rule);
-  border-radius: var(--radius);
+  border-radius: var(--radius-panel);
   background: var(--panel);
   color: var(--fg);
   width: min(31rem, calc(100vw - 2rem));
-  box-shadow: 0 40px 90px -40px #000000cc;
 }
 .modal::backdrop {
-  background: #05090fd9;
+  background: #101010d9;
 }
 .modal[open] {
   animation: modalin 0.24s var(--ease);
@@ -1832,7 +1861,7 @@ pre .s {
   font-family: var(--mono);
   font-size: var(--t-xs);
   letter-spacing: 0.04em;
-  color: var(--accent);
+  color: var(--marker);
 }
 .modal h2 {
   margin-top: 0.65rem;

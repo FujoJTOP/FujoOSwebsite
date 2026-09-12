@@ -408,7 +408,7 @@ function headBlock({ titleZh, desc, pagePath, up, type = "website" }) {
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Geist+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="${up}assets/style.css?v=${CSS_V}" />

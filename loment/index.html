@@ -29,10 +29,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Geist+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="../assets/style.css?v=b7b288b3" />
+    <link rel="stylesheet" href="../assets/style.css?v=e8fa6467" />
     <link rel="icon" href="../favicon.ico" sizes="48x48" />
     <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" sizes="any" />
     <link rel="icon" type="image/png" href="../assets/favicon-32.png" sizes="32x32" />
@@ -150,14 +150,14 @@
       </section>
 
       <!-- ========================================================== division -->
-      <section class="section anchor" id="division" data-motion>
+      <section class="section anchor" id="division">
         <div class="wrap">
-          <h2 class="h2 fade-step" data-zh="分工：写与看" data-en="The division: writing and reading">分工：写与看</h2>
-          <p class="muted prose fade-step" style="margin-top: var(--s2); --delay: 0.07s" data-zh="作者面向 Loment 写系统；机器面向 Potato 读系统。编译器是两者的接缝——它为每一个编译单元强制导出形式对象，没有关闭的开关。" data-en="An author writes the system against Loment; a machine reads the system against Potato. The compiler is the seam — it emits a formal object for every compilation unit, with no switch to turn that off.">
+          <h2 class="h2" data-zh="分工：写与看" data-en="The division: writing and reading">分工：写与看</h2>
+          <p class="muted prose" style="margin-top: var(--s2); " data-zh="作者面向 Loment 写系统；机器面向 Potato 读系统。编译器是两者的接缝——它为每一个编译单元强制导出形式对象，没有关闭的开关。" data-en="An author writes the system against Loment; a machine reads the system against Potato. The compiler is the seam — it emits a formal object for every compilation unit, with no switch to turn that off.">
             作者面向 Loment 写系统；机器面向 Potato 读系统。编译器是两者的接缝——它为每一个编译单元强制导出形式对象，没有关闭的开关。
           </p>
 
-          <figure class="figure fade-step" style="--delay: 0.04s; --draw-dur: 0.45s; margin-top: var(--s4)">
+          <figure class="figure" style="--draw-dur: 0.45s; margin-top: var(--s4)">
             <svg
               class="envelope"
               viewBox="0 0 620 336"
@@ -180,29 +180,29 @@
               <text x="30" y="62" class="t-amber">作者 · 人 / Agent</text>
               <text x="30" y="80" class="t-dim">writes</text>
 
-              <path class="stroke s-amber s-dash fade-step" d="M192,64 H212" marker-end="url(#mkl-a)" style="--delay: 0.14s" />
+              <path class="stroke s-amber s-dash" d="M192,64 H212" marker-end="url(#mkl-a)" style="" />
 
               <rect x="212" y="36" width="176" height="56" class="stroke s-steel" />
               <text x="226" y="62" class="t-steel">Loment 源 .lomt</text>
               <text x="226" y="80" class="t-dim">Rust 严格子集 · 能力域</text>
 
-              <path class="stroke s-steel draw" d="M388,64 H408" marker-end="url(#mkl-s)" style="--delay: 0.2s" />
+              <path class="stroke s-steel draw" d="M388,64 H408" marker-end="url(#mkl-s)" style="" />
 
               <rect x="408" y="36" width="176" height="56" class="stroke s-steel" />
               <text x="422" y="62" class="t-steel">编译器 lomentc</text>
               <text x="422" y="80" class="t-dim">转译 / LLVM IR</text>
 
-              <path class="stroke s-steel draw" d="M496,92 V118 H300 V146" marker-end="url(#mkl-s)" style="--delay: 0.3s" />
+              <path class="stroke s-steel draw" d="M496,92 V118 H300 V146" marker-end="url(#mkl-s)" style="" />
 
               <rect x="150" y="146" width="300" height="56" class="stroke s-steel" />
               <text x="166" y="172" class="t-steel">形式对象 · Potato</text>
               <text x="166" y="190" class="t-dim">强制导出，不可关闭</text>
 
-              <path class="stroke s-steel draw" d="M300,202 V234" style="--delay: 0.4s" />
-              <path class="stroke s-steel draw" d="M108,234 H512" style="--delay: 0.46s" />
-              <path class="stroke s-steel draw" d="M108,234 V258" marker-end="url(#mkl-s)" style="--delay: 0.52s" />
-              <path class="stroke s-steel draw" d="M310,234 V258" marker-end="url(#mkl-s)" style="--delay: 0.56s" />
-              <path class="stroke s-steel draw" d="M512,234 V258" marker-end="url(#mkl-s)" style="--delay: 0.6s" />
+              <path class="stroke s-steel draw" d="M300,202 V234" style="" />
+              <path class="stroke s-steel draw" d="M108,234 H512" style="" />
+              <path class="stroke s-steel draw" d="M108,234 V258" marker-end="url(#mkl-s)" style="" />
+              <path class="stroke s-steel draw" d="M310,234 V258" marker-end="url(#mkl-s)" style="" />
+              <path class="stroke s-steel draw" d="M512,234 V258" marker-end="url(#mkl-s)" style="" />
 
               <text x="16" y="228" class="t-steel">读 · Potato（面向机器）</text>
 
@@ -236,10 +236,10 @@
       </section>
 
       <!-- ============================================================== L0 -->
-      <section class="section anchor" id="l0" data-motion>
+      <section class="section anchor" id="l0">
         <div class="wrap">
-          <h2 class="h2 fade-step" data-zh="L0 · 接口层：现在就能做的那部分" data-en="L0 · the interface layer: the part that can be done now">L0 · 接口层：现在就能做的那部分</h2>
-          <p class="muted prose fade-step" style="margin-top: var(--s2); --delay: 0.07s" data-zh="同一个事实在 JSON、Rust、C、Python 里各写一份——这是当前最实际的成本，也是十个痛点里七个的共同根因。L0 的做法是：一份 .lom 单一真源，生成器产出各类目标，一致性在生成期就被保证。" data-en="The same fact written once each in JSON, Rust, C and Python is today's most concrete cost, and the shared root cause of seven of ten known pain points. L0's answer: one .lom source of truth, generators that emit each target, and consistency guaranteed at generation time.">
+          <h2 class="h2" data-zh="L0 · 接口层：现在就能做的那部分" data-en="L0 · the interface layer: the part that can be done now">L0 · 接口层：现在就能做的那部分</h2>
+          <p class="muted prose" style="margin-top: var(--s2); " data-zh="同一个事实在 JSON、Rust、C、Python 里各写一份——这是当前最实际的成本，也是十个痛点里七个的共同根因。L0 的做法是：一份 .lom 单一真源，生成器产出各类目标，一致性在生成期就被保证。" data-en="The same fact written once each in JSON, Rust, C and Python is today's most concrete cost, and the shared root cause of seven of ten known pain points. L0's answer: one .lom source of truth, generators that emit each target, and consistency guaranteed at generation time.">
             同一个事实在 JSON、Rust、C、Python 里各写一份——这是当前最实际的成本，也是十个痛点里七个的共同根因。L0 的做法是：一份 .lom 单一真源，生成器产出各类目标，一致性在生成期就被保证。
           </p>
 
@@ -273,10 +273,10 @@ enum Opcode: u16 {
       </section>
 
       <!-- ============================================================== L1 -->
-      <section class="section anchor" id="l1" data-motion>
+      <section class="section anchor" id="l1">
         <div class="wrap">
-          <h2 class="h2 fade-step" data-zh="L1 · 系统语言" data-en="L1 · the system language">L1 · 系统语言</h2>
-          <p class="muted prose fade-step" style="margin-top: var(--s2); --delay: 0.07s" data-zh="设计目标按优先级排：布局与 ABI 是一等公民；确定性（无 GC、显式所有权、no_std 优先）；能力域语法化；每个编译单元导出可审计的语义模型；跨后端。第一版是 Loment → Rust 的转译器，不写后端——先拿到一个能跑、能与 Rust 原版逐位对齐的语言。" data-en="Design goals in priority order: layout and ABI as first-class; determinism (no GC, explicit ownership, no_std first); capability domains as a language construct; a auditable semantic model emitted per unit; multiple backends. The first version is a Loment → Rust transpiler with no backend of its own — get a language that runs and aligns bit-for-bit with the Rust original first.">
+          <h2 class="h2" data-zh="L1 · 系统语言" data-en="L1 · the system language">L1 · 系统语言</h2>
+          <p class="muted prose" style="margin-top: var(--s2); " data-zh="设计目标按优先级排：布局与 ABI 是一等公民；确定性（无 GC、显式所有权、no_std 优先）；能力域语法化；每个编译单元导出可审计的语义模型；跨后端。第一版是 Loment → Rust 的转译器，不写后端——先拿到一个能跑、能与 Rust 原版逐位对齐的语言。" data-en="Design goals in priority order: layout and ABI as first-class; determinism (no GC, explicit ownership, no_std first); capability domains as a language construct; a auditable semantic model emitted per unit; multiple backends. The first version is a Loment → Rust transpiler with no backend of its own — get a language that runs and aligns bit-for-bit with the Rust original first.">
             设计目标按优先级排：布局与 ABI 是一等公民；确定性（无 GC、显式所有权、no_std 优先）；能力域语法化；每个编译单元导出可审计的语义模型；跨后端。第一版是 Loment → Rust 的转译器，不写后端——先拿到一个能跑、能与 Rust 原版逐位对齐的语言。
           </p>
 
@@ -347,10 +347,10 @@ export fn flush(req: FlushReq) contract(hex64) {
       </section>
 
       <!-- ====================================================== milestones -->
-      <section class="section anchor" id="progress" data-motion>
+      <section class="section anchor" id="progress">
         <div class="wrap">
-          <h2 class="h2 fade-step" data-zh="进度：说清楚哪些没做完" data-en="Progress: which parts are not finished">进度：说清楚哪些没做完</h2>
-          <p class="muted prose fade-step" style="margin-top: var(--s2); --delay: 0.07s" data-zh="100 个里程碑按依赖排序推进。下表由脚本从路线图文档生成，不是手写的摘要。" data-en="A hundred milestones are worked in dependency order. The table below is generated by a script from the roadmap document, not hand-summarised.">
+          <h2 class="h2" data-zh="进度：说清楚哪些没做完" data-en="Progress: which parts are not finished">进度：说清楚哪些没做完</h2>
+          <p class="muted prose" style="margin-top: var(--s2); " data-zh="100 个里程碑按依赖排序推进。下表由脚本从路线图文档生成，不是手写的摘要。" data-en="A hundred milestones are worked in dependency order. The table below is generated by a script from the roadmap document, not hand-summarised.">
             100 个里程碑按依赖排序推进。下表由脚本从路线图文档生成，不是手写的摘要。
           </p>
 
@@ -394,10 +394,10 @@ export fn flush(req: FlushReq) contract(hex64) {
       </section>
 
       <!-- ========================================================== wave C -->
-      <section class="section anchor" id="measurement" data-motion>
+      <section class="section anchor" id="measurement">
         <div class="wrap">
-          <h2 class="h2 fade-step" data-zh="波 C 测量：把“能转写”变成可复现的数字" data-en="Wave-C measurement: turning “it can translate” into reproducible numbers">波 C 测量：把“能转写”变成可复现的数字</h2>
-          <p class="muted prose fade-step" style="margin-top: var(--s2); --delay: 0.07s" data-zh="语料是 12 个仓库真实文件（每语言 4 个），每个文件的 sha256 记入结果文件，测量与内容绑定。两臂是工具链的严格与宽松档——都确定性、可复现，不使用随机数。" data-en="The corpus is 12 real repository files (4 per language); each file's sha256 goes into the results file so the measurement is bound to its content. The two arms are the toolchain's strict and lenient settings — both deterministic and reproducible, neither using randomness.">
+          <h2 class="h2" data-zh="波 C 测量：把“能转写”变成可复现的数字" data-en="Wave-C measurement: turning “it can translate” into reproducible numbers">波 C 测量：把“能转写”变成可复现的数字</h2>
+          <p class="muted prose" style="margin-top: var(--s2); " data-zh="语料是 12 个仓库真实文件（每语言 4 个），每个文件的 sha256 记入结果文件，测量与内容绑定。两臂是工具链的严格与宽松档——都确定性、可复现，不使用随机数。" data-en="The corpus is 12 real repository files (4 per language); each file's sha256 goes into the results file so the measurement is bound to its content. The two arms are the toolchain's strict and lenient settings — both deterministic and reproducible, neither using randomness.">
             语料是 12 个仓库真实文件（每语言 4 个），每个文件的 sha256 记入结果文件，测量与内容绑定。两臂是工具链的严格与宽松档——都确定性、可复现，不使用随机数。
           </p>
 
