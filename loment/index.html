@@ -104,8 +104,13 @@
 
     <main id="main">
       <!-- ======================================================== page head -->
-      <section class="section section--flush" style="padding-top: var(--s6)" data-motion>
-        <div class="wrap">
+      <section class="section section--flush" style="padding-top: var(--s6); position: relative; overflow: hidden" data-motion>
+        <img
+          src="../assets/loment-mark.svg"
+          alt=""
+          style="position: absolute; top: var(--s4); right: max(0px, calc((100% - var(--page)) / 2)); height: min(calc(100% - 2 * var(--s4)), 520px, 70vw); width: auto; transform: translateX(28%); opacity: 0.45; pointer-events: none"
+        />
+        <div class="wrap" style="position: relative">
           <p class="crumbs fade-step" style="--delay: 0.02s">
             <a href="../" data-zh="首页" data-en="Home">首页</a>
             <span class="sep" aria-hidden="true">/</span>
