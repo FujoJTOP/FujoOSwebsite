@@ -1,0 +1,292 @@
+/* FujoOS — admin page
+   Loaded by /admin/ only, after style.css. The public stylesheet has no form
+   controls at all: it is a reading surface, and every input on the site so far
+   has been a link or a button. This page is a form, so the whole control set
+   is defined here rather than loosened into the shared file.
+
+   The page runs in the datasheet register on purpose — a light work surface
+   reads as a tool, and looking unlike the public site is a small reminder that
+   this one can write to the repository. */
+
+.adm {
+  max-width: 56rem;
+  margin-inline: auto;
+  padding: var(--s5) var(--gutter) var(--s7);
+}
+
+/* ---- masthead ---- */
+.adm__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--s2) var(--s3);
+  padding-bottom: var(--s3);
+  border-bottom: 1px solid var(--rule);
+}
+.adm__title {
+  font-size: var(--t-2xl);
+  letter-spacing: -0.028em;
+}
+.adm__who {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  font-size: var(--t-sm);
+  color: var(--fg-2);
+}
+.adm__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--fg-3);
+}
+.adm__dot[data-state="ok"] {
+  background: #2e7d4f;
+}
+.adm__dot[data-state="bad"] {
+  background: var(--alert);
+}
+
+/* ---- sections ---- */
+.adm section {
+  margin-top: var(--s6);
+}
+.adm h2 {
+  font-size: var(--t-xl);
+  letter-spacing: -0.022em;
+}
+.adm__hint {
+  margin-top: var(--s1);
+  font-size: var(--t-sm);
+  color: var(--fg-2);
+  max-width: 62ch;
+}
+
+/* ---------------------------------------------------------------- forms */
+.field {
+  display: block;
+  margin-top: var(--s3);
+}
+.field__label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-family: var(--mono);
+  font-size: var(--t-xs);
+  letter-spacing: 0.04em;
+  color: var(--fg-2);
+}
+.field__note {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: var(--t-xs);
+  color: var(--fg-3);
+}
+
+/* One control set, defined once. `appearance: none` so the browser's own
+   widget styling does not fight the tokens on either platform. */
+.input,
+.textarea,
+.select {
+  display: block;
+  width: 100%;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--bg-2);
+  color: var(--fg);
+  font-family: var(--sans);
+  font-size: var(--t-sm);
+  line-height: 1.5;
+  appearance: none;
+}
+.textarea {
+  font-family: var(--mono);
+  font-size: var(--t-sm);
+  min-height: 14rem;
+  resize: vertical;
+  white-space: pre;
+  overflow-wrap: normal;
+  overflow-x: auto;
+}
+.input:hover,
+.textarea:hover,
+.select:hover {
+  border-color: var(--fg-3);
+}
+.input:focus-visible,
+.textarea:focus-visible,
+.select:focus-visible {
+  outline: 2px solid var(--steel);
+  outline-offset: 1px;
+  border-color: var(--steel);
+}
+.input[aria-invalid="true"],
+.textarea[aria-invalid="true"] {
+  border-color: var(--alert);
+}
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--fg-3);
+}
+.select {
+  /* a caret drawn from the text colour rather than an image file */
+  background-image: linear-gradient(45deg, transparent 50%, currentColor 50%),
+    linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position: calc(100% - 1.05rem) 52%, calc(100% - 0.7rem) 52%;
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+  padding-right: 2rem;
+}
+
+/* a row of two controls that belong together, e.g. date from / date to */
+.field-row {
+  display: grid;
+  gap: var(--s3);
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-top: var(--s3);
+  font-size: var(--t-sm);
+  cursor: pointer;
+}
+.check input {
+  appearance: none;
+  flex: none;
+  width: 1.05rem;
+  height: 1.05rem;
+  margin: 0;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--bg-2);
+  cursor: pointer;
+}
+.check input:checked {
+  background: var(--fg);
+  border-color: var(--fg);
+}
+.check input:checked::after {
+  content: "";
+  display: block;
+  width: 0.3rem;
+  height: 0.55rem;
+  margin: 0.06rem auto 0;
+  border: solid var(--bg);
+  border-width: 0 2px 2px 0;
+  transform: rotate(42deg);
+}
+.check input:focus-visible {
+  outline: 2px solid var(--steel);
+  outline-offset: 2px;
+}
+
+/* ---------------------------------------------------------------- blocks */
+.adm__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2);
+  align-items: center;
+  margin-top: var(--s4);
+}
+.adm__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s2);
+  padding: 0.7rem 0;
+  border-bottom: 1px solid var(--rule-soft);
+}
+.adm__row:last-child {
+  border-bottom: 0;
+}
+.adm__row-t {
+  flex: 1 1 14rem;
+  min-width: 0;
+}
+.adm__row-t b {
+  display: block;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.adm__row-t span {
+  display: block;
+  font-size: var(--t-xs);
+  color: var(--fg-3);
+  margin-top: 0.15rem;
+}
+.adm__row-acts {
+  display: flex;
+  gap: var(--s1);
+}
+
+.adm__status {
+  margin-top: var(--s3);
+  padding: 0.6rem 0.8rem;
+  border-left: 2px solid var(--steel);
+  background: var(--bg-3);
+  font-family: var(--mono);
+  font-size: var(--t-xs);
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.adm__status[data-kind="bad"] {
+  border-left-color: var(--alert);
+}
+.adm__status[data-kind="good"] {
+  border-left-color: #2e7d4f;
+}
+.adm__status:empty {
+  display: none;
+}
+
+.adm__sep {
+  margin-top: var(--s4);
+  padding-top: var(--s4);
+  border-top: 1px solid var(--rule-soft);
+}
+
+/* the small × on a list row */
+.adm__x {
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--fg-3);
+  font: inherit;
+  font-size: var(--t-base);
+  line-height: 1;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+.adm__x:hover {
+  color: var(--alert);
+  border-color: var(--rule);
+}
+
+/* a preview pane for the fragment body */
+.adm__preview {
+  margin-top: var(--s3);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--bg);
+  overflow: hidden;
+}
+.adm__preview iframe {
+  display: block;
+  width: 100%;
+  height: 26rem;
+  border: 0;
+  background: var(--bg);
+}
+
+code {
+  font-family: var(--mono);
+  font-size: 0.92em;
+  padding: 0.08em 0.32em;
+  border-radius: var(--radius);
+  background: var(--bg-3);
+}

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="theme-datasheet">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>内容管理 — FujoOS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/style.css?v=b7b288b3" />
+    <link rel="stylesheet" href="../assets/admin.css?v=ae57e29d" />
+    <link rel="icon" href="../favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" sizes="any" />
+    <link rel="icon" type="image/png" href="../assets/favicon-32.png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png" />
+  </head>
+  <body>
+    <div class="adm">
+      <header class="adm__head">
+        <h1 class="adm__title">内容管理</h1>
+        <div class="adm__who">
+          <span class="adm__dot" data-state="idle"></span>
+          <span data-conn>未连接</span>
+        </div>
+      </header>
+
+      <!-- ============================================================ 连接 -->
+      <section>
+        <h2>连接</h2>
+        <p class="adm__hint">
+          需要一个只对这个仓库有写入权限的 GitHub 细粒度令牌（Fine-grained token），权限只需
+          <code>Contents: Read and write</code>。不要用 classic token——那等于整个账号的写权限。
+          令牌不加密，只存在这台设备的浏览器里，也只会发往 <code>api.github.com</code>。
+          <strong>任何拿到它的人都能写这个仓库。</strong>
+        </p>
+        <label class="field">
+          <span class="field__label">GitHub 令牌</span>
+          <input
+            class="input"
+            type="password"
+            data-token
+            autocomplete="off"
+            spellcheck="false"
+            placeholder="github_pat_…"
+          />
+        </label>
+        <label class="check">
+          <input type="checkbox" data-remember />
+          记住这台设备（不勾则关闭标签页即失效）
+        </label>
+        <div class="adm__actions">
+          <button class="btn btn--primary" type="button" data-connect>连接</button>
+          <button class="btn btn--ghost" type="button" data-forget>清除令牌</button>
+        </div>
+        <p class="adm__status" data-conn-status></p>
+      </section>
+
+      <!-- ============================================================ 新闻 -->
+      <section data-needs-auth hidden>
+        <h2>新闻</h2>
+        <p class="adm__hint">
+          一篇新闻是一个片段文件，正文直接写 HTML（站点其余部分也是这样）。保存后进入待发布清单，
+          在页面底部统一提交。
+        </p>
+        <div data-news-list></div>
+        <div class="adm__actions">
+          <button class="btn" type="button" data-news-new>新建一篇</button>
+        </div>
+
+        <div class="adm__sep" data-news-editor hidden>
+          <h2 data-editor-title>编辑</h2>
+          <label class="field">
+            <span class="field__label">文件名（slug）</span>
+            <input class="input" type="text" data-f-slug spellcheck="false" placeholder="loment-tooling" />
+            <span class="field__note">出现在地址里：<code>/news/&lt;slug&gt;/</code>。只用小写字母、数字和连字符。</span>
+          </label>
+          <label class="field">
+            <span class="field__label">标题（中文）</span>
+            <input class="input" type="text" data-f-zh />
+          </label>
+          <label class="field">
+            <span class="field__label">Title (English)</span>
+            <input class="input" type="text" data-f-en spellcheck="false" />
+          </label>
+          <div class="field-row">
+            <label class="field">
+              <span class="field__label">日期</span>
+              <input class="input" type="date" data-f-date />
+            </label>
+          </div>
+          <label class="field">
+            <span class="field__label">摘要（中文，列表与搜索结果显示）</span>
+            <textarea class="textarea" style="min-height: 5rem" data-f-desc></textarea>
+          </label>
+          <label class="field">
+            <span class="field__label">Summary (English)</span>
+            <textarea class="textarea" style="min-height: 5rem" data-f-desc-en spellcheck="false"></textarea>
+          </label>
+          <label class="field">
+            <span class="field__label">正文（HTML）</span>
+            <textarea class="textarea" data-f-body spellcheck="false"></textarea>
+            <span class="field__note">
+              这是片段正文，不是整页。可用 <code>&lt;h2&gt;</code>、<code>&lt;p&gt;</code>、
+              <code>&lt;strong&gt;</code>、<code>&lt;code&gt;</code>，以及两端文字用
+              <code>data-zh</code> / <code>data-en</code>。
+            </span>
+          </label>
+          <div class="adm__actions">
+            <button class="btn" type="button" data-news-preview>预览</button>
+            <button class="btn btn--primary" type="button" data-news-stage>暂存这一篇</button>
+            <button class="btn btn--ghost" type="button" data-news-cancel>取消</button>
+          </div>
+          <div class="adm__preview" data-news-preview-box hidden><iframe data-news-frame title="预览"></iframe></div>
+          <p class="adm__status" data-news-status></p>
+        </div>
+      </section>
+
+      <!-- ============================================================ 公告 -->
+      <section data-needs-auth hidden>
+        <h2>公告</h2>
+        <p class="adm__hint">
+          公告出现在每一页的最顶端。红色用于需要立刻知道的，黄色是提示。滚动用于长句子，静止用于短句。
+          置顶会让它随页面滚动常驻——<strong>同时只能有一条置顶</strong>。填了日期区间就会自动上线下线。
+        </p>
+        <div data-ann-list></div>
+        <div class="adm__actions">
+          <button class="btn" type="button" data-ann-add>添加一条</button>
+          <button class="btn btn--primary" type="button" data-ann-stage>暂存公告</button>
+        </div>
+        <p class="adm__status" data-ann-status></p>
+      </section>
+
+      <!-- ============================================================ 发布 -->
+      <section data-needs-auth hidden>
+        <h2>发布</h2>
+        <p class="adm__hint">
+          暂存的改动列在下面。确认后提交到 <code>main</code>；CI 会重新生成站点，约半分钟后线上生效。
+          每个文件是一次提交。
+        </p>
+        <div data-pending></div>
+        <div class="adm__actions">
+          <button class="btn btn--primary" type="button" data-publish>提交并推送</button>
+          <button class="btn btn--ghost" type="button" data-discard>全部丢弃</button>
+        </div>
+        <p class="adm__status" data-publish-status></p>
+      </section>
+    </div>
+
+    <script src="../assets/admin.js?v=70651449"></script>
+  </body>
+</html>

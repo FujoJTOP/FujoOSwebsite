@@ -68,6 +68,11 @@
   /* 6.7:1 against --alert-fg, so the notice clears AA at its smallest size */
   --alert: #b02a2f;
   --alert-fg: #fff4f3;
+  /* The second severity: a caution tape, dark text on saturated yellow. It is
+     deliberately not a lighter red — at a glance the two must not be confusable.
+     8.2:1 against --warn-fg. */
+  --warn: #d9a326;
+  --warn-fg: #1a1206;
   /* The mark's two tones. --steel is tuned for hairlines and small text on a
      dark ground; a large solid area of it reads far lighter, so the rock is
      one step deeper while staying in the same hue family. */
@@ -100,6 +105,8 @@
   --steel-soft: #266b8714;
   --alert: #a01f24;
   --alert-fg: #fff4f3;
+  --warn: #e0ac2c;
+  --warn-fg: #211604;
   --mark-rock: #266b87;
   /* Not pure white: on a light ground the cap would disappear and the summit
      would read as a chunk cut out of the mountain. */
@@ -271,18 +278,19 @@ hr {
   left: 0;
 }
 
-/* ------------------------------------------------- announcement ticker */
+/* ------------------------------------------------------------ announcements */
 /* The only moving thing on the site that is not an entrance, so it is also the
    only thing with a pause control (WCAG 2.2.2) and the only thing that stops
    entirely under reduced-motion. Its inner edges are aligned to the page
-   gutter rather than bled to the viewport, so the red band lines up with the
-   text under it instead of with the window. */
-.ticker {
+   gutter rather than bled to the viewport, so the band lines up with the text
+   under it instead of with the window. */
+.notice {
   /* percentage, not vw: the band spans the body, which excludes the scrollbar,
      while 50vw does not — the two disagree by the scrollbar's width and the
      tag drifts off the gutter. Both the tag and the toggle resolve this
      against the band's own width. */
-  --ticker-pad: max(var(--gutter), calc(50% - var(--page) / 2 + var(--gutter)));
+  --notice-pad: max(var(--gutter), calc(50% - var(--page) / 2 + var(--gutter)));
+  position: relative;
   display: flex;
   align-items: stretch;
   min-height: 2.1rem;
@@ -294,50 +302,66 @@ hr {
   line-height: 1.2;
   letter-spacing: 0.02em;
 }
-.ticker__tag {
+/* A caution tape rather than a paler red: at a glance the two severities must
+   not be confusable, so the second one inverts to dark text. */
+.notice--notice {
+  background: var(--warn);
+  color: var(--warn-fg);
+}
+/* pinned: the bar stays put while the page scrolls. At most one may do this —
+   two would both claim top: 0 — and the generator honours only the first. */
+.notice--pinned {
+  position: sticky;
+  top: 0;
+  z-index: 45;
+}
+.notice__tag {
   flex: none;
   display: flex;
   align-items: center;
   gap: 0.45rem;
   margin: 0;
-  padding: 0 var(--s2) 0 var(--ticker-pad);
+  padding: 0 var(--s2) 0 var(--notice-pad);
   background: #0000002e;
   font-weight: 600;
   letter-spacing: 0.14em;
 }
-.ticker__pip {
+.notice__pip {
   flex: none;
   width: 6px;
   height: 6px;
   border-radius: 50%;
   background: currentColor;
 }
-.ticker__view {
+.notice__view {
   position: relative;
   flex: 1 1 auto;
   min-width: 0;
   display: flex;
   align-items: center;
+}
+/* --- the crawling kind ---------------------------------------------------- */
+.notice--scroll .notice__view {
   overflow: hidden;
   /* The crawl enters and leaves under a fade. That is the look, but it also
      covers the seam where the last duplicated copy meets the first. */
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 2.2rem, #000 calc(100% - 2.2rem), transparent);
   mask-image: linear-gradient(90deg, transparent, #000 2.2rem, #000 calc(100% - 2.2rem), transparent);
 }
-.ticker__track {
+.notice--scroll .notice__track {
   display: flex;
   width: max-content;
   will-change: transform;
-  /* --ticker-dur is measured in site.js from the real track width, so the
+  /* --notice-dur is measured in site.js from the real track width, so the
      notice travels at one speed on every viewport instead of one per screen. */
-  animation: ticker-crawl var(--ticker-dur, 26s) linear infinite;
+  animation: notice-crawl var(--notice-dur, 26s) linear infinite;
 }
-.ticker__item {
+.notice--scroll .notice__item {
   white-space: nowrap;
 }
 /* A dot rather than a character: the repeats are a crawl artifact, and text
    separators get read aloud by screen readers as punctuation. */
-.ticker__item::after {
+.notice--scroll .notice__item::after {
   content: "";
   display: inline-block;
   width: 5px;
@@ -350,15 +374,18 @@ hr {
   border-radius: 50%;
   background: #ffffff7a;
 }
+.notice--notice.notice--scroll .notice__item::after {
+  background: #0000004d;
+}
 /* The separator gap is sized against the marquee window, which collapses to
    ~220px on a phone while the notice itself stays ~206px wide — so the wide
    desktop gap would leave the bar briefly all gap and no text. */
 @media (max-width: 40rem) {
-  .ticker__item::after {
+  .notice--scroll .notice__item::after {
     margin-inline: 1.7rem;
   }
 }
-@keyframes ticker-crawl {
+@keyframes notice-crawl {
   from {
     transform: translateX(0);
   }
@@ -366,37 +393,62 @@ hr {
     transform: translateX(-50%);
   }
 }
-.ticker[data-paused="true"] .ticker__track {
+.notice[data-paused="true"] .notice__track {
   animation-play-state: paused;
 }
-.ticker__toggle {
+/* --- the still kind ------------------------------------------------------- */
+.notice--static .notice__view {
+  padding: 0.5rem var(--notice-pad) 0.5rem var(--s3);
+}
+/* when a close button follows, it owns the right-hand gutter instead — two
+   elements both padding to the page edge would push the text off it */
+.notice--static:has(.notice__close) .notice__view {
+  padding-right: var(--s3);
+}
+/* --- shared controls ------------------------------------------------------ */
+.notice__toggle,
+.notice__close {
   flex: none;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
   border: 0;
   border-left: 1px solid #ffffff33;
-  padding: 0 var(--ticker-pad) 0 var(--s3);
   background: #0000002e;
   color: inherit;
   font: inherit;
   cursor: pointer;
 }
-.ticker__toggle:hover {
+.notice--notice .notice__toggle,
+.notice--notice .notice__close {
+  border-left-color: #00000033;
+}
+.notice__toggle {
+  gap: 0.5rem;
+  padding: 0 var(--notice-pad) 0 var(--s3);
+}
+.notice__close {
+  justify-content: center;
+  padding: 0 var(--notice-pad) 0 var(--s3);
+  font-size: var(--t-base);
+  line-height: 1;
+}
+.notice__toggle:hover,
+.notice__close:hover {
   background: #0000004a;
 }
-.ticker__toggle:focus-visible {
+.notice__toggle:focus-visible,
+.notice__close:focus-visible {
   outline: 2px solid currentColor;
   outline-offset: -3px;
 }
-.ticker__ico {
+.notice__ico {
   position: relative;
   flex: none;
   width: 8px;
   height: 9px;
 }
-.ticker__ico::before,
-.ticker__ico::after {
+.notice__ico::before,
+.notice__ico::after {
   content: "";
   position: absolute;
   top: 0;
@@ -404,46 +456,51 @@ hr {
   width: 2px;
   background: currentColor;
 }
-.ticker__ico::before {
+.notice__ico::before {
   left: 0;
 }
-.ticker__ico::after {
+.notice__ico::after {
   right: 0;
 }
 /* pressed = paused, so the glyph shows what a click gives you back */
-.ticker[data-paused="true"] .ticker__ico {
+.notice[data-paused="true"] .notice__ico {
   width: 0;
   height: 0;
   border-left: 8px solid currentColor;
   border-top: 5px solid transparent;
   border-bottom: 5px solid transparent;
 }
-.ticker[data-paused="true"] .ticker__ico::before,
-.ticker[data-paused="true"] .ticker__ico::after {
+.notice[data-paused="true"] .notice__ico::before,
+.notice[data-paused="true"] .notice__ico::after {
   display: none;
 }
-.ticker__lbl--play {
+.notice__lbl--play {
   display: none;
 }
-.ticker[data-paused="true"] .ticker__lbl--pause {
+.notice[data-paused="true"] .notice__lbl--pause {
   display: none;
 }
-.ticker[data-paused="true"] .ticker__lbl--play {
+.notice[data-paused="true"] .notice__lbl--play {
   display: inline;
 }
+.notice__item a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
 @media (prefers-reduced-motion: reduce) {
-  .ticker__view {
+  .notice--scroll .notice__view {
     -webkit-mask-image: none;
     mask-image: none;
     justify-content: center;
   }
-  .ticker__track {
+  .notice--scroll .notice__track {
     animation: none;
   }
   /* site.js does not clone under reduced-motion; this drops the copy that the
      markup ships so the notice reads as one static line */
-  .ticker__item[aria-hidden="true"],
-  .ticker__toggle {
+  .notice--scroll .notice__item[aria-hidden="true"],
+  .notice__toggle {
     display: none;
   }
 }

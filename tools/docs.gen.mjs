@@ -145,10 +145,15 @@ function assetVersion(file) {
 }
 const CSS_V = assetVersion(join(ROOT, "assets", "style.css"));
 const JS_V = assetVersion(join(ROOT, "assets", "site.js"));
+const ADMIN_CSS_V = assetVersion(join(ROOT, "assets", "admin.css"));
+const ADMIN_JS_V = assetVersion(join(ROOT, "assets", "admin.js"));
 
 /* Pages that are written by hand but reference those assets. The generator
    keeps their query strings in step rather than leaving it to memory. */
-const HAND_WRITTEN = ["index.html", "fuai/index.html", "loment/index.html"];
+const HAND_WRITTEN = ["index.html", "fuai/index.html", "loment/index.html", "admin/index.html"];
+/* The notice is chrome on the pages a visitor reads. The admin page is a tool
+   and deliberately carries none, so it gets asset versions and nothing else. */
+const NOTICE_PAGES = new Set(["index.html", "fuai/index.html", "loment/index.html"]);
 
 /* -------------------------------------------------------------- helpers */
 
@@ -188,35 +193,103 @@ function parseFragment(raw) {
 
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-/* The red announcement bar. Generated rather than hand-written for the reason
-   the rest of the chrome is: one message, sixty-ish pages, and a date that
-   will move again. Retiring the notice means deleting this function, not
-   chasing the markup across the site. */
-const NOTICE = {
-  zh: "FujoOS公布日延期，以仓库发布为准",
-  en: "FujoOS release date postponed — the repository is authoritative",
-};
+/* ------------------------------------------------------- announcements */
+/* Read from content/announcements.json rather than hard-coded: the notice
+   changes often, and the admin page edits that file. Chrome, so it is written
+   once here and spliced into the hand-written pages between markers. */
+const LEVEL_CLASS = { alert: "notice--alert", notice: "notice--notice" };
 
-function ticker(indent = "    ") {
+function loadAnnouncements() {
+  const file = join(ROOT, "content", "announcements.json");
+  if (!existsSync(file)) return [];
+  const parsed = JSON.parse(readFileSync(file, "utf8"));
+  const today = new Date().toISOString().slice(0, 10);
+  let pinnedTaken = false;
+  return (parsed.announcements || [])
+    .filter((a) => {
+      if (!a.zh && !a.en) return false; // nothing to say
+      if (a.from && today < a.from) return false; // not yet
+      if (a.to && today > a.to) return false; // expired
+      return true;
+    })
+    .map((a) => {
+      /* Only the first pinned bar is honoured: two of them would both claim
+         top: 0 and overlap. The admin page refuses to author the second. */
+      const pinned = Boolean(a.pinned) && !pinnedTaken;
+      if (pinned) pinnedTaken = true;
+      return { ...a, pinned };
+    });
+}
+
+const ANNOUNCEMENTS = loadAnnouncements();
+
+function announcement(a, indent) {
   const i = indent;
-  const item = (hidden) =>
-    `${i}      <span class="ticker__item"${hidden ? ' aria-hidden="true"' : ""} data-zh="${esc(
-      NOTICE.zh
-    )}" data-en="${esc(NOTICE.en)}">${esc(NOTICE.zh)}</span>`;
-  return `${i}<div class="ticker" role="note" data-ticker data-paused="false">
-${i}  <p class="ticker__tag"><span class="ticker__pip" aria-hidden="true"></span><span data-zh="公告" data-en="Notice">公告</span></p>
-${i}  <div class="ticker__view">
-${i}    <div class="ticker__track">
+  const zh = a.zh || a.en;
+  const en = a.en || zh;
+  const level = LEVEL_CLASS[a.level] || LEVEL_CLASS.alert;
+  const scroll = a.mode === "scroll";
+  const cls = ["notice", level, scroll ? "notice--scroll" : "notice--static"];
+  if (a.pinned) cls.push("notice--pinned");
+
+  const item = (hidden) => {
+    const attrs = `${hidden ? ' aria-hidden="true"' : ""} data-zh="${esc(zh)}" data-en="${esc(en)}"`;
+    const inner = a.href
+      ? `<a href="${esc(a.href)}">${esc(zh)}</a>`
+      : esc(zh);
+    return `${i}      <span class="notice__item"${attrs}>${inner}</span>`;
+  };
+
+  const body = scroll
+    ? `${i}  <div class="notice__view">
+${i}    <div class="notice__track">
 ${item(false)}
 ${item(true)}
 ${i}    </div>
 ${i}  </div>
-${i}  <button class="ticker__toggle" type="button" data-ticker-toggle aria-pressed="false">
-${i}    <span class="ticker__ico" aria-hidden="true"></span>
-${i}    <span class="ticker__lbl ticker__lbl--pause" data-zh="暂停" data-en="Pause">暂停</span>
-${i}    <span class="ticker__lbl ticker__lbl--play" data-zh="继续" data-en="Play">继续</span>
-${i}  </button>
+${i}  <button class="notice__toggle" type="button" data-ticker-toggle aria-pressed="false">
+${i}    <span class="notice__ico" aria-hidden="true"></span>
+${i}    <span class="notice__lbl notice__lbl--pause" data-zh="暂停" data-en="Pause">暂停</span>
+${i}    <span class="notice__lbl notice__lbl--play" data-zh="继续" data-en="Play">继续</span>
+${i}  </button>`
+    : `${i}  <p class="notice__view notice__view--static"><span class="notice__item">${
+        a.href ? `<a href="${esc(a.href)}">${esc(zh)}</a>` : esc(zh)
+      }</span></p>`;
+
+  const close = a.dismissible
+    ? `\n${i}  <button class="notice__close" type="button" data-notice-close aria-label="关闭公告" data-zh-aria="关闭公告" data-en-aria="Dismiss this notice">×</button>`
+    : "";
+
+  return `${i}<div class="${cls.join(" ")}" role="note" data-notice data-notice-id="${esc(
+    a.id || ""
+  )}"${scroll ? ' data-paused="false"' : ""}>
+${i}  <p class="notice__tag"><span class="notice__pip" aria-hidden="true"></span><span data-zh="公告" data-en="Notice">公告</span></p>
+${body}${close}
 ${i}</div>`;
+}
+
+/* Every active announcement, in declared order.
+
+   The restore script is emitted inline, right after the bars and before the
+   rest of the document: a dismissed notice has to be gone before the first
+   paint, and site.js does not run until the end of <body>. Removing it there
+   would show the bar for a frame first. */
+function noticeBlock(indent = "    ") {
+  if (!ANNOUNCEMENTS.length) return "";
+  const bars = ANNOUNCEMENTS.map((a) => announcement(a, indent)).join("\n");
+  if (!ANNOUNCEMENTS.some((a) => a.dismissible)) return bars;
+  return `${bars}
+${indent}<script>
+${indent}  (function () {
+${indent}    var gone = [];
+${indent}    try { gone = JSON.parse(localStorage.getItem("fujo.notice") || "[]"); } catch (e) {}
+${indent}    if (!gone.length) return;
+${indent}    var bars = document.querySelectorAll("[data-notice-id]");
+${indent}    for (var i = 0; i < bars.length; i++) {
+${indent}      if (gone.indexOf(bars[i].getAttribute("data-notice-id")) > -1) bars[i].remove();
+${indent}    }
+${indent}  })();
+${indent}</script>`;
 }
 
 /* Top nav. `current` is the href of the page being rendered, so the marker
@@ -392,7 +465,7 @@ ${headBlock({ titleZh, desc: meta.desc || "", pagePath, up })}
   <body>
     <a class="skip" href="#main" data-zh="跳到主要内容" data-en="Skip to content">跳到主要内容</a>
 
-${ticker()}
+${noticeBlock()}
 
     <div class="banner" role="note">
       <div class="banner__inner">
@@ -560,7 +633,7 @@ ${headBlock({ titleZh, desc, pagePath, up, type: "article" })}
   <body>
     <a class="skip" href="#main" data-zh="跳到主要内容" data-en="Skip to content">跳到主要内容</a>
 
-${ticker()}
+${noticeBlock()}
 
     <header class="nav">
       <div class="wrap nav__inner">
@@ -710,23 +783,33 @@ ${items}
   const TICKER_MARKERS = /([ \t]*)<!-- ticker:start -->[\s\S]*?<!-- ticker:end -->/;
   for (const name of HAND_WRITTEN) {
     const f = join(ROOT, name);
-    const s = readFileSync(f, "utf8");
-    /* Delimited rather than pattern-matched: the notice is chrome, so it is
-       written once above and spliced in here, and the anchors make removing it
-       later a one-line change. A page that quietly lost its markers would
-       silently lose the notice, so that is a build failure, not a no-op. */
-    if (!TICKER_MARKERS.test(s)) {
-      problems.push(`${name}: missing <!-- ticker:start --> / <!-- ticker:end --> markers`);
+    if (!existsSync(f)) {
+      problems.push(`missing hand-written page: ${name}`);
       continue;
     }
-    const next = s
+    const s = readFileSync(f, "utf8");
+    let next = s
       .replace(/(assets\/style\.css\?v=)[0-9a-f]+/g, `$1${CSS_V}`)
       .replace(/(assets\/site\.js\?v=)[0-9a-f]+/g, `$1${JS_V}`)
-      .replace(TICKER_MARKERS, (m, indent) =>
-        `${indent}<!-- ticker:start -->\n${ticker(indent)}\n${indent}<!-- ticker:end -->`
+      .replace(/(assets\/admin\.css\?v=)[0-9a-f]+/g, `$1${ADMIN_CSS_V}`)
+      .replace(/(assets\/admin\.js\?v=)[0-9a-f]+/g, `$1${ADMIN_JS_V}`);
+    if (NOTICE_PAGES.has(name)) {
+      /* Delimited rather than pattern-matched: the notice is chrome, so it is
+         written once above and spliced in here, and the anchors make removing
+         it later a one-line change. A page that quietly lost its markers would
+         silently lose the notice, so that is a build failure, not a no-op. */
+      if (!TICKER_MARKERS.test(s)) {
+        problems.push(`${name}: missing <!-- ticker:start --> / <!-- ticker:end --> markers`);
+        continue;
+      }
+      next = next.replace(
+        TICKER_MARKERS,
+        (m, indent) =>
+          `${indent}<!-- ticker:start -->\n${noticeBlock(indent)}\n${indent}<!-- ticker:end -->`
       );
+    }
     if (next !== s) {
-      if (check) problems.push(`${name}: asset version or ticker out of date`);
+      if (check) problems.push(`${name}: asset version or notice out of date`);
       else writeFileSync(f, next);
     }
   }
@@ -754,7 +837,9 @@ ${items}
       .join("\n") +
     `\n</urlset>\n`;
 
-  const robots = `User-agent: *\nAllow: /\n\nSitemap: ${SITE}sitemap.xml\n`;
+  /* /admin/ is unlisted and carries noindex, but there is no reason to let a
+     crawler fetch a control panel at all. It is not in the sitemap either. */
+  const robots = `User-agent: *\nAllow: /\nDisallow: /admin/\n\nSitemap: ${SITE}sitemap.xml\n`;
 
   for (const [file, content] of [
     [join(ROOT, "sitemap.xml"), sitemap],

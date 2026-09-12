@@ -195,7 +195,7 @@
   var years = document.querySelectorAll("[data-year]");
   for (var y = 0; y < years.length; y++) years[y].textContent = new Date().getFullYear();
 
-  /* ---- announcement ticker ---- */
+  /* ---- announcements ---- */
   /* A crawl only loops without a visible gap when the track covers the window
      twice over, and how many copies of the notice that takes depends on the
      reader's viewport — nothing the build can know. So the copies are measured
@@ -205,12 +205,12 @@
   var crawlOK = !(
     window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches
   );
-  var tickerNodes = document.querySelectorAll("[data-ticker]");
-  for (var ti = 0; ti < tickerNodes.length; ti++) {
+  var noticeNodes = document.querySelectorAll("[data-notice]");
+  for (var ti = 0; ti < noticeNodes.length; ti++) {
     (function (root) {
-      var view = root.querySelector(".ticker__view");
-      var track = root.querySelector(".ticker__track");
-      var item = track && track.querySelector(".ticker__item");
+      var view = root.querySelector(".notice__view");
+      var track = root.querySelector(".notice__track");
+      var item = track && track.querySelector(".notice__item");
       var toggle = root.querySelector("[data-ticker-toggle]");
 
       function build() {
@@ -235,7 +235,7 @@
         } while (track.scrollWidth - added < need && guard < 24);
         var distance = track.scrollWidth / 2;
         if (distance > 0) {
-          track.style.setProperty("--ticker-dur", (distance / CRAWL_PX_PER_S).toFixed(1) + "s");
+          track.style.setProperty("--notice-dur", (distance / CRAWL_PX_PER_S).toFixed(1) + "s");
         }
       }
       build();
@@ -257,7 +257,27 @@
           toggle.setAttribute("aria-pressed", paused ? "false" : "true");
         });
       }
-    })(tickerNodes[ti]);
+    })(noticeNodes[ti]);
+  }
+
+  /* ---- dismissing a notice ---- */
+  /* The bar is restored-before-paint by an inline script the generator emits
+     next to it; this only records the decision and takes the bar away. */
+  var closeBtns = document.querySelectorAll("[data-notice-close]");
+  for (var ni = 0; ni < closeBtns.length; ni++) {
+    closeBtns[ni].addEventListener("click", function () {
+      var bar = this.closest("[data-notice-id]");
+      if (!bar) return;
+      var id = bar.getAttribute("data-notice-id");
+      try {
+        var gone = JSON.parse(localStorage.getItem("fujo.notice") || "[]");
+        if (gone.indexOf(id) < 0) gone.push(id);
+        localStorage.setItem("fujo.notice", JSON.stringify(gone));
+      } catch (e) {
+        /* storage unavailable: the bar still goes away for this page */
+      }
+      bar.remove();
+    });
   }
 
   /* apply saved language now that content above is parsed */
