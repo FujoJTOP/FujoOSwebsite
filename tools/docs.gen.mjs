@@ -145,15 +145,12 @@ function assetVersion(file) {
 }
 const CSS_V = assetVersion(join(ROOT, "assets", "style.css"));
 const JS_V = assetVersion(join(ROOT, "assets", "site.js"));
-const ADMIN_CSS_V = assetVersion(join(ROOT, "assets", "admin.css"));
-const ADMIN_JS_V = assetVersion(join(ROOT, "assets", "admin.js"));
 
 /* Pages that are written by hand but reference those assets. The generator
-   keeps their query strings in step rather than leaving it to memory. */
-const HAND_WRITTEN = ["index.html", "fuai/index.html", "loment/index.html", "admin/index.html"];
-/* The notice is chrome on the pages a visitor reads. The admin page is a tool
-   and deliberately carries none, so it gets asset versions and nothing else. */
-const NOTICE_PAGES = new Set(["index.html", "fuai/index.html", "loment/index.html"]);
+   keeps their query strings in step rather than leaving it to memory. The
+   publishing console is not one of them: it lives in tools/, is served by
+   tools/admin.mjs, and is never part of the built site. */
+const HAND_WRITTEN = ["index.html", "fuai/index.html", "loment/index.html"];
 
 /* -------------------------------------------------------------- helpers */
 
@@ -788,26 +785,22 @@ ${items}
       continue;
     }
     const s = readFileSync(f, "utf8");
-    let next = s
+    /* Delimited rather than pattern-matched: the notice is chrome, so it is
+       written once above and spliced in here, and the anchors make removing
+       it later a one-line change. A page that quietly lost its markers would
+       silently lose the notice, so that is a build failure, not a no-op. */
+    if (!TICKER_MARKERS.test(s)) {
+      problems.push(`${name}: missing <!-- ticker:start --> / <!-- ticker:end --> markers`);
+      continue;
+    }
+    const next = s
       .replace(/(assets\/style\.css\?v=)[0-9a-f]+/g, `$1${CSS_V}`)
       .replace(/(assets\/site\.js\?v=)[0-9a-f]+/g, `$1${JS_V}`)
-      .replace(/(assets\/admin\.css\?v=)[0-9a-f]+/g, `$1${ADMIN_CSS_V}`)
-      .replace(/(assets\/admin\.js\?v=)[0-9a-f]+/g, `$1${ADMIN_JS_V}`);
-    if (NOTICE_PAGES.has(name)) {
-      /* Delimited rather than pattern-matched: the notice is chrome, so it is
-         written once above and spliced in here, and the anchors make removing
-         it later a one-line change. A page that quietly lost its markers would
-         silently lose the notice, so that is a build failure, not a no-op. */
-      if (!TICKER_MARKERS.test(s)) {
-        problems.push(`${name}: missing <!-- ticker:start --> / <!-- ticker:end --> markers`);
-        continue;
-      }
-      next = next.replace(
+      .replace(
         TICKER_MARKERS,
         (m, indent) =>
           `${indent}<!-- ticker:start -->\n${noticeBlock(indent)}\n${indent}<!-- ticker:end -->`
       );
-    }
     if (next !== s) {
       if (check) problems.push(`${name}: asset version or notice out of date`);
       else writeFileSync(f, next);
@@ -837,9 +830,11 @@ ${items}
       .join("\n") +
     `\n</urlset>\n`;
 
-  /* /admin/ is unlisted and carries noindex, but there is no reason to let a
-     crawler fetch a control panel at all. It is not in the sitemap either. */
-  const robots = `User-agent: *\nAllow: /\nDisallow: /admin/\n\nSitemap: ${SITE}sitemap.xml\n`;
+  /* tools/ holds the generator and the local publishing console. Pages serves
+     it because the whole repository is the site, but it is not part of the
+     site: nothing links to it and it should not be indexed. The real console
+     runs on 127.0.0.1 and is never published at all. */
+  const robots = `User-agent: *\nAllow: /\nDisallow: /tools/\n\nSitemap: ${SITE}sitemap.xml\n`;
 
   for (const [file, content] of [
     [join(ROOT, "sitemap.xml"), sitemap],

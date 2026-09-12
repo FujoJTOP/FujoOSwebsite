@@ -4,76 +4,33 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex, nofollow" />
-    <title>内容管理 — FujoOS</title>
+    <title>发布台 — FujoOS</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="../assets/style.css?v=b7b288b3" />
-    <link rel="stylesheet" href="../assets/admin.css?v=ae57e29d" />
-    <link rel="icon" href="../favicon.ico" sizes="48x48" />
-    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" sizes="any" />
-    <link rel="icon" type="image/png" href="../assets/favicon-32.png" sizes="32x32" />
-    <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png" />
+    <link rel="stylesheet" href="assets/style.css" />
+    <link rel="stylesheet" href="admin-ui.css" />
+    <link rel="icon" href="assets/favicon.svg" sizes="any" />
   </head>
   <body>
     <div class="adm">
       <header class="adm__head">
-        <h1 class="adm__title">内容管理</h1>
+        <h1 class="adm__title">发布台</h1>
         <div class="adm__who">
-          <span class="adm__dot" data-state="idle"></span>
-          <span data-conn>未连接</span>
+          <span class="adm__dot" data-state="ok"></span>
+          <span data-repo>本机</span>
         </div>
       </header>
 
-      <!-- ============================================================ 连接 -->
-      <section>
-        <h2>连接</h2>
-        <p class="adm__hint">
-          需要一个只对这个仓库有写入权限的 GitHub 细粒度令牌（Fine-grained token），权限只需
-          <code>Contents: Read and write</code>。不要用 classic token——那等于整个账号的写权限。
-          令牌不加密，只存在这台设备的浏览器里，也只会发往 <code>api.github.com</code>。
-          <strong>任何拿到它的人都能写这个仓库。</strong>
-        </p>
-        <p class="adm__hint">
-          还有一条容易漏掉：<strong>同源不按路径隔离</strong>。
-          <code>fujojtop.github.io</code> 下所有站点共享同一个 origin，所以这个账号里
-          <em>任何一个</em> Pages 站上运行的脚本，都能读到存在这里的令牌。眼下另一个站是零脚本的静态页，
-          所以这条还不成立——但它成立与否，取决于「永远不给同源站点加第三方脚本」，
-          而那是一条会一直需要遵守的约束。
-          <br />因此：给令牌设一个过期时间；不需要长期挂着时就<strong>不要勾「记住」</strong>，
-          这样它只活到这个标签页关闭为止。
-        </p>
-        <label class="field">
-          <span class="field__label">GitHub 令牌</span>
-          <input
-            class="input"
-            type="password"
-            data-token
-            autocomplete="off"
-            spellcheck="false"
-            placeholder="github_pat_…"
-          />
-        </label>
-        <label class="check">
-          <input type="checkbox" data-remember />
-          记住这台设备（不勾则关闭标签页即失效）
-        </label>
-        <div class="adm__actions">
-          <button class="btn btn--primary" type="button" data-connect>连接</button>
-          <button class="btn btn--ghost" type="button" data-forget>清除令牌</button>
-        </div>
-        <p class="adm__status" data-conn-status></p>
-      </section>
-
       <!-- ============================================================ 新闻 -->
-      <section data-needs-auth hidden>
+      <section>
         <h2>新闻</h2>
         <p class="adm__hint">
-          一篇新闻是一个片段文件，正文直接写 HTML（站点其余部分也是这样）。保存后进入待发布清单，
-          在页面底部统一提交。
+          一篇新闻是一个片段文件，正文直接写 HTML（站点其余部分也是这样）。改动先落在这台机器的工作区，
+          在底部确认后再提交推送。
         </p>
         <div data-news-list></div>
         <div class="adm__actions">
@@ -114,13 +71,12 @@
             <textarea class="textarea" data-f-body spellcheck="false"></textarea>
             <span class="field__note">
               这是片段正文，不是整页。可用 <code>&lt;h2&gt;</code>、<code>&lt;p&gt;</code>、
-              <code>&lt;strong&gt;</code>、<code>&lt;code&gt;</code>，以及两端文字用
-              <code>data-zh</code> / <code>data-en</code>。
+              <code>&lt;strong&gt;</code>、<code>&lt;code&gt;</code>。
             </span>
           </label>
           <div class="adm__actions">
             <button class="btn" type="button" data-news-preview>预览</button>
-            <button class="btn btn--primary" type="button" data-news-stage>暂存这一篇</button>
+            <button class="btn btn--primary" type="button" data-news-save>保存这一篇</button>
             <button class="btn btn--ghost" type="button" data-news-cancel>取消</button>
           </div>
           <div class="adm__preview" data-news-preview-box hidden><iframe data-news-frame title="预览"></iframe></div>
@@ -129,7 +85,7 @@
       </section>
 
       <!-- ============================================================ 公告 -->
-      <section data-needs-auth hidden>
+      <section>
         <h2>公告</h2>
         <p class="adm__hint">
           公告出现在每一页的最顶端。红色用于需要立刻知道的，黄色是提示。滚动用于长句子，静止用于短句。
@@ -138,27 +94,38 @@
         <div data-ann-list></div>
         <div class="adm__actions">
           <button class="btn" type="button" data-ann-add>添加一条</button>
-          <button class="btn btn--primary" type="button" data-ann-stage>暂存公告</button>
+          <button class="btn btn--primary" type="button" data-ann-save>保存公告</button>
         </div>
         <p class="adm__status" data-ann-status></p>
       </section>
 
       <!-- ============================================================ 发布 -->
-      <section data-needs-auth hidden>
+      <section>
         <h2>发布</h2>
         <p class="adm__hint">
-          暂存的改动列在下面。确认后提交到 <code>main</code>；CI 会重新生成站点，约半分钟后线上生效。
-          每个文件是一次提交。
+          确认后：跑一遍生成器 → 提交 → 用这台机器上的 git 凭据推送。CI 随之让线上生效。
+          <strong>能推送到这个仓库的人才能发布</strong>——这由 GitHub 的协作者设置决定，不在这里。
         </p>
-        <div data-pending></div>
+        <p class="adm__hint">
+          <strong>让别人也能发：</strong>在 GitHub 仓库的 Settings → Collaborators 里把对方加成协作者。
+          然后他 clone 仓库，跑 <code>node tools/admin.mjs</code> 就行——工具在仓库里，不需要另外发给他。
+          <br />不需要发压缩包：<em>这个工具本身不含任何凭据</em>，能发稿的唯一条件是仓库写权限。
+          有写权限的人没有工具也能发（直接改文件 push 就行）；没有写权限的人拿到工具也发不了。
+          <br />所以「只有我们几个能发」这句话，落到实处就是「协作者名单里只有我们几个」。
+        </p>
+        <div data-diff></div>
+        <label class="field">
+          <span class="field__label">提交信息</span>
+          <input class="input" type="text" data-message placeholder="留空则用默认信息" />
+        </label>
         <div class="adm__actions">
-          <button class="btn btn--primary" type="button" data-publish>提交并推送</button>
-          <button class="btn btn--ghost" type="button" data-discard>全部丢弃</button>
+          <button class="btn btn--primary" type="button" data-publish>生成并推送</button>
+          <button class="btn btn--ghost" type="button" data-refresh>重新读取</button>
         </div>
         <p class="adm__status" data-publish-status></p>
       </section>
     </div>
 
-    <script src="../assets/admin.js?v=70651449"></script>
+    <script src="admin-ui.js"></script>
   </body>
 </html>
