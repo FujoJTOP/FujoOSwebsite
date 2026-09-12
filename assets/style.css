@@ -590,8 +590,9 @@ hr {
   border: 1px solid var(--rule);
   border-radius: var(--radius);
   overflow: hidden;
-  font-family: var(--mono);
+  font-family: var(--sans);
   font-size: var(--t-xs);
+  font-weight: 500;
 }
 .lang button {
   appearance: none;
@@ -619,8 +620,8 @@ hr {
   border-radius: var(--radius);
   color: var(--fg);
   font: inherit;
-  font-family: var(--mono);
   font-size: var(--t-xs);
+  font-weight: 500;
   padding: 0.32rem 0.55rem;
   cursor: pointer;
 }
@@ -719,7 +720,9 @@ hr {
 
 .hero {
   position: relative;
-  padding-block: var(--s6) var(--s6);
+  /* More air above the fold than below it: the first screen now carries the
+     ticker and the nav and nothing else, so the headline gets to sit alone. */
+  padding-block: clamp(3.4rem, 9vw, 7.6rem) var(--s6);
   border-bottom: 1px solid var(--rule);
   overflow: hidden;
 }
@@ -747,7 +750,11 @@ hr {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  font-family: var(--mono);
+  /* Buttons, footer headings and the language switch are product UI, not
+     notation. Mono there is what makes a page read as a terminal; it stays on
+     code, IDs, numbers and status tags, where it means something. */
+  font-family: var(--sans);
+  font-weight: 500;
   font-size: var(--t-sm);
   letter-spacing: 0.01em;
   padding: 0.62rem 1rem;
@@ -771,6 +778,27 @@ hr {
   background: var(--steel);
   border-color: var(--steel);
   color: var(--bg);
+}
+/* Tertiary entry points. These were three more buttons, which put five
+   equal-weight actions in the first screen and left the hero with no focus. */
+.hero__links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem;
+  margin-top: var(--s3);
+  font-size: var(--t-sm);
+  color: var(--fg-3);
+}
+.hero__links a {
+  color: var(--fg-2);
+  padding-bottom: 1px;
+  border-bottom: 1px solid transparent;
+  transition: color 0.15s var(--ease), border-color 0.15s var(--ease);
+}
+.hero__links a:hover {
+  color: var(--fg);
+  border-bottom-color: var(--steel);
 }
 .btn--ghost {
   background: transparent;
@@ -1489,12 +1517,12 @@ pre .s {
   }
 }
 .foot h4 {
-  font-family: var(--mono);
-  font-size: var(--t-xs);
-  color: var(--fg-3);
-  letter-spacing: 0.04em;
+  font-family: var(--sans);
+  font-size: var(--t-sm);
+  color: var(--fg-2);
+  letter-spacing: 0.01em;
   margin-bottom: 0.7rem;
-  font-weight: 500;
+  font-weight: 600;
 }
 .foot a {
   display: block;

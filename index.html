@@ -60,7 +60,7 @@
       href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="assets/style.css?v=0d7987b1" />
+    <link rel="stylesheet" href="assets/style.css?v=e0a425e4" />
     <link rel="icon" href="favicon.ico" sizes="48x48" />
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" sizes="any" />
     <link rel="icon" type="image/png" href="assets/favicon-32.png" sizes="32x32" />
@@ -93,37 +93,6 @@
       </button>
     </div>
     <!-- ticker:end -->
-
-    <!-- kernel banner: real telemetry, worn as the site's status line -->
-    <div class="banner" role="note">
-      <div class="banner__inner">
-        <b>FujoOS</b>
-        <span class="sep" aria-hidden="true">|</span>
-        <span data-zh="x86_64 · 零第三方依赖" data-en="x86_64 · no third-party deps"
-          >x86_64 · 零第三方依赖</span
-        >
-        <span class="sep" aria-hidden="true">|</span>
-        <span
-          data-zh="回归 59/59 (TCG) · 49/51 (WHPX/KVM)"
-          data-en="regression 59/59 (TCG) · 49/51 (WHPX/KVM)"
-          >回归 59/59 (TCG) · 49/51 (WHPX/KVM)</span
-        >
-        <span class="sep" aria-hidden="true">|</span>
-        <span
-          data-zh="契约 46 原语 · 0 漂移"
-          data-en="contract 46 primitives · 0 drift"
-          >契约 46 原语 · 0 漂移</span
-        >
-        <span class="cadence"
-          ><span class="dot" aria-hidden="true"></span
-          ><span
-            data-zh="τ* = [0.429, 0.454) · τ 45/35"
-            data-en="τ* = [0.429, 0.454) · τ 45/35"
-            >τ* = [0.429, 0.454) · τ 45/35</span
-          ></span
-        >
-      </div>
-    </div>
 
     <header class="nav">
       <div class="wrap nav__inner">
@@ -178,21 +147,12 @@
             <h1 class="display fade-step" style="--delay: 0.02s" data-zh-html="模型只提供<em class=&quot;propose&quot;>提示</em>，<br />内核决定<em class=&quot;decide&quot;>执行</em>。" data-en-html="The model offers <em class=&quot;propose&quot;>hints</em>.<br />The kernel decides what <em class=&quot;decide&quot;>runs</em>.">
               模型只提供<em class="propose">提示</em>，<br />内核决定<em class="decide">执行</em>。
             </h1>
-            <p class="lede fade-step" style="--delay: 0.1s; margin-top: 1.4rem" data-zh="FujoOS 是一套从零写起的 x86_64 操作系统：内核、驱动、窗口系统、文件系统、网络栈与编译器全部自研，零第三方依赖、无 std。大语言模型可以作为系统部件接入内核，接受内核的结构化视野并提出动作建议——而每一个动作都要穿过权限域、留下审计、可被撤销。" data-en="FujoOS is an x86_64 operating system written from scratch: kernel, drivers, window system, filesystem, network stack and compiler are all built here, with no third-party dependencies and no std. A language model can be attached to the kernel as a system component — it receives a structured view of the machine and proposes actions, and every proposed action passes through a permission domain, is audited, and can be revoked.">
-              FujoOS 是一套从零写起的 x86_64 操作系统：内核、驱动、窗口系统、文件系统、网络栈与编译器全部自研，零第三方依赖、无 std。大语言模型可以作为系统部件接入内核，接受内核的结构化视野并提出动作建议——而每一个动作都要穿过权限域、留下审计、可被撤销。
+            <p class="lede fade-step" style="--delay: 0.1s; margin-top: 1.4rem" data-zh="从零写起的 x86_64 操作系统，零第三方依赖、无 std。大语言模型是它的一个系统部件——每个动作都要穿过内核强制的权限域，留下审计，可以被撤销。" data-en="An x86_64 operating system written from scratch, with no third-party dependencies and no std. A language model is one of its system components — every action crosses a kernel-enforced permission domain, is audited, and can be revoked.">
+              从零写起的 x86_64 操作系统，零第三方依赖、无 std。大语言模型是它的一个系统部件——每个动作都要穿过内核强制的权限域，留下审计，可以被撤销。
             </p>
             <div class="hero__actions fade-step" style="--delay: 0.18s">
               <button
                 class="btn btn--primary"
-                type="button"
-                data-modal-open="use-fujoos"
-                data-zh="立刻使用 FujoOS For Free！"
-                data-en="Get FujoOS — for free"
-              >
-                立刻使用 FujoOS For Free！
-              </button>
-              <button
-                class="btn"
                 type="button"
                 data-modal-open="fujoos-download"
                 data-zh="立刻下载 FujoOS 开源版本"
@@ -200,12 +160,23 @@
               >
                 立刻下载 FujoOS 开源版本
               </button>
+              <button
+                class="btn"
+                type="button"
+                data-modal-open="use-fujoos"
+                data-zh="立刻使用 FujoOS For Free！"
+                data-en="Get FujoOS — for free"
+              >
+                立刻使用 FujoOS For Free！
+              </button>
             </div>
-            <div class="hero__actions fade-step" style="--delay: 0.22s; margin-top: 0.55rem">
-              <a class="btn btn--ghost" href="docs/start/index.html" data-zh="构建并运行" data-en="Build and run">构建并运行</a>
-              <a class="btn btn--ghost" href="fuai.html" data-zh="FUAI 安全体系" data-en="The FUAI safety system">FUAI 安全体系</a>
-              <a class="btn btn--ghost" href="https://zenodo.org/records/22352904" rel="noopener" data-zh="预印本 ↗" data-en="Preprint ↗">预印本 ↗</a>
-            </div>
+            <p class="hero__links fade-step" style="--delay: 0.26s">
+              <a href="docs/start/index.html" data-zh="构建并运行" data-en="Build and run">构建并运行</a>
+              <span aria-hidden="true">·</span>
+              <a href="fuai.html" data-zh="FUAI 安全体系" data-en="The FUAI safety system">FUAI 安全体系</a>
+              <span aria-hidden="true">·</span>
+              <a href="https://zenodo.org/records/22352904" rel="noopener" data-zh="预印本 ↗" data-en="Preprint ↗">预印本 ↗</a>
+            </p>
           </div>
 
           <!-- the envelope: the single memorable element -->
