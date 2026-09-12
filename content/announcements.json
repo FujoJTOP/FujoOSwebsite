@@ -12,18 +12,6 @@
       "href": "",
       "from": "",
       "to": ""
-    },
-    {
-      "id": "notice-2026-09-12",
-      "level": "notice",
-      "mode": "scroll",
-      "pinned": false,
-      "dismissible": false,
-      "zh": "我们正在确认 Loment 源代码的问题",
-      "en": "We are checking the issue with the Loment source code",
-      "href": "",
-      "from": "",
-      "to": ""
     }
   ]
 }
