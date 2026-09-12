@@ -55,7 +55,7 @@
         <span class="sep">|</span>
         <span data-zh="0.1.3 Alpha" data-en="0.1.3 Alpha">0.1.3 Alpha</span>
         <span class="sep">|</span>
-        <span data-zh="里程碑 79/100 完成 · 14 部分 · 2 未达 · 5 未开始" data-en="milestones 79/100 done · 14 partial · 2 not met · 5 not started">里程碑 79/100 完成 · 14 部分 · 2 未达 · 5 未开始</span>
+        <span data-zh="里程碑 86/100 完成 · 9 部分 · 1 未达 · 4 未开始" data-en="milestones 86/100 done · 9 partial · 1 not met · 4 not started">里程碑 86/100 完成 · 9 部分 · 1 未达 · 4 未开始</span>
         <span class="sep">|</span>
         <span data-zh="自举三阶段定点：IR 1002385 B 逐字节相同" data-en="three-stage self-host fixpoint: IR byte-identical at 1002385 B">自举三阶段定点：IR 1002385 B 逐字节相同</span>
         <span class="cadence"
@@ -353,20 +353,20 @@ export fn flush(req: FlushReq) contract(hex64) {
 
           <div class="stats" style="margin-top: var(--s4)">
             <div class="stat">
-              <span class="stat__v">79</span>
+              <span class="stat__v">86</span>
               <span class="stat__k" data-zh="完成" data-en="done">完成</span>
             </div>
             <div class="stat">
-              <span class="stat__v">14</span>
+              <span class="stat__v">9</span>
               <span class="stat__k" data-zh="部分完成（边界在文档里逐条写明）" data-en="partially done (each boundary written down)">部分完成（边界在文档里逐条写明）</span>
             </div>
             <div class="stat">
-              <span class="stat__v">2</span>
-              <span class="stat__k" data-zh="未达：M96 语言 1.0 冻结、M100 发布审计" data-en="not met: M96 language 1.0 freeze, M100 release audit">未达：M96 语言 1.0 冻结、M100 发布审计</span>
+              <span class="stat__v">1</span>
+              <span class="stat__k" data-zh="未达：M100 —— 1.0 的发布与外部审计" data-en="not met: M100 — the 1.0 release and its external audit">未达：M100 —— 1.0 的发布与外部审计</span>
             </div>
             <div class="stat">
-              <span class="stat__v">5</span>
-              <span class="stat__k" data-zh="未开始（自举性能优化等）" data-en="not started (self-host performance, and others)">未开始（自举性能优化等）</span>
+              <span class="stat__v">4</span>
+              <span class="stat__k" data-zh="未开始：全部在内核侧（撤销实施、A1–A4 断言、域宽接口、域模型对齐）" data-en="not started: all kernel-side (revocation enforcement, A1–A4 assertions, the width interface, domain-model alignment)">未开始：全部在内核侧（撤销实施、A1–A4 断言、域宽接口、域模型对齐）</span>
             </div>
           </div>
 
@@ -382,8 +382,8 @@ export fn flush(req: FlushReq) contract(hex64) {
             </div>
             <div>
               <h3 class="h3" data-zh="止损线写在前面" data-en="The stop-loss is written down in advance">止损线写在前面</h3>
-              <p class="small muted" data-zh-html="P2 若三个月内无法与 Rust 原版逐位对齐，就回退到“L0 + 代码生成”路线，L1 归档。这条线在立项文档里就写定了，而不是事后追认。<br /><br />仍差的主要两件事：自举编译器的符号表是<b>全单元扁平</b>的，兄弟模块同名私有函数会撞名；子集检查器会把合法程序判错，需要先扩展到能放行全部语料才能当闸门。" data-en-html="If P2 cannot align bit-for-bit with the Rust original within three months, the project falls back to “L0 + code generation” and archives L1. That line was fixed in the founding document, not added retroactively.<br /><br />Two things remain: the self-hosted compiler's symbol table is <b>flat across units</b>, so identically named private functions in sibling modules collide; and the subset checker rejects legal programs, so it must be widened to admit the full corpus before it can serve as a gate.">
-                P2 若三个月内无法与 Rust 原版逐位对齐，就回退到“L0 + 代码生成”路线，L1 归档。这条线在立项文档里就写定了，而不是事后追认。<br /><br />仍差的主要两件事：自举编译器的符号表是<b>全单元扁平</b>的，兄弟模块同名私有函数会撞名；子集检查器会把合法程序判错，需要先扩展到能放行全部语料才能当闸门。
+              <p class="small muted" data-zh-html="P2 若三个月内无法与 Rust 原版逐位对齐，就回退到“L0 + 代码生成”路线，L1 归档。这条线在立项文档里就写定了，而不是事后追认。<br /><br />当时担心的两件事后来都过了：自举 parser 在全语料上与 Python 版逐字符一致（42/42），检查器的规则等价也到了 63/63。所以 L1 没有触发这条止损线。" data-en-html="If P2 cannot align bit-for-bit with the Rust original within three months, the project falls back to “L0 + code generation” and archives L1. That line was fixed in the founding document, not added retroactively.<br /><br />Both things that worried us at the time have since passed: the self-hosted parser matches the Python one character for character across the whole corpus (42/42), and the checker's rules are equivalent 63/63. So L1 never tripped the stop-loss.">
+                P2 若三个月内无法与 Rust 原版逐位对齐，就回退到“L0 + 代码生成”路线，L1 归档。这条线在立项文档里就写定了，而不是事后追认。<br /><br />当时担心的两件事后来都过了：自举 parser 在全语料上与 Python 版逐字符一致（42/42），检查器的规则等价也到了 63/63。所以 L1 没有触发这条止损线。
               </p>
             </div>
           </div>
@@ -537,8 +537,8 @@ export fn flush(req: FlushReq) contract(hex64) {
       <div class="modal__inner">
         <span class="modal__k" data-zh="Loment · Potato" data-en="Loment · Potato">Loment · Potato</span>
         <h2 id="loment-cta-title" data-zh="计划于 9.20 日面向开发者" data-en="Planned for 20 September, opening to developers">计划于 9.20 日面向开发者</h2>
-        <p data-zh="Loment 与 Potato 目前是 0.1.3 Alpha。语言已经跑通端到端闭环——写、转译、编译、运行、导出形式对象——100 个里程碑完成 79 个。首个面向开发者的版本计划于 2026 年 9 月 20 日开放。" data-en="Loment and Potato are at 0.1.3 Alpha. The language already closes the end-to-end loop — write, transpile, compile, run, emit a formal object — with 79 of 100 milestones done. The first developer-facing release is planned for 20 September 2026.">
-          Loment 与 Potato 目前是 0.1.3 Alpha。语言已经跑通端到端闭环——写、转译、编译、运行、导出形式对象——100 个里程碑完成 79 个。首个面向开发者的版本计划于 2026 年 9 月 20 日开放。
+        <p data-zh="Loment 与 Potato 目前是 0.1.3 Alpha。语言已经跑通端到端闭环——写、转译、编译、运行、导出形式对象——100 个里程碑完成 86 个。编译器还能不经过任何解释器把自己重建出来。首个面向开发者的版本计划于 2026 年 9 月 20 日开放。" data-en="Loment and Potato are at 0.1.3 Alpha. The language already closes the end-to-end loop — write, transpile, compile, run, emit a formal object — with 86 of 100 milestones done. The compiler can also rebuild itself without going through any interpreter. The first developer-facing release is planned for 20 September 2026.">
+          Loment 与 Potato 目前是 0.1.3 Alpha。语言已经跑通端到端闭环——写、转译、编译、运行、导出形式对象——100 个里程碑完成 86 个。编译器还能不经过任何解释器把自己重建出来。首个面向开发者的版本计划于 2026 年 9 月 20 日开放。
         </p>
         <div class="modal__actions">
           <a class="btn btn--primary" href="docs/language/quickstart.html" data-modal-close data-zh="读上手文档 (Beta)" data-en="Read the quickstart (Beta)">读上手文档 (Beta)</a>

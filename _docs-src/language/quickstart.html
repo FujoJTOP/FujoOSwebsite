@@ -3,7 +3,7 @@
 
               <div class="note note--amber">
                 <strong data-zh="Beta。" data-en="Beta.">Beta。</strong>
-                <span data-zh="Loment 目前是 0.1.3 Alpha：100 个里程碑完成 79 个，语言尚未冻结。下面的命令今天可用，但语法与参数在 1.0 之前都可能变。本页每一条命令与输出都是在仓库里实跑得到的，不是示意——如果哪条跟你跑出来的不一样，那是我们其中一方的版本不对，请以你的输出为准。" data-en=" Loment is at 0.1.3 Alpha: 79 of 100 milestones done, and the language is not frozen. The commands below work today, but the syntax and the flags may still move before 1.0. Every command and output on this page was actually run in the repository, not sketched — if one disagrees with what you get, one of us is on the wrong version; trust your output."> Loment 目前是 0.1.3 Alpha：100 个里程碑完成 79 个，语言尚未冻结。下面的命令今天可用，但语法与参数在 1.0 之前都可能变。本页每一条命令与输出都是在仓库里实跑得到的，不是示意——如果哪条跟你跑出来的不一样，那是我们其中一方的版本不对，请以你的输出为准。</span>
+                <span data-zh="Loment 目前是 0.1.3 Alpha：100 个里程碑完成 86 个，语言尚未冻结。下面的命令今天可用，但语法与参数在 1.0 之前都可能变。本页每一条命令与输出都是在仓库里实跑得到的，不是示意——如果哪条跟你跑出来的不一样，那是我们其中一方的版本不对，请以你的输出为准。" data-en=" Loment is at 0.1.3 Alpha: 86 of 100 milestones done, and the language is not frozen. The commands below work today, but the syntax and the flags may still move before 1.0. Every command and output on this page was actually run in the repository, not sketched — if one disagrees with what you get, one of us is on the wrong version; trust your output."> Loment 目前是 0.1.3 Alpha：100 个里程碑完成 86 个，语言尚未冻结。下面的命令今天可用，但语法与参数在 1.0 之前都可能变。本页每一条命令与输出都是在仓库里实跑得到的，不是示意——如果哪条跟你跑出来的不一样，那是我们其中一方的版本不对，请以你的输出为准。</span>
               </div>
 
               <h2 data-zh="前置" data-en="Prerequisites">前置</h2>
@@ -17,24 +17,66 @@
                   </thead>
                   <tbody>
                     <tr>
-                      <td><strong>Python 3</strong></td>
-                      <td data-zh="始终。参考编译器本身就是一个纯 Python 程序，没有 pip 依赖——这一点在项目里不是妥协，是刻意的。" data-en="Always. The reference compiler is itself a pure Python program with no pip dependencies — that is deliberate here, not a compromise.">始终。参考编译器本身就是一个纯 Python 程序，没有 pip 依赖——这一点在项目里不是妥协，是刻意的。</td>
+                      <td><strong>clang</strong></td>
+                      <td data-zh-html="重建编译器、编译程序。<strong>这是地基语言</strong>，项目明确保留它——不打算去掉。" data-en-html="Rebuilding the compiler and compiling programs. <strong>This is the base language</strong>, deliberately kept — there is no plan to remove it.">重建编译器、编译程序。<strong>这是地基语言</strong>，项目明确保留它——不打算去掉。</td>
+                    </tr>
+                    <tr>
+                      <td><strong>POSIX sh</strong></td>
+                      <td data-zh-html="跑 <code>loment/bootstrap.sh</code>。整个引导脚本只用 <code>clang</code>、<code>sh</code> 和 <code>cmp</code>。" data-en-html="For <code>loment/bootstrap.sh</code>. The whole bootstrap uses only <code>clang</code>, <code>sh</code> and <code>cmp</code>.">跑 <code>loment/bootstrap.sh</code>。整个引导脚本只用 <code>clang</code>、<code>sh</code> 和 <code>cmp</code>。</td>
                     </tr>
                     <tr>
                       <td><strong>rustc</strong></td>
-                      <td data-zh-html="只有要<strong>跑</strong>程序时。第一版编译器是转译器：Loment → Rust，再用 rustc 编译执行。" data-en-html="Only when you want to <b>run</b> something. The first compiler is a transpiler: Loment → Rust, then rustc compiles and runs it.">只有要<strong>跑</strong>程序时。第一版编译器是转译器：Loment → Rust，再用 rustc 编译执行。</td>
+                      <td data-zh-html="只有要走<strong>转译路径</strong>（Loment → Rust）时。<code>loment test</code> 用它，所以在宿主上快速跑一段代码最省事。" data-en-html="Only for the <b>transpile path</b> (Loment → Rust). <code>loment test</code> uses it, which makes it the easiest way to run something on the host.">只有要走<strong>转译路径</strong>（Loment → Rust）时。<code>loment test</code> 用它，所以在宿主上快速跑一段代码最省事。</td>
                     </tr>
                     <tr>
-                      <td><strong>clang + lld</strong></td>
-                      <td data-zh="只有走原生后端（LLVM IR），或要产出跑在 FujoOS 用户态里的 ELF 时才需要。" data-en="Only for the native backend (LLVM IR), or to produce an ELF that runs in FujoOS user space.">只有走原生后端（LLVM IR），或要产出跑在 FujoOS 用户态里的 ELF 时才需要。</td>
+                      <td><strong>Python 3</strong></td>
+                      <td data-zh-html="只有跑测试判据、或使用尚未重写的工具（<code>lomdoc</code> / <code>loment_lsp</code> / <code>lompkg</code>）时才需要。<strong>从「重建或使用 Loment」出发的路径已经不含解释器</strong>；剩下的 Python 在开发期判据上，不在产品路径上。" data-en-html="Only for the test-side judgements, or for tools not yet rewritten (<code>lomdoc</code> / <code>loment_lsp</code> / <code>lompkg</code>). <b>The path from “rebuild or use Loment” no longer contains an interpreter</b>; what Python remains is dev-time judgement, not product path.">只有跑测试判据、或使用尚未重写的工具（<code>lomdoc</code> / <code>loment_lsp</code> / <code>lompkg</code>）时才需要。<strong>从「重建或使用 Loment」出发的路径已经不含解释器</strong>；剩下的 Python 在开发期判据上，不在产品路径上。</td>
                     </tr>
                   </tbody>
                 </table>
               </div>
 
               <h2 data-zh="六十秒" data-en="Sixty seconds">六十秒</h2>
-              <p class="muted" data-zh="在仓库根目录下。最快的一次成功只需要一条命令——写一个带 test_ 函数的文件并跑它。" data-en="From the repository root. The fastest win is a single command — write a file with a test_ function and run it.">
-                在仓库根目录下。最快的一次成功只需要一条命令——写一个带 <code>test_</code> 函数的文件并跑它。
+              <p class="muted" data-zh-html="在仓库根目录下。先看这一条，因为它一次说明的东西最多：<strong>不经过任何解释器，把整个编译器重建出来</strong>。" data-en-html="From the repository root. Start here, because it says the most at once: <b>rebuild the entire compiler without going through an interpreter</b>.">
+                在仓库根目录下。先看这一条，因为它一次说明的东西最多：<strong>不经过任何解释器，把整个编译器重建出来</strong>。
+              </p>
+              <div class="code">
+                <div class="code__bar">
+                  <span class="lang-tag">sh</span>
+                  <span data-zh="无解释器自举" data-en="interpreter-free bootstrap">无解释器自举</span>
+                  <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+                </div>
+                <pre>sh loment/bootstrap.sh
+
+<span class="c">== 1/4 clang(种子) -&gt; stage1
+== 2/4 stage1 编译 loment/selfhost/driver.lomt -&gt; 必须等于种子
+== 3/4 stage2 -&gt; stage3 定点
+== 4/4 stage1 与 stage2 对非自身入口一致
+SEED BOOTSTRAP OK: 只用 clang + sh (无 Python); 种子自复现 + 三阶段定点</span></pre>
+              </div>
+              <p class="small dim" data-zh-html="起点是一份<strong>固化的种子</strong>：参考实现为自举驱动发射的那份 IR——种子本身就是整个编译器。四条判据依次证明：种子能把自己编出来且逐字节相同；再链一轮仍是定点；换一个<strong>非自身</strong>的入口，两个阶段的产物也一致。最后一条是关键：定点不能是「只会编译自己」的巧合。" data-en-html="The starting point is a <b>frozen seed</b>: the IR the reference implementation emitted for the self-hosted driver — the seed <i>is</i> the whole compiler. Four checks then prove, in order, that the seed rebuilds itself byte-for-byte, that one more round is still a fixpoint, and that a <b>non-self</b> entry produces identical output at both stages. That last one matters: a fixpoint must not be a coincidence of only compiling itself.">
+                起点是一份<strong>固化的种子</strong>：参考实现为自举驱动发射的那份 IR——种子本身就是整个编译器。四条判据依次证明：种子能把自己编出来且逐字节相同；再链一轮仍是定点；换一个<strong>非自身</strong>的入口，两个阶段的产物也一致。最后一条是关键：定点不能是「只会编译自己」的巧合。
+              </p>
+
+              <p class="muted" style="margin-top: var(--s4)" data-zh-html="同一条脚本，带上一个入口，就是把它的 IR 打到 stdout —— 这就是<strong>用 Loment 编译 Loment 程序</strong>：" data-en-html="The same script, given an entry file, prints that file's IR to stdout — this is <b>Loment compiling a Loment program</b>:">
+                同一条脚本，带上一个入口，就是把它的 IR 打到 stdout —— 这就是<strong>用 Loment 编译 Loment 程序</strong>：
+              </p>
+              <div class="code">
+                <div class="code__bar">
+                  <span class="lang-tag">sh</span>
+                  <span data-zh="编译一个文件" data-en="compile one file">编译一个文件</span>
+                  <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+                </div>
+                <pre>sh loment/bootstrap.sh hello.lomt
+
+<span class="c">== 发射 hello.lomt (stage1)
+; 由 tools/lomentc.py 生成 (native: LLVM IR, docs/144/145)
+; clang -O1 driver.c this.ll -o exe
+...</span></pre>
+              </div>
+
+              <p class="muted" style="margin-top: var(--s4)" data-zh-html="想在宿主上直接<strong>跑</strong>一段代码，转译路径更省事——它把 Loment 转成 Rust 再用 rustc 编，因此在 Windows 上也能跑（原生路径产出的是 Linux ELF）。" data-en-html="To actually <b>run</b> something on the host, the transpile path is easier: it turns Loment into Rust and compiles that with rustc, so it works on Windows too (the native path emits a Linux ELF).">
+                想在宿主上直接<strong>跑</strong>一段代码，转译路径更省事——它把 Loment 转成 Rust 再用 rustc 编，因此在 Windows 上也能跑（原生路径产出的是 Linux ELF）。
               </p>
               <div class="code">
                 <div class="code__bar">
@@ -48,8 +90,8 @@
 PASS test_double_0
 RESULT: 2/2 PASS</span></pre>
               </div>
-              <p class="small dim" data-zh-html="这条命令之所以最快，是因为它替你做了三件容易忘的事：转译成 Rust、套一个 <code>main</code> 调用每个 <code>test_*</code> 函数、用 rustc 编译并执行。失败时它会以退出码 1 结束。" data-en-html="This is the fastest path because it does three easily-forgotten things for you: transpile to Rust, wrap a <code>main</code> that calls every <code>test_*</code> function, and compile and run it with rustc. It exits 1 if anything fails.">
-                这条命令之所以最快，是因为它替你做了三件容易忘的事：转译成 Rust、套一个 <code>main</code> 调用每个 <code>test_*</code> 函数、用 rustc 编译并执行。失败时它会以退出码 1 结束。
+              <p class="small dim" data-zh-html="这条命令替你做了三件容易忘的事：转译成 Rust、套一个 <code>main</code> 调用每个 <code>test_*</code> 函数、用 rustc 编译并执行。失败时它以退出码 1 结束。它仍然是 Python —— 测试判据是<strong>有意</strong>留在 Python 上的，理由见「现在还不能做什么」。" data-en-html="This one does three easily-forgotten things for you: transpile to Rust, wrap a <code>main</code> that calls every <code>test_*</code> function, and compile and run it with rustc. It exits 1 if anything fails. It is still Python — the test-side judgements are <b>deliberately</b> left in Python; see “what you cannot do yet” below.">
+                这条命令替你做了三件容易忘的事：转译成 Rust、套一个 <code>main</code> 调用每个 <code>test_*</code> 函数、用 rustc 编译并执行。失败时它以退出码 1 结束。它仍然是 Python —— 测试判据是<strong>有意</strong>留在 Python 上的，理由见「现在还不能做什么」。
               </p>
 
               <h2 data-zh="一个最小程序" data-en="A minimal program">一个最小程序</h2>
@@ -213,7 +255,7 @@ fn write(slot: u32) -&gt; u32 {
                   <tbody>
                     <tr><td class="docs">loment test FILE</td><td data-zh="跑所有 test_*() -> bool 函数" data-en="Runs every test_*() -> bool function">跑所有 test_*() -&gt; bool 函数</td></tr>
                     <tr><td class="docs">loment diag FILE [--json]</td><td data-zh="错误分类 + 修复建议" data-en="Error classification plus a repair suggestion">错误分类 + 修复建议</td></tr>
-                    <tr><td class="docs">loment fmt FILE...</td><td data-zh="格式化（幂等：两次结果相同）" data-en="Format (idempotent: running it twice gives the same result)">格式化（幂等：两次结果相同）</td></tr>
+                    <tr><td class="docs">loment fmt FILE...</td><td data-zh="格式化（幂等：两次结果相同）。已用 Loment 重写，与 Python 版逐字节相同——工具链去 Python 的第一块。" data-en="Format (idempotent: running it twice gives the same result). Already rewritten in Loment, byte-identical to the Python one — the first piece of the toolchain to leave Python.">格式化（幂等：两次结果相同）。已用 Loment 重写，与 Python 版逐字节相同——工具链去 Python 的第一块。</td></tr>
                     <tr><td class="docs">loment ir FILE [--objdump]</td><td data-zh="看 IR，或连同机器码一起看" data-en="Show the IR, or the IR together with machine code">看 IR，或连同机器码一起看</td></tr>
                     <tr><td class="docs">loment cov FILE [--call F]</td><td data-zh="IR 级块覆盖率" data-en="IR-level block coverage">IR 级块覆盖率</td></tr>
                     <tr><td class="docs">loment bench FILE [--n N]</td><td data-zh="Rust 路径与 IR 路径对比" data-en="Contrasts the Rust path against the IR path">Rust 路径与 IR 路径对比</td></tr>
@@ -250,10 +292,12 @@ python tools/lomc.py lom/fuc.lom --check</pre>
 
               <h2 data-zh="现在还不能做什么" data-en="What you cannot do yet">现在还不能做什么</h2>
               <ul class="list">
-                <li><b data-zh="语言还没冻结" data-en="The language is not frozen">语言还没冻结</b> <span data-zh="—— 0.1.3 Alpha。M96（1.0 冻结）与 M100（发布审计）都未达，所以在 1.0 之前可能出现破坏性改动。" data-en=" — 0.1.3 Alpha. M96 (the 1.0 freeze) and M100 (release audit) are both unmet, so breaking changes are possible before 1.0.">—— 0.1.3 Alpha。M96（1.0 冻结）与 M100（发布审计）都未达，所以在 1.0 之前可能出现破坏性改动。</span></li>
-                <li><b data-zh="原生路径要 Linux 或 FujoOS" data-en="The native path needs Linux or FujoOS">原生路径要 Linux 或 FujoOS</b> <span data-zh-html="—— <code>--emit-llvm</code> 产出的 IR 按 <code>x86_64-unknown-linux-gnu</code> 链接。在 Windows 上用转译路径（本页所述）即可，两者能力不完全等价。" data-en-html=" — <code>--emit-llvm</code> output links as <code>x86_64-unknown-linux-gnu</code>. On Windows use the transpile path described on this page; the two are not fully equivalent.">—— <code>--emit-llvm</code> 产出的 IR 按 <code>x86_64-unknown-linux-gnu</code> 链接。在 Windows 上用转译路径（本页所述）即可，两者能力不完全等价。</span></li>
-                <li><b data-zh="自举还差两件事" data-en="Self-hosting is two things short">自举还差两件事</b> <span data-zh-html="—— 自举版编译器的符号表是全单元扁平的（兄弟模块同名私有函数会撞名），且子集检查器会把合法程序判错。见 <a href=&quot;selfhost.html&quot;>自举</a>。" data-en-html=" — the self-hosted compiler's symbol table is flat across units (identically named private functions in sibling modules collide), and the subset checker rejects legal programs. See <a href=&quot;selfhost.html&quot;>Self-hosting</a>.">—— 自举版编译器的符号表是全单元扁平的（兄弟模块同名私有函数会撞名），且子集检查器会把合法程序判错。见 <a href="selfhost.html">自举</a>。</span></li>
-                <li><b data-zh="面向开发者的首个版本尚未发布" data-en="The first developer release has not shipped">面向开发者的首个版本尚未发布</b> <span data-zh="—— 按计划 9.20 面向开发者。在那之前，本页描述的是仓库当前状态，不是已发布产品。" data-en=" — planned for 20 September, opening to developers. Until then this page describes the repository's current state, not a shipped product.">—— 按计划 9.20 面向开发者。在那之前，本页描述的是仓库当前状态，不是已发布产品。</span></li>
+                <li><b data-zh="1.0 还没发布" data-en="1.0 has not shipped">1.0 还没发布</b> <span data-zh-html="—— 冻结面<strong>已成文</strong>（M96 完成：语法与类型规则、诊断 E001–E017、单元装载、跨线发射符号约定、两后端逐字节等价，附 7 条已知开放项），但发布与外部审计（M100）未达。现在是 0.1.3 Alpha，1.0 之前仍可能出现破坏性改动。冻结面本身见 <code>docs/158</code>。" data-en-html=" — the freeze surface is <b>written down</b> (M96 done: syntax and type rules, diagnostics E001–E017, unit loading, the cross-line emission symbol convention, byte-identical parity between the two backends, with 7 known open items), but the release and its external audit (M100) are unmet. It is 0.1.3 Alpha; breaking changes are still possible before 1.0. The freeze document itself is <code>docs/158</code>.">—— 冻结面<strong>已成文</strong>（M96 完成：语法与类型规则、诊断 E001–E017、单元装载、跨线发射符号约定、两后端逐字节等价，附 7 条已知开放项），但发布与外部审计（M100）未达。现在是 0.1.3 Alpha，1.0 之前仍可能出现破坏性改动。冻结面本身见 <code>docs/158</code>。</span></li>
+                <li><b data-zh="剩下的基本在内核侧" data-en="What is left is mostly kernel-side">剩下的基本在内核侧</b> <span data-zh-html="—— 撤销由内核真正实施（M37）、与内核域模型对齐（M39）、A1–A4 的运行时断言（M40）、信任自适应域宽接口（M42），加上中断与断言表的内核接入（M33/M50），全部标注 <strong>P7</strong>，等内核线排期。语言这一侧已经完整。" data-en-html=" — revocation actually enforced by the kernel (M37), aligning with the kernel's domain model (M39), runtime assertions for A1–A4 (M40), the trust-adaptive width interface (M42), plus kernel integration for interrupts and the assertion table (M33/M50). All are marked <b>P7</b>, waiting on the kernel line. The language side is complete.">—— 撤销由内核真正实施（M37）、与内核域模型对齐（M39）、A1–A4 的运行时断言（M40）、信任自适应域宽接口（M42），加上中断与断言表的内核接入（M33/M50），全部标注 <strong>P7</strong>，等内核线排期。语言这一侧已经完整。</span></li>
+                <li><b data-zh="原生路径产出的是 Linux ELF" data-en="The native path emits a Linux ELF">原生路径产出的是 Linux ELF</b> <span data-zh-html="—— 按 <code>x86_64-unknown-linux-gnu</code> 链接。在 Windows 上走转译路径（本页所述）即可，两者能力不完全等价。" data-en-html=" — it links as <code>x86_64-unknown-linux-gnu</code>. On Windows take the transpile path described on this page; the two are not fully equivalent.">—— 按 <code>x86_64-unknown-linux-gnu</code> 链接。在 Windows 上走转译路径（本页所述）即可，两者能力不完全等价。</span></li>
+                <li><b data-zh="测试判据仍是 Python" data-en="The test judgements are still Python">测试判据仍是 Python</b> <span data-zh-html="—— 这是有意留的：它不在产品路径上，只影响开发期判据。两条路都合理——把一致性套件写成 Loment 程序，或保持 Python 作为「第三方审计工具」。" data-en-html=" — deliberately: they are not on the product path, only on dev-time judgement. Either path is defensible — write the parity suites as Loment programs, or keep Python as a third-party auditor.">—— 这是有意留的：它不在产品路径上，只影响开发期判据。两条路都合理——把一致性套件写成 Loment 程序，或保持 Python 作为「第三方审计工具」。</span></li>
+                <li><b data-zh="还有三个工具是 Python" data-en="Three tools are still Python">还有三个工具是 Python</b> <span data-zh-html="—— <code>lomdoc</code>、语言服务、包管理尚未重写（前两个需要完整的 parser，包管理还缺目录遍历与 JSON 子集）。格式化器<strong>已经</strong>重写成 Loment，与 Python 版逐字节相同。" data-en-html=" — <code>lomdoc</code>, the language server and the package manager are not yet rewritten (the first two need a complete parser; the package manager still lacks directory traversal and a JSON subset). The formatter <b>has</b> been rewritten in Loment and is byte-identical to the Python one.">—— <code>lomdoc</code>、语言服务、包管理尚未重写（前两个需要完整的 parser，包管理还缺目录遍历与 JSON 子集）。格式化器<strong>已经</strong>重写成 Loment，与 Python 版逐字节相同。</span></li>
+                <li><b data-zh="自举版比参考实现慢约 10 倍" data-en="The self-hosted compiler is about 10× slower">自举版比参考实现慢约 10 倍</b> <span data-zh-html="—— 编译自身 12.8 秒，参考实现 1.2 秒。目前只记了基线与护栏（M86），没有做优化——所以别把它当性能版本用。另外 aarch64 交叉编译通过但没有模拟器验证，DWARF 只有语句级行表、没有变量信息。" data-en-html=" — 12.8 s to compile itself against the reference implementation's 1.2 s. Only a baseline and a guard rail exist (M86); no optimisation has been done, so do not treat it as the fast path. Separately, aarch64 cross-compiles but has no emulator to verify on, and DWARF carries statement-level line tables only, with no variable information.">—— 编译自身 12.8 秒，参考实现 1.2 秒。目前只记了基线与护栏（M86），没有做优化——所以别把它当性能版本用。另外 aarch64 交叉编译通过但没有模拟器验证，DWARF 只有语句级行表、没有变量信息。</span></li>
               </ul>
 
               <div class="note note--steel">

@@ -1,4 +1,4 @@
-<!--{"zh":"自举","en":"Self-hosting","desc":"编译器编译自身：三阶段产物逐字节相同（1002385 B），以及仍未做到的两件事。","banner_zh":"自举 · 三阶段定点","banner_en":"Self-hosting · the three-stage fixpoint"}-->
+<!--{"zh":"自举","en":"Self-hosting","desc":"编译器编译自身：三阶段产物逐字节相同（1002385 B），而且已经能不用任何解释器重建自己。","banner_zh":"自举 · 三阶段定点 + 无解释器引导","banner_en":"Self-hosting · fixpoint, and no interpreter to bootstrap"}-->
               <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="自举" data-en="Self-hosting">自举</h1>
 
               <div class="prose">
@@ -13,8 +13,12 @@
                   <span class="stat__k" data-zh="三阶段产物 IR 逐字节全等" data-en="three-stage IR output, byte-identical">三阶段产物 IR 逐字节全等</span>
                 </div>
                 <div class="stat">
-                  <span class="stat__v">39/39</span>
-                  <span class="stat__k" data-zh="目标覆盖：标量、控制流、短路、转换、for、除法、内建、常量内联、struct、数组切片、字符串、枚举 match、泛型单态化、trait 派发、能力域、?、if let、整数↔指针" data-en="Target coverage: scalars, control flow, short-circuit, casts, for, division, builtins, constant inlining, struct, array slices, strings, enum match, generic monomorphisation, trait dispatch, capability domains, ?, if let, int↔pointer">目标覆盖：标量、控制流、短路、转换、for、除法、内建、常量内联、struct、数组切片、字符串、枚举 match、泛型单态化、trait 派发、能力域、?、if let、整数↔指针</span>
+                  <span class="stat__v">42/42</span>
+                  <span class="stat__k" data-zh="parser 全语料与 Python 版逐字符一致，dump 助手零跳过" data-en="parser matches the Python one character for character across the whole corpus, with zero skipped dump helpers">parser 全语料与 Python 版逐字符一致，dump 助手零跳过</span>
+                </div>
+                <div class="stat">
+                  <span class="stat__v">0</span>
+                  <span class="stat__k" data-zh="重建编译器需要的解释器数量 —— 只有 clang、POSIX sh 和 cmp" data-en="interpreters needed to rebuild the compiler — only clang, POSIX sh and cmp">重建编译器需要的解释器数量 —— 只有 clang、POSIX sh 和 cmp</span>
                 </div>
               </div>
 
@@ -36,30 +40,54 @@
                     </tr>
                     <tr>
                       <td data-zh="语法" data-en="Parser">语法</td>
-                      <td data-zh="语句 / 表达式子集，AST dump 与 Python 版逐字符一致" data-en="A statement / expression subset whose AST dump matches the Python one character for character">语句 / 表达式子集，AST dump 与 Python 版逐字符一致</td>
-                      <td><span class="tag tag--part" data-zh="子集" data-en="subset">子集</span></td>
+                      <td data-zh="全语料 42/42 逐字符一致，dump 助手零跳过；两道棘轮（已知缺口表）已清空，且门禁拒绝过期条目 —— 覆盖不准回退。" data-en="42/42 across the whole corpus, character for character, with zero skipped dump helpers. Both ratchets (the known-gap tables) are empty, and the gate rejects stale entries — coverage cannot quietly regress.">全语料 42/42 逐字符一致，dump 助手零跳过；两道棘轮（已知缺口表）已清空，且门禁拒绝过期条目 —— 覆盖不准回退。</td>
+                      <td><span class="tag tag--ok">OK</span></td>
+                    </tr>
+                    <tr>
+                      <td data-zh="类型检查" data-en="Type checking">类型检查</td>
+                      <td data-zh="规则等价 63/63；另有 63 条负例直接喂自举驱动，全部非零退出且无假阳性。" data-en="Rule equivalence 63/63; separately, 63 negative cases fed straight to the self-hosted driver all exit non-zero with no false positives.">规则等价 63/63；另有 63 条负例直接喂自举驱动，全部非零退出且无假阳性。</td>
+                      <td><span class="tag tag--ok">OK</span></td>
                     </tr>
                     <tr>
                       <td data-zh="IR 生成" data-en="IR generation">IR 生成</td>
-                      <td data-zh=".ll 与 Python 版逐字节一致，自举四阶段全部能编译自身" data-en=".ll byte-identical to the Python version; all four bootstrap stages can compile themselves">.ll 与 Python 版逐字节一致，自举四阶段全部能编译自身</td>
+                      <td data-zh=".ll 与 Python 版逐字节一致，目标覆盖 39/39" data-en=".ll byte-identical to the Python version, with 39/39 target coverage">.ll 与 Python 版逐字节一致，目标覆盖 39/39</td>
                       <td><span class="tag tag--ok">OK</span></td>
                     </tr>
                     <tr>
                       <td data-zh="三阶段定点" data-en="Three-stage fixpoint">三阶段定点</td>
-                      <td data-zh="第 2 / 3 阶段产物逐字节相同；自举驱动也做了二阶段定点" data-en="Stage 2 and 3 outputs byte-identical; the bootstrap driver also reached a two-stage fixpoint">第 2 / 3 阶段产物逐字节相同；自举驱动也做了二阶段定点</td>
+                      <td data-zh="第 2 / 3 阶段产物逐字节相同；换一个非自身入口，两个阶段的产物也一致 —— 定点不是“只会编译自己”的巧合。" data-en="Stage 2 and 3 outputs byte-identical; and a non-self entry produces identical output at both stages — the fixpoint is not a coincidence of only compiling itself.">第 2 / 3 阶段产物逐字节相同；换一个非自身入口，两个阶段的产物也一致 —— 定点不是“只会编译自己”的巧合。</td>
+                      <td><span class="tag tag--ok">OK</span></td>
+                    </tr>
+                    <tr>
+                      <td data-zh="无解释器引导" data-en="Interpreter-free bootstrap">无解释器引导</td>
+                      <td data-zh-html="起点是一份<strong>固化的种子</strong>（参考实现为自举驱动发射的 IR）。<code>sh loment/bootstrap.sh</code> 只用 clang、sh、cmp 走完四条判据。" data-en-html="The starting point is a <b>frozen seed</b> — the IR the reference implementation emitted for the self-hosted driver. <code>sh loment/bootstrap.sh</code> runs all four checks with only clang, sh and cmp.">起点是一份<strong>固化的种子</strong>（参考实现为自举驱动发射的 IR）。<code>sh loment/bootstrap.sh</code> 只用 clang、sh、cmp 走完四条判据。</td>
                       <td><span class="tag tag--ok">OK</span></td>
                     </tr>
                   </tbody>
                 </table>
               </div>
 
-              <h2 data-zh="还差的两件事（写清楚）" data-en="The two things still outstanding">还差的两件事（写清楚）</h2>
+              <h2 data-zh="那一格为什么重要" data-en="Why that last row matters">那一格为什么重要</h2>
+              <div class="prose">
+                <p data-zh-html="在此之前，自举链只能从 <strong>Python 版编译器</strong>起步：stage1 由 <code>tools/lomentc.py</code> 现编。也就是说，“想重建 Loment 编译器”这件事本身依赖一个解释器。这条依赖比工具链（格式化、文档、语言服务）更根本 —— 它不在使用侧，在<strong>重建编译器</strong>那一步上。" data-en-html="Until recently the bootstrap chain could only start from the <b>Python compiler</b>: stage1 was built on the spot by <code>tools/lomentc.py</code>. That is, “rebuild the Loment compiler” itself depended on an interpreter. That dependency is more fundamental than the toolchain (format, docs, language server) — it is not on the using side, it is on the <b>rebuilding the compiler</b> step.">
+                  在此之前，自举链只能从 <strong>Python 版编译器</strong>起步：stage1 由 <code>tools/lomentc.py</code> 现编。也就是说，“想重建 Loment 编译器”这件事本身依赖一个解释器。这条依赖比工具链（格式化、文档、语言服务）更根本 —— 它不在使用侧，在<strong>重建编译器</strong>那一步上。
+                </p>
+                <p data-zh-html="把起点固化成工件之后，从“重建或使用 Loment”出发的路径上已经没有解释器了。剩下的 Python 在<strong>开发期判据</strong>上（一致性套件、CI）和尚未重写的三个工具上 —— 每一项都有可测量的迁移判据可写，但都不在产品路径上。" data-en-html="Once the starting point is frozen into an artefact, the path from “rebuild or use Loment” contains no interpreter. What Python remains is in <b>dev-time judgement</b> (the parity suites, CI) and in three tools not yet rewritten — each has a measurable migration criterion that could be written, and none is on the product path.">
+                  把起点固化成工件之后，从“重建或使用 Loment”出发的路径上已经没有解释器了。剩下的 Python 在<strong>开发期判据</strong>上（一致性套件、CI）和尚未重写的三个工具上 —— 每一项都有可测量的迁移判据可写，但都不在产品路径上。
+                </p>
+                <p data-zh-html="种子本身也有一道棘轮：门禁每次都拿参考实现重新发射一遍并逐字符比对 —— <strong>自举产物变了而种子没跟上，门禁就红</strong>。这是“种子不许过期”。" data-en-html="The seed has its own ratchet: the gate re-emits it from the reference implementation every run and compares character by character — <b>if the bootstrap output moves and the seed does not follow, the gate goes red</b>. The seed is not allowed to go stale.">
+                  种子本身也有一道棘轮：门禁每次都拿参考实现重新发射一遍并逐字符比对 —— <strong>自举产物变了而种子没跟上，门禁就红</strong>。这是“种子不许过期”。
+                </p>
+              </div>
+
+              <h2 data-zh="还差什么（写清楚）" data-en="What is still outstanding">还差什么（写清楚）</h2>
               <ul class="list">
-                <li><b data-zh="符号表是全单元扁平的" data-en="the symbol table is flat across units">符号表是全单元扁平的</b> <span data-zh="—— 兄弟模块里同名的私有函数会撞名。要修就得给符号加模块作用域。" data-en=" — identically named private functions in sibling modules collide. Fixing it means giving symbols module scope.">—— 兄弟模块里同名的私有函数会撞名。要修就得给符号加模块作用域。</span></li>
-                <li><b data-zh="检查器是 4 条规则的子集" data-en="the checker implements 4 rules of a larger set">检查器是 4 条规则的子集</b> <span data-zh="—— 它会把合法程序判错，所以还不能当闸门用。得先扩展到能放行全部语料。" data-en=" — it rejects legal programs, so it cannot serve as a gate yet. It has to be widened to admit the whole corpus first.">—— 它会把合法程序判错，所以还不能当闸门用。得先扩展到能放行全部语料。</span></li>
+                <li><b data-zh="1.0 还没发布" data-en="1.0 has not shipped">1.0 还没发布</b> <span data-zh-html="—— 冻结面已成文（M96 完成），但发布与外部审计（M100）未达。100 个里程碑口径下完成 86 个。" data-en-html=" — the freeze surface is written down (M96 done), but the release and its external audit (M100) are unmet. 86 of 100 milestones are done.">—— 冻结面已成文（M96 完成），但发布与外部审计（M100）未达。100 个里程碑口径下完成 86 个。</span></li>
+                <li><b data-zh="剩下的几乎全在内核侧" data-en="almost everything left is kernel-side">剩下的几乎全在内核侧</b> <span data-zh="—— 撤销由内核真正实施、A1–A4 的运行时断言、与内核域模型对齐、信任自适应域宽接口，全部标注 P7。语言这一侧已经完整。" data-en=" — revocation actually enforced by the kernel, runtime assertions for A1–A4, aligning with the kernel's domain model, the trust-adaptive width interface — all marked P7. The language side is complete.">—— 撤销由内核真正实施、A1–A4 的运行时断言、与内核域模型对齐、信任自适应域宽接口，全部标注 P7。语言这一侧已经完整。</span></li>
+                <li><b data-zh="自举版比参考实现慢约 10 倍" data-en="the self-hosted compiler is about 10× slower">自举版比参考实现慢约 10 倍</b> <span data-zh-html="—— 编译自身 <strong>12.8 秒</strong>，参考实现 1.2 秒。目前只记了基线与护栏（M86），没做优化。" data-en-html=" — <b>12.8 s</b> to compile itself against the reference implementation's 1.2 s. Only a baseline and a guard rail exist (M86); no optimisation has been done.">—— 编译自身 <strong>12.8 秒</strong>，参考实现 1.2 秒。目前只记了基线与护栏（M86），没做优化。</span></li>
               </ul>
 
               <div class="note note--amber">
                 <strong data-zh="口径检查：" data-en="Wording check: ">口径检查：</strong>
-                <span data-zh="“自举完成”指的是上面那几项已达成；它不等于“语言可以发布了”。M96（1.0 冻结）与 M100（发布审计）都还是未达状态。" data-en="“Self-hosting done” refers to the items above; it does not mean “the language is ready to ship”. M96 (1.0 freeze) and M100 (release audit) are both still unmet.">“自举完成”指的是上面那几项已达成；它不等于“语言可以发布了”。M96（1.0 冻结）与 M100（发布审计）都还是未达状态。</span>
+                <span data-zh="“自举完成”指的是上面那几项已达成；它不等于“语言可以发布了”。1.0 的发布与外部审计（M100）仍是未达状态。" data-en="“Self-hosting done” refers to the rows above; it does not mean “the language is ready to ship”. The 1.0 release and its external audit (M100) are still unmet.">“自举完成”指的是上面那几项已达成；它不等于“语言可以发布了”。1.0 的发布与外部审计（M100）仍是未达状态。</span>
               </div>

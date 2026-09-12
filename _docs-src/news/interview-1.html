@@ -65,8 +65,8 @@
                   <p data-zh="能跑的：写、转译、编译、运行、导出形式对象，端到端闭环；25 个示例；系统调用层 46/46 覆盖；工具链齐了——格式化器、语言服务、包管理器、文档生成器、DWARF 语句级行表，增量构建从冷 82.6 ms 到热 9.0 ms。" data-en="What runs: write, transpile, compile, run, emit a formal object — a closed loop end to end; 25 examples; 46/46 syscall coverage; and a full toolchain — formatter, language server, package manager, doc generator, DWARF statement-level line tables, incremental builds from 82.6 ms cold to 9.0 ms warm.">
                     能跑的：写、转译、编译、运行、导出形式对象，端到端闭环；25 个示例；系统调用层 46/46 覆盖；工具链齐了——格式化器、语言服务、包管理器、文档生成器、DWARF 语句级行表，增量构建从冷 82.6 ms 到热 9.0 ms。
                   </p>
-                  <p data-zh="没冻结的：100 个里程碑完成 79 个，1.0 的冻结和发布审计都没过。现在接手的人要有准备——语法和参数还会变。上手文档我们写了，标的是 Beta，就是这个意思。" data-en="What is not frozen: 79 of 100 milestones done, and neither the 1.0 freeze nor the release audit is passed. Anyone picking this up now should expect the syntax and the flags to move. The quickstart page is marked Beta for exactly that reason.">
-                    没冻结的：100 个里程碑完成 79 个，1.0 的冻结和发布审计都没过。现在接手的人要有准备——语法和参数还会变。上手文档我们写了，标的是 Beta，就是这个意思。
+                  <p data-zh="没发布的：100 个里程碑完成 86 个，1.0 的冻结面已经成文，但发布与外部审计还没过。现在接手的人要有准备——语法和参数还会变。上手文档我们写了，标的是 Beta，就是这个意思。" data-en="What is not shipped: 86 of 100 milestones done, with the 1.0 freeze surface written down but the release and its external audit still open. Anyone picking this up now should expect the syntax and the flags to move. The quickstart page is marked Beta for exactly that reason.">
+                    没发布的：100 个里程碑完成 86 个，1.0 的冻结面已经成文，但发布与外部审计还没过。现在接手的人要有准备——语法和参数还会变。上手文档我们写了，标的是 Beta，就是这个意思。
                   </p>
                 </div>
               </div>
@@ -77,8 +77,8 @@
                 </p>
                 <div class="qa__a">
                   <p data-zh="三件，按依赖排。" data-en="Three things, in dependency order.">三件，按依赖排。</p>
-                  <p data-zh="一、把自举补完。自举版编译器的符号表还是全单元扁平的，兄弟模块里同名的私有函数会撞名；子集检查器目前只有四条规则，会把合法程序判错。这两个不解决，自举版就不能当闸门用——能编译自己，和能守住自己的规矩，是两回事。" data-en="One: finish self-hosting. The self-hosted compiler's symbol table is flat across units, so identically named private functions in sibling modules collide; and the subset checker implements only four rules, so it rejects legal programs. Until both are fixed it cannot serve as a gate — compiling yourself and holding your own rules are two different achievements.">
-                    一、把自举补完。自举版编译器的符号表还是全单元扁平的，兄弟模块里同名的私有函数会撞名；子集检查器目前只有四条规则，会把合法程序判错。这两个不解决，自举版就不能当闸门用——能编译自己，和能守住自己的规矩，是两回事。
+                  <p data-zh="一、把自举收尾，然后去 Python 化。自举本身已经相当完整：parser 全语料 42/42 逐字符一致，检查器规则等价 63/63，而且现在能不用任何解释器把自己重建出来——起点是一份固化的种子，clang 加 sh 就够。剩下的是工具链上那三个还没重写的（文档生成、语言服务、包管理），格式化器已经改完且与 Python 版逐字节相同。" data-en="One: close out self-hosting, then finish leaving Python. Self-hosting is already substantial — the parser matches the reference character for character across the entire corpus (42/42), the checker's rules are equivalent 63/63, and it can now rebuild itself without any interpreter: the start is a frozen seed, and clang plus sh is enough. What remains is the three tools not yet rewritten (doc generator, language server, package manager); the formatter is done and byte-identical to the Python one.">
+                    一、把自举收尾，然后去 Python 化。自举本身已经相当完整：parser 全语料 42/42 逐字符一致，检查器规则等价 63/63，而且现在能不用任何解释器把自己重建出来——起点是一份固化的种子，clang 加 sh 就够。剩下的是工具链上那三个还没重写的（文档生成、语言服务、包管理），格式化器已经改完且与 Python 版逐字节相同。
                   </p>
                   <p data-zh="二、内核侧接入。A1–A4 的运行时断言、能力域与内核域模型对齐、撤销语义由内核真正实施。现在那张断言表还停在产物层，没有进内核。" data-en="Two: kernel-side integration. Runtime assertions for A1–A4, aligning the capability domain with the kernel's own domain model, and revocation actually enforced by the kernel. The assertion table is still at the artifact layer; it does not reach the kernel yet.">
                     二、内核侧接入。A1–A4 的运行时断言、能力域与内核域模型对齐、撤销语义由内核真正实施。现在那张断言表还停在产物层，没有进内核。
