@@ -142,6 +142,12 @@
   --amber-soft: #b8440c1a;
   --steel: #3f6b34;
   --steel-soft: #3f6b341a;
+  /* The primary button is the one element filled with the ground's opposite:
+     a bright fill labelled in the ground's own colour. On this ground both
+     halves flip, so the fill token has to flip with them. Left at the canvas
+     chalk, the button kept a #fafafa fill while its label took the card's ink
+     #eeeeee — the label landed on its own colour, at 1.05:1. */
+  --chalk: #1d1a18;
   color: var(--fg);
 }
 
