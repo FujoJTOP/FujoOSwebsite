@@ -151,7 +151,7 @@ const JS_V = assetVersion(join(ROOT, "assets", "site.js"));
    keeps their query strings in step rather than leaving it to memory. The
    publishing console is not one of them: it lives in tools/, is served by
    tools/admin.mjs, and is never part of the built site. */
-const HAND_WRITTEN = ["index.html", "fuai/index.html", "loment/index.html"];
+const HAND_WRITTEN = ["index.html", "fuai/index.html", "loment/index.html", "bugs/index.html"];
 
 /* -------------------------------------------------------------- helpers */
 
@@ -169,6 +169,7 @@ const AT = {
   loment: "loment/",
   docs: "docs/",
   news: "news/",
+  bugs: "bugs/",
   start: "docs/start/",
 };
 
@@ -299,6 +300,7 @@ function navLinks(up, current) {
     [`${up}${AT.loment}`, "Loment · Potato", "Loment · Potato"],
     [`${up}${AT.docs}`, "文档", "Docs"],
     [`${up}${AT.news}`, "新闻", "News"],
+    [`${up}${AT.bugs}`, "Bug 社区", "Bug reports"],
   ];
   const links = items.map(([href, zh, en]) => {
     const here = href === current ? ' aria-current="page"' : "";
@@ -505,6 +507,7 @@ ${navLinks(up, `${up}${AT.docs}`)}
           <a href="${up}${AT.loment}" data-zh="Loment · Potato 语言" data-en="Loment · Potato language">Loment · Potato 语言</a>
           <a href="${up}${AT.docs}" data-zh="文档" data-en="Documentation">文档</a>
           <a href="${up}${AT.start}" data-zh="构建与运行" data-en="Build and run">构建与运行</a>
+          <a href="${up}${AT.bugs}" data-zh="Bug 社区" data-en="Bug reports">Bug 社区</a>
         </div>
       </div>
     </header>
@@ -658,6 +661,7 @@ ${navLinks(up, current)}
           <a href="${up}${AT.loment}" data-zh="Loment · Potato 语言" data-en="Loment · Potato language">Loment · Potato 语言</a>
           <a href="${up}${AT.docs}" data-zh="文档" data-en="Documentation">文档</a>
           <a href="${up}${AT.news}" data-zh="新闻" data-en="News">新闻</a>
+          <a href="${up}${AT.bugs}" data-zh="Bug 社区" data-en="Bug reports">Bug 社区</a>
         </div>
       </div>
     </header>
@@ -816,6 +820,7 @@ ${items}
     "", // the root serves index.html
     AT.fuai,
     AT.loment,
+    AT.bugs,
     AT.docs,
     ...flat.map((p) => (p.slug === "index" ? `docs/${p.section}/` : `docs/${p.section}/${p.slug}/`)),
     ...(POSTS.length ? [AT.news, ...POSTS.map((p) => `news/${p.slug}/`)] : []),

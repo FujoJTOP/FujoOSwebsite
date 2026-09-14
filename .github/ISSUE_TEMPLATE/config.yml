@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 已知边界 / Known limits
+    url: https://fujojtop.github.io/FujoOSwebsite/docs/project/limitations/
+    about: 站上没宣称的东西不算 bug——多半已经写在这里了。/ Something the site never claimed is not a bug, and is probably written down here.
+  - name: 冻结面的开放项 / Open items in the freeze surface
+    url: https://fujojtop.github.io/FujoOSwebsite/docs/language/freeze/
+    about: 已知的缺口，写在明处。/ The known gaps, written where they can be read.
+  - name: 快速上手 / Quickstart
+    url: https://fujojtop.github.io/FujoOSwebsite/docs/language/quickstart/
+    about: 用法问题多半在这里有答案。/ Most usage questions are answered here.
