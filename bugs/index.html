@@ -241,8 +241,87 @@
           <div class="fade-step" style="--delay: 0.24s; margin-top: var(--s4)">
             <!-- board:start -->
               <div class="board" data-board>
-                <p class="board__blank" data-zh="还没有条目。" data-en="Nothing on the board yet.">还没有条目。</p>
-                <p class="muted small" style="margin-top: var(--s2)" data-zh-html="报进来的东西被读明白之后才会写在这里——这块板子是记录，不是收件箱。怎么报见上面。" data-en-html="A report is written here once it has been read and understood — this board is the record, not the inbox. How to report is above.">报进来的东西被读明白之后才会写在这里——这块板子是记录，不是收件箱。怎么报见上面。</p>
+                <div class="board__bar">
+                  <button type="button" class="board__chip" data-board-state="all" aria-pressed="true" data-zh-html="全部 <span class=&quot;board__n&quot;>7</span>" data-en-html="All <span class=&quot;board__n&quot;>7</span>">全部 <span class="board__n">7</span></button>
+                  <button type="button" class="board__chip" data-board-state="open" aria-pressed="false" data-zh-html="待确认 <span class=&quot;board__n&quot;>7</span>" data-en-html="Open <span class=&quot;board__n&quot;>7</span>">待确认 <span class="board__n">7</span></button>
+                  <label class="board__search">
+                    <span data-zh="搜索" data-en="Search">搜索</span>
+                    <input type="search" data-board-search autocomplete="off" aria-label="搜索编号或标题" data-zh-aria="搜索编号或标题" data-en-aria="Search by id or title" />
+                  </label>
+                </div>
+                <p class="board__blank" data-board-blank hidden data-zh="没有匹配的条目。" data-en="Nothing matches.">没有匹配的条目。</p>
+                <div class="table-wrap" data-board-table>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th scope="col" data-zh="编号" data-en="Id">编号</th>
+                        <th scope="col" data-zh="标题" data-en="Title">标题</th>
+                        <th scope="col" data-zh="线" data-en="Line">线</th>
+                        <th scope="col" data-zh="来源" data-en="Source">来源</th>
+                        <th scope="col" data-zh="状态" data-en="State">状态</th>
+                        <th scope="col" data-zh="报于" data-en="Reported">报于</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                  <tr id="FJ-0001" data-board-row data-state="open" data-search="fj-0001 loment b1 — 工具链页说 lompkg「还没重写」；0.1.4 已重写，l0 生成器 lomc 也已重写 loment b1 — 工具链页说 lompkg「还没重写」；0.1.4 已重写，l0 生成器 lomc 也已重写 站点显示 0.1.3.4 alpha · 实测 0.1.4-alpha 待确认 open 语言 language 非官方 unofficial">
+                    <td class="num board__id">FJ-0001</td>
+                    <td><a class="board__t" href="https://fujojtop.github.io/FujoOSwebsite/docs/language/toolchain/" data-zh="Loment B1 — 工具链页说 lompkg「还没重写」；0.1.4 已重写，L0 生成器 lomc 也已重写" data-en="Loment B1 — 工具链页说 lompkg「还没重写」；0.1.4 已重写，L0 生成器 lomc 也已重写">Loment B1 — 工具链页说 lompkg「还没重写」；0.1.4 已重写，L0 生成器 lomc 也已重写</a><span class="board__meta" data-zh="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha" data-en="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha">站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha</span></td>
+                    <td data-zh="语言" data-en="Language">语言</td>
+                    <td><span class="tag board__org board__org--unofficial" data-zh="非官方" data-en="Unofficial">非官方</span></td>
+                    <td><span class="tag board__st board__st--open" data-zh="待确认" data-en="Open">待确认</span></td>
+                    <td class="num">2026-09-14</td>
+                  </tr>
+                  <tr id="FJ-0002" data-board-row data-state="open" data-search="fj-0002 loment b2 — 站点版本号仍是 0.1.3.4 alpha；仓库已 0.1.4 alpha 并打了 tag loment b2 — 站点版本号仍是 0.1.3.4 alpha；仓库已 0.1.4 alpha 并打了 tag 站点显示 0.1.3.4 alpha · 实测 0.1.4-alpha 待确认 open 语言 language 非官方 unofficial">
+                    <td class="num board__id">FJ-0002</td>
+                    <td><a class="board__t" href="https://fujojtop.github.io/FujoOSwebsite/docs/project/limitations/" data-zh="Loment B2 — 站点版本号仍是 0.1.3.4 Alpha；仓库已 0.1.4 Alpha 并打了 tag" data-en="Loment B2 — 站点版本号仍是 0.1.3.4 Alpha；仓库已 0.1.4 Alpha 并打了 tag">Loment B2 — 站点版本号仍是 0.1.3.4 Alpha；仓库已 0.1.4 Alpha 并打了 tag</a><span class="board__meta" data-zh="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha" data-en="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha">站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha</span></td>
+                    <td data-zh="语言" data-en="Language">语言</td>
+                    <td><span class="tag board__org board__org--unofficial" data-zh="非官方" data-en="Unofficial">非官方</span></td>
+                    <td><span class="tag board__st board__st--open" data-zh="待确认" data-en="Open">待确认</span></td>
+                    <td class="num">2026-09-14</td>
+                  </tr>
+                  <tr id="FJ-0003" data-board-row data-state="open" data-search="fj-0003 loment b3 — 自举页的三阶段定点字节数 1002385 b 与实现不符（现为 1630436 b） loment b3 — 自举页的三阶段定点字节数 1002385 b 与实现不符（现为 1630436 b） 站点显示 0.1.3.4 alpha · 实测 0.1.4-alpha 待确认 open 语言 language 非官方 unofficial">
+                    <td class="num board__id">FJ-0003</td>
+                    <td><a class="board__t" href="https://fujojtop.github.io/FujoOSwebsite/docs/language/selfhost/" data-zh="Loment B3 — 自举页的三阶段定点字节数 1002385 B 与实现不符（现为 1630436 B）" data-en="Loment B3 — 自举页的三阶段定点字节数 1002385 B 与实现不符（现为 1630436 B）">Loment B3 — 自举页的三阶段定点字节数 1002385 B 与实现不符（现为 1630436 B）</a><span class="board__meta" data-zh="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha" data-en="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha">站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha</span></td>
+                    <td data-zh="语言" data-en="Language">语言</td>
+                    <td><span class="tag board__org board__org--unofficial" data-zh="非官方" data-en="Unofficial">非官方</span></td>
+                    <td><span class="tag board__st board__st--open" data-zh="待确认" data-en="Open">待确认</span></td>
+                    <td class="num">2026-09-14</td>
+                  </tr>
+                  <tr id="FJ-0004" data-board-row data-state="open" data-search="fj-0004 loment b4 — 自举页写「完成 86 个」；里程碑实为完成 87、部分 8 loment b4 — 自举页写「完成 86 个」；里程碑实为完成 87、部分 8 站点显示 0.1.3.4 alpha · 实测 0.1.4-alpha 待确认 open 语言 language 非官方 unofficial">
+                    <td class="num board__id">FJ-0004</td>
+                    <td><a class="board__t" href="https://fujojtop.github.io/FujoOSwebsite/docs/language/selfhost/" data-zh="Loment B4 — 自举页写「完成 86 个」；里程碑实为完成 87、部分 8" data-en="Loment B4 — 自举页写「完成 86 个」；里程碑实为完成 87、部分 8">Loment B4 — 自举页写「完成 86 个」；里程碑实为完成 87、部分 8</a><span class="board__meta" data-zh="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha" data-en="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha">站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha</span></td>
+                    <td data-zh="语言" data-en="Language">语言</td>
+                    <td><span class="tag board__org board__org--unofficial" data-zh="非官方" data-en="Unofficial">非官方</span></td>
+                    <td><span class="tag board__st board__st--open" data-zh="待确认" data-en="Open">待确认</span></td>
+                    <td class="num">2026-09-14</td>
+                  </tr>
+                  <tr id="FJ-0005" data-board-row data-state="open" data-search="fj-0005 loment b5 — 已知边界「调试信息只有语句级行表，没有变量信息」已不成立 loment b5 — 已知边界「调试信息只有语句级行表，没有变量信息」已不成立 站点显示 0.1.3.4 alpha · 实测 0.1.4-alpha 待确认 open 语言 language 非官方 unofficial">
+                    <td class="num board__id">FJ-0005</td>
+                    <td><a class="board__t" href="https://fujojtop.github.io/FujoOSwebsite/docs/project/limitations/" data-zh="Loment B5 — 已知边界「调试信息只有语句级行表，没有变量信息」已不成立" data-en="Loment B5 — 已知边界「调试信息只有语句级行表，没有变量信息」已不成立">Loment B5 — 已知边界「调试信息只有语句级行表，没有变量信息」已不成立</a><span class="board__meta" data-zh="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha" data-en="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha">站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha</span></td>
+                    <td data-zh="语言" data-en="Language">语言</td>
+                    <td><span class="tag board__org board__org--unofficial" data-zh="非官方" data-en="Unofficial">非官方</span></td>
+                    <td><span class="tag board__st board__st--open" data-zh="待确认" data-en="Open">待确认</span></td>
+                    <td class="num">2026-09-14</td>
+                  </tr>
+                  <tr id="FJ-0006" data-board-row data-state="open" data-search="fj-0006 loment b6 — 已知边界缺一条：自举 codegen 对 `(a + b as t) as u` 发非法 ir loment b6 — 已知边界缺一条：自举 codegen 对 `(a + b as t) as u` 发非法 ir 站点显示 0.1.3.4 alpha · 实测 0.1.4-alpha 待确认 open 语言 language 非官方 unofficial">
+                    <td class="num board__id">FJ-0006</td>
+                    <td><a class="board__t" href="https://fujojtop.github.io/FujoOSwebsite/docs/project/limitations/" data-zh="Loment B6 — 已知边界缺一条：自举 codegen 对 `(a + b as T) as U` 发非法 IR" data-en="Loment B6 — 已知边界缺一条：自举 codegen 对 `(a + b as T) as U` 发非法 IR">Loment B6 — 已知边界缺一条：自举 codegen 对 `(a + b as T) as U` 发非法 IR</a><span class="board__meta" data-zh="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha" data-en="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha">站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha</span></td>
+                    <td data-zh="语言" data-en="Language">语言</td>
+                    <td><span class="tag board__org board__org--unofficial" data-zh="非官方" data-en="Unofficial">非官方</span></td>
+                    <td><span class="tag board__st board__st--open" data-zh="待确认" data-en="Open">待确认</span></td>
+                    <td class="num">2026-09-14</td>
+                  </tr>
+                  <tr id="FJ-0007" data-board-row data-state="open" data-search="fj-0007 loment b7 — 已知边界缺一条：大单元里拿 `fn` 当局部名会让自举 checker 走岔 loment b7 — 已知边界缺一条：大单元里拿 `fn` 当局部名会让自举 checker 走岔 站点显示 0.1.3.4 alpha · 实测 0.1.4-alpha 待确认 open 语言 language 非官方 unofficial">
+                    <td class="num board__id">FJ-0007</td>
+                    <td><a class="board__t" href="https://fujojtop.github.io/FujoOSwebsite/docs/project/limitations/" data-zh="Loment B7 — 已知边界缺一条：大单元里拿 `fn` 当局部名会让自举 checker 走岔" data-en="Loment B7 — 已知边界缺一条：大单元里拿 `fn` 当局部名会让自举 checker 走岔">Loment B7 — 已知边界缺一条：大单元里拿 `fn` 当局部名会让自举 checker 走岔</a><span class="board__meta" data-zh="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha" data-en="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha">站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha</span></td>
+                    <td data-zh="语言" data-en="Language">语言</td>
+                    <td><span class="tag board__org board__org--unofficial" data-zh="非官方" data-en="Unofficial">非官方</span></td>
+                    <td><span class="tag board__st board__st--open" data-zh="待确认" data-en="Open">待确认</span></td>
+                    <td class="num">2026-09-14</td>
+                  </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             <!-- board:end -->
           </div>

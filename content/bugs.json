@@ -12,5 +12,132 @@
     "url": "the page the report is about, or empty"
   },
   "report_to": "",
-  "bugs": []
+  "bugs": [
+    {
+      "id": "FJ-0001",
+      "official": false,
+      "state": "open",
+      "area": "language",
+      "version": "站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha",
+      "reported": "2026-09-14",
+      "zh": "Loment B1 — 工具链页说 lompkg「还没重写」；0.1.4 已重写，L0 生成器 lomc 也已重写",
+      "en": "Loment B1 — 工具链页说 lompkg「还没重写」；0.1.4 已重写，L0 生成器 lomc 也已重写",
+      "url": "https://fujojtop.github.io/FujoOSwebsite/docs/language/toolchain/",
+      "report": {
+        "what": "https://fujojtop.github.io/FujoOSwebsite/docs/language/toolchain/ ——「这是工具链上唯一还没重写成 Loment 的一个」（讲 lompkg）；\nhttps://fujojtop.github.io/FujoOSwebsite/docs/project/limitations/ 语言段第 16 条 ——「一个工具还是 Python —— 包管理 lompkg。」",
+        "cmd": "git show v0.1.4-alpha:loment/tools/lompkg.lomt | head -1\npython tools/loment_pkg_test.py | tail -1",
+        "out": "// loment/tools/lompkg.lomt — Loment 版包管理器 (无 Python, docs/159 §4b)\nloment_pkg_test: 3/3 通过",
+        "expect": "工具链页与已知边界都不该再有「还是 Python」的工具：0.1.4 里 lomfmt / lomdoc / loment_lsp / lompkg\n四块都已用 Loment 重写，判据是与 Python 版 stdout 逐字节相同 + 退出码相同。\n另外 **L0 生成器 lomc** 也已重写（loment/tools/lomc.lomt：四个后端与 Python 版逐字节相同，\n12 份生成物一个字节没动），工具链页目前完全没提它 —— 建议补一行说明它不再是 Python。",
+        "env": "Windows 11 + WSL2；clang 22.1.8；仓库 Fujoos-FujoLang-DEV @ c47c970"
+      }
+    },
+    {
+      "id": "FJ-0002",
+      "official": false,
+      "state": "open",
+      "area": "language",
+      "version": "站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha",
+      "reported": "2026-09-14",
+      "zh": "Loment B2 — 站点版本号仍是 0.1.3.4 Alpha；仓库已 0.1.4 Alpha 并打了 tag",
+      "en": "Loment B2 — 站点版本号仍是 0.1.3.4 Alpha；仓库已 0.1.4 Alpha 并打了 tag",
+      "url": "https://fujojtop.github.io/FujoOSwebsite/docs/project/limitations/",
+      "report": {
+        "what": "https://fujojtop.github.io/FujoOSwebsite/docs/project/limitations/ 语言段第 14 条 ——「Loment 尚未向开发者发布 —— 0.1.3.4 Alpha 已经完成并冻结\n（M96 完成，冻结面见 docs/158）。」\nhttps://fujojtop.github.io/FujoOSwebsite/loment/ 页脚 ——「MIT Loment 0.1.3.4 Alpha · Potato v1」；页内对话框 ——「目前是 0.1.3.4 Alpha」",
+        "cmd": "git describe --tags\npython -c \"import json;print(json.load(open('loment/build/release-manifest.json',encoding='utf-8'))['release'])\"\ngit rev-list -n1 v0.1.4-alpha | cut -c1-7",
+        "out": "v0.1.4-alpha-2-gc47c970\n0.1.4-alpha\nf3da70e",
+        "expect": "站点写 **0.1.4 Alpha**（tag `v0.1.4-alpha`）。这一版的主题是「去 Python 收口」：用户侧工具链与\nL0 生成器全部 Loment 化；语言面**无破坏性变更**（冻结面语义与 0.1.3.4 相同），L0 的 12 个\n生成物一个字节没动 —— 所以「已完成并冻结」这半句可以保留，只有版本号要换。",
+        "env": "Windows 11 + WSL2；clang 22.1.8；仓库 Fujoos-FujoLang-DEV @ c47c970"
+      }
+    },
+    {
+      "id": "FJ-0003",
+      "official": false,
+      "state": "open",
+      "area": "language",
+      "version": "站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha",
+      "reported": "2026-09-14",
+      "zh": "Loment B3 — 自举页的三阶段定点字节数 1002385 B 与实现不符（现为 1630436 B）",
+      "en": "Loment B3 — 自举页的三阶段定点字节数 1002385 B 与实现不符（现为 1630436 B）",
+      "url": "https://fujojtop.github.io/FujoOSwebsite/docs/language/selfhost/",
+      "report": {
+        "what": "https://fujojtop.github.io/FujoOSwebsite/docs/language/selfhost/ 统计卡 ——「1002385 B 三阶段产物 IR 逐字节全等」",
+        "cmd": "wc -c < loment/build/selfhost_driver.ll",
+        "out": "1630436",
+        "expect": "统计卡里的数字应随实现更新（或干脆不印死数字，改成「由 tools/loment_seed.py 现算」，并说明它被\n门禁钉住）。这个数在新版本来就该动：0.1.4 修了自举 checker 的「复合类型表按函数清零」，驱动\n单元的 IR 跟着变（1 630 342 → 1 630 422 B，再到现在的 1 630 436 B）。「逐字节全等」这个**性质**\n没变（loment_seed_test 每次都验），只有数字过期。",
+        "env": "Windows 11 + WSL2；clang 22.1.8；仓库 Fujoos-FujoLang-DEV @ c47c970"
+      }
+    },
+    {
+      "id": "FJ-0004",
+      "official": false,
+      "state": "open",
+      "area": "language",
+      "version": "站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha",
+      "reported": "2026-09-14",
+      "zh": "Loment B4 — 自举页写「完成 86 个」；里程碑实为完成 87、部分 8",
+      "en": "Loment B4 — 自举页写「完成 86 个」；里程碑实为完成 87、部分 8",
+      "url": "https://fujojtop.github.io/FujoOSwebsite/docs/language/selfhost/",
+      "report": {
+        "what": "https://fujojtop.github.io/FujoOSwebsite/docs/language/selfhost/「还差什么」段 ——「100 个里程碑口径下完成 86 个」",
+        "cmd": "sed -n '6p' docs/154-loment-status.md",
+        "out": "- 完成 **87/100** · 部分 **8** · 未达 **1** · 未开始 **4**",
+        "expect": "完成 **87**、部分 **8**（未达 1、未开始 4 不变）。增量是 **M59 调试信息**收口：DWARF 在语句级\n行表之外补上了变量信息，M59 从「部分」翻成「完成」。docs/154 由 tools/loment_status.py 从\ndocs/145 生成、门禁 C10 盯着它；站上那行是它的一个过期副本。",
+        "env": "Windows 11 + WSL2；clang 22.1.8；仓库 Fujoos-FujoLang-DEV @ c47c970"
+      }
+    },
+    {
+      "id": "FJ-0005",
+      "official": false,
+      "state": "open",
+      "area": "language",
+      "version": "站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha",
+      "reported": "2026-09-14",
+      "zh": "Loment B5 — 已知边界「调试信息只有语句级行表，没有变量信息」已不成立",
+      "en": "Loment B5 — 已知边界「调试信息只有语句级行表，没有变量信息」已不成立",
+      "url": "https://fujojtop.github.io/FujoOSwebsite/docs/project/limitations/",
+      "report": {
+        "what": "https://fujojtop.github.io/FujoOSwebsite/docs/project/limitations/ 语言段第 17 条 ——「aarch64 能交叉编译但没有模拟器验证 —— 产物没有真正跑过。\n调试信息也只有语句级行表，没有变量信息。」",
+        "cmd": "python tools/lomentc.py loment/examples/toolchain.lomt \\\n       --emit-llvm x.ll --emit-potato x.json --debug\ngrep -c '!DILocalVariable' x.ll\ngrep -c 'dbg_declare' x.ll",
+        "out": "14\n14",
+        "expect": "「没有变量信息」这半句要去掉、换成准确边界：**行表 + 变量名与声明行**已经有了（每个形参/局部\n一条 DILocalVariable 元数据 + 一条 #dbg_declare 调试记录，形参带 arg:，类型走 DIBasicType）；\n仍存在的是**位置求值** —— llvm-objdump --debug-vars 在 freestanding 目标上只显示\n`<unknown op DW_OP_fbreg>`，而 clang 自己发射的 C 产物在同一条命令下**显示完全相同**，所以那是\n工具限制、不是元数据缺陷。aarch64 那半句仍然成立。",
+        "env": "Windows 11 + WSL2；clang 22.1.8；仓库 Fujoos-FujoLang-DEV @ c47c970"
+      }
+    },
+    {
+      "id": "FJ-0006",
+      "official": false,
+      "state": "open",
+      "area": "language",
+      "version": "站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha",
+      "reported": "2026-09-14",
+      "zh": "Loment B6 — 已知边界缺一条：自举 codegen 对 `(a + b as T) as U` 发非法 IR",
+      "en": "Loment B6 — 已知边界缺一条：自举 codegen 对 `(a + b as T) as U` 发非法 IR",
+      "url": "https://fujojtop.github.io/FujoOSwebsite/docs/project/limitations/",
+      "report": {
+        "what": "https://fujojtop.github.io/FujoOSwebsite/docs/project/limitations/「语言」段（5 条）里**没有**这一条；https://fujojtop.github.io/FujoOSwebsite/docs/language/selfhost/ 说「IR 生成：.ll 与 Python 版逐字节一致，\n目标覆盖 39/39」——39/39 是语料范围，不含下面这个构造",
+        "cmd": "printf 'module b6\\nfn f(x: u64) -> u8 {\\n    let y: u8 = (48 + (x %% 10) as u32) as u8;\\n    return y;\\n}\\n' > b6.lomt\npython tools/lomentc.py b6.lomt --emit-llvm ref.ll --emit-potato p.json && grep 'trunc i' ref.ll\nsh loment/bootstrap.sh b6.lomt | grep 'trunc i'",
+        "out": "参考实现：  %t6 = trunc i32 %t5 to i8\n自举 stage1：%t6 = trunc i64 %t5 to i8      ← %t5 其实是 i32；clang 直接拒",
+        "expect": "两条应当一致（都 trunc i32）。根因在自举 codegen 的 operand_type()（loment/selfhost/codegen.lomt:318）：\n运算符右侧是「带 as 的括号表达式」时，它进括号取了里层 x 的类型（u64），**没把括号后面那个\n`as u32` 算进去**；参考实现的 expr_type(Bin) 取 `lt or rt`，这里正是 u32。建议要么修 operand_type，\n要么写进已知边界 —— 现在的绕法是在源码里多写一次中间变量，用户不该需要知道这件事。",
+        "env": "Windows 11 + WSL2；clang 22.1.8；仓库 Fujoos-FujoLang-DEV @ c47c970"
+      }
+    },
+    {
+      "id": "FJ-0007",
+      "official": false,
+      "state": "open",
+      "area": "language",
+      "version": "站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha",
+      "reported": "2026-09-14",
+      "zh": "Loment B7 — 已知边界缺一条：大单元里拿 `fn` 当局部名会让自举 checker 走岔",
+      "en": "Loment B7 — 已知边界缺一条：大单元里拿 `fn` 当局部名会让自举 checker 走岔",
+      "url": "https://fujojtop.github.io/FujoOSwebsite/docs/project/limitations/",
+      "report": {
+        "what": "https://fujojtop.github.io/FujoOSwebsite/docs/project/limitations/「语言」段（5 条）里**没有**这一条；https://fujojtop.github.io/FujoOSwebsite/docs/language/selfhost/ 说「类型检查：规则等价 63/63；另有 63 条\n负例直接喂自举驱动，全部非零退出且无假阳性」——63 条负例范围内为真，下面这个形状不在那 63 条里",
+        "cmd": "# 把仓库里那个局部改回 fn（其余不动），走自举链\nsed 's/fname/fn/g' loment/tools/lomc.lomt > lomc_fn.lomt\nsh loment/bootstrap.sh lomc_fn.lomt > /dev/null; echo \"exit=$?\"\n# 最小对照：单独一个单元，同样写法\nprintf 'module b7\\nfn f() -> u32 {\\n    let fn: u64 = 1;\\n    return fn as u32;\\n}\\n' > b7.lomt\nsh loment/bootstrap.sh b7.lomt | head -1",
+        "out": "lomc_fn.lomt：fujoc-s: 静态检查未通过 / E2 @… line …: fn …（一串 E002 连锁）  exit=1\nb7.lomt    ：正常发射 IR，与参考实现**逐字节一致**、零诊断",
+        "expect": "这条要写清形状再决定写不写进边界 —— **它不是「关键字当标识符被误拒」**（最小单元证明那个说法\n不成立），而是**某个规模相关的表/游标**被这个 token 触发：同一个 `let fn`，放进 357 个 let /\n108 个 fn 的 lomc.lomt 就炸，放进单函数单元就没事；把变量改名即通过。已知边界（或自举页的\n「还差什么」）应据实记这一条，根因定位后再升级为「已修」。\n（我最初把它误诊成「关键字假阳性」并写进了仓库文档与 v0.1.4-alpha 的 tag 消息，已在\ndocs/150 留更正框、单独提交订正 c47c970。录入时请按订正后的说法。）",
+        "env": "Windows 11 + WSL2；clang 22.1.8；仓库 Fujoos-FujoLang-DEV @ c47c970"
+      }
+    }
+  ]
 }
