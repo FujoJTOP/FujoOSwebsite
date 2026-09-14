@@ -1384,6 +1384,31 @@ td strong {
   color: var(--fg-3);
   font-size: var(--t-sm);
 }
+/* The evidence, folded away until asked for. A title alone is a claim with
+   the working taken out, so the working is here — but open by default it
+   would bury the table. */
+.board__proof {
+  margin-top: 0.4rem;
+}
+.board__proof summary {
+  cursor: pointer;
+  font-size: var(--t-xs);
+  color: var(--fg-3);
+}
+.board__proof summary:hover {
+  color: var(--fg);
+}
+.board__proof pre {
+  margin-top: 0.4rem;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--rule-soft);
+  border-radius: var(--radius);
+  background: var(--bg-2);
+  font-size: var(--t-xs);
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
 .board__st {
   color: var(--fg-3);
 }

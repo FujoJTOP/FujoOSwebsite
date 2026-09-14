@@ -313,13 +313,16 @@ ${indent}</script>`;
    way the docs rail marks where you are. */
 const BUG_STATES = {
   open: ["待确认", "Open"],
-  confirmed: ["已确认", "Confirmed"],
+  unfixed: ["未修", "Unfixed"],
   fixed: ["已修", "Fixed"],
   duplicate: ["重复", "Duplicate"],
   invalid: ["无效", "Invalid"],
   wontfix: ["不予处理", "Won't fix"],
 };
-const BUG_STATE_ORDER = ["open", "confirmed", "fixed", "duplicate", "invalid", "wontfix"];
+const BUG_STATE_ORDER = ["open", "unfixed", "fixed", "duplicate", "invalid", "wontfix"];
+/* The two that are still live. Everything else has been closed, and a closed
+   bug with no reason written down is the thing this board exists to avoid. */
+const BUG_OPEN_STATES = ["open", "unfixed"];
 /* Provenance, and the anti-noise mechanism. Anything anyone sends is kept and
    shown as 非官方 — a claim, reproduced by its reporter and by nobody here.
    Only what this project has itself reproduced or judged becomes 官方. That
@@ -360,7 +363,7 @@ function loadBugs() {
        the thing this board exists to avoid. Only official entries can be
        closed at all — nobody here has the standing to close someone else's
        unverified claim. */
-    if (b.official && !["open", "confirmed"].includes(b.state) && !b.res_zh && !b.res_en)
+    if (b.official && !BUG_OPEN_STATES.includes(b.state) && !b.res_zh && !b.res_en)
       problems.push(`content/bugs.json: ${b.id} is "${b.state}" with no resolution written`);
     if (!b.official && b.state !== "open")
       problems.push(`content/bugs.json: ${b.id} is unofficial, so its state can only be "open"`);
@@ -416,10 +419,25 @@ ${i}</div>`;
       const [azh, aen] = BUG_AREAS[b.area];
       const org = b.official ? "official" : "unofficial";
       const [ozh, oen] = BUG_ORGS[org];
-      const hay = [b.id, b.zh, b.en, b.version, szh, sen, azh, aen, ozh, oen]
+      const hay = [b.id, b.zh, b.en, b.version, szh, sen, azh, aen, ozh, oen, b.report && b.report.what]
         .filter(Boolean)
         .join(" ")
         .toLowerCase();
+      /* The evidence travels with the report, so it is shown rather than
+         merely filed — a title on its own is a claim with the working taken
+         out. The labels are the contract's own field names: language-neutral,
+         and the same words an agent posts to the API. */
+      const proofBody = b.report
+        ? ["what", "cmd", "out", "expect", "env"]
+            .filter((k) => b.report[k])
+            .map((k) => `${k}:\n${b.report[k]}`)
+            .join("\n\n")
+        : "";
+      const proof = proofBody
+        ? `<details class="board__proof"><summary data-zh="证据" data-en="Evidence">证据</summary><pre>${esc(
+            proofBody
+          )}</pre></details>`
+        : "";
       const version = b.version
         ? `<span class="board__meta" data-zh="${esc(b.version)}" data-en="${esc(b.version)}">${esc(b.version)}</span>`
         : "";
@@ -430,7 +448,7 @@ ${i}</div>`;
       const title = `<a class="board__t"${link} data-zh="${esc(b.zh || b.en)}" data-en="${esc(b.en || b.zh)}">${esc(b.zh || b.en)}</a>`;
       return `${i2}  <tr id="${esc(b.id)}" data-board-row data-state="${esc(b.state)}" data-search="${esc(hay)}">
 ${i2}    <td class="num board__id">${esc(b.id)}</td>
-${i2}    <td>${title}${version}${res}</td>
+${i2}    <td>${title}${version}${res}${proof}</td>
 ${i2}    <td data-zh="${esc(azh)}" data-en="${esc(aen)}">${esc(azh)}</td>
 ${i2}    <td><span class="tag board__org board__org--${org}" data-zh="${esc(ozh)}" data-en="${esc(oen)}">${esc(ozh)}</span></td>
 ${i2}    <td><span class="tag board__st board__st--${esc(b.state)}" data-zh="${esc(szh)}" data-en="${esc(sen)}">${esc(szh)}</span></td>

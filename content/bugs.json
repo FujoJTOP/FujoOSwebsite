@@ -1,22 +1,23 @@
 {
-  "_comment": "The bug board at /bugs/. An ordinary file — edit it by hand and re-run tools/docs.gen.mjs. Reported bugs arrive by mail (see report_to) and are written in here once they are understood; the board is the record, not the inbox.",
+  "_comment": "The bug board at /bugs/. An ordinary file — edit it by hand and run node tools/docs.gen.mjs. Reports arrive through the submit page and through tools/bugapi.mjs; the board is the record, not the inbox.",
   "_schema": {
     "id": "FJ-0001 — assigned in order, never reused, never renumbered",
-    "state": "open | confirmed | fixed | duplicate | invalid | wontfix",
+    "state": "open | unfixed | fixed | duplicate | invalid | wontfix. open and unfixed are the live ones and need no resolution; the rest are closed and must say why.",
     "area": "kernel | language | compat | ai | site",
     "version": "the version string the report was made against",
     "reported": "YYYY-MM-DD",
     "fixed_in": "version string, or empty",
     "zh / en": "the title, in the two site languages",
     "res_zh / res_en": "how it was resolved — required for anything but open and confirmed",
-    "url": "the page the report is about, or empty"
+    "url": "the page the report is about, or empty",
+    "official": "true | false. true once this project has itself reproduced or judged it. false is what a report is when it arrives: kept and shown, marked as nobody-here-has-checked-it."
   },
   "report_to": "",
   "bugs": [
     {
       "id": "FJ-0001",
-      "official": false,
-      "state": "open",
+      "official": true,
+      "state": "unfixed",
       "area": "language",
       "version": "站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha",
       "reported": "2026-09-14",
@@ -33,8 +34,8 @@
     },
     {
       "id": "FJ-0002",
-      "official": false,
-      "state": "open",
+      "official": true,
+      "state": "unfixed",
       "area": "language",
       "version": "站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha",
       "reported": "2026-09-14",
@@ -51,8 +52,8 @@
     },
     {
       "id": "FJ-0003",
-      "official": false,
-      "state": "open",
+      "official": true,
+      "state": "unfixed",
       "area": "language",
       "version": "站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha",
       "reported": "2026-09-14",
@@ -69,8 +70,8 @@
     },
     {
       "id": "FJ-0004",
-      "official": false,
-      "state": "open",
+      "official": true,
+      "state": "unfixed",
       "area": "language",
       "version": "站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha",
       "reported": "2026-09-14",
@@ -87,8 +88,8 @@
     },
     {
       "id": "FJ-0005",
-      "official": false,
-      "state": "open",
+      "official": true,
+      "state": "unfixed",
       "area": "language",
       "version": "站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha",
       "reported": "2026-09-14",
@@ -105,8 +106,8 @@
     },
     {
       "id": "FJ-0006",
-      "official": false,
-      "state": "open",
+      "official": true,
+      "state": "unfixed",
       "area": "language",
       "version": "站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha",
       "reported": "2026-09-14",
@@ -123,8 +124,8 @@
     },
     {
       "id": "FJ-0007",
-      "official": false,
-      "state": "open",
+      "official": true,
+      "state": "unfixed",
       "area": "language",
       "version": "站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha",
       "reported": "2026-09-14",

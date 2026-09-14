@@ -32,7 +32,7 @@
       href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Geist+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="../assets/style.css?v=83c9e677" />
+    <link rel="stylesheet" href="../assets/style.css?v=76690bc6" />
     <link rel="icon" href="../favicon.ico" sizes="48x48" />
     <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" sizes="any" />
     <link rel="icon" type="image/png" href="../assets/favicon-32.png" sizes="32x32" />
@@ -243,7 +243,7 @@
               <div class="board" data-board>
                 <div class="board__bar">
                   <button type="button" class="board__chip" data-board-state="all" aria-pressed="true" data-zh-html="全部 <span class=&quot;board__n&quot;>7</span>" data-en-html="All <span class=&quot;board__n&quot;>7</span>">全部 <span class="board__n">7</span></button>
-                  <button type="button" class="board__chip" data-board-state="open" aria-pressed="false" data-zh-html="待确认 <span class=&quot;board__n&quot;>7</span>" data-en-html="Open <span class=&quot;board__n&quot;>7</span>">待确认 <span class="board__n">7</span></button>
+                  <button type="button" class="board__chip" data-board-state="unfixed" aria-pressed="false" data-zh-html="未修 <span class=&quot;board__n&quot;>7</span>" data-en-html="Unfixed <span class=&quot;board__n&quot;>7</span>">未修 <span class="board__n">7</span></button>
                   <label class="board__search">
                     <span data-zh="搜索" data-en="Search">搜索</span>
                     <input type="search" data-board-search autocomplete="off" aria-label="搜索编号或标题" data-zh-aria="搜索编号或标题" data-en-aria="Search by id or title" />
@@ -263,60 +263,204 @@
                       </tr>
                     </thead>
                     <tbody>
-                  <tr id="FJ-0001" data-board-row data-state="open" data-search="fj-0001 loment b1 — 工具链页说 lompkg「还没重写」；0.1.4 已重写，l0 生成器 lomc 也已重写 loment b1 — 工具链页说 lompkg「还没重写」；0.1.4 已重写，l0 生成器 lomc 也已重写 站点显示 0.1.3.4 alpha · 实测 0.1.4-alpha 待确认 open 语言 language 非官方 unofficial">
+                  <tr id="FJ-0001" data-board-row data-state="unfixed" data-search="fj-0001 loment b1 — 工具链页说 lompkg「还没重写」；0.1.4 已重写，l0 生成器 lomc 也已重写 loment b1 — 工具链页说 lompkg「还没重写」；0.1.4 已重写，l0 生成器 lomc 也已重写 站点显示 0.1.3.4 alpha · 实测 0.1.4-alpha 未修 unfixed 语言 language 官方 official https://fujojtop.github.io/fujooswebsite/docs/language/toolchain/ ——「这是工具链上唯一还没重写成 loment 的一个」（讲 lompkg）；
+https://fujojtop.github.io/fujooswebsite/docs/project/limitations/ 语言段第 16 条 ——「一个工具还是 python —— 包管理 lompkg。」">
                     <td class="num board__id">FJ-0001</td>
-                    <td><a class="board__t" href="https://fujojtop.github.io/FujoOSwebsite/docs/language/toolchain/" data-zh="Loment B1 — 工具链页说 lompkg「还没重写」；0.1.4 已重写，L0 生成器 lomc 也已重写" data-en="Loment B1 — 工具链页说 lompkg「还没重写」；0.1.4 已重写，L0 生成器 lomc 也已重写">Loment B1 — 工具链页说 lompkg「还没重写」；0.1.4 已重写，L0 生成器 lomc 也已重写</a><span class="board__meta" data-zh="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha" data-en="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha">站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha</span></td>
+                    <td><a class="board__t" href="https://fujojtop.github.io/FujoOSwebsite/docs/language/toolchain/" data-zh="Loment B1 — 工具链页说 lompkg「还没重写」；0.1.4 已重写，L0 生成器 lomc 也已重写" data-en="Loment B1 — 工具链页说 lompkg「还没重写」；0.1.4 已重写，L0 生成器 lomc 也已重写">Loment B1 — 工具链页说 lompkg「还没重写」；0.1.4 已重写，L0 生成器 lomc 也已重写</a><span class="board__meta" data-zh="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha" data-en="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha">站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha</span><details class="board__proof"><summary data-zh="证据" data-en="Evidence">证据</summary><pre>what:
+https://fujojtop.github.io/FujoOSwebsite/docs/language/toolchain/ ——「这是工具链上唯一还没重写成 Loment 的一个」（讲 lompkg）；
+https://fujojtop.github.io/FujoOSwebsite/docs/project/limitations/ 语言段第 16 条 ——「一个工具还是 Python —— 包管理 lompkg。」
+
+cmd:
+git show v0.1.4-alpha:loment/tools/lompkg.lomt | head -1
+python tools/loment_pkg_test.py | tail -1
+
+out:
+// loment/tools/lompkg.lomt — Loment 版包管理器 (无 Python, docs/159 §4b)
+loment_pkg_test: 3/3 通过
+
+expect:
+工具链页与已知边界都不该再有「还是 Python」的工具：0.1.4 里 lomfmt / lomdoc / loment_lsp / lompkg
+四块都已用 Loment 重写，判据是与 Python 版 stdout 逐字节相同 + 退出码相同。
+另外 **L0 生成器 lomc** 也已重写（loment/tools/lomc.lomt：四个后端与 Python 版逐字节相同，
+12 份生成物一个字节没动），工具链页目前完全没提它 —— 建议补一行说明它不再是 Python。
+
+env:
+Windows 11 + WSL2；clang 22.1.8；仓库 Fujoos-FujoLang-DEV @ c47c970</pre></details></td>
                     <td data-zh="语言" data-en="Language">语言</td>
-                    <td><span class="tag board__org board__org--unofficial" data-zh="非官方" data-en="Unofficial">非官方</span></td>
-                    <td><span class="tag board__st board__st--open" data-zh="待确认" data-en="Open">待确认</span></td>
+                    <td><span class="tag board__org board__org--official" data-zh="官方" data-en="Official">官方</span></td>
+                    <td><span class="tag board__st board__st--unfixed" data-zh="未修" data-en="Unfixed">未修</span></td>
                     <td class="num">2026-09-14</td>
                   </tr>
-                  <tr id="FJ-0002" data-board-row data-state="open" data-search="fj-0002 loment b2 — 站点版本号仍是 0.1.3.4 alpha；仓库已 0.1.4 alpha 并打了 tag loment b2 — 站点版本号仍是 0.1.3.4 alpha；仓库已 0.1.4 alpha 并打了 tag 站点显示 0.1.3.4 alpha · 实测 0.1.4-alpha 待确认 open 语言 language 非官方 unofficial">
+                  <tr id="FJ-0002" data-board-row data-state="unfixed" data-search="fj-0002 loment b2 — 站点版本号仍是 0.1.3.4 alpha；仓库已 0.1.4 alpha 并打了 tag loment b2 — 站点版本号仍是 0.1.3.4 alpha；仓库已 0.1.4 alpha 并打了 tag 站点显示 0.1.3.4 alpha · 实测 0.1.4-alpha 未修 unfixed 语言 language 官方 official https://fujojtop.github.io/fujooswebsite/docs/project/limitations/ 语言段第 14 条 ——「loment 尚未向开发者发布 —— 0.1.3.4 alpha 已经完成并冻结
+（m96 完成，冻结面见 docs/158）。」
+https://fujojtop.github.io/fujooswebsite/loment/ 页脚 ——「mit loment 0.1.3.4 alpha · potato v1」；页内对话框 ——「目前是 0.1.3.4 alpha」">
                     <td class="num board__id">FJ-0002</td>
-                    <td><a class="board__t" href="https://fujojtop.github.io/FujoOSwebsite/docs/project/limitations/" data-zh="Loment B2 — 站点版本号仍是 0.1.3.4 Alpha；仓库已 0.1.4 Alpha 并打了 tag" data-en="Loment B2 — 站点版本号仍是 0.1.3.4 Alpha；仓库已 0.1.4 Alpha 并打了 tag">Loment B2 — 站点版本号仍是 0.1.3.4 Alpha；仓库已 0.1.4 Alpha 并打了 tag</a><span class="board__meta" data-zh="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha" data-en="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha">站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha</span></td>
+                    <td><a class="board__t" href="https://fujojtop.github.io/FujoOSwebsite/docs/project/limitations/" data-zh="Loment B2 — 站点版本号仍是 0.1.3.4 Alpha；仓库已 0.1.4 Alpha 并打了 tag" data-en="Loment B2 — 站点版本号仍是 0.1.3.4 Alpha；仓库已 0.1.4 Alpha 并打了 tag">Loment B2 — 站点版本号仍是 0.1.3.4 Alpha；仓库已 0.1.4 Alpha 并打了 tag</a><span class="board__meta" data-zh="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha" data-en="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha">站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha</span><details class="board__proof"><summary data-zh="证据" data-en="Evidence">证据</summary><pre>what:
+https://fujojtop.github.io/FujoOSwebsite/docs/project/limitations/ 语言段第 14 条 ——「Loment 尚未向开发者发布 —— 0.1.3.4 Alpha 已经完成并冻结
+（M96 完成，冻结面见 docs/158）。」
+https://fujojtop.github.io/FujoOSwebsite/loment/ 页脚 ——「MIT Loment 0.1.3.4 Alpha · Potato v1」；页内对话框 ——「目前是 0.1.3.4 Alpha」
+
+cmd:
+git describe --tags
+python -c "import json;print(json.load(open('loment/build/release-manifest.json',encoding='utf-8'))['release'])"
+git rev-list -n1 v0.1.4-alpha | cut -c1-7
+
+out:
+v0.1.4-alpha-2-gc47c970
+0.1.4-alpha
+f3da70e
+
+expect:
+站点写 **0.1.4 Alpha**（tag `v0.1.4-alpha`）。这一版的主题是「去 Python 收口」：用户侧工具链与
+L0 生成器全部 Loment 化；语言面**无破坏性变更**（冻结面语义与 0.1.3.4 相同），L0 的 12 个
+生成物一个字节没动 —— 所以「已完成并冻结」这半句可以保留，只有版本号要换。
+
+env:
+Windows 11 + WSL2；clang 22.1.8；仓库 Fujoos-FujoLang-DEV @ c47c970</pre></details></td>
                     <td data-zh="语言" data-en="Language">语言</td>
-                    <td><span class="tag board__org board__org--unofficial" data-zh="非官方" data-en="Unofficial">非官方</span></td>
-                    <td><span class="tag board__st board__st--open" data-zh="待确认" data-en="Open">待确认</span></td>
+                    <td><span class="tag board__org board__org--official" data-zh="官方" data-en="Official">官方</span></td>
+                    <td><span class="tag board__st board__st--unfixed" data-zh="未修" data-en="Unfixed">未修</span></td>
                     <td class="num">2026-09-14</td>
                   </tr>
-                  <tr id="FJ-0003" data-board-row data-state="open" data-search="fj-0003 loment b3 — 自举页的三阶段定点字节数 1002385 b 与实现不符（现为 1630436 b） loment b3 — 自举页的三阶段定点字节数 1002385 b 与实现不符（现为 1630436 b） 站点显示 0.1.3.4 alpha · 实测 0.1.4-alpha 待确认 open 语言 language 非官方 unofficial">
+                  <tr id="FJ-0003" data-board-row data-state="unfixed" data-search="fj-0003 loment b3 — 自举页的三阶段定点字节数 1002385 b 与实现不符（现为 1630436 b） loment b3 — 自举页的三阶段定点字节数 1002385 b 与实现不符（现为 1630436 b） 站点显示 0.1.3.4 alpha · 实测 0.1.4-alpha 未修 unfixed 语言 language 官方 official https://fujojtop.github.io/fujooswebsite/docs/language/selfhost/ 统计卡 ——「1002385 b 三阶段产物 ir 逐字节全等」">
                     <td class="num board__id">FJ-0003</td>
-                    <td><a class="board__t" href="https://fujojtop.github.io/FujoOSwebsite/docs/language/selfhost/" data-zh="Loment B3 — 自举页的三阶段定点字节数 1002385 B 与实现不符（现为 1630436 B）" data-en="Loment B3 — 自举页的三阶段定点字节数 1002385 B 与实现不符（现为 1630436 B）">Loment B3 — 自举页的三阶段定点字节数 1002385 B 与实现不符（现为 1630436 B）</a><span class="board__meta" data-zh="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha" data-en="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha">站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha</span></td>
+                    <td><a class="board__t" href="https://fujojtop.github.io/FujoOSwebsite/docs/language/selfhost/" data-zh="Loment B3 — 自举页的三阶段定点字节数 1002385 B 与实现不符（现为 1630436 B）" data-en="Loment B3 — 自举页的三阶段定点字节数 1002385 B 与实现不符（现为 1630436 B）">Loment B3 — 自举页的三阶段定点字节数 1002385 B 与实现不符（现为 1630436 B）</a><span class="board__meta" data-zh="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha" data-en="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha">站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha</span><details class="board__proof"><summary data-zh="证据" data-en="Evidence">证据</summary><pre>what:
+https://fujojtop.github.io/FujoOSwebsite/docs/language/selfhost/ 统计卡 ——「1002385 B 三阶段产物 IR 逐字节全等」
+
+cmd:
+wc -c &lt; loment/build/selfhost_driver.ll
+
+out:
+1630436
+
+expect:
+统计卡里的数字应随实现更新（或干脆不印死数字，改成「由 tools/loment_seed.py 现算」，并说明它被
+门禁钉住）。这个数在新版本来就该动：0.1.4 修了自举 checker 的「复合类型表按函数清零」，驱动
+单元的 IR 跟着变（1 630 342 → 1 630 422 B，再到现在的 1 630 436 B）。「逐字节全等」这个**性质**
+没变（loment_seed_test 每次都验），只有数字过期。
+
+env:
+Windows 11 + WSL2；clang 22.1.8；仓库 Fujoos-FujoLang-DEV @ c47c970</pre></details></td>
                     <td data-zh="语言" data-en="Language">语言</td>
-                    <td><span class="tag board__org board__org--unofficial" data-zh="非官方" data-en="Unofficial">非官方</span></td>
-                    <td><span class="tag board__st board__st--open" data-zh="待确认" data-en="Open">待确认</span></td>
+                    <td><span class="tag board__org board__org--official" data-zh="官方" data-en="Official">官方</span></td>
+                    <td><span class="tag board__st board__st--unfixed" data-zh="未修" data-en="Unfixed">未修</span></td>
                     <td class="num">2026-09-14</td>
                   </tr>
-                  <tr id="FJ-0004" data-board-row data-state="open" data-search="fj-0004 loment b4 — 自举页写「完成 86 个」；里程碑实为完成 87、部分 8 loment b4 — 自举页写「完成 86 个」；里程碑实为完成 87、部分 8 站点显示 0.1.3.4 alpha · 实测 0.1.4-alpha 待确认 open 语言 language 非官方 unofficial">
+                  <tr id="FJ-0004" data-board-row data-state="unfixed" data-search="fj-0004 loment b4 — 自举页写「完成 86 个」；里程碑实为完成 87、部分 8 loment b4 — 自举页写「完成 86 个」；里程碑实为完成 87、部分 8 站点显示 0.1.3.4 alpha · 实测 0.1.4-alpha 未修 unfixed 语言 language 官方 official https://fujojtop.github.io/fujooswebsite/docs/language/selfhost/「还差什么」段 ——「100 个里程碑口径下完成 86 个」">
                     <td class="num board__id">FJ-0004</td>
-                    <td><a class="board__t" href="https://fujojtop.github.io/FujoOSwebsite/docs/language/selfhost/" data-zh="Loment B4 — 自举页写「完成 86 个」；里程碑实为完成 87、部分 8" data-en="Loment B4 — 自举页写「完成 86 个」；里程碑实为完成 87、部分 8">Loment B4 — 自举页写「完成 86 个」；里程碑实为完成 87、部分 8</a><span class="board__meta" data-zh="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha" data-en="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha">站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha</span></td>
+                    <td><a class="board__t" href="https://fujojtop.github.io/FujoOSwebsite/docs/language/selfhost/" data-zh="Loment B4 — 自举页写「完成 86 个」；里程碑实为完成 87、部分 8" data-en="Loment B4 — 自举页写「完成 86 个」；里程碑实为完成 87、部分 8">Loment B4 — 自举页写「完成 86 个」；里程碑实为完成 87、部分 8</a><span class="board__meta" data-zh="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha" data-en="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha">站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha</span><details class="board__proof"><summary data-zh="证据" data-en="Evidence">证据</summary><pre>what:
+https://fujojtop.github.io/FujoOSwebsite/docs/language/selfhost/「还差什么」段 ——「100 个里程碑口径下完成 86 个」
+
+cmd:
+sed -n '6p' docs/154-loment-status.md
+
+out:
+- 完成 **87/100** · 部分 **8** · 未达 **1** · 未开始 **4**
+
+expect:
+完成 **87**、部分 **8**（未达 1、未开始 4 不变）。增量是 **M59 调试信息**收口：DWARF 在语句级
+行表之外补上了变量信息，M59 从「部分」翻成「完成」。docs/154 由 tools/loment_status.py 从
+docs/145 生成、门禁 C10 盯着它；站上那行是它的一个过期副本。
+
+env:
+Windows 11 + WSL2；clang 22.1.8；仓库 Fujoos-FujoLang-DEV @ c47c970</pre></details></td>
                     <td data-zh="语言" data-en="Language">语言</td>
-                    <td><span class="tag board__org board__org--unofficial" data-zh="非官方" data-en="Unofficial">非官方</span></td>
-                    <td><span class="tag board__st board__st--open" data-zh="待确认" data-en="Open">待确认</span></td>
+                    <td><span class="tag board__org board__org--official" data-zh="官方" data-en="Official">官方</span></td>
+                    <td><span class="tag board__st board__st--unfixed" data-zh="未修" data-en="Unfixed">未修</span></td>
                     <td class="num">2026-09-14</td>
                   </tr>
-                  <tr id="FJ-0005" data-board-row data-state="open" data-search="fj-0005 loment b5 — 已知边界「调试信息只有语句级行表，没有变量信息」已不成立 loment b5 — 已知边界「调试信息只有语句级行表，没有变量信息」已不成立 站点显示 0.1.3.4 alpha · 实测 0.1.4-alpha 待确认 open 语言 language 非官方 unofficial">
+                  <tr id="FJ-0005" data-board-row data-state="unfixed" data-search="fj-0005 loment b5 — 已知边界「调试信息只有语句级行表，没有变量信息」已不成立 loment b5 — 已知边界「调试信息只有语句级行表，没有变量信息」已不成立 站点显示 0.1.3.4 alpha · 实测 0.1.4-alpha 未修 unfixed 语言 language 官方 official https://fujojtop.github.io/fujooswebsite/docs/project/limitations/ 语言段第 17 条 ——「aarch64 能交叉编译但没有模拟器验证 —— 产物没有真正跑过。
+调试信息也只有语句级行表，没有变量信息。」">
                     <td class="num board__id">FJ-0005</td>
-                    <td><a class="board__t" href="https://fujojtop.github.io/FujoOSwebsite/docs/project/limitations/" data-zh="Loment B5 — 已知边界「调试信息只有语句级行表，没有变量信息」已不成立" data-en="Loment B5 — 已知边界「调试信息只有语句级行表，没有变量信息」已不成立">Loment B5 — 已知边界「调试信息只有语句级行表，没有变量信息」已不成立</a><span class="board__meta" data-zh="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha" data-en="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha">站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha</span></td>
+                    <td><a class="board__t" href="https://fujojtop.github.io/FujoOSwebsite/docs/project/limitations/" data-zh="Loment B5 — 已知边界「调试信息只有语句级行表，没有变量信息」已不成立" data-en="Loment B5 — 已知边界「调试信息只有语句级行表，没有变量信息」已不成立">Loment B5 — 已知边界「调试信息只有语句级行表，没有变量信息」已不成立</a><span class="board__meta" data-zh="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha" data-en="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha">站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha</span><details class="board__proof"><summary data-zh="证据" data-en="Evidence">证据</summary><pre>what:
+https://fujojtop.github.io/FujoOSwebsite/docs/project/limitations/ 语言段第 17 条 ——「aarch64 能交叉编译但没有模拟器验证 —— 产物没有真正跑过。
+调试信息也只有语句级行表，没有变量信息。」
+
+cmd:
+python tools/lomentc.py loment/examples/toolchain.lomt \
+       --emit-llvm x.ll --emit-potato x.json --debug
+grep -c '!DILocalVariable' x.ll
+grep -c 'dbg_declare' x.ll
+
+out:
+14
+14
+
+expect:
+「没有变量信息」这半句要去掉、换成准确边界：**行表 + 变量名与声明行**已经有了（每个形参/局部
+一条 DILocalVariable 元数据 + 一条 #dbg_declare 调试记录，形参带 arg:，类型走 DIBasicType）；
+仍存在的是**位置求值** —— llvm-objdump --debug-vars 在 freestanding 目标上只显示
+`&lt;unknown op DW_OP_fbreg&gt;`，而 clang 自己发射的 C 产物在同一条命令下**显示完全相同**，所以那是
+工具限制、不是元数据缺陷。aarch64 那半句仍然成立。
+
+env:
+Windows 11 + WSL2；clang 22.1.8；仓库 Fujoos-FujoLang-DEV @ c47c970</pre></details></td>
                     <td data-zh="语言" data-en="Language">语言</td>
-                    <td><span class="tag board__org board__org--unofficial" data-zh="非官方" data-en="Unofficial">非官方</span></td>
-                    <td><span class="tag board__st board__st--open" data-zh="待确认" data-en="Open">待确认</span></td>
+                    <td><span class="tag board__org board__org--official" data-zh="官方" data-en="Official">官方</span></td>
+                    <td><span class="tag board__st board__st--unfixed" data-zh="未修" data-en="Unfixed">未修</span></td>
                     <td class="num">2026-09-14</td>
                   </tr>
-                  <tr id="FJ-0006" data-board-row data-state="open" data-search="fj-0006 loment b6 — 已知边界缺一条：自举 codegen 对 `(a + b as t) as u` 发非法 ir loment b6 — 已知边界缺一条：自举 codegen 对 `(a + b as t) as u` 发非法 ir 站点显示 0.1.3.4 alpha · 实测 0.1.4-alpha 待确认 open 语言 language 非官方 unofficial">
+                  <tr id="FJ-0006" data-board-row data-state="unfixed" data-search="fj-0006 loment b6 — 已知边界缺一条：自举 codegen 对 `(a + b as t) as u` 发非法 ir loment b6 — 已知边界缺一条：自举 codegen 对 `(a + b as t) as u` 发非法 ir 站点显示 0.1.3.4 alpha · 实测 0.1.4-alpha 未修 unfixed 语言 language 官方 official https://fujojtop.github.io/fujooswebsite/docs/project/limitations/「语言」段（5 条）里**没有**这一条；https://fujojtop.github.io/fujooswebsite/docs/language/selfhost/ 说「ir 生成：.ll 与 python 版逐字节一致，
+目标覆盖 39/39」——39/39 是语料范围，不含下面这个构造">
                     <td class="num board__id">FJ-0006</td>
-                    <td><a class="board__t" href="https://fujojtop.github.io/FujoOSwebsite/docs/project/limitations/" data-zh="Loment B6 — 已知边界缺一条：自举 codegen 对 `(a + b as T) as U` 发非法 IR" data-en="Loment B6 — 已知边界缺一条：自举 codegen 对 `(a + b as T) as U` 发非法 IR">Loment B6 — 已知边界缺一条：自举 codegen 对 `(a + b as T) as U` 发非法 IR</a><span class="board__meta" data-zh="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha" data-en="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha">站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha</span></td>
+                    <td><a class="board__t" href="https://fujojtop.github.io/FujoOSwebsite/docs/project/limitations/" data-zh="Loment B6 — 已知边界缺一条：自举 codegen 对 `(a + b as T) as U` 发非法 IR" data-en="Loment B6 — 已知边界缺一条：自举 codegen 对 `(a + b as T) as U` 发非法 IR">Loment B6 — 已知边界缺一条：自举 codegen 对 `(a + b as T) as U` 发非法 IR</a><span class="board__meta" data-zh="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha" data-en="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha">站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha</span><details class="board__proof"><summary data-zh="证据" data-en="Evidence">证据</summary><pre>what:
+https://fujojtop.github.io/FujoOSwebsite/docs/project/limitations/「语言」段（5 条）里**没有**这一条；https://fujojtop.github.io/FujoOSwebsite/docs/language/selfhost/ 说「IR 生成：.ll 与 Python 版逐字节一致，
+目标覆盖 39/39」——39/39 是语料范围，不含下面这个构造
+
+cmd:
+printf 'module b6\nfn f(x: u64) -&gt; u8 {\n    let y: u8 = (48 + (x %% 10) as u32) as u8;\n    return y;\n}\n' &gt; b6.lomt
+python tools/lomentc.py b6.lomt --emit-llvm ref.ll --emit-potato p.json &amp;&amp; grep 'trunc i' ref.ll
+sh loment/bootstrap.sh b6.lomt | grep 'trunc i'
+
+out:
+参考实现：  %t6 = trunc i32 %t5 to i8
+自举 stage1：%t6 = trunc i64 %t5 to i8      ← %t5 其实是 i32；clang 直接拒
+
+expect:
+两条应当一致（都 trunc i32）。根因在自举 codegen 的 operand_type()（loment/selfhost/codegen.lomt:318）：
+运算符右侧是「带 as 的括号表达式」时，它进括号取了里层 x 的类型（u64），**没把括号后面那个
+`as u32` 算进去**；参考实现的 expr_type(Bin) 取 `lt or rt`，这里正是 u32。建议要么修 operand_type，
+要么写进已知边界 —— 现在的绕法是在源码里多写一次中间变量，用户不该需要知道这件事。
+
+env:
+Windows 11 + WSL2；clang 22.1.8；仓库 Fujoos-FujoLang-DEV @ c47c970</pre></details></td>
                     <td data-zh="语言" data-en="Language">语言</td>
-                    <td><span class="tag board__org board__org--unofficial" data-zh="非官方" data-en="Unofficial">非官方</span></td>
-                    <td><span class="tag board__st board__st--open" data-zh="待确认" data-en="Open">待确认</span></td>
+                    <td><span class="tag board__org board__org--official" data-zh="官方" data-en="Official">官方</span></td>
+                    <td><span class="tag board__st board__st--unfixed" data-zh="未修" data-en="Unfixed">未修</span></td>
                     <td class="num">2026-09-14</td>
                   </tr>
-                  <tr id="FJ-0007" data-board-row data-state="open" data-search="fj-0007 loment b7 — 已知边界缺一条：大单元里拿 `fn` 当局部名会让自举 checker 走岔 loment b7 — 已知边界缺一条：大单元里拿 `fn` 当局部名会让自举 checker 走岔 站点显示 0.1.3.4 alpha · 实测 0.1.4-alpha 待确认 open 语言 language 非官方 unofficial">
+                  <tr id="FJ-0007" data-board-row data-state="unfixed" data-search="fj-0007 loment b7 — 已知边界缺一条：大单元里拿 `fn` 当局部名会让自举 checker 走岔 loment b7 — 已知边界缺一条：大单元里拿 `fn` 当局部名会让自举 checker 走岔 站点显示 0.1.3.4 alpha · 实测 0.1.4-alpha 未修 unfixed 语言 language 官方 official https://fujojtop.github.io/fujooswebsite/docs/project/limitations/「语言」段（5 条）里**没有**这一条；https://fujojtop.github.io/fujooswebsite/docs/language/selfhost/ 说「类型检查：规则等价 63/63；另有 63 条
+负例直接喂自举驱动，全部非零退出且无假阳性」——63 条负例范围内为真，下面这个形状不在那 63 条里">
                     <td class="num board__id">FJ-0007</td>
-                    <td><a class="board__t" href="https://fujojtop.github.io/FujoOSwebsite/docs/project/limitations/" data-zh="Loment B7 — 已知边界缺一条：大单元里拿 `fn` 当局部名会让自举 checker 走岔" data-en="Loment B7 — 已知边界缺一条：大单元里拿 `fn` 当局部名会让自举 checker 走岔">Loment B7 — 已知边界缺一条：大单元里拿 `fn` 当局部名会让自举 checker 走岔</a><span class="board__meta" data-zh="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha" data-en="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha">站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha</span></td>
+                    <td><a class="board__t" href="https://fujojtop.github.io/FujoOSwebsite/docs/project/limitations/" data-zh="Loment B7 — 已知边界缺一条：大单元里拿 `fn` 当局部名会让自举 checker 走岔" data-en="Loment B7 — 已知边界缺一条：大单元里拿 `fn` 当局部名会让自举 checker 走岔">Loment B7 — 已知边界缺一条：大单元里拿 `fn` 当局部名会让自举 checker 走岔</a><span class="board__meta" data-zh="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha" data-en="站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha">站点显示 0.1.3.4 Alpha · 实测 0.1.4-alpha</span><details class="board__proof"><summary data-zh="证据" data-en="Evidence">证据</summary><pre>what:
+https://fujojtop.github.io/FujoOSwebsite/docs/project/limitations/「语言」段（5 条）里**没有**这一条；https://fujojtop.github.io/FujoOSwebsite/docs/language/selfhost/ 说「类型检查：规则等价 63/63；另有 63 条
+负例直接喂自举驱动，全部非零退出且无假阳性」——63 条负例范围内为真，下面这个形状不在那 63 条里
+
+cmd:
+# 把仓库里那个局部改回 fn（其余不动），走自举链
+sed 's/fname/fn/g' loment/tools/lomc.lomt &gt; lomc_fn.lomt
+sh loment/bootstrap.sh lomc_fn.lomt &gt; /dev/null; echo "exit=$?"
+# 最小对照：单独一个单元，同样写法
+printf 'module b7\nfn f() -&gt; u32 {\n    let fn: u64 = 1;\n    return fn as u32;\n}\n' &gt; b7.lomt
+sh loment/bootstrap.sh b7.lomt | head -1
+
+out:
+lomc_fn.lomt：fujoc-s: 静态检查未通过 / E2 @… line …: fn …（一串 E002 连锁）  exit=1
+b7.lomt    ：正常发射 IR，与参考实现**逐字节一致**、零诊断
+
+expect:
+这条要写清形状再决定写不写进边界 —— **它不是「关键字当标识符被误拒」**（最小单元证明那个说法
+不成立），而是**某个规模相关的表/游标**被这个 token 触发：同一个 `let fn`，放进 357 个 let /
+108 个 fn 的 lomc.lomt 就炸，放进单函数单元就没事；把变量改名即通过。已知边界（或自举页的
+「还差什么」）应据实记这一条，根因定位后再升级为「已修」。
+（我最初把它误诊成「关键字假阳性」并写进了仓库文档与 v0.1.4-alpha 的 tag 消息，已在
+docs/150 留更正框、单独提交订正 c47c970。录入时请按订正后的说法。）
+
+env:
+Windows 11 + WSL2；clang 22.1.8；仓库 Fujoos-FujoLang-DEV @ c47c970</pre></details></td>
                     <td data-zh="语言" data-en="Language">语言</td>
-                    <td><span class="tag board__org board__org--unofficial" data-zh="非官方" data-en="Unofficial">非官方</span></td>
-                    <td><span class="tag board__st board__st--open" data-zh="待确认" data-en="Open">待确认</span></td>
+                    <td><span class="tag board__org board__org--official" data-zh="官方" data-en="Official">官方</span></td>
+                    <td><span class="tag board__st board__st--unfixed" data-zh="未修" data-en="Unfixed">未修</span></td>
                     <td class="num">2026-09-14</td>
                   </tr>
                     </tbody>
@@ -332,8 +476,8 @@
               <span data-zh="—— 这是这块板子上最重要的一栏。非官方 = 别人报上来的，原样收录，我们没有复现过；它是一条声明，不是我们的结论。官方 = 我们自己复现过、或明确判定过的。垃圾进不来，靠的不是事后删帖，而是这一栏始终在行上。" data-en=" — the most important column here. Unofficial means someone reported it and we kept it as-is without reproducing it: a claim, not our conclusion. Official means this project reproduced it, or judged it outright. What keeps noise out is not deleting it later; it is that this column is always on the row.">—— 这是这块板子上最重要的一栏。非官方 = 别人报上来的，原样收录，我们没有复现过；它是一条声明，不是我们的结论。官方 = 我们自己复现过、或明确判定过的。垃圾进不来，靠的不是事后删帖，而是这一栏始终在行上。</span>
             </div>
             <div class="note">
-              <strong data-zh="待确认 / 已确认" data-en="Open / Confirmed">待确认 / 已确认</strong>
-              <span data-zh="—— 收到了，还没读完 / 读过了，确实复现得出来。非官方条目只能是待确认——别人一条没验过的声明，我们无从替它下结论。" data-en=" — received but not yet read / read, and it does reproduce. An unofficial entry can only be open: nobody here has the standing to conclude on someone else's unchecked claim.">—— 收到了，还没读完 / 读过了，确实复现得出来。非官方条目只能是待确认——别人一条没验过的声明，我们无从替它下结论。</span>
+              <strong data-zh="待确认 / 未修" data-en="Open / Unfixed">待确认 / 未修</strong>
+              <span data-zh="—— 收到了，还没读完 / 读过了，确实复现得出来，还没改。这两个是唯一不要求写处理的——事情还没结案。非官方条目只能是待确认：别人一条没验过的声明，我们无从替它下结论。" data-en=" — received but not yet read / read, reproduced, and not fixed. These two are the only ones that require no resolution, because nothing has been concluded. An unofficial entry can only be open: there is no standing to conclude on someone else's unchecked claim.">—— 收到了，还没读完 / 读过了，确实复现得出来，还没改。这两个是唯一不要求写处理的——事情还没结案。非官方条目只能是待确认：别人一条没验过的声明，我们无从替它下结论。</span>
             </div>
             <div class="note">
               <strong data-zh="已修" data-en="Fixed">已修</strong>
