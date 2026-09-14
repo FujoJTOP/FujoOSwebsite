@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html
+  lang="zh-CN"
+  class="theme-instrument"
+  data-title-zh="Bug 提交 API — 让脚本和 agent 也能报"
+  data-title-en="Bug submission API — so scripts and agents can report too"
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bug 提交 API — 让脚本和 agent 也能报</title>
+    <link rel="canonical" href="https://fujojtop.github.io/FujoOSwebsite/bugs/api/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="FujoOS" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:locale:alternate" content="en" />
+    <meta property="og:title" content="Bug 提交 API — 让脚本和 agent 也能报" />
+    <meta property="og:description" content="把两条硬门槛写成机器可读的形状：字段、校验、失败长什么样，以及浏览器里和本机上各有一个入口。" />
+    <meta property="og:url" content="https://fujojtop.github.io/FujoOSwebsite/bugs/api/" />
+    <meta property="og:image" content="https://fujojtop.github.io/FujoOSwebsite/assets/og-card.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="FujoOS — Mount Fuji mark" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="description"
+      content="把两条硬门槛写成机器可读的形状：字段、校验、失败长什么样，以及浏览器里和本机上各有一个入口。"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Geist+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/style.css?v=83c9e677" />
+    <link rel="icon" href="../../favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg" sizes="any" />
+    <link rel="icon" type="image/png" href="../../assets/favicon-32.png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png" />
+    <script>
+      document.documentElement.classList.add("js");
+      /* If site.js never runs, reveal everything instead of leaving it hidden. */
+      setTimeout(function () {
+        var r = document.documentElement;
+        if (!r.hasAttribute("data-motion-on")) r.classList.add("no-motion");
+      }, 1200);
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#main" data-zh="跳到主要内容" data-en="Skip to content">跳到主要内容</a>
+
+    <!-- ticker:start -->
+    <div class="notice notice--alert notice--scroll" role="note" data-notice data-notice-id="release-delay" data-paused="false">
+      <p class="notice__tag"><span class="notice__pip" aria-hidden="true"></span><span data-zh="公告" data-en="Notice">公告</span></p>
+      <div class="notice__view">
+        <div class="notice__track">
+          <span class="notice__item" data-zh="FujoOS公布日延期，以仓库发布为准" data-en="FujoOS release date postponed — the repository is authoritative">FujoOS公布日延期，以仓库发布为准</span>
+          <span class="notice__item" aria-hidden="true" data-zh="FujoOS公布日延期，以仓库发布为准" data-en="FujoOS release date postponed — the repository is authoritative">FujoOS公布日延期，以仓库发布为准</span>
+        </div>
+      </div>
+      <button class="notice__toggle" type="button" data-ticker-toggle aria-pressed="false">
+        <span class="notice__ico" aria-hidden="true"></span>
+        <span class="notice__lbl notice__lbl--pause" data-zh="暂停" data-en="Pause">暂停</span>
+        <span class="notice__lbl notice__lbl--play" data-zh="继续" data-en="Play">继续</span>
+      </button>
+    </div>
+    <!-- ticker:end -->
+
+    <header class="nav">
+      <div class="wrap nav__inner">
+        <a class="nav__brand" href="../../">
+          <svg viewBox="0 14 64 46" aria-hidden="true">
+            <path d="M3,58 Q11,38 26,16 Q32,19 38,16 Q53,38 61,58 Z" fill="var(--mark-rock)" />
+            <path d="M15.9,32 Q18,22 26,16 Q32,19 38,16 Q46,22 48.1,32 Q32,38 15.9,32 Z" fill="var(--mark-snow)" />
+          </svg>
+          FujoOS
+        </a>
+        <nav class="nav__links" aria-label="主导航" data-zh-aria="主导航" data-en-aria="Primary">
+          <a class="nav__link" href="../../" data-zh="首页" data-en="Home">首页</a>
+          <a class="nav__link" href="../../fuai/" data-zh="FUAI 安全体系" data-en="FUAI safety">FUAI 安全体系</a>
+          <a class="nav__link" href="../../loment/" data-zh="Loment · Potato" data-en="Loment · Potato">Loment · Potato</a>
+          <a class="nav__link" href="../../docs/" data-zh="文档" data-en="Docs">文档</a>
+          <a class="nav__link" href="../../news/" data-zh="新闻" data-en="News">新闻</a>
+          <a class="nav__link" href="../../bugs/" aria-current="page" data-zh="Bug 社区" data-en="Bug reports">Bug 社区</a>
+          <a class="nav__link" href="https://zenodo.org/records/22352904" rel="noopener" data-zh="论文 ↗" data-en="Paper ↗">论文 ↗</a>
+          <div class="lang" role="group" aria-label="语言" data-zh-aria="语言" data-en-aria="Language">
+            <button type="button" data-lang="zh" aria-pressed="true">ZH</button>
+            <button type="button" data-lang="en" aria-pressed="false">EN</button>
+          </div>
+        </nav>
+        <button class="nav__toggle" type="button" aria-expanded="false" data-zh="菜单" data-en="Menu">菜单</button>
+      </div>
+      <div class="wrap">
+        <div class="nav__drawer" data-open="false">
+          <a href="../../" data-zh="首页" data-en="Home">首页</a>
+          <a href="../../fuai/" data-zh="FUAI 安全体系" data-en="FUAI safety system">FUAI 安全体系</a>
+          <a href="../../loment/" data-zh="Loment · Potato 语言" data-en="Loment · Potato language">Loment · Potato 语言</a>
+          <a href="../../docs/" data-zh="文档" data-en="Documentation">文档</a>
+          <a href="../../news/" data-zh="新闻" data-en="News">新闻</a>
+          <a href="../../bugs/" data-zh="Bug 社区" data-en="Bug reports">Bug 社区</a>
+          <a href="../../docs/start/" data-zh="构建与运行" data-en="Build and run">构建与运行</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="section section--flush" style="padding-top: var(--s6)" data-motion>
+        <div class="wrap">
+          <p class="crumbs fade-step" style="--delay: 0.02s">
+            <a href="../../" data-zh="首页" data-en="Home">首页</a>
+            <span class="sep" aria-hidden="true">/</span>
+            <a href="../" data-zh="Bug 社区" data-en="Bug reports">Bug 社区</a>
+            <span class="sep" aria-hidden="true">/</span>
+            <span data-zh="API" data-en="API">API</span>
+          </p>
+          <h1 class="display fade-step" style="--delay: 0.06s; font-size: clamp(2.1rem, 3.6vw, 2.9rem); margin-top: var(--s4)" data-zh="Bug 提交 API" data-en="Bug submission API">
+            Bug 提交 API
+          </h1>
+          <p class="lede fade-step" style="--delay: 0.14s; margin-top: var(--s3); max-width: var(--measure)" data-zh-html="这一页是那两条硬门槛的机器可读形状：字段叫什么、缺了会怎样、失败长什么样。一个 agent 读完这一页就应该能交出一条我们处理得了的报告，不用猜。<strong>本站没有后端</strong>——所以入口有两个，能力不同，下面分别写清楚。" data-en-html="This page is the machine-readable form of the two gates: what the fields are called, what happens when one is missing, and what a failure looks like. An agent that reads it should be able to file a report we can act on, without guessing. <strong>This site has no backend</strong> — so there are two entries with different powers, each described below.">
+            这一页是那两条硬门槛的机器可读形状：字段叫什么、缺了会怎样、失败长什么样。一个 agent 读完这一页就应该能交出一条我们处理得了的报告，不用猜。<strong>本站没有后端</strong>——所以入口有两个，能力不同，下面分别写清楚。
+          </p>
+
+          <div class="note note--amber fade-step" style="--delay: 0.22s; margin-top: var(--s4)">
+            <strong data-zh="先读这一条，否则另外两个入口会被你误解。" data-en="Read this first, or you will misread both entries.">先读这一条，否则另外两个入口会被你误解。</strong>
+            <span data-zh-html="浏览器里那个 API <strong>不落盘</strong>——它只把报告排成统一格式，因为没有任何服务器可以接。真正能写进去的只有<strong>本机</strong>那个，它绑在 127.0.0.1 上，机器外面碰不到。这不是设计取舍，是 GitHub Pages 只发文件、不跑代码。" data-en-html="The browser entry does <strong>not</strong> store anything — it only lays the report out in one shape, because there is no server to take it. The only one that actually writes is the <strong>local</strong> one, bound to 127.0.0.1 so nothing off this machine can reach it. That is not a design choice; it is what GitHub Pages is — files, not code.">浏览器里那个 API <strong>不落盘</strong>——它只把报告排成统一格式，因为没有任何服务器可以接。真正能写进去的只有<strong>本机</strong>那个，它绑在 127.0.0.1 上，机器外面碰不到。这不是设计取舍，是 GitHub Pages 只发文件、不跑代码。</span>
+          </div>
+
+          <h2 class="h2" data-zh="报告对象" data-en="The report object">报告对象</h2>
+          <p class="muted prose" style="margin-top: var(--s2)" data-zh="两个入口收的是同一个对象。前五个字段缺任何一个，报告都无法处理。" data-en="Both entries take the same object. Missing any of the first five, the report cannot be acted on.">
+            两个入口收的是同一个对象。前五个字段缺任何一个，报告都无法处理。
+          </p>
+          <div class="table-wrap" style="margin-top: var(--s4)">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col" data-zh="字段" data-en="Field">字段</th>
+                  <th scope="col" data-zh="必填" data-en="Required">必填</th>
+                  <th scope="col" data-zh="是什么" data-en="What it is">是什么</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td><code>title</code></td><td data-zh="是" data-en="yes">是</td><td data-zh="一行说清哪里不对。看板上显示的就是它。" data-en="One line saying what is wrong. This is what the board shows.">一行说清哪里不对。看板上显示的就是它。</td></tr>
+                <tr><td><code>what</code></td><td data-zh="是" data-en="yes">是</td><td data-zh="站上那句话的原文，或它所在页面的地址。" data-en="The sentence on this site, or the address of the page it is on.">站上那句话的原文，或它所在页面的地址。</td></tr>
+                <tr><td><code>cmd</code></td><td data-zh="是" data-en="yes">是</td><td data-zh="你跑的命令，原样。" data-en="The command you ran, verbatim.">你跑的命令，原样。</td></tr>
+                <tr><td><code>out</code></td><td data-zh="是" data-en="yes">是</td><td data-zh="你得到的输出，原样。错误信息别删。" data-en="What you got, verbatim. Do not trim the error.">你得到的输出，原样。错误信息别删。</td></tr>
+                <tr><td><code>expect</code></td><td data-zh="是" data-en="yes">是</td><td data-zh="按站上那句话，应该发生什么。" data-en="What the site says should happen.">按站上那句话，应该发生什么。</td></tr>
+                <tr><td><code>version</code></td><td data-zh="否" data-en="no">否</td><td data-zh="站上写的版本串。" data-en="The version string the site carries.">站上写的版本串。</td></tr>
+                <tr><td><code>env</code></td><td data-zh="否" data-en="no">否</td><td data-zh="OS / 浏览器 / 工具链——只在确实相关时。" data-en="OS, browser or toolchain — only where it actually matters.">OS / 浏览器 / 工具链——只在确实相关时。</td></tr>
+                <tr><td><code>area</code></td><td data-zh="否" data-en="no">否</td><td data-zh-html="五选一：<code>kernel</code> / <code>language</code> / <code>compat</code> / <code>ai</code> / <code>site</code>。默认 <code>site</code>。" data-en-html="One of <code>kernel</code>, <code>language</code>, <code>compat</code>, <code>ai</code>, <code>site</code>. Defaults to <code>site</code>.">五选一：<code>kernel</code> / <code>language</code> / <code>compat</code> / <code>ai</code> / <code>site</code>。默认 <code>site</code>。</td></tr>
+                <tr><td><code>url</code></td><td data-zh="否" data-en="no">否</td><td data-zh="相关页面的地址，做成链接挂在条目上。" data-en="The page it is about, linked from the entry.">相关页面的地址，做成链接挂在条目上。</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 class="h2" data-zh="入口一：浏览器" data-en="Entry one: the browser">入口一：浏览器</h2>
+          <p class="muted prose" style="margin-top: var(--s2)" data-zh-html="在 <a href=&quot;../submit/&quot;>提交页</a>上，<code>window.FJ.submitBug(report)</code> 和表单走的是同一段代码。用了浏览器自动化的人（或 agent）可以完全跳过点击。" data-en-html="On <a href=&quot;../submit/&quot;>the submit page</a>, <code>window.FJ.submitBug(report)</code> goes through exactly the code the form does. Anyone (or any agent) driving a browser can skip the clicking entirely.">
+            在 <a href="../submit/">提交页</a>上，<code>window.FJ.submitBug(report)</code> 和表单走的是同一段代码。用了浏览器自动化的人（或 agent）可以完全跳过点击。
+          </p>
+          <div class="code" style="margin-top: var(--s3)">
+            <div class="code__bar">
+              <span class="lang-tag">js</span>
+              <span data-zh="在提交页的控制台里" data-en="in the console on the submit page">在提交页的控制台里</span>
+              <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+            </div>
+            <pre>FJ.submitBug({
+  title:  "quickstart 里的等价套件跑不出 63/63",
+  what:   "https://fujojtop.github.io/FujoOSwebsite/docs/language/quickstart/",
+  cmd:    "python tools/loment_rule_parity.py",
+  out:    "E013 duplicate name: x",
+  expect: "规则等价 63/63",
+  version: "0.1.3.4 Alpha",
+  area:   "language"
+})
+
+<span class="c">// 成功 → { ok: true, report: "【标题】…" }
+// 失败 → { ok: false, missing: ["the command"] }</span></pre>
+          </div>
+          <p class="small dim" style="margin-top: var(--s3)" data-zh="返回的 report 就是你要交出去的那段文本。它不会被发到任何地方——没有地方可发。" data-en="The report it returns is the text to hand over. It is not sent anywhere — there is nowhere to send it.">
+            返回的 report 就是你要交出去的那段文本。它不会被发到任何地方——没有地方可发。
+          </p>
+
+          <h2 class="h2" data-zh="入口二：本机" data-en="Entry two: this machine">入口二：本机</h2>
+          <p class="muted prose" style="margin-top: var(--s2)" data-zh-html="仓库里的 <code>tools/bugapi.mjs</code> 是一个只绑 <code>127.0.0.1</code> 的小服务。它校验、按顺序发号、把条目写进 <code>content/bugs.json</code>。写进去的条目是<strong>非官方</strong>——本机没人复现过它，这一点写在行上。" data-en-html="<code>tools/bugapi.mjs</code> in the repository is a small service bound to <code>127.0.0.1</code> only. It validates, hands out the next id in order, and writes the entry into <code>content/bugs.json</code>. What it writes is <strong>unofficial</strong> — nobody here has reproduced it, and the row says so.">
+            仓库里的 <code>tools/bugapi.mjs</code> 是一个只绑 <code>127.0.0.1</code> 的小服务。它校验、按顺序发号、把条目写进 <code>content/bugs.json</code>。写进去的条目是<strong>非官方</strong>——本机没人复现过它，这一点写在行上。
+          </p>
+          <div class="code" style="margin-top: var(--s3)">
+            <div class="code__bar">
+              <span class="lang-tag">bash</span>
+              <span data-zh="起服务，然后交一条" data-en="start it, then file one">起服务，然后交一条</span>
+              <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+            </div>
+            <pre>node tools/bugapi.mjs
+<span class="c"># bug intake listening on http://127.0.0.1:8788</span>
+
+curl -sS http://127.0.0.1:8788/api/bug \
+  -H 'content-type: application/json' \
+  -d '{"title":"…","what":"…","cmd":"…","out":"…","expect":"…","area":"language"}'
+
+<span class="c"># 201 { "ok": true, "id": "FJ-0004", "file": "content/bugs.json",
+#       "next": "node tools/docs.gen.mjs",
+#       "note": "written as an unofficial entry — nobody here has reproduced it yet" }</span></pre>
+          </div>
+          <div class="table-wrap" style="margin-top: var(--s4)">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col" data-zh="失败码" data-en="Code">失败码</th>
+                  <th scope="col" data-zh="什么时候" data-en="When">什么时候</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td><code>missing_field</code></td><td data-zh="必填字段为空或不是字符串" data-en="A required field is empty or not a string">必填字段为空或不是字符串</td></tr>
+                <tr><td><code>unknown_field</code></td><td data-zh="传了契约里没有的字段——宁可拒收，也不要静默丢掉" data-en="A field outside the contract — refused rather than silently dropped">传了契约里没有的字段——宁可拒收，也不要静默丢掉</td></tr>
+                <tr><td><code>bad_area</code></td><td data-zh="area 不在那五个里" data-en="area is not one of the five">area 不在那五个里</td></tr>
+                <tr><td><code>too_long</code></td><td data-zh="单个字段超过两万字符" data-en="A single field is over twenty thousand characters">单个字段超过两万字符</td></tr>
+                <tr><td><code>bad_json</code></td><td data-zh="请求体不是合法 JSON" data-en="The request body is not valid JSON">请求体不是合法 JSON</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="small dim" style="margin-top: var(--s3)" data-zh-html="校验不过时返回 <code>422</code>，一次列出全部问题——不是第一个。写完之后条目是数据，看板要重新生成才看得见：<code>node tools/docs.gen.mjs</code>。" data-en-html="A failed check returns <code>422</code> and lists every problem at once, not the first one. Once written the entry is data; the board shows it after a rebuild: <code>node tools/docs.gen.mjs</code>.">
+            校验不过时返回 <code>422</code>，一次列出全部问题——不是第一个。写完之后条目是数据，看板要重新生成才看得见：<code>node tools/docs.gen.mjs</code>。
+          </p>
+
+          <div class="note note--steel" style="margin-top: var(--s4)">
+            <strong data-zh="一句话总结：" data-en="In one line: ">一句话总结：</strong>
+            <span data-zh="报告的形状到处都一样；能不能落盘，取决于你在哪台机器上。" data-en="the shape of a report is the same everywhere; whether it can be stored depends on which machine you are on.">报告的形状到处都一样；能不能落盘，取决于你在哪台机器上。</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <div class="wrap">
+        <div class="foot__grid">
+          <div>
+            <div class="nav__brand" style="margin-bottom: 0.7rem">
+              <svg viewBox="0 14 64 46" aria-hidden="true">
+            <path d="M3,58 Q11,38 26,16 Q32,19 38,16 Q53,38 61,58 Z" fill="var(--mark-rock)" />
+            <path d="M15.9,32 Q18,22 26,16 Q32,19 38,16 Q46,22 48.1,32 Q32,38 15.9,32 Z" fill="var(--mark-snow)" />
+          </svg>
+              FujoOS
+            </div>
+            <p class="small dim" style="max-width: 34ch" data-zh="契约是公开的，服务只在本机。浏览器里能组装，本机上能落盘。" data-en="The contract is public; the service is local. A browser can assemble; this machine can store.">
+              契约是公开的，服务只在本机。浏览器里能组装，本机上能落盘。
+            </p>
+          </div>
+          <div>
+            <h4 data-zh="本页" data-en="On this page">本页</h4>
+            <a href="#top" data-zh="报告对象" data-en="The report object">报告对象</a>
+            <a href="../submit/" data-zh="提交页" data-en="The submit page">提交页</a>
+            <a href="../" data-zh="看板" data-en="The board">看板</a>
+          </div>
+          <div>
+            <h4 data-zh="先看这里" data-en="Read first">先看这里</h4>
+            <a href="../../docs/project/limitations/" data-zh="已知边界" data-en="Known limits">已知边界</a>
+            <a href="../../docs/language/freeze/" data-zh="冻结面" data-en="The freeze surface">冻结面</a>
+            <a href="../../docs/project/roadmap/" data-zh="路线图" data-en="Roadmap">路线图</a>
+          </div>
+          <div>
+            <h4 data-zh="文档" data-en="Documentation">文档</h4>
+            <a href="../../docs/language/quickstart/" data-zh="快速上手" data-en="Quickstart">快速上手</a>
+            <a href="../../docs/start/" data-zh="构建与运行" data-en="Build and run">构建与运行</a>
+            <a href="../../docs/" data-zh="全部文档 →" data-en="All documentation →">全部文档 →</a>
+          </div>
+        </div>
+        <div class="foot__end">
+          <span>© <span data-year>2026</span> Yuxuan Jiang · MIT</span>
+          <span data-zh="任何“完成”都要给出可重放的命令与输出" data-en="any “done” must come with a replayable command and its output">任何“完成”都要给出可重放的命令与输出</span>
+        </div>
+      </div>
+    </footer>
+
+    <script src="../../assets/site.js?v=9dad9a77"></script>
+  </body>
+</html>

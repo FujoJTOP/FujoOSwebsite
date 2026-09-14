@@ -360,39 +360,77 @@
     applyBoard();
   }
 
-  /* ---- bug report form ---- */
-  /* There is no server to post to, so this assembles the report and stops.
-     Saying so on the page is the point: a submit button that quietly did
-     nothing would be worse than no button at all. */
+  /* ---- bug reports ---- */
+  /* The four the board's gates name. One definition, shared by the form and
+     by FJ.submitBug — a page, a script and a contract that disagree about
+     what a usable report is would be three chances to be wrong. */
+  var BUG_REQUIRED = [
+    ["what", "哪一句", "which sentence"],
+    ["cmd", "命令", "the command"],
+    ["out", "输出", "the output"],
+    ["expect", "预期", "what you expected"],
+  ];
+
+  /* Assemble a report without clicking anything. Exposed on window.FJ so an
+     agent driving a browser can produce exactly what the form produces; the
+     shape is documented at /bugs/api/.
+
+     It returns the report and stops. There is no server to hand it to, and
+     pretending otherwise is the one thing this site does not do. */
+  FJ.submitBug = function (report) {
+    var en = document.documentElement.getAttribute("data-lang") === "en";
+    var src = report || {};
+    var str = function (k) {
+      return typeof src[k] === "string" ? src[k].trim() : "";
+    };
+    var gap = [];
+    for (var i = 0; i < BUG_REQUIRED.length; i++) {
+      if (!str(BUG_REQUIRED[i][0])) gap.push(BUG_REQUIRED[i][en ? 2 : 1]);
+    }
+    if (gap.length) return { ok: false, missing: gap };
+    var none = en ? "(not given)" : "（未填）";
+    var lines = [
+      (en ? "[which sentence] " : "【哪一句】") + str("what"),
+      en ? "[command]" : "【命令】",
+      str("cmd"),
+      en ? "[output]" : "【输出】",
+      str("out"),
+      en ? "[expected]" : "【预期】",
+      str("expect"),
+      (en ? "[version] " : "【版本】") + (str("version") || none),
+      (en ? "[environment] " : "【环境】") + (str("env") || none),
+    ];
+    if (str("title")) lines.unshift((en ? "[title] " : "【标题】") + str("title"));
+    return { ok: true, report: lines.join("\n") };
+  };
+
   var bugForm = document.querySelector("[data-bug-form]");
   if (bugForm) {
     var bugResult = document.querySelector("[data-bug-result]");
     var bugPre = document.querySelector("[data-bug-text]");
     var bugMissing = document.querySelector("[data-bug-missing]");
-    var REQUIRED = [
-      ["f-what", "哪一句", "which sentence"],
-      ["f-cmd", "命令", "the command"],
-      ["f-out", "输出", "the output"],
-      ["f-expect", "预期", "what you expected"],
-    ];
-    var valueOf = function (id) {
-      var el = document.getElementById(id);
+    var fieldOf = function (key) {
+      var el = document.getElementById("f-" + key);
       return el ? el.value.trim() : "";
     };
 
     bugForm.addEventListener("submit", function (e) {
       e.preventDefault();
       var en = document.documentElement.getAttribute("data-lang") === "en";
-      var gap = [];
-      for (var fi = 0; fi < REQUIRED.length; fi++) {
-        if (!valueOf(REQUIRED[fi][0])) gap.push(REQUIRED[fi][en ? 2 : 1]);
-      }
-      if (gap.length) {
+      var out = FJ.submitBug({
+        what: fieldOf("what"),
+        cmd: fieldOf("cmd"),
+        out: fieldOf("out"),
+        expect: fieldOf("expect"),
+        version: fieldOf("version"),
+        env: fieldOf("env"),
+      });
+      if (!out.ok) {
         if (bugMissing) {
           bugMissing.hidden = false;
           bugMissing.textContent =
             (en ? "Still missing: " : "还差：") +
-            gap.join(en ? ", " : "、") +
+            out.missing.join(en ? ", " : "、") +
             (en
               ? ". Without these the report cannot be acted on."
               : "。没有这几样，这条报告没法处理。");
@@ -401,19 +439,7 @@
         return;
       }
       if (bugMissing) bugMissing.hidden = true;
-      var none = en ? "(not given)" : "（未填）";
-      var text = [
-        (en ? "[which sentence] " : "【哪一句】") + valueOf("f-what"),
-        en ? "[command]" : "【命令】",
-        valueOf("f-cmd"),
-        en ? "[output]" : "【输出】",
-        valueOf("f-out"),
-        en ? "[expected]" : "【预期】",
-        valueOf("f-expect"),
-        (en ? "[version] " : "【版本】") + (valueOf("f-version") || none),
-        (en ? "[environment] " : "【环境】") + (valueOf("f-env") || none),
-      ].join("\n");
-      if (bugPre) bugPre.textContent = text;
+      if (bugPre) bugPre.textContent = out.report;
       if (bugResult) {
         bugResult.hidden = false;
         bugResult.scrollIntoView({ block: "start", behavior: "smooth" });

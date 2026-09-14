@@ -157,6 +157,7 @@ const HAND_WRITTEN = [
   "loment/index.html",
   "bugs/index.html",
   "bugs/submit/index.html",
+  "bugs/api/index.html",
 ];
 
 /* -------------------------------------------------------------- helpers */
@@ -1018,6 +1019,7 @@ ${items}
     AT.loment,
     AT.bugs,
     `${AT.bugs}submit/`,
+    `${AT.bugs}api/`,
     AT.docs,
     ...flat.map((p) => (p.slug === "index" ? `docs/${p.section}/` : `docs/${p.section}/${p.slug}/`)),
     ...(POSTS.length ? [AT.news, ...POSTS.map((p) => `news/${p.slug}/`)] : []),
