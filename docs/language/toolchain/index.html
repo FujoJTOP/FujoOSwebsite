@@ -161,6 +161,7 @@
                   <a href="../../../docs/language/quickstart/" data-zh="快速上手 (Beta)" data-en="Quickstart (Beta)">快速上手 (Beta)</a>
                   <a href="../../../docs/language/" data-zh="总览" data-en="Overview">总览</a>
                   <a href="../../../docs/language/loment/" data-zh="Loment 语言" data-en="The Loment language">Loment 语言</a>
+                  <a href="../../../docs/language/freeze/" data-zh="冻结面" data-en="The freeze surface">冻结面</a>
                   <a href="../../../docs/language/l0/" data-zh="L0 单一真源" data-en="L0 source of truth">L0 单一真源</a>
                   <a href="../../../docs/language/capability/" data-zh="能力域即语言构造" data-en="Capability as a construct">能力域即语言构造</a>
                   <a href="../../../docs/language/toolchain/" aria-current="page" data-zh="工具链" data-en="Toolchain">工具链</a>
@@ -237,17 +238,17 @@
                     <tr>
                       <td><strong>loment_lsp</strong></td>
                       <td data-zh="语言服务：补全 / 跳转 / 诊断" data-en="Language service: completion / go-to / diagnostics">语言服务：补全 / 跳转 / 诊断</td>
-                      <td data-zh="VS Code 扩展已装，无头验收含完整 LSP 往返；编辑器内人工点验待做" data-en="VS Code extension installed; headless acceptance covers a full LSP round trip; hands-on verification in the editor still pending">VS Code 扩展已装，无头验收含完整 LSP 往返；编辑器内人工点验待做</td>
+                      <td data-zh="已用 Loment 重写（loment/tools/lsp.lomt），装它不需要 Python；VS Code 扩展 6/6 无头验收含完整 LSP 往返；编辑器内人工点验待做" data-en="Rewritten in Loment (loment/tools/lsp.lomt), and installing it needs no Python; the VS Code extension passes 6/6 headless acceptance including a full LSP round trip; hands-on verification in the editor is still pending">已用 Loment 重写（loment/tools/lsp.lomt），装它不需要 Python；VS Code 扩展 6/6 无头验收含完整 LSP 往返；编辑器内人工点验待做</td>
                     </tr>
                     <tr>
                       <td><strong>lompkg</strong></td>
                       <td data-zh="包管理器：依赖解析 + 校验和" data-en="Package manager: dependency resolution + checksums">包管理器：依赖解析 + 校验和</td>
-                      <td data-zh="依赖解析与校验和可复现" data-en="Resolution and checksums reproducible">依赖解析与校验和可复现</td>
+                      <td data-zh="依赖解析与校验和可复现。这是工具链上唯一还没重写成 Loment 的一个" data-en="Resolution and checksums reproducible. The one tool on this list not yet rewritten in Loment">依赖解析与校验和可复现。这是工具链上唯一还没重写成 Loment 的一个</td>
                     </tr>
                     <tr>
                       <td><strong>lomdoc</strong></td>
                       <td data-zh="从 .lomt 生成 API 文档" data-en="Generates API docs from .lomt">从 .lomt 生成 API 文档</td>
-                      <td data-zh="文档与编译器同版本" data-en="Docs versioned with the compiler">文档与编译器同版本</td>
+                      <td data-zh="已用 Loment 重写（loment/tools/lomdoc.lomt），与 Python 版逐字节相同；文档与编译器同版本" data-en="Rewritten in Loment (loment/tools/lomdoc.lomt), byte-identical to the Python one; docs versioned with the compiler">已用 Loment 重写（loment/tools/lomdoc.lomt），与 Python 版逐字节相同；文档与编译器同版本</td>
                     </tr>
                     <tr>
                       <td><strong>loment ir</strong></td>
@@ -268,6 +269,57 @@
                 </table>
               </div>
 
+              <h2 data-zh="编辑器" data-en="Editors">编辑器</h2>
+              <div class="prose">
+                <p data-zh-html="语言服务不绑定 VS Code——它是一个普通的 stdio LSP，命令行与编辑器设置里填的值完全一样。高亮是两份 TextMate 语法（<code>.lomt</code> / <code>.lom</code>），两边共用同一份词表，所以不会各说各话。" data-en-html="The language server is not tied to VS Code — it is an ordinary stdio LSP, and its command line is exactly what the editor settings hold. Highlighting is two TextMate grammars (<code>.lomt</code> / <code>.lom</code>) sharing one vocabulary list, so the two cannot drift apart.">
+                  语言服务不绑定 VS Code——它是一个普通的 stdio LSP，命令行与编辑器设置里填的值完全一样。高亮是两份 TextMate 语法（<code>.lomt</code> / <code>.lom</code>），两边共用同一份词表，所以不会各说各话。
+                </p>
+              </div>
+
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="去哪儿写" data-en="Where to write">去哪儿写</th>
+                      <th scope="col" data-zh="怎么装" data-en="How to install">怎么装</th>
+                      <th scope="col" data-zh="得到什么" data-en="What you get">得到什么</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>VS Code</strong></td>
+                      <td data-zh-html="<code>editors/vscode/</code>，打包装 <code>tools/vscode_ext.py</code>" data-en-html="<code>editors/vscode/</code>, packaging via <code>tools/vscode_ext.py</code>"><code>editors/vscode/</code>，打包用 <code>tools/vscode_ext.py</code></td>
+                      <td data-zh="两份语法 + LSP（补全 / 跳转 / 诊断 / 格式化）+ 6 个命令；无头验收 6/6" data-en="Two grammars + an LSP (completion / go-to / diagnostics / formatting) + 6 commands; 6/6 headless acceptance">两份语法 + LSP（补全 / 跳转 / 诊断 / 格式化）+ 6 个命令；无头验收 6/6</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Vim</strong></td>
+                      <td data-zh-html="在 vimrc 里加 <code>set runtimepath+=</code> 指向仓库的 <code>editors/vim</code>；零插件、零 Python" data-en-html="Add <code>set runtimepath+=</code> pointing at the repo's <code>editors/vim</code>; no plugins, no Python">在 vimrc 里加 <code>set runtimepath+=</code> 指向仓库的 <code>editors/vim</code>；零插件、零 Python</td>
+                      <td data-zh-html="高亮，以及 <code>:LomentCheck</code> 把诊断接进 quickfix、<code>:LomentBuild</code> 出 .ll/.elf；判据 2/2（含无头 vim 断言语法分组）" data-en-html="Highlighting, plus <code>:LomentCheck</code> into quickfix and <code>:LomentBuild</code> for .ll/.elf; 2/2 criterion, including headless vim assertions on syntax groups">高亮，以及 <code>:LomentCheck</code> 把诊断接进 quickfix、<code>:LomentBuild</code> 出 .ll/.elf；判据 2/2</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="任意 LSP 客户端" data-en="Any LSP client">任意 LSP 客户端</td>
+                      <td data-zh-html="指向 <code>scripts/install-lsp.ps1</code> 装好的那个服务（Windows 上经 WSL 调）" data-en-html="Point it at the server <code>scripts/install-lsp.ps1</code> installs (invoked through WSL on Windows)">指向 <code>scripts/install-lsp.ps1</code> 装好的那个服务（Windows 上经 WSL 调）</td>
+                      <td data-zh="补全 / 跳转 / 保存即诊断。装服务本身不需要 Python——服务也是自举编译器编译出来的" data-en="Completion / go-to / diagnostics on save. Installing the server needs no Python — the server is compiled by the bootstrap compiler too">补全 / 跳转 / 保存即诊断。装服务本身不需要 Python——服务也是自举编译器编译出来的</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="不开编辑器" data-en="Without an editor">不开编辑器</td>
+                      <td data-zh-html="<code>powershell -File scripts/lomc.ps1 FILE -Run</code>（只用种子 + clang + WSL）" data-en-html="<code>powershell -File scripts/lomc.ps1 FILE -Run</code> (seed + clang + WSL only)"><code>powershell -File scripts/lomc.ps1 FILE -Run</code>（只用种子 + clang + WSL）</td>
+                      <td data-zh="编译并运行一个 .lomt，全程无 Python；目标是 Linux ELF，所以运行那一步走 WSL" data-en="Compiles and runs a .lomt with no Python in the path; the target is a Linux ELF, so the run step goes through WSL">编译并运行一个 .lomt，全程无 Python；目标是 Linux ELF，所以运行那一步走 WSL</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="Windows 文件关联" data-en="Windows file association">Windows 文件关联</td>
+                      <td data-zh-html="<code>python tools/loment_filetype.py --register</code>（只写 HKCU，不需要管理员）" data-en-html="<code>python tools/loment_filetype.py --register</code> (HKCU only, no administrator)"><code>python tools/loment_filetype.py --register</code>（只写 HKCU，不需要管理员）</td>
+                      <td data-zh=".lomt / .lom 成为真实文件类型：双击进编辑器，「打开方式」里常驻，资源管理器里有自己的图标" data-en=".lomt / .lom become real file types: double-click opens the editor, they stay listed under Open with, and Explorer shows their own icon">.lomt / .lom 成为真实文件类型：双击进编辑器，「打开方式」里常驻，资源管理器里有自己的图标</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="note">
+                <strong data-zh="这条路上还缺什么：" data-en="What this path still lacks: ">这条路上还缺什么：</strong>
+                <span data-zh-html="编辑器内<strong>格式化</strong>还没走 Loment 版（语言服务未声明 <code>documentFormattingProvider</code>），命令行仍可用 <code>lomfmt</code>；诊断文案是分类标题（如 <code>E013 重名</code>），不是参考实现的完整措辞。" data-en-html="<b>Formatting</b> inside the editor does not go through the Loment version yet (the server declares no <code>documentFormattingProvider</code>); the CLI still has <code>lomfmt</code>. And diagnostics carry the classification title (e.g. <code>E013 duplicate name</code>) rather than the reference implementation's full wording.">编辑器内<strong>格式化</strong>还没走 Loment 版（语言服务未声明 <code>documentFormattingProvider</code>），命令行仍可用 <code>lomfmt</code>；诊断文案是分类标题（如 <code>E013 重名</code>），不是参考实现的完整措辞。</span>
+              </div>
+
               <h2 data-zh="构建性能" data-en="Build performance">构建性能</h2>
               <div class="stats">
                 <div class="stat">
@@ -282,8 +334,8 @@
 
               <h2 data-zh="错误信息" data-en="Diagnostics">错误信息</h2>
               <div class="prose">
-                <p data-zh="诊断分成 E001–E013 十三类，每一类都带修复建议。13 条反例全部命中——这意味着错误分类不是文档里的一张表，而是真的会触发的代码路径。" data-en="Diagnostics fall into thirteen classes, E001–E013, each carrying a repair suggestion. All thirteen counterexamples hit — meaning the classification is not a table in a document but code paths that actually fire.">
-                  诊断分成 E001–E013 十三类，每一类都带修复建议。13 条反例全部命中——这意味着错误分类不是文档里的一张表，而是真的会触发的代码路径。
+                <p data-zh-html="诊断码是 <strong>E001–E017</strong>，十七类，每一类都带一条可执行的修复建议。两条纪律让它不只是一张表：<strong>码按修法分，不按消息措辞分</strong>——「实参类型」「载荷类型」「return 类型」都归 E001，因为用户接下来要做的是同一件事；<strong>顺序即优先级</strong>，E002 必须排在 E001 前（「载荷类型 Foo 未声明」要做的是先声明 Foo）。判据有两条：13 条反例片段逐条被分类（无 E999）且带建议；以及用 AST 抽出参考实现里<strong>全部 81 条</strong>消息模板逐条分类——分类表漏掉一条，那条规则会在「自举 vs 参考」的码集对照里两边都成 E999，缺口就这样静默消失。" data-en-html="Diagnostic codes run <strong>E001–E017</strong>, seventeen classes, each carrying an executable repair suggestion. Two disciplines keep it from being merely a table: <strong>codes are cut by the repair, not by the message</strong> — “argument type”, “payload type” and “return type” all land on E001, because the user's next move is the same; and <strong>order is priority</strong>, so E002 must precede E001 (a “payload type Foo undeclared” wants Foo declared first). Two criteria: thirteen counterexample snippets each classify (no E999) and carry a suggestion; and an AST walk extracts <strong>all 81</strong> message templates from the reference implementation and classifies each — miss one in the table and that rule becomes E999 on both sides of the bootstrap-vs-reference code-set comparison, so the gap disappears silently.">
+                  诊断码是 <strong>E001–E017</strong>，十七类，每一类都带一条可执行的修复建议。两条纪律让它不只是一张表：<strong>码按修法分，不按消息措辞分</strong>——「实参类型」「载荷类型」「return 类型」都归 E001，因为用户接下来要做的是同一件事；<strong>顺序即优先级</strong>，E002 必须排在 E001 前（「载荷类型 Foo 未声明」要做的是先声明 Foo）。判据有两条：13 条反例片段逐条被分类（无 E999）且带建议；以及用 AST 抽出参考实现里<strong>全部 81 条</strong>消息模板逐条分类——分类表漏掉一条，那条规则会在「自举 vs 参考」的码集对照里两边都成 E999，缺口就这样静默消失。
                 </p>
               </div>
 

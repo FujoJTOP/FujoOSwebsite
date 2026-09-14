@@ -1,0 +1,193 @@
+<!--{"zh":"冻结面","en":"The freeze surface","desc":"0.1.3.4 Alpha 冻结了什么、明确不冻结什么、7 条已知开放项，以及改动触及冻结面时要走的四步流程。","banner_zh":"冻结面 · 改动要付代价","banner_en":"The freeze surface · a change now costs something"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="冻结面" data-en="The freeze surface">冻结面</h1>
+
+              <div class="prose">
+                <p data-zh-html="这一页说的是 <strong>0.1.3.4 Alpha</strong> 冻结了什么。冻结不等于完备，也不等于发布——它说的是<strong>改动要付代价</strong>：任何触及下面那份清单的改动，必须同时改规范、改一致性套件、两个实现同一次提交改完，再走最后那套流程。清单之外的东西随便改。" data-en-html="This page covers what <b>0.1.3.4 Alpha</b> freezes. Frozen does not mean complete, and it does not mean released — it means <b>a change now costs something</b>: anything touching the list below has to move the spec, the parity suite and both implementations in one commit, then follow the process at the end. Everything outside that list is free to change.">
+                  这一页说的是 <strong>0.1.3.4 Alpha</strong> 冻结了什么。冻结不等于完备，也不等于发布——它说的是<strong>改动要付代价</strong>：任何触及下面那份清单的改动，必须同时改规范、改一致性套件、两个实现同一次提交改完，再走最后那套流程。清单之外的东西随便改。
+                </p>
+              </div>
+
+              <h2 data-zh="为什么现在能冻结" data-en="Why it can be frozen now">为什么现在能冻结</h2>
+              <div class="prose">
+                <p data-zh-html="冻结的前提不是「功能齐全」，而是<strong>规范有唯一的执行者，而且可测量</strong>。" data-en-html="The precondition for freezing is not “everything is finished” but that <b>the spec has a single executor, and it is measurable</b>.">
+                  冻结的前提不是「功能齐全」，而是<strong>规范有唯一的执行者，而且可测量</strong>。
+                </p>
+              </div>
+              <ul class="list">
+                <li>
+                  <b data-zh="63/63 规则等价" data-en="63 of 63 rules agree">63/63 规则等价</b>
+                  <span data-zh-html="—— 自举 checker 与参考实现在 63 条规则上判定等价（<code>tools/loment_rule_parity.py</code>）。门禁是棘轮：等价数 ≥ 预算，假阳性与码漂移必须为 0。" data-en-html=" — the bootstrap checker and the reference implementation agree on 63 rules (<code>tools/loment_rule_parity.py</code>). The gate is a ratchet: equivalence ≥ budget, with false positives and code drift pinned at zero.">—— 自举 checker 与参考实现在 63 条规则上判定等价（<code>tools/loment_rule_parity.py</code>）。门禁是棘轮：等价数 ≥ 预算，假阳性与码漂移必须为 0。</span>
+                </li>
+                <li>
+                  <b data-zh="负例真的被拒" data-en="The counterexamples are actually refused">负例真的被拒</b>
+                  <span data-zh="—— 63 条规则负例直接喂自举驱动，全部非零退出，而且无一因信号而死。" data-en=" — all 63 rule counterexamples fed straight to the bootstrap driver exit non-zero, and not one dies on a signal.">—— 63 条规则负例直接喂自举驱动，全部非零退出，而且无一因信号而死。</span>
+                </li>
+                <li>
+                  <b data-zh="语料与定点" data-en="Corpus and fixpoint">语料与定点</b>
+                  <span data-zh="—— 40/40 语料单元零诊断、40/40 可发射目标两个后端逐字节一致、三阶段自举定点成立。" data-en=" — 40 of 40 corpus units diagnose clean, 40 of 40 emittable targets are byte-identical across the two backends, and the three-stage bootstrap fixpoint holds.">—— 40/40 语料单元零诊断、40/40 可发射目标两个后端逐字节一致、三阶段自举定点成立。</span>
+                </li>
+                <li>
+                  <b data-zh="错误码是单一真源" data-en="One source for diagnostic codes">错误码是单一真源</b>
+                  <span data-zh-html="—— 口径在 <code>tools/loment_diag.RULES</code>（E001–E017），参考实现能发出的<strong>全部 81 条</strong>消息模板都被它分类。" data-en-html=" — the definitions sit in <code>tools/loment_diag.RULES</code> (E001–E017), and it classifies <b>all 81</b> message templates the reference implementation can emit.">—— 口径在 <code>tools/loment_diag.RULES</code>（E001–E017），参考实现能发出的<strong>全部 81 条</strong>消息模板都被它分类。</span>
+                </li>
+              </ul>
+              <div class="prose">
+                <p data-zh-html="换句话说：从这一刻起「语言是什么」由<strong>规范加一致性套件</strong>定义，参考实现不再是唯一权威——它只是套件里的一员。" data-en-html="Put another way: from this point “what the language is” is defined by <b>the spec plus the parity suite</b>. The reference implementation is no longer the sole authority — it is one member of that suite.">
+                  换句话说：从这一刻起「语言是什么」由<strong>规范加一致性套件</strong>定义，参考实现不再是唯一权威——它只是套件里的一员。
+                </p>
+              </div>
+
+              <h2 data-zh="冻结了什么" data-en="What is frozen">冻结了什么</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="面" data-en="Surface">面</th>
+                      <th scope="col" data-zh="内容" data-en="What it covers">内容</th>
+                      <th scope="col" data-zh="为什么冻结" data-en="Why it is frozen">为什么冻结</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td data-zh="语法与类型规则" data-en="Syntax and type rules">语法与类型规则</td>
+                      <td data-zh="词法（含「多字符运算符拆成单字符 token」这一条）、解析形状、类型系统、移动与借用规则" data-en="Lexing (including the rule that multi-character operators split into single-character tokens), parse shape, the type system, move and borrow rules">词法（含「多字符运算符拆成单字符 token」这一条）、解析形状、类型系统、移动与借用规则</td>
+                      <td data-zh="它们是用户程序与一致性套件的接口" data-en="They are the interface both user programs and the parity suite are written against">它们是用户程序与一致性套件的接口</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="诊断口径" data-en="Diagnostic definitions">诊断口径</td>
+                      <td data-zh="错误码 E001–E017，以及「码按修法分」的分组原则" data-en="Error codes E001–E017, plus the principle that codes are cut by the repair">错误码 E001–E017，以及「码按修法分」的分组原则</td>
+                      <td data-zh="用户脚本与 CI 会按码匹配；码是最稳的那层 ABI" data-en="User scripts and CI match on the code; the code is the most stable ABI there is">用户脚本与 CI 会按码匹配；码是最稳的那层 ABI</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="单元装载规则" data-en="Unit loading rules">单元装载规则</td>
+                      <td data-zh-html="<code>use</code> 递归装载、依赖按先序拼进单元、去重、预置枚举的注入点（单元末尾）" data-en-html="<code>use</code> loads recursively, dependencies splice into the unit in pre-order, duplicates are removed, and the prelude enum is injected at the end of the unit"><code>use</code> 递归装载、依赖按先序拼进单元、去重、预置枚举的注入点（单元末尾）</td>
+                      <td data-zh="它决定同名、顺序与枚举的可见性，跨文件程序的语义靠它" data-en="It decides shadowing, ordering and enum visibility — the semantics of any multi-file program rest on it">它决定同名、顺序与枚举的可见性，跨文件程序的语义靠它</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="发射符号约定" data-en="Emission symbol convention">发射符号约定</td>
+                      <td data-zh-html="顶层名字在单元内唯一（平名字空间，不做 mangling）；入口名（<code>_start</code>、<code>timer_isr</code> 这类）由内核线按名查找；内核与驱动按名解析的符号不得私有化" data-en-html="Top-level names are unique within a unit (a flat namespace, no mangling); entry names such as <code>_start</code> and <code>timer_isr</code> are looked up by name on the kernel line; a symbol the kernel or a driver resolves by name must not be made private">顶层名字在单元内唯一（平名字空间，不做 mangling）；入口名（<code>_start</code>、<code>timer_isr</code> 这类）由内核线按名查找；内核与驱动按名解析的符号不得私有化</td>
+                      <td data-zh="这是跨线 ABI：内核与 C 夹具按名字找入口，改名就是破坏契约" data-en="This is the cross-line ABI: the kernel and the C fixtures find entry points by name, so renaming one breaks the contract">这是跨线 ABI：内核与 C 夹具按名字找入口，改名就是破坏契约</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="两个后端的等价性" data-en="Equivalence of the two backends">两个后端的等价性</td>
+                      <td data-zh="同一输入下，自举 codegen 与参考实现的 IR 必须逐字节相同；三阶段定点必须成立" data-en="On the same input the bootstrap codegen and the reference implementation must emit byte-identical IR, and the three-stage fixpoint must hold">同一输入下，自举 codegen 与参考实现的 IR 必须逐字节相同；三阶段定点必须成立</td>
+                      <td data-zh="它是「两个实现」能互相验证的前提，也是回归检测的主要手段" data-en="It is what lets two implementations check each other, and it is the main instrument for catching regressions">它是「两个实现」能互相验证的前提，也是回归检测的主要手段</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="内建函数表" data-en="The builtin table">内建函数表</td>
+                      <td data-zh="18 个内建的名字、元数、参数与返回类型" data-en="The name, arity and parameter/return types of the 18 builtins">18 个内建的名字、元数、参数与返回类型</td>
+                      <td data-zh="名字与签名被内核线直接调用" data-en="The kernel line calls them by name and signature">名字与签名被内核线直接调用</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="能力域语义" data-en="Capability semantics">能力域语义</td>
+                      <td data-zh-html="<code>capability</code> / <code>guard</code> / <code>excluded</code> 的判定；字面量越界在编译期就拒" data-en-html="How <code>capability</code>, <code>guard</code> and <code>excluded</code> are decided; a literal out of range is refused at compile time">capability / guard / excluded 的判定；字面量越界在编译期就拒</td>
+                      <td data-zh="它是信任自适应能力域的输入" data-en="It is the input to the trust-adaptive capability domain">它是信任自适应能力域的输入</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 data-zh="明确不冻结" data-en="Explicitly not frozen">明确不冻结</h2>
+              <ul class="list">
+                <li><b data-zh="实现内部" data-en="Implementation internals">实现内部</b> <span data-zh="—— 两份编译器的内部表布局、缓冲尺寸、遍历顺序、临时名；自举侧的 arena 分段与类型表述。只要不动上面的等价性与容量闸门，随便改。" data-en=" — the internal table layouts, buffer sizes, traversal order and temporary names of either compiler, and the bootstrap side's arena segmentation and type representation. Free to change as long as the equivalence and capacity gates above stay intact.">—— 两份编译器的内部表布局、缓冲尺寸、遍历顺序、临时名；自举侧的 arena 分段与类型表述。只要不动上面的等价性与容量闸门，随便改。</span></li>
+                <li><b data-zh="工具链内部" data-en="Tool internals">工具链内部</b> <span data-zh-html="—— <code>tools/*.py</code> 的函数与结构，只要对外的命令行行为和上面的判据不变。" data-en-html=" — the functions and structures inside <code>tools/*.py</code>, as long as the command-line behaviour and the criteria above do not move.">—— <code>tools/*.py</code> 的函数与结构，只要对外的命令行行为和上面的判据不变。</span></li>
+                <li><b data-zh="文档结构" data-en="Document structure">文档结构</b> <span data-zh="—— 手册的产物随源变化，它本来就是生成的。" data-en=" — the manual's output follows its sources; it is generated in the first place.">—— 手册的产物随源变化，它本来就是生成的。</span></li>
+                <li><b data-zh="性能" data-en="Performance">性能</b> <span data-zh="—— 现在只有护栏（自编译 ≤ 30 秒，实测基线 12.8 秒）。优化不受冻结限制：索引化符号查找这类改动，只要不改变产物字节，随便做。" data-en=" — for now there is only a guard rail (self-compilation ≤ 30 s against a 12.8 s baseline). Optimisation is not frozen: indexing the symbol lookup is free, provided the emitted bytes do not change.">—— 现在只有护栏（自编译 ≤ 30 秒，实测基线 12.8 秒）。优化不受冻结限制：索引化符号查找这类改动，只要不改变产物字节，随便做。</span></li>
+              </ul>
+
+              <h2 data-zh="已知的开放项与刻意偏离" data-en="Known open items and deliberate deviations">已知的开放项与刻意偏离</h2>
+              <div class="prose">
+                <p data-zh-html="冻结<strong>不等于</strong>完备。这些是已知的口子，写在这里是为了让后来的人和审计者不必自己撞上去。" data-en-html="Frozen is <b>not</b> the same as complete. These are the known gaps, written down so that whoever comes next — or whoever audits — does not have to find them by walking into them.">
+                  冻结<strong>不等于</strong>完备。这些是已知的口子，写在这里是为了让后来的人和审计者不必自己撞上去。
+                </p>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="#" data-en="#">#</th>
+                      <th scope="col" data-zh="项" data-en="Item">项</th>
+                      <th scope="col" data-zh="现状" data-en="State">现状</th>
+                      <th scope="col" data-zh="影响" data-en="Consequence">影响</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="num">1</td>
+                      <td data-zh="三处刻意偏离" data-en="Three deliberate deviations">三处刻意偏离</td>
+                      <td data-zh-html="下标与 <code>&amp;</code> 在「类型未知」时不报；<code>match</code> 主体未知时不报；<code>?</code> 只在能确定不是 <code>Result</code> 时报" data-en-html="Subscript and <code>&amp;</code> do not report when the type is unknown; <code>match</code> does not report when the scrutinee is unknown; <code>?</code> reports only when it can tell the value is not a <code>Result</code>">下标与 <code>&amp;</code> 在「类型未知」时不报；<code>match</code> 主体未知时不报；<code>?</code> 只在能确定不是 <code>Result</code> 时报</td>
+                      <td data-zh="自举 checker 在这三种情形下可能少报，参考实现会报。方向是保守——不假阳性" data-en="The bootstrap checker can under-report in these three cases where the reference implementation would report. The direction is conservative — no false positives">自举 checker 在这三种情形下可能少报，参考实现会报。方向是保守——不假阳性</td>
+                    </tr>
+                    <tr>
+                      <td class="num">2</td>
+                      <td data-zh-html="同名 <code>let</code> 双 alloca" data-en-html="Two allocas for a repeated <code>let</code>">同名 <code>let</code> 双 alloca</td>
+                      <td data-zh="参考实现复用槽位；自举 codegen 发两条，第二条遮蔽第一条" data-en="The reference implementation reuses the slot; the bootstrap codegen emits two, the second shadowing the first">参考实现复用槽位；自举 codegen 发两条，第二条遮蔽第一条</td>
+                      <td data-zh="同一函数里重复声明同名变量时，两个实现语义不同" data-en="When the same name is declared twice in one function, the two implementations differ">同一函数里重复声明同名变量时，两个实现语义不同</td>
+                    </tr>
+                    <tr>
+                      <td class="num">3</td>
+                      <td data-zh="驱动器没有 parser" data-en="The driver has no parser">驱动器没有 parser</td>
+                      <td data-zh="驱动是 lex → check → emit；解析期错误它看不见" data-en="The driver is lex → check → emit; parse-time errors are invisible to it">驱动是 lex → check → emit；解析期错误它看不见</td>
+                      <td data-zh="自举链单独使用时，解析期错误不会被报出来，只能靠参考实现兜底" data-en="Using the bootstrap chain on its own, parse-time errors go unreported and the reference implementation has to catch them">自举链单独使用时，解析期错误不会被报出来，只能靠参考实现兜底</td>
+                    </tr>
+                    <tr>
+                      <td class="num">4</td>
+                      <td data-zh="aarch64 目标" data-en="The aarch64 target">aarch64 目标</td>
+                      <td data-zh="后端支持 elf64-littleaarch64，但没有在真机或模拟器上执行过" data-en="The backend supports elf64-littleaarch64, but nothing has been executed on real hardware or an emulator">后端支持 elf64-littleaarch64，但没有在真机或模拟器上执行过</td>
+                      <td data-zh="只保证发射，不保证运行" data-en="Emission is guaranteed; execution is not">只保证发射，不保证运行</td>
+                    </tr>
+                    <tr>
+                      <td class="num">5</td>
+                      <td data-zh="自举性能" data-en="Bootstrap performance">自举性能</td>
+                      <td data-zh="自编译 12.8 秒（参考实现 1.2 秒），符号查找是线性扫" data-en="12.8 s to compile itself against the reference implementation's 1.2 s; the symbol lookup is a linear scan">自编译 12.8 秒（参考实现 1.2 秒），符号查找是线性扫</td>
+                      <td data-zh="大单元编译偏慢；不影响正确性" data-en="Large units compile slowly; correctness is unaffected">大单元编译偏慢；不影响正确性</td>
+                    </tr>
+                    <tr>
+                      <td class="num">6</td>
+                      <td data-zh="DWARF 变量信息" data-en="DWARF variable information">DWARF 变量信息</td>
+                      <td data-zh="只有语句级行表，没有变量位置信息" data-en="Statement-level line tables only, no variable locations">只有语句级行表，没有变量位置信息</td>
+                      <td data-zh="调试器能按行断点，但看不到变量值" data-en="A debugger can break on a line but cannot show you a variable's value">调试器能按行断点，但看不到变量值</td>
+                    </tr>
+                    <tr>
+                      <td class="num">7</td>
+                      <td data-zh="外部审计" data-en="External audit">外部审计</td>
+                      <td data-zh="尚未由第三方复核（M100）" data-en="Not yet reviewed by a third party (M100)">尚未由第三方复核（M100）</td>
+                      <td data-zh="冻结面内的判据都是自证的——自证不全等于正确" data-en="Every criterion inside the freeze surface is self-certified — and self-certification is not the same as being right">冻结面内的判据都是自证的——自证不全等于正确</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 data-zh="改冻结面的流程" data-en="How to change the freeze surface">改冻结面的流程</h2>
+              <div class="prose">
+                <p data-zh="四条，缺一不可。" data-en="Four steps. Skipping any one of them is not a shortcut.">四条，缺一不可。</p>
+              </div>
+              <ul class="list">
+                <li><b data-zh="1 · 改规范" data-en="1 · Move the spec">1 · 改规范</b> <span data-zh-html="—— 先改手册（或对应的语言章节），把新规则写成可判定的句子。涉及诊断的话，先在 <code>tools/loment_diag.RULES</code> 里给码：<strong>码只增不改</strong>，新规则从 E018 起。" data-en-html=" — change the manual (or the matching language section) first, and write the new rule as a sentence that can be decided. If a diagnostic is involved, give it a code in <code>tools/loment_diag.RULES</code> first: <b>codes are only ever added</b>, never changed, and a new rule starts at E018.">—— 先改手册（或对应的语言章节），把新规则写成可判定的句子。涉及诊断的话，先在 <code>tools/loment_diag.RULES</code> 里给码：<strong>码只增不改</strong>，新规则从 E018 起。</span></li>
+                <li><b data-zh="2 · 改一致性套件" data-en="2 · Move the parity suite">2 · 改一致性套件</b> <span data-zh-html="—— 在 <code>tools/loment_rule_parity.py</code> 的用例表里加<strong>最小负例</strong>，并把预算<strong>上调</strong>。只调低预算是放松门禁，等于隐瞒缺口——门禁会因此变红。" data-en-html=" — add a <b>minimal counterexample</b> to the case table in <code>tools/loment_rule_parity.py</code> and <b>raise</b> the budget. Lowering the budget is loosening the gate, which is the same as hiding the gap — and the gate goes red for it.">—— 在 <code>tools/loment_rule_parity.py</code> 的用例表里加<strong>最小负例</strong>，并把预算<strong>上调</strong>。只调低预算是放松门禁，等于隐瞒缺口——门禁会因此变红。</span></li>
+                <li><b data-zh="3 · 两个实现同一次提交" data-en="3 · Both implementations, one commit">3 · 两个实现同一次提交</b> <span data-zh-html="—— 参考实现与自举 checker 必须一起改。规则对照、40/40 逐字节一致、三阶段定点全绿，才算完成。" data-en-html=" — the reference implementation and the bootstrap checker move together. Rule parity, 40-of-40 byte-identical output and the three-stage fixpoint all have to be green before the change counts as done.">—— 参考实现与自举 checker 必须一起改。规则对照、40/40 逐字节一致、三阶段定点全绿，才算完成。</span></li>
+                <li><b data-zh="4 · 过静态门禁" data-en="4 · Pass the static gates">4 · 过静态门禁</b> <span data-zh="—— 静态门禁里 L0 / L1 的部分全绿。若改动触及内核线按名解析的符号，得先走内核线的交接约定。" data-en=" — the L0/L1 half of the static gates green. If the change touches a symbol the kernel line resolves by name, the kernel hand-off convention comes first.">—— 静态门禁里 L0 / L1 的部分全绿。若改动触及内核线按名解析的符号，得先走内核线的交接约定。</span></li>
+              </ul>
+
+              <h2 data-zh="一致性套件" data-en="The parity suite">一致性套件</h2>
+              <div class="prose">
+                <p data-zh="说「0.1.3.4 Alpha 冻结了」，指的就是这一套全绿——它们是判据，不是建议。" data-en="Saying “0.1.3.4 Alpha is frozen” means exactly this set is green. These are criteria, not suggestions.">说「0.1.3.4 Alpha 冻结了」，指的就是这一套全绿——它们是判据，不是建议。</p>
+              </div>
+              <div class="code">
+                <div class="code__bar">
+                  <span class="lang-tag">bash</span>
+                  <span data-zh="全绿才算数" data-en="green is the bar">全绿才算数</span>
+                  <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+                </div>
+                <pre>python tools/loment_rule_parity.py    <span class="c"># 63/63 等价 + 假阳性/漂移 0（棘轮预算 63）</span>
+python tools/loment_p8_test.py        <span class="c"># 16/16：40/40 零诊断 + 40/40 逐字节 + 定点 + 4 条闸门</span>
+python tools/lomentc_test.py          <span class="c"># 参考实现 91/91</span>
+python tools/loment_tools_test.py     <span class="c"># 15/15：诊断分类 / 内建表 / 增量缓存</span>
+python tools/loment_ir_diff.py --all  <span class="c"># 40 个目标逐字节一致（定位工具）</span>
+python tools/loment_status.py --check <span class="c"># 状态矩阵与里程碑文档一致</span></pre>
+              </div>
+
+              <div class="note note--steel">
+                <strong data-zh="判据优先于实现：" data-en="Criteria outrank implementation: ">判据优先于实现：</strong>
+                <span data-zh="任何一处红灯都不许「改判据让它变绿」，只许改实现，或者按上面那四步走一遍。" data-en="No red light may be turned green by editing the criterion. Fix the implementation, or walk the four steps above.">任何一处红灯都不许「改判据让它变绿」，只许改实现，或者按上面那四步走一遍。</span>
+              </div>
