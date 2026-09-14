@@ -151,7 +151,13 @@ const JS_V = assetVersion(join(ROOT, "assets", "site.js"));
    keeps their query strings in step rather than leaving it to memory. The
    publishing console is not one of them: it lives in tools/, is served by
    tools/admin.mjs, and is never part of the built site. */
-const HAND_WRITTEN = ["index.html", "fuai/index.html", "loment/index.html", "bugs/index.html"];
+const HAND_WRITTEN = [
+  "index.html",
+  "fuai/index.html",
+  "loment/index.html",
+  "bugs/index.html",
+  "bugs/submit/index.html",
+];
 
 /* -------------------------------------------------------------- helpers */
 
@@ -361,20 +367,17 @@ function loadBugs() {
   return (BUGS_CACHE = { reportTo: parsed.report_to || "", bugs });
 }
 
-/* Where a report goes. A mailto, because this site has no server to post to
-   and no third-party script may run on this origin — those two constraints
-   leave exactly one channel. The address is data so that changing it is one
-   line of JSON rather than a hunt through the markup. */
+/* The way in. A page rather than a mailto: this site has no server and no
+   third-party script may run on this origin, so the form has to be part of
+   the site itself. What it can do without a backend is assemble the report —
+   see /bugs/submit/. */
 function reportBlock(indent = "                ") {
-  const { reportTo } = loadBugs();
-  if (!reportTo) return "";
-  const subject = encodeURIComponent("FujoOS bug report");
   return `${indent}<a
 ${indent}  class="btn btn--primary"
-${indent}  href="mailto:${esc(reportTo)}?subject=${subject}"
-${indent}  data-zh="把报告寄出去 ↗"
-${indent}  data-en="Send the report ↗"
-${indent}  >把报告寄出去 ↗</a
+${indent}  href="submit/"
+${indent}  data-zh="提交一条 bug"
+${indent}  data-en="Report a bug"
+${indent}  >提交一条 bug</a
 ${indent}>`;
 }
 
@@ -1014,6 +1017,7 @@ ${items}
     AT.fuai,
     AT.loment,
     AT.bugs,
+    `${AT.bugs}submit/`,
     AT.docs,
     ...flat.map((p) => (p.slug === "index" ? `docs/${p.section}/` : `docs/${p.section}/${p.slug}/`)),
     ...(POSTS.length ? [AT.news, ...POSTS.map((p) => `news/${p.slug}/`)] : []),

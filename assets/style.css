@@ -1415,6 +1415,62 @@ td strong {
   display: none;
 }
 
+/* ------------------------------------------------------- bug report form */
+.bugform__field {
+  margin-top: var(--s3);
+}
+.bugform__field label {
+  display: block;
+  font-size: var(--t-sm);
+  color: var(--fg);
+}
+.bugform__hint {
+  margin-top: 0.2rem;
+  font-size: var(--t-xs);
+  color: var(--fg-3);
+}
+.bugform textarea,
+.bugform input[type="text"] {
+  display: block;
+  width: 100%;
+  margin-top: 0.5rem;
+  font-family: var(--mono);
+  font-size: var(--t-sm);
+  line-height: 1.55;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--panel);
+  color: var(--fg);
+  resize: vertical;
+}
+.bugform__row {
+  display: grid;
+  gap: var(--s3);
+}
+@media (min-width: 48rem) {
+  .bugform__row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+/* Not an accent. An incomplete report is a state of the form, not a trust
+   state, so it is said with weight like everything else on this board. */
+.bugform__missing {
+  margin-top: var(--s3);
+  font-size: var(--t-sm);
+  font-weight: 500;
+  color: var(--fg);
+}
+.bugform__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2);
+  margin-top: var(--s4);
+}
+.bugform[hidden] {
+  display: none;
+}
+
 /* ---------------------------------------------------------------- cards */
 
 .card {

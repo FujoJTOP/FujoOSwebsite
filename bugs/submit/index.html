@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html
+  lang="zh-CN"
+  class="theme-instrument"
+  data-title-zh="提交一条 bug — 站上说的和你跑出来的对不上"
+  data-title-en="Report a bug — where the site and your output disagree"
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>提交一条 bug — 站上说的和你跑出来的对不上</title>
+    <link rel="canonical" href="https://fujojtop.github.io/FujoOSwebsite/bugs/submit/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="FujoOS" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:locale:alternate" content="en" />
+    <meta property="og:title" content="提交一条 bug — 站上说的和你跑出来的对不上" />
+    <meta property="og:description" content="照着两条硬门槛填：指向站上的一句话，带上命令与输出。填完这里会把它整理成一段可交出去的文本。" />
+    <meta property="og:url" content="https://fujojtop.github.io/FujoOSwebsite/bugs/submit/" />
+    <meta property="og:image" content="https://fujojtop.github.io/FujoOSwebsite/assets/og-card.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="FujoOS — Mount Fuji mark" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="description"
+      content="照着两条硬门槛填：指向站上的一句话，带上命令与输出。填完这里会把它整理成一段可交出去的文本。"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Geist+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/style.css?v=83c9e677" />
+    <link rel="icon" href="../../favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg" sizes="any" />
+    <link rel="icon" type="image/png" href="../../assets/favicon-32.png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png" />
+    <script>
+      document.documentElement.classList.add("js");
+      /* If site.js never runs, reveal everything instead of leaving it hidden. */
+      setTimeout(function () {
+        var r = document.documentElement;
+        if (!r.hasAttribute("data-motion-on")) r.classList.add("no-motion");
+      }, 1200);
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#main" data-zh="跳到主要内容" data-en="Skip to content">跳到主要内容</a>
+
+    <!-- ticker:start -->
+    <div class="notice notice--alert notice--scroll" role="note" data-notice data-notice-id="release-delay" data-paused="false">
+      <p class="notice__tag"><span class="notice__pip" aria-hidden="true"></span><span data-zh="公告" data-en="Notice">公告</span></p>
+      <div class="notice__view">
+        <div class="notice__track">
+          <span class="notice__item" data-zh="FujoOS公布日延期，以仓库发布为准" data-en="FujoOS release date postponed — the repository is authoritative">FujoOS公布日延期，以仓库发布为准</span>
+          <span class="notice__item" aria-hidden="true" data-zh="FujoOS公布日延期，以仓库发布为准" data-en="FujoOS release date postponed — the repository is authoritative">FujoOS公布日延期，以仓库发布为准</span>
+        </div>
+      </div>
+      <button class="notice__toggle" type="button" data-ticker-toggle aria-pressed="false">
+        <span class="notice__ico" aria-hidden="true"></span>
+        <span class="notice__lbl notice__lbl--pause" data-zh="暂停" data-en="Pause">暂停</span>
+        <span class="notice__lbl notice__lbl--play" data-zh="继续" data-en="Play">继续</span>
+      </button>
+    </div>
+    <!-- ticker:end -->
+
+    <header class="nav">
+      <div class="wrap nav__inner">
+        <a class="nav__brand" href="../../">
+          <svg viewBox="0 14 64 46" aria-hidden="true">
+            <path d="M3,58 Q11,38 26,16 Q32,19 38,16 Q53,38 61,58 Z" fill="var(--mark-rock)" />
+            <path d="M15.9,32 Q18,22 26,16 Q32,19 38,16 Q46,22 48.1,32 Q32,38 15.9,32 Z" fill="var(--mark-snow)" />
+          </svg>
+          FujoOS
+        </a>
+        <nav class="nav__links" aria-label="主导航" data-zh-aria="主导航" data-en-aria="Primary">
+          <a class="nav__link" href="../../" data-zh="首页" data-en="Home">首页</a>
+          <a class="nav__link" href="../../fuai/" data-zh="FUAI 安全体系" data-en="FUAI safety">FUAI 安全体系</a>
+          <a class="nav__link" href="../../loment/" data-zh="Loment · Potato" data-en="Loment · Potato">Loment · Potato</a>
+          <a class="nav__link" href="../../docs/" data-zh="文档" data-en="Docs">文档</a>
+          <a class="nav__link" href="../../news/" data-zh="新闻" data-en="News">新闻</a>
+          <a class="nav__link" href="../../bugs/" aria-current="page" data-zh="Bug 社区" data-en="Bug reports">Bug 社区</a>
+          <a class="nav__link" href="https://zenodo.org/records/22352904" rel="noopener" data-zh="论文 ↗" data-en="Paper ↗">论文 ↗</a>
+          <div class="lang" role="group" aria-label="语言" data-zh-aria="语言" data-en-aria="Language">
+            <button type="button" data-lang="zh" aria-pressed="true">ZH</button>
+            <button type="button" data-lang="en" aria-pressed="false">EN</button>
+          </div>
+        </nav>
+        <button class="nav__toggle" type="button" aria-expanded="false" data-zh="菜单" data-en="Menu">菜单</button>
+      </div>
+      <div class="wrap">
+        <div class="nav__drawer" data-open="false">
+          <a href="../../" data-zh="首页" data-en="Home">首页</a>
+          <a href="../../fuai/" data-zh="FUAI 安全体系" data-en="FUAI safety system">FUAI 安全体系</a>
+          <a href="../../loment/" data-zh="Loment · Potato 语言" data-en="Loment · Potato language">Loment · Potato 语言</a>
+          <a href="../../docs/" data-zh="文档" data-en="Documentation">文档</a>
+          <a href="../../news/" data-zh="新闻" data-en="News">新闻</a>
+          <a href="../../bugs/" data-zh="Bug 社区" data-en="Bug reports">Bug 社区</a>
+          <a href="../../docs/start/" data-zh="构建与运行" data-en="Build and run">构建与运行</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="section section--flush" style="padding-top: var(--s6)" data-motion>
+        <div class="wrap">
+          <p class="crumbs fade-step" style="--delay: 0.02s">
+            <a href="../../" data-zh="首页" data-en="Home">首页</a>
+            <span class="sep" aria-hidden="true">/</span>
+            <a href="../" data-zh="Bug 社区" data-en="Bug reports">Bug 社区</a>
+            <span class="sep" aria-hidden="true">/</span>
+            <span data-zh="提交" data-en="Report">提交</span>
+          </p>
+          <h1 class="display fade-step" style="--delay: 0.06s; font-size: clamp(2.1rem, 3.6vw, 2.9rem); margin-top: var(--s4)" data-zh="提交一条 bug" data-en="Report a bug">
+            提交一条 bug
+          </h1>
+          <p class="lede fade-step" style="--delay: 0.14s; margin-top: var(--s3); max-width: var(--measure)" data-zh-html="两条硬门槛：<strong>指向站上的一句话</strong>，并且<strong>带上命令与输出</strong>。缺任何一条，这条报告都无法处理——不是苛刻，是没有它就无法判断是站错了还是看错了。" data-en-html="Two hard gates: <strong>point at a sentence on this site</strong>, and <strong>carry the command and its output</strong>. Missing either, the report cannot be acted on — not strictness, but the fact that without it there is no way to tell whether the site is wrong or the reading is.">
+            两条硬门槛：<strong>指向站上的一句话</strong>，并且<strong>带上命令与输出</strong>。缺任何一条，这条报告都无法处理——不是苛刻，是没有它就无法判断是站错了还是看错了。
+          </p>
+
+          <form class="bugform fade-step" style="--delay: 0.22s; margin-top: var(--s5)" data-bug-form novalidate>
+            <div class="bugform__field">
+              <label for="f-what" data-zh="哪一句" data-en="Which sentence">哪一句</label>
+              <p class="bugform__hint" data-zh="页面地址，或者站上那句话的原文。这一条挡掉的是「你们应该支持 X」。" data-en="The page address, or the sentence itself. What this turns away is “you should support X”.">页面地址，或者站上那句话的原文。这一条挡掉的是「你们应该支持 X」。</p>
+              <textarea id="f-what" name="what" rows="3" required></textarea>
+            </div>
+
+            <div class="bugform__field">
+              <label for="f-cmd" data-zh="你跑的命令" data-en="The command you ran">你跑的命令</label>
+              <p class="bugform__hint" data-zh="原样贴，不要整理。整理过的命令跑出来的东西，通常正是分歧所在。" data-en="Paste it verbatim, do not tidy it. A tidied command usually produces exactly the thing in dispute.">原样贴，不要整理。整理过的命令跑出来的东西，通常正是分歧所在。</p>
+              <textarea id="f-cmd" name="cmd" rows="3" required spellcheck="false"></textarea>
+            </div>
+
+            <div class="bugform__field">
+              <label for="f-out" data-zh="你得到的输出" data-en="What you got">你得到的输出</label>
+              <p class="bugform__hint" data-zh="原样贴。错误信息是整个报告里信息量最大的部分。" data-en="Paste it verbatim. The error message carries more than the rest of the report put together.">原样贴。错误信息是整个报告里信息量最大的部分。</p>
+              <textarea id="f-out" name="out" rows="4" required spellcheck="false"></textarea>
+            </div>
+
+            <div class="bugform__field">
+              <label for="f-expect" data-zh="你预期的输出" data-en="What you expected">你预期的输出</label>
+              <p class="bugform__hint" data-zh="引用站上那句话就够了——它就是我们双方的对照物。" data-en="Quoting the sentence from the site is enough — it is the object both sides measure against.">引用站上那句话就够了——它就是我们双方的对照物。</p>
+              <textarea id="f-expect" name="expect" rows="3" required></textarea>
+            </div>
+
+            <div class="bugform__row">
+              <div class="bugform__field">
+                <label for="f-version" data-zh="版本" data-en="Version">版本</label>
+                <p class="bugform__hint" data-zh="站上写的版本串；不确定就留空。" data-en="The version string the site carries; leave it empty if unsure.">站上写的版本串；不确定就留空。</p>
+                <input id="f-version" name="version" type="text" autocomplete="off" />
+              </div>
+              <div class="bugform__field">
+                <label for="f-env" data-zh="环境" data-en="Environment">环境</label>
+                <p class="bugform__hint" data-zh="OS / 浏览器 / 工具链——只在确实相关时填。" data-en="OS, browser or toolchain — only where it actually matters.">OS / 浏览器 / 工具链——只在确实相关时填。</p>
+                <input id="f-env" name="env" type="text" autocomplete="off" />
+              </div>
+            </div>
+
+            <p class="bugform__missing" data-bug-missing hidden></p>
+
+            <div class="bugform__actions">
+              <button class="btn btn--primary" type="submit" data-zh="提交" data-en="Submit">提交</button>
+              <a class="btn btn--ghost" href="../" data-zh="返回看板" data-en="Back to the board">返回看板</a>
+            </div>
+          </form>
+
+          <!-- ==================================================== the result -->
+          <div class="bugform fade-step" style="--delay: 0.3s; margin-top: var(--s5)" data-bug-result hidden>
+            <h2 class="h2" data-zh="整理好了" data-en="Assembled">整理好了</h2>
+            <p class="muted" style="margin-top: var(--s2)" data-zh-html="这个站没有服务器，「提交」不会替你把任何东西发出去——它把报告排成下面这一段。这个步骤是为了让格式统一，好读、好对照。" data-en-html="This site has no server, so “submit” does not send anything anywhere on your behalf — it lays the report out below. The point of the step is a uniform shape: easier to read, easier to line up against the claim.">
+              这个站没有服务器，「提交」不会替你把任何东西发出去——它把报告排成下面这一段。这个步骤是为了让格式统一，好读、好对照。
+            </p>
+            <div class="code" style="margin-top: var(--s3)">
+              <div class="code__bar">
+                <span class="lang-tag">text</span>
+                <span data-zh="你的报告" data-en="your report">你的报告</span>
+                <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+              </div>
+              <pre data-bug-text></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <div class="wrap">
+        <div class="foot__grid">
+          <div>
+            <div class="nav__brand" style="margin-bottom: 0.7rem">
+              <svg viewBox="0 14 64 46" aria-hidden="true">
+            <path d="M3,58 Q11,38 26,16 Q32,19 38,16 Q53,38 61,58 Z" fill="var(--mark-rock)" />
+            <path d="M15.9,32 Q18,22 26,16 Q32,19 38,16 Q46,22 48.1,32 Q32,38 15.9,32 Z" fill="var(--mark-snow)" />
+          </svg>
+              FujoOS
+            </div>
+            <p class="small dim" style="max-width: 34ch" data-zh="提交不会把任何东西发出去：这个站没有后端。它只把报告整理成统一格式。" data-en="Submitting does not send anything: this site has no backend. It only lays the report out in one shape.">
+              提交不会把任何东西发出去：这个站没有后端。它只把报告整理成统一格式。
+            </p>
+          </div>
+          <div>
+            <h4 data-zh="本页" data-en="On this page">本页</h4>
+            <a href="../" data-zh="看板" data-en="The board">看板</a>
+            <a href="../#how" data-zh="一条报告要带什么" data-en="What a report has to carry">一条报告要带什么</a>
+          </div>
+          <div>
+            <h4 data-zh="先看这里" data-en="Read first">先看这里</h4>
+            <a href="../../docs/project/limitations/" data-zh="已知边界" data-en="Known limits">已知边界</a>
+            <a href="../../docs/language/freeze/" data-zh="冻结面" data-en="The freeze surface">冻结面</a>
+            <a href="../../docs/project/roadmap/" data-zh="路线图" data-en="Roadmap">路线图</a>
+          </div>
+          <div>
+            <h4 data-zh="文档" data-en="Documentation">文档</h4>
+            <a href="../../docs/language/quickstart/" data-zh="快速上手" data-en="Quickstart">快速上手</a>
+            <a href="../../docs/start/" data-zh="构建与运行" data-en="Build and run">构建与运行</a>
+            <a href="../../docs/" data-zh="全部文档 →" data-en="All documentation →">全部文档 →</a>
+          </div>
+        </div>
+        <div class="foot__end">
+          <span>© <span data-year>2026</span> Yuxuan Jiang · MIT</span>
+          <span data-zh="任何“完成”都要给出可重放的命令与输出" data-en="any “done” must come with a replayable command and its output">任何“完成”都要给出可重放的命令与输出</span>
+        </div>
+      </div>
+    </footer>
+
+    <script src="../../assets/site.js?v=eda6eed4"></script>
+  </body>
+</html>
