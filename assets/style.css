@@ -1308,6 +1308,113 @@ td strong {
   color: var(--fg-3);
 }
 
+/* ------------------------------------------------------------- bug board */
+/* The table is the site's ordinary one; what is new is the filter bar above it
+   and the state marks in it.
+
+   The state marks carry no accent colour, deliberately. A bug's state is a
+   workflow, not a trust state, and the site's two accents are only allowed to
+   name the latter. They are told apart by weight instead — the same device the
+   docs rail uses for "you are here". */
+
+.board__bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s1);
+  align-items: center;
+  margin-bottom: var(--s3);
+}
+.board__chip {
+  font: inherit;
+  font-size: var(--t-sm);
+  padding: 0.3rem 0.6rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--fg-2);
+  cursor: pointer;
+  transition: color 0.15s var(--ease), border-color 0.15s var(--ease),
+    background 0.15s var(--ease);
+}
+.board__chip[aria-pressed="true"] {
+  background: var(--fg);
+  border-color: var(--fg);
+  color: var(--bg);
+}
+.board__chip .board__n {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  opacity: 0.65;
+  margin-left: 0.2rem;
+}
+.board__search {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-left: auto;
+  font-size: var(--t-sm);
+  color: var(--fg-3);
+}
+.board__search input {
+  font: inherit;
+  font-size: var(--t-sm);
+  padding: 0.3rem 0.6rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--panel);
+  color: var(--fg);
+  min-width: 11rem;
+}
+.board__id {
+  font-family: var(--mono);
+  font-size: var(--t-xs);
+  color: var(--fg-3);
+  white-space: nowrap;
+}
+.board__t {
+  color: var(--fg);
+}
+.board__meta {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: var(--t-xs);
+  color: var(--fg-3);
+}
+.board__blank {
+  color: var(--fg-3);
+  font-size: var(--t-sm);
+}
+.board__st {
+  color: var(--fg-3);
+}
+.board__st--open,
+.board__st--confirmed {
+  color: var(--fg-2);
+}
+.board__st--fixed {
+  color: var(--fg);
+}
+/* Provenance, on the same terms: weight, plus a dashed edge for "this is a
+   claim we have not checked". No accent — an unverified report is not a trust
+   state either, and marking it green or orange would say it is. */
+.board__org {
+  color: var(--fg-3);
+}
+.board__org--official {
+  color: var(--fg);
+  border-color: var(--rule);
+}
+.board__org--unofficial {
+  border-style: dashed;
+}
+/* The filter sets `hidden` on rows; a table has its own display rules, so say
+   it here rather than hoping. */
+.board [data-board-row][hidden],
+.board [data-board-blank][hidden],
+.board [data-board-table][hidden] {
+  display: none;
+}
+
 /* ---------------------------------------------------------------- cards */
 
 .card {

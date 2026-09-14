@@ -1,0 +1,16 @@
+{
+  "_comment": "The bug board at /bugs/. An ordinary file — edit it by hand and re-run tools/docs.gen.mjs. Reported bugs arrive by mail (see report_to) and are written in here once they are understood; the board is the record, not the inbox.",
+  "_schema": {
+    "id": "FJ-0001 — assigned in order, never reused, never renumbered",
+    "state": "open | confirmed | fixed | duplicate | invalid | wontfix",
+    "area": "kernel | language | compat | ai | site",
+    "version": "the version string the report was made against",
+    "reported": "YYYY-MM-DD",
+    "fixed_in": "version string, or empty",
+    "zh / en": "the title, in the two site languages",
+    "res_zh / res_en": "how it was resolved — required for anything but open and confirmed",
+    "url": "the page the report is about, or empty"
+  },
+  "report_to": "",
+  "bugs": []
+}

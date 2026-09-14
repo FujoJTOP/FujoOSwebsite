@@ -15,7 +15,7 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:locale:alternate" content="en" />
     <meta property="og:title" content="Bug 社区 — 站上说的和你跑出来的对不上" />
-    <meta property="og:description" content="这个站每一条主张都绑着一条可重放的命令。问题板收的就是「复现不出来」——不管最后是文档写错了，还是命令过期了，还是环境不同。" />
+    <meta property="og:description" content="这块看板收的东西很具体：站上写了某句话，你按它给的命令跑，得到的不是它说的那个东西。带编号、状态、版本，可按状态筛选与搜索。" />
     <meta property="og:url" content="https://fujojtop.github.io/FujoOSwebsite/bugs/" />
     <meta property="og:image" content="https://fujojtop.github.io/FujoOSwebsite/assets/og-card.png" />
     <meta property="og:image:width" content="1200" />
@@ -24,7 +24,7 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta
       name="description"
-      content="这个站每一条主张都绑着一条可重放的命令。问题板收的就是「复现不出来」——不管最后是文档写错了，还是命令过期了，还是环境不同。"
+      content="这块看板收的东西很具体：站上写了某句话，你按它给的命令跑，得到的不是它说的那个东西。带编号、状态、版本，可按状态筛选与搜索。"
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -32,7 +32,7 @@
       href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Geist+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="../assets/style.css?v=5ccf3da7" />
+    <link rel="stylesheet" href="../assets/style.css?v=4fba685b" />
     <link rel="icon" href="../favicon.ico" sizes="48x48" />
     <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" sizes="any" />
     <link rel="icon" type="image/png" href="../assets/favicon-32.png" sizes="32x32" />
@@ -117,61 +117,25 @@
               <h1 class="display fade-step" style="--delay: 0.06s; font-size: clamp(2.1rem, 3.6vw, 2.9rem)" data-zh="站上说的，和你跑出来的，对不上。" data-en="Where what the site says and what you get disagree.">
                 站上说的，和你跑出来的，对不上。
               </h1>
-              <p class="lede fade-step" style="--delay: 0.14s; margin-top: var(--s3)" data-zh-html="这个站每一条主张都绑着一条可重放的命令。所以这块板子收的东西很具体：<strong>复现不出来</strong>。不管最后是我们写错了、命令过期了，还是你的环境确实不同——先在公开的 issue 里把它摆出来。" data-en-html="Every claim on this site is tied to a command you can replay. So what this board collects is narrow: <strong>something that does not reproduce</strong>. Whether that turns out to be our error, a command that went stale, or a genuinely different environment — put it in a public issue first.">
-                这个站每一条主张都绑着一条可重放的命令。所以这块板子收的东西很具体：<strong>复现不出来</strong>。不管最后是我们写错了、命令过期了，还是你的环境确实不同——先在公开的 issue 里把它摆出来。
+              <p class="lede fade-step" style="--delay: 0.14s; margin-top: var(--s3)" data-zh-html="这块看板收的东西很具体：<strong>站上写了某句话，你按它给的命令跑，得到的不是它说的那个东西</strong>。不管最后是我们写错了、命令过期了，还是你的环境确实不同——先报上来，读明白之后它会带着编号进下面那张表。" data-en-html="What this board collects is narrow: <strong>the site says something, you run the command it gives, and what comes back is not that</strong>. Whether that turns out to be our error, a command that went stale, or a genuinely different environment — report it, and once it has been read it takes an id and joins the table below.">
+                这块看板收的东西很具体：<strong>站上写了某句话，你按它的命令跑，得到的不是它说的那个东西</strong>。不管最后是我们写错了、命令过期了，还是你的环境确实不同——先报上来，读明白之后它会带着编号进下面那张表。
               </p>
               <div class="hero__actions fade-step" style="--delay: 0.22s; margin-top: var(--s4)">
-                <a
-                  class="btn btn--primary"
-                  href="https://github.com/FujoJTOP/FujoOSwebsite/issues/new?labels=bug&amp;template=claim-not-reproducing.yml"
-                  rel="noopener"
-                  data-zh="开一条 issue ↗"
-                  data-en="Open an issue ↗"
-                  >开一条 issue ↗</a
-                >
-                <a class="btn" href="https://github.com/FujoJTOP/FujoOSwebsite/issues" rel="noopener" data-zh="看已有的 ↗" data-en="Read the existing ones ↗">看已有的 ↗</a>
+                <!-- report:start -->
+
+                <!-- report:end -->
+                <a class="btn" href="#board" data-zh="看板" data-en="The board">看板</a>
               </div>
             </div>
             <div class="stack" style="gap: var(--s2)">
               <div class="note note--steel fade-step" style="--delay: 0.3s">
-                <strong data-zh="板子挂在网站仓库上。" data-en="The board lives on the website repository.">板子挂在网站仓库上。</strong>
-                <span data-zh-html="—— 代码仓库（内核与 Loment）尚未公开，所以这里现在收的是<strong>站上的主张</strong>，不是源码级的问题。等仓库公开，这一条会改。" data-en-html=" — the code repository (kernel and Loment) is not public yet, so what this board collects today is <strong>the site's claims</strong>, not source-level issues. That line changes when the repository opens.">—— 代码仓库（内核与 Loment）尚未公开，所以这里现在收的是<strong>站上的主张</strong>，不是源码级的问题。等仓库公开，这一条会改。</span>
+                <strong data-zh="为什么是邮件。" data-en="Why mail.">为什么是邮件。</strong>
+                <span data-zh-html="这个站没有服务器，这个 origin 上也不许跑第三方脚本——两件事一起，可用的提交渠道只剩一个。代价是实打实的：没有投票，没有评论，条目由作者读完再录入。" data-en-html="This site has no server, and no third-party script may run on this origin — together those leave exactly one channel. The cost is real: no voting, no comments, and entries are written in by hand after they have been read.">这个站没有服务器，这个 origin 上也不许跑第三方脚本——两件事一起，可用的提交渠道只剩一个。代价是实打实的：没有投票，没有评论，条目由作者读完再录入。</span>
               </div>
               <div class="note note--amber fade-step" style="--delay: 0.38s">
-                <strong data-zh="关闭不等于不认。" data-en="Closed does not mean denied.">关闭不等于不认。</strong>
-                <span data-zh="—— 每条被关掉的 issue 都会写明为什么：已修、需复现信息、或者它其实不是 bug 而是我们对某句话的理解不同。" data-en=" — every closed issue says why it closed: fixed, needs more information, or it turns out not to be a bug but a disagreement about what a sentence meant.">—— 每条被关掉的 issue 都会写明为什么：已修、需复现信息、或者它其实不是 bug 而是我们对某句话的理解不同。</span>
+                <strong data-zh="编号不会变。" data-en="Ids do not move.">编号不会变。</strong>
+                <span data-zh="—— 一条报告的编号是它的地址，按顺序发放，不复用、不重编。你留过的链接永远指向同一条。" data-en=" — an id is the address of a report. They are handed out in order, never reused and never renumbered, so a link you kept keeps pointing at the same thing.">—— 一条报告的编号是它的地址，按顺序发放，不复用、不重编。你留过的链接永远指向同一条。</span>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ==================================================== what counts -->
-      <section class="section anchor" id="what" data-motion>
-        <div class="wrap">
-          <h2 class="h2 fade-step" style="--delay: 0.08s" data-zh="什么算一条 bug" data-en="What counts as a bug">什么算一条 bug</h2>
-          <p class="muted prose fade-step" style="--delay: 0.16s; margin-top: var(--s2); " data-zh="判据只有一条：站上写了某句话，你按它给的命令跑，得到的不是它说的那个东西。" data-en="There is one criterion: the site says something, you run the command it gives, and what comes back is not that.">
-            判据只有一条：站上写了某句话，你按它给的命令跑，得到的不是它说的那个东西。
-          </p>
-
-          <div class="grid grid--2" style="margin-top: var(--s4); align-items: start">
-            <div>
-              <h3 class="h3" data-zh="收" data-en="In scope">收</h3>
-              <ul class="list list--check">
-                <li data-zh="页面上的命令按原样跑，输出与页面写的不一致" data-en="A command on a page, run as written, does not produce what the page says">页面上的命令按原样跑，输出与页面写的不一致</li>
-                <li data-zh="数字对不上——版本串、里程碑计数、判据的通过数" data-en="A number disagrees — a version string, a milestone count, a criterion's pass count">数字对不上——版本串、里程碑计数、判据的通过数</li>
-                <li data-zh="链接打不开，或者指向的东西已经不在那儿了" data-en="A link does not open, or what it points at is no longer there">链接打不开，或者指向的东西已经不在那儿了</li>
-                <li data-zh="页面在某个浏览器或某个尺寸下坏掉（布局、对比度、键盘可达性）" data-en="A page breaks in some browser or at some size — layout, contrast, keyboard access">页面在某个浏览器或某个尺寸下坏掉（布局、对比度、键盘可达性）</li>
-                <li data-zh="同一件事在两页上写得不一样" data-en="The same fact is written two different ways on two pages">同一件事在两页上写得不一样</li>
-              </ul>
-            </div>
-            <div>
-              <h3 class="h3" data-zh="不收" data-en="Out of scope">不收</h3>
-              <ul class="list">
-                <li data-zh-html="<b>功能请求</b> —— 站上没宣称的东西不算 bug。先看看<a href=&quot;../docs/project/limitations/&quot;>已知边界</a>和<a href=&quot;../docs/project/roadmap/&quot;>路线图</a>，多半已经写在那儿了。" data-en-html="<b>Feature requests</b> — something the site never claimed is not a bug. Check <a href=&quot;../docs/project/limitations/&quot;>Known limits</a> and the <a href=&quot;../docs/project/roadmap/&quot;>roadmap</a> first; it is probably already written down."><b>功能请求</b> —— 站上没宣称的东西不算 bug。先看看<a href="../docs/project/limitations/">已知边界</a>和<a href="../docs/project/roadmap/">路线图</a>，多半已经写在那儿了。</li>
-                <li data-zh="用法提问 —— 那不是 bug，是文档没写清楚，也值得开一条，但请用「文档」标签" data-en="Usage questions — not a bug, but a sign the documentation is unclear. Worth an issue, with the documentation label">用法提问 —— 那不是 bug，是文档没写清楚，也值得开一条，但请用「文档」标签</li>
-                <li data-zh="源码级问题 —— 代码仓库尚未公开，暂时只能停在现象这一层" data-en="Source-level issues — the code repository is not public, so for now these stop at the observable symptom">源码级问题 —— 代码仓库尚未公开，暂时只能停在现象这一层</li>
-              </ul>
             </div>
           </div>
         </div>
@@ -181,8 +145,8 @@
       <section class="section anchor" id="how" data-motion>
         <div class="wrap">
           <h2 class="h2 fade-step" style="--delay: 0.08s" data-zh="一条报告要带什么" data-en="What a report has to carry">一条报告要带什么</h2>
-          <p class="muted prose fade-step" style="--delay: 0.16s; margin-top: var(--s2); " data-zh="这个站对「完成」的要求是可重放的命令与输出；对「没完成」的要求一样。缺了下面任何一条，报告都会停在「需要更多信息」。" data-en="This site demands a replayable command and its output for any claim of done. It asks the same of a claim of not-done. Without any one of these, a report stops at “needs more information”.">
-            这个站对「完成」的要求是可重放的命令与输出；对「没完成」的要求一样。缺了下面任何一条，报告都会停在「需要更多信息」。
+          <p class="muted prose fade-step" style="--delay: 0.16s; margin-top: var(--s2); " data-zh="这个站对「完成」的要求是可重放的命令与输出；对「没完成」的要求一样。缺了下面任何一条，报告只能停在「需要更多信息」——不是刁难，是没有它就无法判定谁对。" data-en="This site demands a replayable command and its output for any claim of done. It asks the same of a claim of not-done. Without any one of these, a report stops at “needs more information” — not to be difficult, but because without it there is no way to tell which side is wrong.">
+            这个站对「完成」的要求是可重放的命令与输出；对「没完成」的要求一样。缺了下面任何一条，报告只能停在「需要更多信息」——不是刁难，是没有它就无法判定谁对。
           </p>
 
           <div class="table-wrap fade-step" style="--delay: 0.24s; margin-top: var(--s4)">
@@ -218,9 +182,82 @@
             </table>
           </div>
 
-          <div class="note note--steel fade-step" style="--delay: 0.36s; margin-top: var(--s4)">
-            <strong data-zh="一句实话：" data-en="One honest note: ">一句实话：</strong>
-            <span data-zh-html="站上有些页面本身就在讲「还没做完」——<a href=&quot;../docs/project/limitations/&quot;>已知边界</a>、<a href=&quot;../docs/language/freeze/&quot;>冻结面的开放项</a>、M100 的外部审计。那些是<strong>已知</strong>的，写在明处；拿它们当 bug 报不会得到修复。但它们本来也不该由发现者先撞上——如果某一页把某个已知缺口写漏了，那才是真 bug。" data-en-html="Some pages on this site are themselves about what is not finished — <a href=&quot;../docs/project/limitations/&quot;>known limits</a>, the <a href=&quot;../docs/language/freeze/&quot;>open items in the freeze surface</a>, M100's external audit. Those are <strong>known</strong>, and written where they can be read; reporting one will not get it fixed. But a discoverer should not be the first to hit it either — and if a page fails to mention a gap it should have, that is a real bug.">站上有些页面本身就在讲「还没做完」——<a href="../docs/project/limitations/">已知边界</a>、<a href="../docs/language/freeze/">冻结面的开放项</a>、M100 的外部审计。那些是<strong>已知</strong>的，写在明处；拿它们当 bug 报不会得到修复。但它们本来也不该由发现者先撞上——如果某一页把某个已知缺口写漏了，那才是真 bug。</span>
+          <div class="grid grid--2 fade-step" style="--delay: 0.32s; margin-top: var(--s4); align-items: start">
+            <div>
+              <h3 class="h3" data-zh="两条硬门槛" data-en="Two hard gates">两条硬门槛</h3>
+              <ul class="list">
+                <li>
+                  <b data-zh="要指向站上的一句话" data-en="It has to point at a sentence on this site">要指向站上的一句话</b>
+                  <span data-zh="—— 给不出页面地址或原文的，不进看板。这一条挡掉的是「你们应该支持 X」。" data-en=" — no page address and no quoted sentence, no entry. What this turns away is “you should support X”.">—— 给不出页面地址或原文的，不进看板。这一条挡掉的是「你们应该支持 X」。</span>
+                </li>
+                <li>
+                  <b data-zh="要带命令与输出" data-en="It has to carry a command and its output">要带命令与输出</b>
+                  <span data-zh="—— 只有结论、没有过程的，同样不进。这一条挡掉的是「我试了，不行」。" data-en=" — a conclusion with no process does not get in either. What this turns away is “I tried it, it didn't work”.">—— 只有结论、没有过程的，同样不进。这一条挡掉的是「我试了，不行」。</span>
+                </li>
+              </ul>
+              <p class="small dim" style="margin-top: var(--s2)" data-zh="这不是苛刻。这两样都没有，我们无法判断是站错了还是你看错了——那它就不是一条能处理的报告。" data-en="This is not strictness for its own sake. Without both, there is no way to tell whether the site is wrong or the reading is — and then it is not a report anyone can act on.">
+                这不是苛刻。这两样都没有，我们无法判断是站错了还是你看错了——那它就不是一条能处理的报告。
+              </p>
+            </div>
+            <div>
+              <h3 class="h3" data-zh="照着这个填" data-en="Fill this in">照着这个填</h3>
+              <div class="code" style="margin-top: var(--s2)">
+                <div class="code__bar">
+                  <span class="lang-tag">text</span>
+                  <span data-zh="报告模板" data-en="report template">报告模板</span>
+                  <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+                </div>
+                <pre>【哪一句】页面地址，或者原文
+【命令】  原样贴，不要整理
+【输出】  原样贴，错误信息别删
+【预期】  站上那句话
+【版本】  站上写的版本串
+【环境】  OS / 浏览器 / 工具链（只在相关时填）</pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="note note--steel fade-step" style="--delay: 0.4s; margin-top: var(--s4)">
+            <strong data-zh="这些不用报：" data-en="Nothing to report here: ">这些不用报：</strong>
+            <span data-zh-html="站上有些页面本身就在讲「还没做完」——<a href=&quot;../docs/project/limitations/&quot;>已知边界</a>、<a href=&quot;../docs/language/freeze/&quot;>冻结面的开放项</a>、M100 的外部审计。那些是<strong>已知</strong>的，写在明处。但某一页把本该写的缺口写漏了，那是真 bug。" data-en-html="Some pages are themselves about what is not finished — <a href=&quot;../docs/project/limitations/&quot;>known limits</a>, the <a href=&quot;../docs/language/freeze/&quot;>open items in the freeze surface</a>, M100's external audit. Those are <strong>known</strong> and written where they can be read. A page that fails to mention a gap it should have is a real bug.">站上有些页面本身就在讲「还没做完」——<a href="../docs/project/limitations/">已知边界</a>、<a href="../docs/language/freeze/">冻结面的开放项</a>、M100 的外部审计。那些是<strong>已知</strong>的，写在明处。但某一页把本该写的缺口写漏了，那是真 bug。</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ board -->
+      <section class="section anchor" id="board" data-motion>
+        <div class="wrap">
+          <h2 class="h2 fade-step" style="--delay: 0.08s" data-zh="看板" data-en="The board">看板</h2>
+          <p class="muted prose fade-step" style="--delay: 0.16s; margin-top: var(--s2); " data-zh="每一条都带一个不变的编号、它报出时的版本、以及现在的状态。状态只有六种，含义写死；关掉的条目必须写明为什么。" data-en="Every entry carries a permanent id, the version it was reported against, and its current state. There are six states and their meanings are fixed; anything closed has to say why.">
+            每一条都带一个不变的编号、它报出时的版本、以及现在的状态。状态只有六种，含义写死；关掉的条目必须写明为什么。
+          </p>
+
+          <div class="fade-step" style="--delay: 0.24s; margin-top: var(--s4)">
+            <!-- board:start -->
+              <div class="board" data-board>
+                <p class="board__blank" data-zh="还没有条目。" data-en="Nothing on the board yet.">还没有条目。</p>
+                <p class="muted small" style="margin-top: var(--s2)" data-zh-html="报进来的东西被读明白之后才会写在这里——这块板子是记录，不是收件箱。怎么报见上面。" data-en-html="A report is written here once it has been read and understood — this board is the record, not the inbox. How to report is above.">报进来的东西被读明白之后才会写在这里——这块板子是记录，不是收件箱。怎么报见上面。</p>
+              </div>
+            <!-- board:end -->
+          </div>
+
+          <div class="grid grid--2 fade-step" style="--delay: 0.32s; margin-top: var(--s5)">
+            <div class="note note--steel">
+              <strong data-zh="官方 / 非官方" data-en="Official / Unofficial">官方 / 非官方</strong>
+              <span data-zh="—— 这是这块板子上最重要的一栏。非官方 = 别人报上来的，原样收录，我们没有复现过；它是一条声明，不是我们的结论。官方 = 我们自己复现过、或明确判定过的。垃圾进不来，靠的不是事后删帖，而是这一栏始终在行上。" data-en=" — the most important column here. Unofficial means someone reported it and we kept it as-is without reproducing it: a claim, not our conclusion. Official means this project reproduced it, or judged it outright. What keeps noise out is not deleting it later; it is that this column is always on the row.">—— 这是这块板子上最重要的一栏。非官方 = 别人报上来的，原样收录，我们没有复现过；它是一条声明，不是我们的结论。官方 = 我们自己复现过、或明确判定过的。垃圾进不来，靠的不是事后删帖，而是这一栏始终在行上。</span>
+            </div>
+            <div class="note">
+              <strong data-zh="待确认 / 已确认" data-en="Open / Confirmed">待确认 / 已确认</strong>
+              <span data-zh="—— 收到了，还没读完 / 读过了，确实复现得出来。非官方条目只能是待确认——别人一条没验过的声明，我们无从替它下结论。" data-en=" — received but not yet read / read, and it does reproduce. An unofficial entry can only be open: nobody here has the standing to conclude on someone else's unchecked claim.">—— 收到了，还没读完 / 读过了，确实复现得出来。非官方条目只能是待确认——别人一条没验过的声明，我们无从替它下结论。</span>
+            </div>
+            <div class="note">
+              <strong data-zh="已修" data-en="Fixed">已修</strong>
+              <span data-zh="—— 改完了，并写明在哪个版本。改了哪一处也会同时改文档——这个站不留下对不上的说法。" data-en=" — changed, and the version it landed in is written down. Whatever was changed is changed in the documentation too; this site does not leave a claim it no longer honours.">—— 改完了，并写明在哪个版本。改了哪一处也会同时改文档——这个站不留下对不上的说法。</span>
+            </div>
+            <div class="note">
+              <strong data-zh="重复 / 无效 / 不予处理" data-en="Duplicate / Invalid / Won't fix">重复 / 无效 / 不予处理</strong>
+              <span data-zh="—— 三种关闭方式，都要写理由：已经有人报过、报告本身不成立、或者我们决定不做。关闭不等于不认。" data-en=" — three ways to close, and each states why: already reported, the report does not hold, or we have decided not to. Closed does not mean denied.">—— 三种关闭方式，都要写理由：已经有人报过、报告本身不成立、或者我们决定不做。关闭不等于不认。</span>
+            </div>
           </div>
         </div>
       </section>
@@ -237,15 +274,14 @@
           </svg>
               FujoOS
             </div>
-            <p class="small dim" style="max-width: 34ch" data-zh="问题板在网站仓库上，公开可读。代码仓库（内核与 Loment）尚未公开。" data-en="The board sits on the website repository and is publicly readable. The code repository (kernel and Loment) is not public yet.">
-              问题板在网站仓库上，公开可读。代码仓库（内核与 Loment）尚未公开。
+            <p class="small dim" style="max-width: 34ch" data-zh="看板是记录，不是收件箱：条目由作者读完报告后录入，编号一经发放不再更改。" data-en="The board is the record, not the inbox: entries are written in once a report has been read, and an id never changes.">
+              看板是记录，不是收件箱：条目由作者读完报告后录入，编号一经发放不再更改。
             </p>
           </div>
           <div>
-            <h4 data-zh="问题板" data-en="The board">问题板</h4>
-            <a href="https://github.com/FujoJTOP/FujoOSwebsite/issues/new?labels=bug&amp;template=claim-not-reproducing.yml" rel="noopener" data-zh="开一条 issue ↗" data-en="Open an issue ↗">开一条 issue ↗</a>
-            <a href="https://github.com/FujoJTOP/FujoOSwebsite/issues" rel="noopener" data-zh="全部 issue ↗" data-en="All issues ↗">全部 issue ↗</a>
-            <a href="https://github.com/FujoJTOP/FujoOSwebsite/issues?q=is%3Aissue+is%3Aclosed" rel="noopener" data-zh="已关闭的 ↗" data-en="Closed ones ↗">已关闭的 ↗</a>
+            <h4 data-zh="本页" data-en="On this page">本页</h4>
+            <a href="#how" data-zh="一条报告要带什么" data-en="What a report has to carry">一条报告要带什么</a>
+            <a href="#board" data-zh="看板" data-en="The board">看板</a>
           </div>
           <div>
             <h4 data-zh="先看这里" data-en="Read first">先看这里</h4>
@@ -267,6 +303,6 @@
       </div>
     </footer>
 
-    <script src="../assets/site.js?v=bbeb6d68"></script>
+    <script src="../assets/site.js?v=2b801b6e"></script>
   </body>
 </html>

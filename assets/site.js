@@ -318,6 +318,48 @@
     });
   }
 
+  /* ---- bug board ---- */
+  /* Filtering is client-side because there is no server to filter on, and the
+     list is small enough to ship whole. Rows carry what they match against in
+     a single lowercased attribute, so this does not have to know the table's
+     shape — adding a column does not touch this code. */
+  var board = document.querySelector("[data-board]");
+  if (board) {
+    var rows = board.querySelectorAll("[data-board-row]");
+    var chips = board.querySelectorAll("[data-board-state]");
+    var box = board.querySelector("[data-board-search]");
+    var table = board.querySelector("[data-board-table]");
+    var blank = board.querySelector("[data-board-blank]");
+    var state = "all";
+
+    var applyBoard = function () {
+      var q = box ? box.value.trim().toLowerCase() : "";
+      var shown = 0;
+      for (var i = 0; i < rows.length; i++) {
+        var row = rows[i];
+        var byState = state === "all" || row.getAttribute("data-state") === state;
+        var byText = !q || (row.getAttribute("data-search") || "").indexOf(q) > -1;
+        var show = byState && byText;
+        row.hidden = !show;
+        if (show) shown++;
+      }
+      if (blank) blank.hidden = shown > 0;
+      if (table) table.hidden = rows.length > 0 && shown === 0;
+    };
+
+    for (var ci = 0; ci < chips.length; ci++) {
+      chips[ci].addEventListener("click", function () {
+        state = this.getAttribute("data-board-state");
+        for (var k = 0; k < chips.length; k++) {
+          chips[k].setAttribute("aria-pressed", chips[k] === this ? "true" : "false");
+        }
+        applyBoard();
+      });
+    }
+    if (box) box.addEventListener("input", applyBoard);
+    applyBoard();
+  }
+
   /* apply saved language now that content above is parsed */
   FJ.applyLang(FJ.saved());
 })();

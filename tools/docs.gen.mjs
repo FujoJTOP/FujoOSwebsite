@@ -291,6 +291,179 @@ ${indent}  })();
 ${indent}</script>`;
 }
 
+/* ------------------------------------------------------------- bug board */
+/* /bugs/ is data, not markup, for the same reason the notice is: it changes
+   whenever a report is understood, and it is spliced into the hand-written
+   page between markers. A page that lost its markers would silently stop
+   updating, so that is a build failure rather than a no-op.
+
+   An entry is what a report becomes *after* it has been read. The board is the
+   record, not the inbox — reports arrive by mail, because this site has no
+   server to receive them and no third-party script is allowed on this origin. */
+/* Deliberately no accent colour here. A bug's state is a workflow, not a trust
+   state, and the two accents are only allowed to name the latter — see the
+   design system's rule. The states are told apart by weight instead, the same
+   way the docs rail marks where you are. */
+const BUG_STATES = {
+  open: ["待确认", "Open"],
+  confirmed: ["已确认", "Confirmed"],
+  fixed: ["已修", "Fixed"],
+  duplicate: ["重复", "Duplicate"],
+  invalid: ["无效", "Invalid"],
+  wontfix: ["不予处理", "Won't fix"],
+};
+const BUG_STATE_ORDER = ["open", "confirmed", "fixed", "duplicate", "invalid", "wontfix"];
+/* Provenance, and the anti-noise mechanism. Anything anyone sends is kept and
+   shown as 非官方 — a claim, reproduced by its reporter and by nobody here.
+   Only what this project has itself reproduced or judged becomes 官方. That
+   split is what stops a bad report from ever reading as our own conclusion:
+   the mark is on the row, not in someone's memory of a decision. */
+const BUG_ORGS = {
+  official: ["官方", "Official"],
+  unofficial: ["非官方", "Unofficial"],
+};
+const BUG_AREAS = {
+  kernel: ["内核", "Kernel"],
+  language: ["语言", "Language"],
+  compat: ["兼容", "Compatibility"],
+  ai: ["AI 层", "AI layer"],
+  site: ["本站", "This site"],
+};
+
+/* Parsed and validated once per run. Both the report link and the board read
+   it, and without this the same complaint would be printed twice. */
+let BUGS_CACHE = null;
+function loadBugs() {
+  if (BUGS_CACHE) return BUGS_CACHE;
+  const file = join(ROOT, "content", "bugs.json");
+  if (!existsSync(file)) return (BUGS_CACHE = { reportTo: "", bugs: [] });
+  const parsed = JSON.parse(readFileSync(file, "utf8"));
+  const bugs = (parsed.bugs || []).filter((b) => b && b.id && (b.zh || b.en));
+  const seen = new Set();
+  for (const b of bugs) {
+    /* An id is the address of a report. Two of them, or one that gets
+       renumbered, sends every link anyone kept to the wrong place. */
+    if (seen.has(b.id)) problems.push(`content/bugs.json: duplicate id ${b.id}`);
+    seen.add(b.id);
+    if (!BUG_STATES[b.state]) problems.push(`content/bugs.json: ${b.id} has unknown state "${b.state}"`);
+    if (!BUG_AREAS[b.area]) problems.push(`content/bugs.json: ${b.id} has unknown area "${b.area}"`);
+    if (typeof b.official !== "boolean")
+      problems.push(`content/bugs.json: ${b.id} must say official: true or false`);
+    /* Half a record is worse than no record: a closed bug with no reason is
+       the thing this board exists to avoid. Only official entries can be
+       closed at all — nobody here has the standing to close someone else's
+       unverified claim. */
+    if (b.official && !["open", "confirmed"].includes(b.state) && !b.res_zh && !b.res_en)
+      problems.push(`content/bugs.json: ${b.id} is "${b.state}" with no resolution written`);
+    if (!b.official && b.state !== "open")
+      problems.push(`content/bugs.json: ${b.id} is unofficial, so its state can only be "open"`);
+  }
+  return (BUGS_CACHE = { reportTo: parsed.report_to || "", bugs });
+}
+
+/* Where a report goes. A mailto, because this site has no server to post to
+   and no third-party script may run on this origin — those two constraints
+   leave exactly one channel. The address is data so that changing it is one
+   line of JSON rather than a hunt through the markup. */
+function reportBlock(indent = "                ") {
+  const { reportTo } = loadBugs();
+  if (!reportTo) return "";
+  const subject = encodeURIComponent("FujoOS bug report");
+  return `${indent}<a
+${indent}  class="btn btn--primary"
+${indent}  href="mailto:${esc(reportTo)}?subject=${subject}"
+${indent}  data-zh="把报告寄出去 ↗"
+${indent}  data-en="Send the report ↗"
+${indent}  >把报告寄出去 ↗</a
+${indent}>`;
+}
+
+function boardBlock(indent = "        ") {
+  const { reportTo, bugs } = loadBugs();
+  const i = indent;
+  const i2 = i + "  ";
+
+  if (!bugs.length) {
+    return `${i}<div class="board" data-board>
+${i2}<p class="board__blank" data-zh="还没有条目。" data-en="Nothing on the board yet.">还没有条目。</p>
+${i2}<p class="muted small" style="margin-top: var(--s2)" data-zh-html="报进来的东西被读明白之后才会写在这里——这块板子是记录，不是收件箱。怎么报见上面。" data-en-html="A report is written here once it has been read and understood — this board is the record, not the inbox. How to report is above.">报进来的东西被读明白之后才会写在这里——这块板子是记录，不是收件箱。怎么报见上面。</p>
+${i}</div>`;
+  }
+
+  const count = (s) => bugs.filter((b) => b.state === s).length;
+  /* The label carries a count, so it is markup rather than text — which means
+     the -html attribute form, where only & and " are escaped and the tags stay
+     tags. esc() would turn them into visible angle brackets. */
+  const attrHtml = (s) => String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;");
+  const chip = (key, zh, en, n, on) => {
+    const inner = `<span class="board__n">${n}</span>`;
+    return `${i2}  <button type="button" class="board__chip" data-board-state="${key}" aria-pressed="${on}" data-zh-html="${attrHtml(zh + " " + inner)}" data-en-html="${attrHtml(en + " " + inner)}">${esc(zh)} ${inner}</button>`;
+  };
+  const chips = [
+    chip("all", "全部", "All", bugs.length, "true"),
+    ...BUG_STATE_ORDER.filter((s) => count(s)).map((s) =>
+      chip(s, BUG_STATES[s][0], BUG_STATES[s][1], count(s), "false")
+    ),
+  ].join("\n");
+
+  const rows = bugs
+    .map((b) => {
+      const [szh, sen] = BUG_STATES[b.state];
+      const [azh, aen] = BUG_AREAS[b.area];
+      const org = b.official ? "official" : "unofficial";
+      const [ozh, oen] = BUG_ORGS[org];
+      const hay = [b.id, b.zh, b.en, b.version, szh, sen, azh, aen, ozh, oen]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+      const version = b.version
+        ? `<span class="board__meta" data-zh="${esc(b.version)}" data-en="${esc(b.version)}">${esc(b.version)}</span>`
+        : "";
+      const res = b.res_zh || b.res_en
+        ? `<span class="board__meta" data-zh="${esc(b.res_zh || b.res_en)}" data-en="${esc(b.res_en || b.res_zh)}">${esc(b.res_zh || b.res_en)}</span>`
+        : "";
+      const link = b.url ? ` href="${esc(b.url)}"` : "";
+      const title = `<a class="board__t"${link} data-zh="${esc(b.zh || b.en)}" data-en="${esc(b.en || b.zh)}">${esc(b.zh || b.en)}</a>`;
+      return `${i2}  <tr id="${esc(b.id)}" data-board-row data-state="${esc(b.state)}" data-search="${esc(hay)}">
+${i2}    <td class="num board__id">${esc(b.id)}</td>
+${i2}    <td>${title}${version}${res}</td>
+${i2}    <td data-zh="${esc(azh)}" data-en="${esc(aen)}">${esc(azh)}</td>
+${i2}    <td><span class="tag board__org board__org--${org}" data-zh="${esc(ozh)}" data-en="${esc(oen)}">${esc(ozh)}</span></td>
+${i2}    <td><span class="tag board__st board__st--${esc(b.state)}" data-zh="${esc(szh)}" data-en="${esc(sen)}">${esc(szh)}</span></td>
+${i2}    <td class="num">${esc(b.reported || "")}</td>
+${i2}  </tr>`;
+    })
+    .join("\n");
+
+  return `${i}<div class="board" data-board>
+${i2}<div class="board__bar">
+${chips}
+${i2}  <label class="board__search">
+${i2}    <span data-zh="搜索" data-en="Search">搜索</span>
+${i2}    <input type="search" data-board-search autocomplete="off" aria-label="搜索编号或标题" data-zh-aria="搜索编号或标题" data-en-aria="Search by id or title" />
+${i2}  </label>
+${i2}</div>
+${i2}<p class="board__blank" data-board-blank hidden data-zh="没有匹配的条目。" data-en="Nothing matches.">没有匹配的条目。</p>
+${i2}<div class="table-wrap" data-board-table>
+${i2}  <table>
+${i2}    <thead>
+${i2}      <tr>
+${i2}        <th scope="col" data-zh="编号" data-en="Id">编号</th>
+${i2}        <th scope="col" data-zh="标题" data-en="Title">标题</th>
+${i2}        <th scope="col" data-zh="线" data-en="Line">线</th>
+${i2}        <th scope="col" data-zh="来源" data-en="Source">来源</th>
+${i2}        <th scope="col" data-zh="状态" data-en="State">状态</th>
+${i2}        <th scope="col" data-zh="报于" data-en="Reported">报于</th>
+${i2}      </tr>
+${i2}    </thead>
+${i2}    <tbody>
+${rows}
+${i2}    </tbody>
+${i2}  </table>
+${i2}</div>
+${i}</div>`;
+}
+
 /* Top nav. `current` is the href of the page being rendered, so the marker
    lands on the right item instead of being hard-coded to Docs. */
 function navLinks(up, current) {
@@ -783,6 +956,8 @@ ${items}
    Touching only the version token, so nothing else in those files moves. */
 {
   const TICKER_MARKERS = /([ \t]*)<!-- ticker:start -->[\s\S]*?<!-- ticker:end -->/;
+  const BOARD_MARKERS = /([ \t]*)<!-- board:start -->[\s\S]*?<!-- board:end -->/;
+  const REPORT_MARKERS = /([ \t]*)<!-- report:start -->[\s\S]*?<!-- report:end -->/;
   for (const name of HAND_WRITTEN) {
     const f = join(ROOT, name);
     if (!existsSync(f)) {
@@ -798,7 +973,15 @@ ${items}
       problems.push(`${name}: missing <!-- ticker:start --> / <!-- ticker:end --> markers`);
       continue;
     }
-    const next = s
+    /* The board lives on one page only, and it is the same contract as the
+       notice: markers or a build failure, never a page that quietly stops
+       updating. */
+    const hasBoard = BOARD_MARKERS.test(s);
+    if (name === "bugs/index.html" && !hasBoard) {
+      problems.push(`${name}: missing <!-- board:start --> / <!-- board:end --> markers`);
+      continue;
+    }
+    let next = s
       .replace(/(assets\/style\.css\?v=)[0-9a-f]+/g, `$1${CSS_V}`)
       .replace(/(assets\/site\.js\?v=)[0-9a-f]+/g, `$1${JS_V}`)
       .replace(
@@ -806,6 +989,16 @@ ${items}
         (m, indent) =>
           `${indent}<!-- ticker:start -->\n${noticeBlock(indent)}\n${indent}<!-- ticker:end -->`
       );
+    if (hasBoard) {
+      next = next.replace(
+        BOARD_MARKERS,
+        (m, indent) => `${indent}<!-- board:start -->\n${boardBlock(indent + "  ")}\n${indent}<!-- board:end -->`
+      );
+      next = next.replace(
+        REPORT_MARKERS,
+        (m, indent) => `${indent}<!-- report:start -->\n${reportBlock(indent + "  ")}\n${indent}<!-- report:end -->`
+      );
+    }
     if (next !== s) {
       if (check) problems.push(`${name}: asset version or notice out of date`);
       else writeFileSync(f, next);
