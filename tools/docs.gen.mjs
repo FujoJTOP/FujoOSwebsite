@@ -82,6 +82,7 @@ const SECTIONS = [
       { slug: "quickstart", zh: "快速上手 (Beta)", en: "Quickstart (Beta)" },
       { slug: "index", zh: "总览", en: "Overview" },
       { slug: "loment", zh: "Loment 语言", en: "The Loment language" },
+      { slug: "libraries", zh: "写一个 Loment 库", en: "Writing a Loment library" },
       { slug: "freeze", zh: "冻结面", en: "The freeze surface" },
       { slug: "l0", zh: "L0 单一真源", en: "L0 source of truth" },
       { slug: "capability", zh: "能力域即语言构造", en: "Capability as a construct" },

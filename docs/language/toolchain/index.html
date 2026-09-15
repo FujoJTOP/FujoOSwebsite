@@ -165,6 +165,7 @@
                   <a href="../../../docs/language/quickstart/" data-zh="快速上手 (Beta)" data-en="Quickstart (Beta)">快速上手 (Beta)</a>
                   <a href="../../../docs/language/" data-zh="总览" data-en="Overview">总览</a>
                   <a href="../../../docs/language/loment/" data-zh="Loment 语言" data-en="The Loment language">Loment 语言</a>
+                  <a href="../../../docs/language/libraries/" data-zh="写一个 Loment 库" data-en="Writing a Loment library">写一个 Loment 库</a>
                   <a href="../../../docs/language/freeze/" data-zh="冻结面" data-en="The freeze surface">冻结面</a>
                   <a href="../../../docs/language/l0/" data-zh="L0 单一真源" data-en="L0 source of truth">L0 单一真源</a>
                   <a href="../../../docs/language/capability/" data-zh="能力域即语言构造" data-en="Capability as a construct">能力域即语言构造</a>
@@ -253,6 +254,11 @@
                       <td><strong>lomdoc</strong></td>
                       <td data-zh="从 .lomt 生成 API 文档" data-en="Generates API docs from .lomt">从 .lomt 生成 API 文档</td>
                       <td data-zh="已用 Loment 重写（loment/tools/lomdoc.lomt），与 Python 版逐字节相同；文档与编译器同版本" data-en="Rewritten in Loment (loment/tools/lomdoc.lomt), byte-identical to the Python one; docs versioned with the compiler">已用 Loment 重写（loment/tools/lomdoc.lomt），与 Python 版逐字节相同；文档与编译器同版本</td>
+                    </tr>
+                    <tr>
+                      <td><strong>loment-lomelf</strong></td>
+                      <td data-zh="链接器：把 IR 变成可执行文件" data-en="Linker: turns IR into an executable">链接器：把 IR 变成可执行文件</td>
+                      <td data-zh="仓库自己的第三个后端。同一份 IR 链出 Linux ELF 或 Windows PE，产物与 clang 路行为逐值一致；自举镜像产出的可执行文件与参考实现逐字节相同。包里自带，不需要 clang，也不需要 WSL" data-en="The repository's own third backend. The same IR links to a Linux ELF or a Windows PE, behaviourally identical to the clang path; the self-hosted mirror's executables are byte-identical to the reference. It ships in the package, and needs neither clang nor WSL">仓库自己的第三个后端。同一份 IR 链出 Linux ELF 或 Windows PE，产物与 clang 路行为逐值一致；自举镜像产出的可执行文件与参考实现逐字节相同。包里自带，不需要 clang，也不需要 WSL</td>
                     </tr>
                     <tr>
                       <td><strong>loment ir</strong></td>
