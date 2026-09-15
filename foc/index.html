@@ -2,22 +2,22 @@
 <html
   lang="zh-CN"
   class="theme-instrument"
-  data-title-zh="FOC — FujoOS 内核的第一个 tag"
-  data-title-en="FOC — the FujoOS kernel's first tag"
+  data-title-zh="FOC — FujoOS 的内核线"
+  data-title-en="FOC — the FujoOS kernel line"
 >
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>FOC — FujoOS 内核的第一个 tag</title>
+    <title>FOC — FujoOS 的内核线</title>
     <link rel="canonical" href="https://fujojtop.github.io/FujoOSwebsite/foc/" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="FujoOS" />
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:locale:alternate" content="en" />
-    <meta property="og:title" content="FOC — FujoOS 内核的第一个 tag" />
+    <meta property="og:title" content="FOC — FujoOS 的内核线" />
     <meta
       property="og:description"
-      content="FOC-0.1.0 指向 project-dev 的分支顶点：B 段收口与并行开发基础，六个提交。所有验证都跑在这同一个可引用的字节快照上。"
+      content="FOC 是 FujoOS 的内核线。它管最底下那些不能出错的事——内存、调度、中断、驱动、系统调用——也让上面每一层的说法都能落回一份可引用的字节。"
     />
     <meta property="og:url" content="https://fujojtop.github.io/FujoOSwebsite/foc/" />
     <meta property="og:image" content="https://fujojtop.github.io/FujoOSwebsite/assets/og-card.png" />
@@ -27,7 +27,7 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta
       name="description"
-      content="FOC-0.1.0 是 FujoOS 内核的第一个 tag，指向 project-dev 的分支顶点。它的意义不是“内核完成了”，而是内核第一次有了一个可被引用的字节快照。"
+      content="FOC 是 FujoOS 的内核线。它管最底下那些不能出错的事——内存、调度、中断、驱动、系统调用——也让上面每一层的说法都能落回一份可引用的字节。"
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -124,31 +124,43 @@
             <img src="../assets/foc-mark.svg" width="16" height="16" alt="" decoding="async" style="align-self: center" />
             <span data-zh="FOC 内核线" data-en="The FOC kernel line">FOC 内核线</span>
           </p>
-          <div style="margin-top: var(--s4); max-width: var(--measure)">
-            <h1 class="display fade-step" style="--delay: 0.06s; font-size: clamp(2.1rem, 3.6vw, 2.9rem)" data-zh="内核第一次有了一个可被引用的字节快照。" data-en="The kernel now has a byte snapshot that can be cited.">
-              内核第一次有了一个可被引用的字节快照。
-            </h1>
-            <p class="lede fade-step" style="--delay: 0.14s; margin-top: var(--s3)" data-zh-html="<strong>FOC-0.1.0</strong> 是 FujoOS 内核线的第一个 tag，指向 <code>project-dev</code> 的分支顶点：B 段收口（W63a–W70a）加并行开发基础，共六个提交。它的意义不是「内核完成了」——而是从这一版起，验证读数是<b>对着一份可引用的字节</b>说的，而不是对着一句「当前 HEAD」。" data-en-html="<strong>FOC-0.1.0</strong> is the first tag on the FujoOS kernel line, pointing at the tip of <code>project-dev</code>: the B-segment close-out (W63a–W70a) plus the parallel-development foundation, six commits in all. What it means is not “the kernel is done” — it is that from this version on, the verification readings are stated <b>against a byte snapshot that can be cited</b>, rather than against “current HEAD”.">
-              <strong>FOC-0.1.0</strong> 是 FujoOS 内核线的第一个 tag，指向 <code>project-dev</code> 的分支顶点：B 段收口（W63a–W70a）加并行开发基础，共六个提交。它的意义不是「内核完成了」——而是从这一版起，验证读数是<b>对着一份可引用的字节</b>说的，而不是对着一句「当前 HEAD」。
-            </p>
-            <div class="hero__actions fade-step" style="--delay: 0.22s; margin-top: var(--s4)">
-              <a class="btn btn--primary" href="../docs/project/roadmap/" data-zh="看路线图与当前进度" data-en="Roadmap and current progress">看路线图与当前进度</a>
-              <a class="btn" href="#verification" data-zh="看验证读数" data-en="The verification readings">看验证读数</a>
-              <a class="btn btn--ghost" href="../loment/" data-zh="看语言线 Loment" data-en="The language line, Loment">看语言线 Loment</a>
+          <div class="grid grid--2" style="margin-top: var(--s4); align-items: start">
+            <div>
+              <h1 class="display fade-step" style="--delay: 0.06s; font-size: clamp(2.1rem, 3.6vw, 2.9rem)" data-zh="机器怎么跑，由内核决定；凭什么这么说，也由内核兜住。" data-en="The kernel decides how the machine runs — and it is the kernel that makes the saying of it answerable.">
+                机器怎么跑，由内核决定；凭什么这么说，也由内核兜住。
+              </h1>
+              <p class="lede fade-step" style="--delay: 0.14s; margin-top: var(--s3)" data-zh="FOC 是 FujoOS 的内核线。它一面管最底下那些不能出错的事——内存、调度、中断、驱动、系统调用；另一面让上面每一层的说法都能落回一份可引用的字节。这一页讲它管什么、不管什么，以及哪些还没做。" data-en="FOC is the FujoOS kernel line. On one side it owns the things at the bottom that cannot go wrong — memory, scheduling, interrupts, drivers, syscalls. On the other it keeps every claim made above it answerable to a citable byte snapshot. This page says what it governs, what it does not, and what is still missing.">
+                FOC 是 FujoOS 的内核线。它一面管最底下那些不能出错的事——内存、调度、中断、驱动、系统调用；另一面让上面每一层的说法都能落回一份可引用的字节。这一页讲它管什么、不管什么，以及哪些还没做。
+              </p>
+              <div class="hero__actions fade-step" style="--delay: 0.22s; margin-top: var(--s4)">
+                <a class="btn btn--primary" href="../docs/architecture/" data-zh="看系统架构" data-en="See the architecture">看系统架构</a>
+                <a class="btn" href="#evidence" data-zh="看验证读数" data-en="The verification readings">看验证读数</a>
+                <a class="btn btn--ghost" href="../loment/" data-zh="看语言线 Loment" data-en="The language line, Loment">看语言线 Loment</a>
+              </div>
+            </div>
+            <div class="stack" style="gap: var(--s2)">
+              <div class="note note--amber fade-step" style="--delay: 0.3s">
+                <strong data-zh="内核不等于整个系统。" data-en="The kernel is not the whole system.">内核不等于整个系统。</strong>
+                <span data-zh="—— 设备驱动、文件系统、网络栈都不在 Ring 0，它们跑在用户态服务里。这样做的好处很直白：它们崩了可以重启，内核崩了不行。" data-en=" — device drivers, the filesystem and the network stack are not in Ring 0; they run as user-space services. The reason is plain: those can be restarted, the kernel cannot.">—— 设备驱动、文件系统、网络栈都不在 Ring 0，它们跑在用户态服务里。这样做的好处很直白：它们崩了可以重启，内核崩了不行。</span>
+              </div>
+              <div class="note note--steel fade-step" style="--delay: 0.38s">
+                <strong data-zh="内核也不等于 AI。" data-en="Nor is the kernel the AI.">内核也不等于 AI。</strong>
+                <span data-zh="—— 模型跑在机器外面。内核给它的是三样东西：一条通道、一本账、一道闸门。" data-en=" — the model runs off the machine. What the kernel gives it is three things: a channel, a ledger, and a gate.">—— 模型跑在机器外面。内核给它的是三样东西：一条通道、一本账、一道闸门。</span>
+              </div>
             </div>
           </div>
-          <div class="stats fade-step" style="--delay: 0.3s; margin-top: var(--s5)">
+          <div class="stats fade-step" style="--delay: 0.46s; margin-top: var(--s5)">
             <div class="stat">
-              <span class="stat__v">6</span>
-              <span class="stat__k" data-zh="这个 tag 里的提交数" data-en="commits in this tag">这个 tag 里的提交数</span>
+              <span class="stat__v">5</span>
+              <span class="stat__k" data-zh="层：应用 / 能力 / 服务 / 驱动 / 地基" data-en="layers: app / capability / service / driver / foundation">层：应用 / 能力 / 服务 / 驱动 / 地基</span>
             </div>
             <div class="stat">
-              <span class="stat__v">8/8</span>
-              <span class="stat__k" data-zh="并行开发门禁 parallel_gate" data-en="the parallel-development gate, parallel_gate">并行开发门禁 parallel_gate</span>
+              <span class="stat__v">3</span>
+              <span class="stat__k" data-zh="套 ABI 共用同一个系统调用门" data-en="ABIs sharing one syscall gate">套 ABI 共用同一个系统调用门</span>
             </div>
             <div class="stat">
               <span class="stat__v">78/79</span>
-              <span class="stat__k" data-zh="全量矩阵：0 失败、1 例已知竞态（已归因）" data-en="full matrix: 0 failed, 1 known race, attributed">全量矩阵：0 失败、1 例已知竞态（已归因）</span>
+              <span class="stat__k" data-zh="全量回归：0 失败、1 例已知竞态（已归因）" data-en="full regression: 0 failed, 1 known race, attributed">全量回归：0 失败、1 例已知竞态（已归因）</span>
             </div>
             <div class="stat">
               <span class="stat__v">156.3 波</span>
@@ -158,64 +170,129 @@
         </div>
       </section>
 
-      <!-- ======================================================== commits -->
-      <section class="section" id="commits" data-motion>
+      <!-- ============================================================= what -->
+      <section class="section anchor" id="what" data-motion>
         <div class="wrap">
-          <h2 class="h2" data-zh="这六个提交做了什么" data-en="What the six commits did">这六个提交做了什么</h2>
-          <div class="prose">
-            <p data-zh="tag 指向的不是一个功能点，是一段收口：把池 arena 迁移、容量探针、T 重算与并行开发基础放在同一个可引用点上。下面按波次先后列，提交短哈希取自 tag 自身的说明。" data-en="The tag points at a stretch of close-out rather than a single feature: the pool arena migration, the capacity probes, the T recomputation and the parallel-development foundation, pinned to one citable point. They are listed in wave order; the short hashes come from the tag's own message.">
-              tag 指向的不是一个功能点，是一段收口：把池 arena 迁移、容量探针、T 重算与并行开发基础放在同一个可引用点上。下面按波次先后列，提交短哈希取自 tag 自身的说明。
-            </p>
-          </div>
-          <div class="table-wrap">
+          <h2 class="h2 fade-step" style="--delay: 0.08s" data-zh="内核管什么" data-en="What the kernel governs">内核管什么</h2>
+          <p class="muted prose fade-step" style="--delay: 0.16s; margin-top: var(--s2)" data-zh="内核不是一份功能清单。它管的是几件不能出错、也不能绕过的事：谁能用 CPU、谁占哪块内存、谁可以发系统调用、出了错留给谁看。其余的功能都长在这几件事上面。" data-en="The kernel is not a feature list. It governs the few things that cannot go wrong and cannot be bypassed: who gets the CPU, who owns which memory, who may issue a syscall, and who gets to see a failure. Everything else is built on top of those.">
+            内核不是一份功能清单。它管的是几件不能出错、也不能绕过的事：谁能用 CPU、谁占哪块内存、谁可以发系统调用、出了错留给谁看。其余的功能都长在这几件事上面。
+          </p>
+
+          <div class="table-wrap fade-step" style="--delay: 0.24s; margin-top: var(--s4)">
             <table>
               <thead>
                 <tr>
-                  <th scope="col" data-zh="提交" data-en="Commit">提交</th>
-                  <th scope="col" data-zh="内容" data-en="What it did">内容</th>
+                  <th scope="col" data-zh="管的事" data-en="What it governs">管的事</th>
+                  <th scope="col" data-zh="怎么管" data-en="How">怎么管</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td class="num">592283a</td>
-                  <td data-zh="W63a–W65：池 arena（前置修复 B1–B4 + 逐池迁移）+ 内核瘦身" data-en="W63a–W65: the pool arena (pre-fixes B1–B4 plus per-pool migration) and kernel slimming">W63a–W65：池 arena（前置修复 B1–B4 + 逐池迁移）+ 内核瘦身</td>
+                  <td><strong data-zh="机器怎么起来" data-en="How the machine comes up">机器怎么起来</strong></td>
+                  <td data-zh="可从三种方式引导——GRUB multiboot、直接把镜像交给虚拟机、或从一张可引导 ISO。起来之后自己认出显示、键鼠、磁盘、网卡。" data-en="Boots three ways — GRUB multiboot, handing the image straight to the hypervisor, or from a bootable ISO. Once up, it identifies display, keyboard and mouse, disks and NIC on its own.">可从三种方式引导——GRUB multiboot、直接把镜像交给虚拟机、或从一张可引导 ISO。起来之后自己认出显示、键鼠、磁盘、网卡。</td>
                 </tr>
                 <tr>
-                  <td class="num">407d246</td>
-                  <td data-zh="W66–W68：load_end 评估（结论是不动）+ T 重算与规则提案 + 池对不遮蔽断言 + 工具链自证" data-en="W66–W68: the load_end evaluation (verdict: leave it alone), the T recomputation and rule proposal, the pool-pair non-shadowing assertion, toolchain self-verification">W66–W68：load_end 评估（结论是不动）+ T 重算与规则提案 + 池对不遮蔽断言 + 工具链自证</td>
+                  <td><strong data-zh="内存与处理器" data-en="Memory and processor">内存与处理器</strong></td>
+                  <td data-zh="4 KiB 页配 2 MiB 大页；抢占式多任务，每个进程有自己的地址空间。一个程序越界，被终止的是它自己，不是整台机器。" data-en="4 KiB pages alongside 2 MiB large pages; preemptive multitasking with a separate address space per process. When a program oversteps, it is the program that dies, not the machine.">4 KiB 页配 2 MiB 大页；抢占式多任务，每个进程有自己的地址空间。一个程序越界，被终止的是它自己，不是整台机器。</td>
                 </tr>
                 <tr>
-                  <td class="num">2143ea1</td>
-                  <td data-zh="W69：容量探针收口 —— fujr 两条上界补真探针，并补上「满即留痕」" data-en="W69: capacity probes close out — real probes for fujr's two upper bounds, plus “a full ledger leaves a trace”">W69：容量探针收口 —— fujr 两条上界补真探针，并补上「满即留痕」</td>
+                  <td><strong data-zh="系统调用门" data-en="The syscall gate">系统调用门</strong></td>
+                  <td data-zh="三套 ABI 共用同一个内核服务面，只在编号上做映射：Linux 程序直接调、不需要翻译；Windows 与 macOS 各经自己的一层薄垫片。" data-en="Three ABIs share one kernel service surface, differing only in numbering: Linux binaries call it directly with no translation layer, while Windows and macOS go through their own thin shim.">三套 ABI 共用同一个内核服务面，只在编号上做映射：Linux 程序直接调、不需要翻译；Windows 与 macOS 各经自己的一层薄垫片。</td>
                 </tr>
                 <tr>
-                  <td class="num">ff7e617</td>
-                  <td data-zh-html="W70：<strong>L3 首个真实替换</strong> —— 台账准入（<code>0x831A</code>）的判定层改由 Loment 写的代码承载" data-en-html="W70: <strong>the first real L3 replacement</strong> — the decision layer of ledger admission (<code>0x831A</code>) is now carried by Loment-written code">W70：<strong>L3 首个真实替换</strong> —— 台账准入（<code>0x831A</code>）的判定层改由 Loment 写的代码承载</td>
+                  <td><strong data-zh="存储" data-en="Storage">存储</strong></td>
+                  <td data-zh="内核只管块设备怎么读写，文件语义整个交给用户态的文件服务。自己的文件系统能在真实 SATA 盘上落盘、重启后读回。" data-en="The kernel only handles block access; file semantics belong entirely to a user-space file service. Its own filesystem writes to a real SATA disk and reads back across a reboot.">内核只管块设备怎么读写，文件语义整个交给用户态的文件服务。自己的文件系统能在真实 SATA 盘上落盘、重启后读回。</td>
                 </tr>
                 <tr>
-                  <td class="num">7fee289</td>
-                  <td data-zh-html="W70a：预算变更（单独一波）—— <code>POOL_BUDGET_BYTES</code> 80 KiB → 100 KiB" data-en-html="W70a: a budget change in its own wave — <code>POOL_BUDGET_BYTES</code> from 80 KiB to 100 KiB">W70a：预算变更（单独一波）—— <code>POOL_BUDGET_BYTES</code> 80 KiB → 100 KiB</td>
+                  <td><strong data-zh="出错之后" data-en="After something fails">出错之后</strong></td>
+                  <td data-zh="可能失败的路径必须留痕，且痕迹写在可以带外读出的地方——机器死了，账还在。这条纪律是整个项目判据的地基。" data-en="Any path that can fail must leave a trace, and the trace must live somewhere readable from outside — the machine can die, the ledger survives. That discipline is the foundation of every claim the project makes.">可能失败的路径必须留痕，且痕迹写在可以带外读出的地方——机器死了，账还在。这条纪律是整个项目判据的地基。</td>
                 </tr>
                 <tr>
-                  <td class="num">477e66e</td>
-                  <td data-zh="并行开发基础：own-pid kill + 动态端口 + 整轮独占锁（含负例自证）" data-en="Parallel-development foundation: own-pid kill, dynamic ports, a whole-round exclusive lock (with negative cases proving it)">并行开发基础：own-pid kill + 动态端口 + 整轮独占锁（含负例自证）</td>
+                  <td><strong data-zh="在系统里编译" data-en="Compiling inside the system">在系统里编译</strong></td>
+                  <td data-zh="系统自带一套小工具链——汇编器、链接器、一个 C 子集编译器。它编译并运行过自己的 hello 克隆，不用离开这台机器。" data-en="The system carries its own small toolchain — assembler, linker, a C-subset compiler. It has compiled and run its own hello clone without leaving the machine.">系统自带一套小工具链——汇编器、链接器、一个 C 子集编译器。它编译并运行过自己的 hello 克隆，不用离开这台机器。</td>
                 </tr>
               </tbody>
             </table>
           </div>
+
+          <div class="note note--amber fade-step" style="--delay: 0.36s; margin-top: var(--s4)">
+            <strong data-zh="一件被刻意排除在外的事：" data-en="One thing deliberately kept out: ">一件被刻意排除在外的事：</strong>
+            <span data-zh="内核里没有推理。模型跑在宿主机上，内核只负责把它的建议送进来、把结果记下来、把不该做的挡回去。所以「内核里的 AI」这句话，准确说法是「内核为 AI 开了一道受管制的门」。" data-en="there is no inference inside the kernel. The model runs on the host; the kernel delivers its suggestions inward, records the outcome, and refuses what must not happen. So “AI in the kernel” is more precisely “the kernel opens a governed door for AI”.">内核里没有推理。模型跑在宿主机上，内核只负责把它的建议送进来、把结果记下来、把不该做的挡回去。所以「内核里的 AI」这句话，准确说法是「内核为 AI 开了一道受管制的门」。</span>
+          </div>
         </div>
       </section>
 
-      <!-- ==================================================== verification -->
-      <section class="section" id="verification" data-motion>
+      <!-- =========================================================== layers -->
+      <section class="section anchor" id="layers" data-motion>
         <div class="wrap">
-          <h2 class="h2" data-zh="验证读数" data-en="The verification readings">验证读数</h2>
-          <div class="prose">
-            <p data-zh="下面每一条都是在这个 tag 指向的那份字节上跑出来的。写下来是为了让复核的人能拿着同一个 ref 复现，而不是听一句「测过了」。" data-en="Every reading below was produced on the exact bytes this tag points at. They are written down so that a reviewer can reproduce them from the same ref, rather than take “it was tested” on trust.">
-              下面每一条都是在这个 tag 指向的那份字节上跑出来的。写下来是为了让复核的人能拿着同一个 ref 复现，而不是听一句「测过了」。
-            </p>
+          <h2 class="h2 fade-step" style="--delay: 0.08s" data-zh="分层：Ring 0 只留两件事" data-en="The layering: Ring 0 keeps only two things">分层：Ring 0 只留两件事</h2>
+          <p class="muted prose fade-step" style="--delay: 0.16s; margin-top: var(--s2)" data-zh="越靠近硬件的代码越难改、越难重启。所以这套系统把「与硬件无关」的部分尽量往上推：驱动、文件系统、网络栈全在用户态。内核那一层只留下 CPU 调度与空间管理。" data-en="The closer code sits to the hardware, the harder it is to change and the harder to restart. So this system pushes everything hardware-agnostic upward: drivers, filesystem and network stack all live in user space. The kernel layer keeps only CPU scheduling and space management.">
+            越靠近硬件的代码越难改、越难重启。所以这套系统把「与硬件无关」的部分尽量往上推：驱动、文件系统、网络栈全在用户态。内核那一层只留下 CPU 调度与空间管理。
+          </p>
+
+          <figure class="figure fade-step" style="--delay: 0.24s; --draw-dur: 0.45s; margin-top: var(--s4)">
+            <svg
+              class="envelope"
+              viewBox="0 0 620 396"
+              role="img"
+              aria-label="五层结构：应用层、能力层、服务层、驱动层都在 Ring 3 用户态；只有最下面的地基留在 Ring 0 内核。"
+              data-zh-aria="五层结构：应用层、能力层、服务层、驱动层都在 Ring 3 用户态；只有最下面的地基留在 Ring 0 内核。"
+              data-en-aria="Five layers: application, capability, service and driver all sit in Ring 3 user space; only the foundation at the bottom stays in the Ring 0 kernel."
+            >
+              <text x="16" y="20" class="t-dim">Ring 3 · 用户态</text>
+
+              <rect x="16" y="32" width="588" height="52" class="stroke s-rule" />
+              <text x="32" y="56" class="t-steel">应用层</text>
+              <text x="32" y="74" class="t-dim">shell · 会话 · 安装器 · 更新 · 打包</text>
+
+              <rect x="16" y="92" width="588" height="52" class="stroke s-rule" />
+              <text x="32" y="116" class="t-steel">能力层</text>
+              <text x="32" y="134" class="t-dim">能力 · 上下文 · 进程间通信 · 契约</text>
+
+              <rect x="16" y="152" width="588" height="52" class="stroke s-rule" />
+              <text x="32" y="176" class="t-steel">服务层</text>
+              <text x="32" y="194" class="t-dim">文件系统 · 网络 · 装载器 · 日志</text>
+
+              <rect x="16" y="212" width="588" height="52" class="stroke s-rule" />
+              <text x="32" y="236" class="t-steel">驱动层</text>
+              <text x="32" y="254" class="t-dim">ATA · AHCI · virtio · PS/2 · PCI · ACPI · 音频</text>
+
+              <path class="stroke s-dash" d="M16,288 H604" />
+
+              <text x="16" y="310" class="t-dim">Ring 0 · 内核</text>
+
+              <rect x="16" y="322" width="588" height="52" class="stroke s-steel" />
+              <text x="32" y="346" class="t-steel">地基</text>
+              <text x="32" y="364" class="t-dim">内存 · 调度 · 中断 · 全局描述符表 · 多核 · 定时器 · 地址布局</text>
+            </svg>
+            <figcaption class="figure__cap">
+              <span data-zh="越往上越容易换，越往下越不能错" data-en="Higher is easier to replace; lower cannot afford to be wrong">越往上越容易换，越往下越不能错</span>
+              <span data-zh="驱动是唯一允许直接碰硬件端口的一层" data-en="The driver layer is the only place allowed to touch hardware ports">驱动是唯一允许直接碰硬件端口的一层</span>
+            </figcaption>
+          </figure>
+
+          <div class="grid grid--2 fade-step" style="--delay: 0.36s; margin-top: var(--s4); align-items: start">
+            <div class="note note--amber">
+              <strong data-zh="为什么把驱动挪出去" data-en="Why the drivers move out">为什么把驱动挪出去</strong>
+              <span data-zh="—— 驱动是系统里最容易出错、也最爱改的一层。放进内核意味着一次写错就带走整台机器；放进用户态，它崩溃可以被重启，还可以单独升级。" data-en=" — drivers are the most error-prone and most frequently changed layer. In the kernel, one mistake takes the machine down; in user space, a crash can be restarted and the driver upgraded on its own.">—— 驱动是系统里最容易出错、也最爱改的一层。放进内核意味着一次写错就带走整台机器；放进用户态，它崩溃可以被重启，还可以单独升级。</span>
+            </div>
+            <div class="note note--steel">
+              <strong data-zh="硬件的门只开一处" data-en="Hardware access has exactly one door">硬件的门只开一处</strong>
+              <span data-zh="—— 直接读写端口的指令只允许出现在驱动层。别处想碰硬件，必须经过它。规则靠评审和门禁一起守，不靠自觉。" data-en=" — instructions that touch ports directly are allowed only in the driver layer. Anything else wanting hardware has to go through it. The rule is kept by review and by gates, not by good intentions.">—— 直接读写端口的指令只允许出现在驱动层。别处想碰硬件，必须经过它。规则靠评审和门禁一起守，不靠自觉。</span>
+            </div>
           </div>
-          <div class="table-wrap">
+        </div>
+      </section>
+
+      <!-- ========================================================= evidence -->
+      <section class="section anchor" id="evidence" data-motion>
+        <div class="wrap">
+          <h2 class="h2 fade-step" style="--delay: 0.08s" data-zh="验证读数：每个数字对着一份字节" data-en="The readings: every number against one set of bytes">验证读数：每个数字对着一份字节</h2>
+          <p class="muted prose fade-step" style="--delay: 0.16s; margin-top: var(--s2)" data-zh="这些读数不是对着一句「当前版本」说的，是对着一份可以被人取到、也可以被人复跑的字节快照说的。写下来是为了让复核的人拿着同一个东西重跑一遍，而不是听一句「测过了」。" data-en="These readings are not stated against “the current version”. They are stated against a byte snapshot a reviewer can fetch and re-run. They are written down so that checking them means running the same thing, rather than taking “it was tested” on trust.">
+            这些读数不是对着一句「当前版本」说的，是对着一份可以被人取到、也可以被人复跑的字节快照说的。写下来是为了让复核的人拿着同一个东西重跑一遍，而不是听一句「测过了」。
+          </p>
+
+          <div class="table-wrap fade-step" style="--delay: 0.24s; margin-top: var(--s4)">
             <table>
               <thead>
                 <tr>
@@ -229,7 +306,7 @@
                   <td data-zh-html="<span class=&quot;tag tag--ok&quot;>VERDICT: OK (8/8)</span>" data-en-html="<span class=&quot;tag tag--ok&quot;>VERDICT: OK (8/8)</span>">VERDICT: OK (8/8)</td>
                 </tr>
                 <tr>
-                  <td data-zh="全量矩阵（79 例）" data-en="Full matrix (79 cases)">全量矩阵（79 例）</td>
+                  <td data-zh="全量回归（79 例）" data-en="Full regression (79 cases)">全量回归（79 例）</td>
                   <td data-zh-html="<span class=&quot;tag tag--ok&quot;>78 PASS</span> <span class=&quot;tag&quot;>0 FAIL</span> <span class=&quot;tag tag--part&quot;>1 FLAKY</span>" data-en-html="<span class=&quot;tag tag--ok&quot;>78 PASS</span> <span class=&quot;tag&quot;>0 FAIL</span> <span class=&quot;tag tag--part&quot;>1 FLAKY</span>">78 PASS · 0 FAIL · 1 FLAKY</td>
                 </tr>
                 <tr>
@@ -241,66 +318,46 @@
                   <td data-zh="slack 22,088 B ⇒ T = 308.3 波" data-en="slack 22,088 B ⇒ T = 308.3 waves">slack 22,088 B ⇒ T = 308.3 波</td>
                 </tr>
                 <tr>
-                  <td data-zh-html="<code>budget_forecast --from-log</code>" data-en-html="<code>budget_forecast --from-log</code>"><code>budget_forecast --from-log</code></td>
-                  <td data-zh="VERDICT: PASS（退出码 0）" data-en="VERDICT: PASS (exit code 0)">VERDICT: PASS（退出码 0）</td>
-                </tr>
-                <tr>
                   <td data-zh="全新克隆可构建（从 index 抽树冷编）" data-en="A fresh clone builds (cold build from a tree extracted out of the index)">全新克隆可构建（从 index 抽树冷编）</td>
-                  <td data-zh="0 error（kernel_budget 6/6）" data-en="0 errors (kernel_budget 6/6)">0 error（kernel_budget 6/6）</td>
+                  <td data-zh="0 error（预算断言 6/6）" data-en="0 errors (budget assertions 6/6)">0 error（预算断言 6/6）</td>
                 </tr>
               </tbody>
             </table>
           </div>
+
+          <p class="small dim fade-step" style="--delay: 0.34s; margin-top: var(--s3)" data-zh-html="「T」是把当前余量除以每波的平均增长算出来的——它回答的是「照这个速度还能写多少波」，不是一个性能指标。完整口径写在 <a href=&quot;../docs/project/roadmap/&quot;>路线图</a> 里。" data-en-html="“T” is headroom divided by average growth per wave — it answers “how many more waves at this rate”, not how fast anything is. The full definition lives in the <a href=&quot;../docs/project/roadmap/&quot;>roadmap</a>.">
+            「T」是把当前余量除以每波的平均增长算出来的——它回答的是「照这个速度还能写多少波」，不是一个性能指标。完整口径写在 <a href="../docs/project/roadmap/">路线图</a> 里。
+          </p>
         </div>
       </section>
 
-      <!-- ========================================================== limits -->
-      <section class="section" id="limits" data-motion>
+      <!-- =========================================================== limits -->
+      <section class="section anchor" id="limits" data-motion>
         <div class="wrap">
-          <h2 class="h2" data-zh="已知边界（诚实记）" data-en="Known boundaries (stated plainly)">已知边界（诚实记）</h2>
-          <ul class="list">
-            <li><b data-zh="L3 不等于 L4" data-en="L3 is not L4">L3 不等于 L4</b> <span data-zh-html="—— 换成 Loment 写的代码的只有台账准入的<strong>判定层</strong>；内核本体仍是 Rust，接口面（<code>0x831A</code> 五个 op 与返回码）一字未动。" data-en-html=" — only the <b>decision layer</b> of ledger admission moved to Loment-written code; the kernel itself is still Rust, and the interface surface (the five <code>0x831A</code> ops and their return codes) is unchanged.">—— 换成 Loment 写的代码的只有台账准入的<strong>判定层</strong>；内核本体仍是 Rust，接口面（<code>0x831A</code> 五个 op 与返回码）一字未动。</span></li>
-            <li><b data-zh="矩阵里有一例不稳定" data-en="One case in the matrix is flaky">矩阵里有一例不稳定</b> <span data-zh="—— box-v1-online 是已知的「连续盒用例抢 COM2 端口」竞态（docs/160 §6.5），harness 重跑即过，本次单独复跑 2/2。归因是环境噪声，不是内核回归——但它是 79 例里唯一不是全绿的那一格，所以写在这里。" data-en=" — box-v1-online is the known race where consecutive box cases grab COM2 (docs/160 §6.5); a harness re-run passes, and it passed 2/2 when re-run in isolation. It is attributed to environment noise rather than a kernel regression — but it is the one cell out of 79 that is not green, so it belongs here.">—— box-v1-online 是已知的「连续盒用例抢 COM2 端口」竞态（docs/160 §6.5），harness 重跑即过，本次单独复跑 2/2。归因是环境噪声，不是内核回归——但它是 79 例里唯一不是全绿的那一格，所以写在这里。</span></li>
-            <li><b data-zh="T 的镜像轴有两种读法" data-en="T has two readings on the image axis">T 的镜像轴有两种读法</b> <span data-zh="—— 历史序列混了池迁移前 / 后两种布局；同一布局窗口内约 1,148 B/波 ⇒ T ≈ 490 波。两种读法的镜像 T 都远大于 50，不影响任何裁定（docs/161 §7.5(d)）。" data-en=" — the historical series mixes the pre- and post-pool-migration layouts; within one layout it is about 1,148 B per wave ⇒ T ≈ 490 waves. Both readings leave the image T far above 50 and change no verdict (docs/161 §7.5(d)).">—— 历史序列混了池迁移前 / 后两种布局；同一布局窗口内约 1,148 B/波 ⇒ T ≈ 490 波。两种读法的镜像 T 都远大于 50，不影响任何裁定（docs/161 §7.5(d)）。</span></li>
+          <h2 class="h2 fade-step" style="--delay: 0.08s" data-zh="已知边界（诚实记）" data-en="Known boundaries (stated plainly)">已知边界（诚实记）</h2>
+          <ul class="list fade-step" style="--delay: 0.16s; margin-top: var(--s3)">
+            <li><b data-zh="真机只覆盖一部分" data-en="Real hardware is only partly covered">真机只覆盖一部分</b> <span data-zh="—— 磁盘持久化与 ISO 引导链已经在真机上跑通；视频输出与 USB 驱动还没有。" data-en=" — disk persistence and the ISO boot chain are demonstrated on real hardware; video output and USB drivers are not.">—— 磁盘持久化与 ISO 引导链已经在真机上跑通；视频输出与 USB 驱动还没有。</span></li>
+            <li><b data-zh="回归里有一例不稳定" data-en="One case in the regression is flaky">回归里有一例不稳定</b> <span data-zh="—— 它是已知的「连续两个用例抢同一个串口」竞态，重跑即过，归因是环境噪声而不是内核回归。但它是 79 例里唯一不是全绿的一格，所以写在这里。" data-en=" — it is the known race where two consecutive cases grab the same serial port. A re-run passes, and it is attributed to environment noise rather than a kernel regression — but it is the one cell out of 79 that is not green, so it belongs here.">—— 它是已知的「连续两个用例抢同一个串口」竞态，重跑即过，归因是环境噪声而不是内核回归。但它是 79 例里唯一不是全绿的一格，所以写在这里。</span></li>
+            <li><b data-zh="余量的算法有两种读法" data-en="The headroom has two readings">余量的算法有两种读法</b> <span data-zh="—— 历史序列混了内存池迁移前后的两种布局；按同一种布局算，每波增长约 1,148 B，对应约 490 波。两种读法都远高于 50 波的门槛，不影响任何结论。" data-en=" — the historical series mixes the layouts from before and after the memory-pool migration. Within one layout the growth is about 1,148 B per wave, which works out to roughly 490 waves. Both readings sit far above the 50-wave threshold and change no conclusion.">—— 历史序列混了内存池迁移前后的两种布局；按同一种布局算，每波增长约 1,148 B，对应约 490 波。两种读法都远高于 50 波的门槛，不影响任何结论。</span></li>
           </ul>
-          <div class="note note--amber">
+          <div class="note note--amber fade-step" style="--delay: 0.28s; margin-top: var(--s4)">
             <strong data-zh="口径检查：" data-en="Wording check: ">口径检查：</strong>
-            <span data-zh="「打了第一个 tag」不等于「内核发布」。它是一个可引用的快照，不是一次对外发布；发布与外部审计（M100）仍未达。" data-en="“First tag” does not mean “kernel released”. It is a citable snapshot, not a public release; the release and its external audit (M100) remain unmet.">「打了第一个 tag」不等于「内核发布」。它是一个可引用的快照，不是一次对外发布；发布与外部审计（M100）仍未达。</span>
+            <span data-zh="这一层有了一个可引用的快照，不等于内核已经发布。它是给复核者用的参照物，不是一次对外发布——发布与外部审计仍未达。" data-en="having a citable snapshot is not the same as having a released kernel. It is a reference for reviewers, not a public release — the release and its external audit remain unmet.">这一层有了一个可引用的快照，不等于内核已经发布。它是给复核者用的参照物，不是一次对外发布——发布与外部审计仍未达。</span>
           </div>
         </div>
       </section>
 
-      <!-- ============================================================= get -->
-      <section class="section" id="get" data-motion>
+      <!-- ============================================================= next -->
+      <section class="section anchor" id="next" data-motion>
         <div class="wrap">
-          <h2 class="h2" data-zh="怎么拿到它" data-en="How to get it">怎么拿到它</h2>
-          <div class="prose">
-            <p data-zh-html="tag 已经推到远端，在 <code>FujoOS</code>、<code>FujoOS-FujoLang</code> 与 <code>FujoOS-compat</code> 三个仓库里都有同名标签，指向同一个字节快照。" data-en-html="The tag is pushed, and the same name exists in <code>FujoOS</code>, <code>FujoOS-FujoLang</code> and <code>FujoOS-compat</code>, all pointing at the same byte snapshot.">
-              tag 已经推到远端，在 <code>FujoOS</code>、<code>FujoOS-FujoLang</code> 与 <code>FujoOS-compat</code> 三个仓库里都有同名标签，指向同一个字节快照。
-            </p>
-          </div>
-          <div class="table-wrap">
-            <table>
-              <tbody>
-                <tr>
-                  <td data-zh="取到那个快照" data-en="Check out the snapshot">取到那个快照</td>
-                  <td><code>git fetch --tags &amp;&amp; git checkout FOC-0.1.0</code></td>
-                </tr>
-                <tr>
-                  <td data-zh="读 tag 的全文" data-en="Read the full tag message">读 tag 的全文</td>
-                  <td><code>git tag -n99 FOC-0.1.0</code></td>
-                </tr>
-                <tr>
-                  <td data-zh="重跑并行开发门禁" data-en="Re-run the parallel-development gate">重跑并行开发门禁</td>
-                  <td><code>python tools/parallel_gate.py</code></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="prose" style="margin-top: var(--s4)">
-            <p data-zh-html="想从语言那一侧入手的话，<a href=&quot;../loment/&quot;>Loment · Potato</a> 是同一个项目的语言线；<a href=&quot;../docs/project/roadmap/&quot;>路线图</a> 里写着两者现在各自到哪一步。" data-en-html="To start from the language side instead, <a href=&quot;../loment/&quot;>Loment · Potato</a> is the same project's language line, and the <a href=&quot;../docs/project/roadmap/&quot;>roadmap</a> says where each stands right now.">
-              想从语言那一侧入手的话，<a href="../loment/">Loment · Potato</a> 是同一个项目的语言线；<a href="../docs/project/roadmap/">路线图</a> 里写着两者现在各自到哪一步。
-            </p>
+          <h2 class="h2 fade-step" style="--delay: 0.08s" data-zh="从哪儿接着看" data-en="Where to go next">从哪儿接着看</h2>
+          <p class="muted prose fade-step" style="--delay: 0.16s; margin-top: var(--s2)" data-zh="内核这一层是地基。上面还站着另外两条线：一条是安全体系，讲 AI 的动作怎么被管住；一条是语言线，讲写系统用的那门语言。三条线在同一个项目里，各自说清自己做到哪儿。" data-en="This kernel layer is the foundation. Two more lines stand on it: the safety system, which says how AI actions are governed, and the language line, which is the language the system is written in. All three belong to the same project, and each says plainly how far it has got.">
+            内核这一层是地基。上面还站着另外两条线：一条是安全体系，讲 AI 的动作怎么被管住；一条是语言线，讲写系统用的那门语言。三条线在同一个项目里，各自说清自己做到哪儿。
+          </p>
+          <div class="hero__actions fade-step" style="--delay: 0.24s; margin-top: var(--s4)">
+            <a class="btn btn--primary" href="../docs/architecture/" data-zh="读系统架构文档" data-en="Read the architecture docs">读系统架构文档</a>
+            <a class="btn" href="../fuai/" data-zh="看 FUAI 安全体系" data-en="See the FUAI safety system">看 FUAI 安全体系</a>
+            <a class="btn btn--ghost" href="../loment/" data-zh="看语言线 Loment" data-en="See the language line, Loment">看语言线 Loment</a>
           </div>
         </div>
       </section>
@@ -317,16 +374,16 @@
               </svg>
               FujoOS
             </div>
-            <p class="small dim" style="max-width: 34ch" data-zh="FOC 是内核线。它的 tag 记的是一个可引用的字节快照，不是一次对外发布。" data-en="FOC is the kernel line. Its tags record a citable byte snapshot, not a public release.">
-              FOC 是内核线。它的 tag 记的是一个可引用的字节快照，不是一次对外发布。
+            <p class="small dim" style="max-width: 34ch" data-zh="FOC 是内核线：管最底下不能出错的那一层，也让上面每一层的说法有据可查。" data-en="FOC is the kernel line: it owns the bottom layer that cannot afford mistakes, and it keeps every claim above it answerable.">
+              FOC 是内核线：管最底下不能出错的那一层，也让上面每一层的说法有据可查。
             </p>
           </div>
           <div>
             <h4 data-zh="本页" data-en="On this page">本页</h4>
-            <a href="#commits" data-zh="六个提交" data-en="The six commits">六个提交</a>
-            <a href="#verification" data-zh="验证读数" data-en="Verification readings">验证读数</a>
+            <a href="#what" data-zh="内核管什么" data-en="What the kernel governs">内核管什么</a>
+            <a href="#layers" data-zh="分层" data-en="The layering">分层</a>
+            <a href="#evidence" data-zh="验证读数" data-en="Verification readings">验证读数</a>
             <a href="#limits" data-zh="已知边界" data-en="Known boundaries">已知边界</a>
-            <a href="#get" data-zh="怎么拿到" data-en="How to get it">怎么拿到</a>
           </div>
           <div>
             <h4 data-zh="文档" data-en="Documentation">文档</h4>
@@ -343,7 +400,7 @@
         </div>
         <div class="foot__end">
           <span>© <span data-year>2026</span> Yuxuan Jiang · MIT</span>
-          <span data-zh="FOC-0.1.0 · 内核线第一个 tag" data-en="FOC-0.1.0 · the kernel line's first tag">FOC-0.1.0 · 内核线第一个 tag</span>
+          <span data-zh="FOC · FujoOS 内核线" data-en="FOC · the FujoOS kernel line">FOC · FujoOS 内核线</span>
         </div>
       </div>
     </footer>
