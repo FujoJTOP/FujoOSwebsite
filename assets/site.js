@@ -447,6 +447,21 @@
     });
   }
 
+  /* ---- early use: the confirmation ---- */
+  /* The sign-up form is a plain HTML post, so it works with scripting off and
+     with site.js never running at all. This only swaps in the confirmation
+     when the form service sends the visitor back with ?sent=1. */
+  if (document.querySelector("[data-early-form]")) {
+    var sent = /(^|[?&])sent=1(&|$)/.test(window.location.search);
+    var sentPanel = document.querySelector("[data-early-sent]");
+    var sentBox = document.querySelector("[data-early-form]");
+    if (sent && sentPanel) {
+      sentPanel.hidden = false;
+      if (sentBox) sentBox.hidden = true;
+      sentPanel.scrollIntoView({ block: "start", behavior: "smooth" });
+    }
+  }
+
   /* apply saved language now that content above is parsed */
   FJ.applyLang(FJ.saved());
 })();

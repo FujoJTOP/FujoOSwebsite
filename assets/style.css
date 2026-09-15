@@ -1455,7 +1455,8 @@ td strong {
   color: var(--fg-3);
 }
 .bugform textarea,
-.bugform input[type="text"] {
+.bugform input[type="text"],
+.bugform input[type="email"] {
   display: block;
   width: 100%;
   margin-top: 0.5rem;
