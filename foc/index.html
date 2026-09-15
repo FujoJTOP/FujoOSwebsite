@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html
+  lang="zh-CN"
+  class="theme-instrument"
+  data-title-zh="FOC — FujoOS 内核的第一个 tag"
+  data-title-en="FOC — the FujoOS kernel's first tag"
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FOC — FujoOS 内核的第一个 tag</title>
+    <link rel="canonical" href="https://fujojtop.github.io/FujoOSwebsite/foc/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="FujoOS" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:locale:alternate" content="en" />
+    <meta property="og:title" content="FOC — FujoOS 内核的第一个 tag" />
+    <meta
+      property="og:description"
+      content="FOC-0.1.0 指向 project-dev 的分支顶点：B 段收口与并行开发基础，六个提交。所有验证都跑在这同一个可引用的字节快照上。"
+    />
+    <meta property="og:url" content="https://fujojtop.github.io/FujoOSwebsite/foc/" />
+    <meta property="og:image" content="https://fujojtop.github.io/FujoOSwebsite/assets/og-card.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="FujoOS — Mount Fuji mark" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="description"
+      content="FOC-0.1.0 是 FujoOS 内核的第一个 tag，指向 project-dev 的分支顶点。它的意义不是“内核完成了”，而是内核第一次有了一个可被引用的字节快照。"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Geist+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/style.css?v=91b37345" />
+    <link rel="icon" href="../favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" sizes="any" />
+    <link rel="icon" type="image/png" href="../assets/favicon-32.png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png" />
+    <script>
+      document.documentElement.classList.add("js");
+      /* If site.js never runs, reveal everything instead of leaving it hidden. */
+      setTimeout(function () {
+        var r = document.documentElement;
+        if (!r.hasAttribute("data-motion-on")) r.classList.add("no-motion");
+      }, 1200);
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#main" data-zh="跳到主要内容" data-en="Skip to content">跳到主要内容</a>
+
+    <!-- ticker:start -->
+    <div class="notice notice--alert notice--scroll" role="note" data-notice data-notice-id="release-delay" data-paused="false">
+      <p class="notice__tag"><span class="notice__pip" aria-hidden="true"></span><span data-zh="公告" data-en="Notice">公告</span></p>
+      <div class="notice__view">
+        <div class="notice__track">
+          <span class="notice__item" data-zh="FujoOS公布日延期，以仓库发布为准" data-en="FujoOS release date postponed — the repository is authoritative">FujoOS公布日延期，以仓库发布为准</span>
+          <span class="notice__item" aria-hidden="true" data-zh="FujoOS公布日延期，以仓库发布为准" data-en="FujoOS release date postponed — the repository is authoritative">FujoOS公布日延期，以仓库发布为准</span>
+        </div>
+      </div>
+      <button class="notice__toggle" type="button" data-ticker-toggle aria-pressed="false">
+        <span class="notice__ico" aria-hidden="true"></span>
+        <span class="notice__lbl notice__lbl--pause" data-zh="暂停" data-en="Pause">暂停</span>
+        <span class="notice__lbl notice__lbl--play" data-zh="继续" data-en="Play">继续</span>
+      </button>
+    </div>
+    <!-- ticker:end -->
+
+    <header class="nav">
+      <div class="wrap nav__inner">
+        <a class="nav__brand" href="../">
+          <svg viewBox="0 14 64 46" aria-hidden="true">
+            <path d="M3,58 Q11,38 26,16 Q32,19 38,16 Q53,38 61,58 Z" fill="var(--mark-rock)" />
+            <path d="M15.9,32 Q18,22 26,16 Q32,19 38,16 Q46,22 48.1,32 Q32,38 15.9,32 Z" fill="var(--mark-snow)" />
+          </svg>
+          FujoOS
+        </a>
+        <nav class="nav__links" aria-label="主导航" data-zh-aria="主导航" data-en-aria="Primary">
+          <a class="nav__link" href="../" data-zh="首页" data-en="Home">首页</a>
+          <a class="nav__link" href="../foc/" aria-current="page" data-zh="FOC 内核" data-en="FOC kernel">FOC 内核</a>
+          <a class="nav__link" href="../fuai/" data-zh="FUAI 安全体系" data-en="FUAI safety">FUAI 安全体系</a>
+          <a class="nav__link" href="../loment/" data-zh="Loment · Potato" data-en="Loment · Potato">Loment · Potato</a>
+          <a class="nav__link" href="../docs/" data-zh="文档" data-en="Docs">文档</a>
+          <a class="nav__link" href="../news/" data-zh="新闻" data-en="News">新闻</a>
+          <a class="nav__link" href="../bugs/" data-zh="Bug 社区" data-en="Bug reports">Bug 社区</a>
+          <a class="nav__link" href="https://zenodo.org/records/22352904" rel="noopener" data-zh="论文 ↗" data-en="Paper ↗">论文 ↗</a>
+          <div class="lang" role="group" aria-label="语言" data-zh-aria="语言" data-en-aria="Language">
+            <button type="button" data-lang="zh" aria-pressed="true">ZH</button>
+            <button type="button" data-lang="en" aria-pressed="false">EN</button>
+          </div>
+        </nav>
+        <button class="nav__toggle" type="button" aria-expanded="false" data-zh="菜单" data-en="Menu">菜单</button>
+      </div>
+      <div class="wrap">
+        <div class="nav__drawer" data-open="false">
+          <a href="../" data-zh="首页" data-en="Home">首页</a>
+          <a href="../foc/" data-zh="FOC 内核" data-en="FOC kernel">FOC 内核</a>
+          <a href="../fuai/" data-zh="FUAI 安全体系" data-en="FUAI safety system">FUAI 安全体系</a>
+          <a href="../loment/" data-zh="Loment · Potato 语言" data-en="Loment · Potato language">Loment · Potato 语言</a>
+          <a href="../docs/" data-zh="文档" data-en="Documentation">文档</a>
+          <a href="../news/" data-zh="新闻" data-en="News">新闻</a>
+          <a href="../bugs/" data-zh="Bug 社区" data-en="Bug reports">Bug 社区</a>
+          <a href="../docs/start/" data-zh="构建与运行" data-en="Build and run">构建与运行</a>
+          <a href="https://zenodo.org/records/22352904" rel="noopener" data-zh="论文 (Zenodo) ↗" data-en="Paper (Zenodo) ↗">论文 (Zenodo) ↗</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+      <!-- ======================================================== page head -->
+      <section class="section section--flush" style="padding-top: var(--s6); position: relative; overflow: hidden" data-motion>
+        <img
+          src="../assets/foc-mark.svg"
+          alt=""
+          style="position: absolute; top: var(--s4); right: max(0px, calc((100% - var(--page)) / 2)); height: min(calc(100% - 2 * var(--s4)), 480px, 64vw); width: auto; transform: translateX(26%); opacity: 0.5; pointer-events: none"
+        />
+        <div class="wrap" style="position: relative">
+          <p class="crumbs fade-step" style="--delay: 0.02s">
+            <a href="../" data-zh="首页" data-en="Home">首页</a>
+            <span class="sep" aria-hidden="true">/</span>
+            <img src="../assets/foc-mark.svg" width="16" height="16" alt="" decoding="async" style="align-self: center" />
+            <span data-zh="FOC 内核线" data-en="The FOC kernel line">FOC 内核线</span>
+          </p>
+          <div style="margin-top: var(--s4); max-width: var(--measure)">
+            <h1 class="display fade-step" style="--delay: 0.06s; font-size: clamp(2.1rem, 3.6vw, 2.9rem)" data-zh="内核第一次有了一个可被引用的字节快照。" data-en="The kernel now has a byte snapshot that can be cited.">
+              内核第一次有了一个可被引用的字节快照。
+            </h1>
+            <p class="lede fade-step" style="--delay: 0.14s; margin-top: var(--s3)" data-zh-html="<strong>FOC-0.1.0</strong> 是 FujoOS 内核线的第一个 tag，指向 <code>project-dev</code> 的分支顶点：B 段收口（W63a–W70a）加并行开发基础，共六个提交。它的意义不是「内核完成了」——而是从这一版起，验证读数是<b>对着一份可引用的字节</b>说的，而不是对着一句「当前 HEAD」。" data-en-html="<strong>FOC-0.1.0</strong> is the first tag on the FujoOS kernel line, pointing at the tip of <code>project-dev</code>: the B-segment close-out (W63a–W70a) plus the parallel-development foundation, six commits in all. What it means is not “the kernel is done” — it is that from this version on, the verification readings are stated <b>against a byte snapshot that can be cited</b>, rather than against “current HEAD”.">
+              <strong>FOC-0.1.0</strong> 是 FujoOS 内核线的第一个 tag，指向 <code>project-dev</code> 的分支顶点：B 段收口（W63a–W70a）加并行开发基础，共六个提交。它的意义不是「内核完成了」——而是从这一版起，验证读数是<b>对着一份可引用的字节</b>说的，而不是对着一句「当前 HEAD」。
+            </p>
+            <div class="hero__actions fade-step" style="--delay: 0.22s; margin-top: var(--s4)">
+              <a class="btn btn--primary" href="../docs/project/roadmap/" data-zh="看路线图与当前进度" data-en="Roadmap and current progress">看路线图与当前进度</a>
+              <a class="btn" href="#verification" data-zh="看验证读数" data-en="The verification readings">看验证读数</a>
+              <a class="btn btn--ghost" href="../loment/" data-zh="看语言线 Loment" data-en="The language line, Loment">看语言线 Loment</a>
+            </div>
+          </div>
+          <div class="stats fade-step" style="--delay: 0.3s; margin-top: var(--s5)">
+            <div class="stat">
+              <span class="stat__v">6</span>
+              <span class="stat__k" data-zh="这个 tag 里的提交数" data-en="commits in this tag">这个 tag 里的提交数</span>
+            </div>
+            <div class="stat">
+              <span class="stat__v">8/8</span>
+              <span class="stat__k" data-zh="并行开发门禁 parallel_gate" data-en="the parallel-development gate, parallel_gate">并行开发门禁 parallel_gate</span>
+            </div>
+            <div class="stat">
+              <span class="stat__v">78/79</span>
+              <span class="stat__k" data-zh="全量矩阵：0 失败、1 例已知竞态（已归因）" data-en="full matrix: 0 failed, 1 known race, attributed">全量矩阵：0 失败、1 例已知竞态（已归因）</span>
+            </div>
+            <div class="stat">
+              <span class="stat__v">156.3 波</span>
+              <span class="stat__k" data-zh="镜像预算余量折算出的可写波数" data-en="writable waves implied by the image budget headroom">镜像预算余量折算出的可写波数</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================== commits -->
+      <section class="section" id="commits" data-motion>
+        <div class="wrap">
+          <h2 class="h2" data-zh="这六个提交做了什么" data-en="What the six commits did">这六个提交做了什么</h2>
+          <div class="prose">
+            <p data-zh="tag 指向的不是一个功能点，是一段收口：把池 arena 迁移、容量探针、T 重算与并行开发基础放在同一个可引用点上。下面按波次先后列，提交短哈希取自 tag 自身的说明。" data-en="The tag points at a stretch of close-out rather than a single feature: the pool arena migration, the capacity probes, the T recomputation and the parallel-development foundation, pinned to one citable point. They are listed in wave order; the short hashes come from the tag's own message.">
+              tag 指向的不是一个功能点，是一段收口：把池 arena 迁移、容量探针、T 重算与并行开发基础放在同一个可引用点上。下面按波次先后列，提交短哈希取自 tag 自身的说明。
+            </p>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col" data-zh="提交" data-en="Commit">提交</th>
+                  <th scope="col" data-zh="内容" data-en="What it did">内容</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="num">592283a</td>
+                  <td data-zh="W63a–W65：池 arena（前置修复 B1–B4 + 逐池迁移）+ 内核瘦身" data-en="W63a–W65: the pool arena (pre-fixes B1–B4 plus per-pool migration) and kernel slimming">W63a–W65：池 arena（前置修复 B1–B4 + 逐池迁移）+ 内核瘦身</td>
+                </tr>
+                <tr>
+                  <td class="num">407d246</td>
+                  <td data-zh="W66–W68：load_end 评估（结论是不动）+ T 重算与规则提案 + 池对不遮蔽断言 + 工具链自证" data-en="W66–W68: the load_end evaluation (verdict: leave it alone), the T recomputation and rule proposal, the pool-pair non-shadowing assertion, toolchain self-verification">W66–W68：load_end 评估（结论是不动）+ T 重算与规则提案 + 池对不遮蔽断言 + 工具链自证</td>
+                </tr>
+                <tr>
+                  <td class="num">2143ea1</td>
+                  <td data-zh="W69：容量探针收口 —— fujr 两条上界补真探针，并补上「满即留痕」" data-en="W69: capacity probes close out — real probes for fujr's two upper bounds, plus “a full ledger leaves a trace”">W69：容量探针收口 —— fujr 两条上界补真探针，并补上「满即留痕」</td>
+                </tr>
+                <tr>
+                  <td class="num">ff7e617</td>
+                  <td data-zh-html="W70：<strong>L3 首个真实替换</strong> —— 台账准入（<code>0x831A</code>）的判定层改由 Loment 写的代码承载" data-en-html="W70: <strong>the first real L3 replacement</strong> — the decision layer of ledger admission (<code>0x831A</code>) is now carried by Loment-written code">W70：<strong>L3 首个真实替换</strong> —— 台账准入（<code>0x831A</code>）的判定层改由 Loment 写的代码承载</td>
+                </tr>
+                <tr>
+                  <td class="num">7fee289</td>
+                  <td data-zh-html="W70a：预算变更（单独一波）—— <code>POOL_BUDGET_BYTES</code> 80 KiB → 100 KiB" data-en-html="W70a: a budget change in its own wave — <code>POOL_BUDGET_BYTES</code> from 80 KiB to 100 KiB">W70a：预算变更（单独一波）—— <code>POOL_BUDGET_BYTES</code> 80 KiB → 100 KiB</td>
+                </tr>
+                <tr>
+                  <td class="num">477e66e</td>
+                  <td data-zh="并行开发基础：own-pid kill + 动态端口 + 整轮独占锁（含负例自证）" data-en="Parallel-development foundation: own-pid kill, dynamic ports, a whole-round exclusive lock (with negative cases proving it)">并行开发基础：own-pid kill + 动态端口 + 整轮独占锁（含负例自证）</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================================================== verification -->
+      <section class="section" id="verification" data-motion>
+        <div class="wrap">
+          <h2 class="h2" data-zh="验证读数" data-en="The verification readings">验证读数</h2>
+          <div class="prose">
+            <p data-zh="下面每一条都是在这个 tag 指向的那份字节上跑出来的。写下来是为了让复核的人能拿着同一个 ref 复现，而不是听一句「测过了」。" data-en="Every reading below was produced on the exact bytes this tag points at. They are written down so that a reviewer can reproduce them from the same ref, rather than take “it was tested” on trust.">
+              下面每一条都是在这个 tag 指向的那份字节上跑出来的。写下来是为了让复核的人能拿着同一个 ref 复现，而不是听一句「测过了」。
+            </p>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col" data-zh="项" data-en="Item">项</th>
+                  <th scope="col" data-zh="读数" data-en="Reading">读数</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td data-zh-html="并行开发门禁 <code>tools/parallel_gate.py</code>" data-en-html="parallel-development gate <code>tools/parallel_gate.py</code>">并行开发门禁 <code>tools/parallel_gate.py</code></td>
+                  <td data-zh-html="<span class=&quot;tag tag--ok&quot;>VERDICT: OK (8/8)</span>" data-en-html="<span class=&quot;tag tag--ok&quot;>VERDICT: OK (8/8)</span>">VERDICT: OK (8/8)</td>
+                </tr>
+                <tr>
+                  <td data-zh="全量矩阵（79 例）" data-en="Full matrix (79 cases)">全量矩阵（79 例）</td>
+                  <td data-zh-html="<span class=&quot;tag tag--ok&quot;>78 PASS</span> <span class=&quot;tag&quot;>0 FAIL</span> <span class=&quot;tag tag--part&quot;>1 FLAKY</span>" data-en-html="<span class=&quot;tag tag--ok&quot;>78 PASS</span> <span class=&quot;tag&quot;>0 FAIL</span> <span class=&quot;tag tag--part&quot;>1 FLAKY</span>">78 PASS · 0 FAIL · 1 FLAKY</td>
+                </tr>
+                <tr>
+                  <td data-zh="镜像预算余量（镜像末 0x2A6950）" data-en="Image budget headroom (image ends at 0x2A6950)">镜像预算余量（镜像末 0x2A6950）</td>
+                  <td data-zh="562,864 B ⇒ T = 156.3 波" data-en="562,864 B ⇒ T = 156.3 waves">562,864 B ⇒ T = 156.3 波</td>
+                </tr>
+                <tr>
+                  <td data-zh-html="池账本 Σ(r+h) = 80,312 B，B = 102,400 B" data-en-html="Pool ledger Σ(r+h) = 80,312 B over B = 102,400 B">池账本 Σ(r+h) = 80,312 B，B = 102,400 B</td>
+                  <td data-zh="slack 22,088 B ⇒ T = 308.3 波" data-en="slack 22,088 B ⇒ T = 308.3 waves">slack 22,088 B ⇒ T = 308.3 波</td>
+                </tr>
+                <tr>
+                  <td data-zh-html="<code>budget_forecast --from-log</code>" data-en-html="<code>budget_forecast --from-log</code>"><code>budget_forecast --from-log</code></td>
+                  <td data-zh="VERDICT: PASS（退出码 0）" data-en="VERDICT: PASS (exit code 0)">VERDICT: PASS（退出码 0）</td>
+                </tr>
+                <tr>
+                  <td data-zh="全新克隆可构建（从 index 抽树冷编）" data-en="A fresh clone builds (cold build from a tree extracted out of the index)">全新克隆可构建（从 index 抽树冷编）</td>
+                  <td data-zh="0 error（kernel_budget 6/6）" data-en="0 errors (kernel_budget 6/6)">0 error（kernel_budget 6/6）</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================== limits -->
+      <section class="section" id="limits" data-motion>
+        <div class="wrap">
+          <h2 class="h2" data-zh="已知边界（诚实记）" data-en="Known boundaries (stated plainly)">已知边界（诚实记）</h2>
+          <ul class="list">
+            <li><b data-zh="L3 不等于 L4" data-en="L3 is not L4">L3 不等于 L4</b> <span data-zh-html="—— 换成 Loment 写的代码的只有台账准入的<strong>判定层</strong>；内核本体仍是 Rust，接口面（<code>0x831A</code> 五个 op 与返回码）一字未动。" data-en-html=" — only the <b>decision layer</b> of ledger admission moved to Loment-written code; the kernel itself is still Rust, and the interface surface (the five <code>0x831A</code> ops and their return codes) is unchanged.">—— 换成 Loment 写的代码的只有台账准入的<strong>判定层</strong>；内核本体仍是 Rust，接口面（<code>0x831A</code> 五个 op 与返回码）一字未动。</span></li>
+            <li><b data-zh="矩阵里有一例不稳定" data-en="One case in the matrix is flaky">矩阵里有一例不稳定</b> <span data-zh="—— box-v1-online 是已知的「连续盒用例抢 COM2 端口」竞态（docs/160 §6.5），harness 重跑即过，本次单独复跑 2/2。归因是环境噪声，不是内核回归——但它是 79 例里唯一不是全绿的那一格，所以写在这里。" data-en=" — box-v1-online is the known race where consecutive box cases grab COM2 (docs/160 §6.5); a harness re-run passes, and it passed 2/2 when re-run in isolation. It is attributed to environment noise rather than a kernel regression — but it is the one cell out of 79 that is not green, so it belongs here.">—— box-v1-online 是已知的「连续盒用例抢 COM2 端口」竞态（docs/160 §6.5），harness 重跑即过，本次单独复跑 2/2。归因是环境噪声，不是内核回归——但它是 79 例里唯一不是全绿的那一格，所以写在这里。</span></li>
+            <li><b data-zh="T 的镜像轴有两种读法" data-en="T has two readings on the image axis">T 的镜像轴有两种读法</b> <span data-zh="—— 历史序列混了池迁移前 / 后两种布局；同一布局窗口内约 1,148 B/波 ⇒ T ≈ 490 波。两种读法的镜像 T 都远大于 50，不影响任何裁定（docs/161 §7.5(d)）。" data-en=" — the historical series mixes the pre- and post-pool-migration layouts; within one layout it is about 1,148 B per wave ⇒ T ≈ 490 waves. Both readings leave the image T far above 50 and change no verdict (docs/161 §7.5(d)).">—— 历史序列混了池迁移前 / 后两种布局；同一布局窗口内约 1,148 B/波 ⇒ T ≈ 490 波。两种读法的镜像 T 都远大于 50，不影响任何裁定（docs/161 §7.5(d)）。</span></li>
+          </ul>
+          <div class="note note--amber">
+            <strong data-zh="口径检查：" data-en="Wording check: ">口径检查：</strong>
+            <span data-zh="「打了第一个 tag」不等于「内核发布」。它是一个可引用的快照，不是一次对外发布；发布与外部审计（M100）仍未达。" data-en="“First tag” does not mean “kernel released”. It is a citable snapshot, not a public release; the release and its external audit (M100) remain unmet.">「打了第一个 tag」不等于「内核发布」。它是一个可引用的快照，不是一次对外发布；发布与外部审计（M100）仍未达。</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================= get -->
+      <section class="section" id="get" data-motion>
+        <div class="wrap">
+          <h2 class="h2" data-zh="怎么拿到它" data-en="How to get it">怎么拿到它</h2>
+          <div class="prose">
+            <p data-zh-html="tag 已经推到远端，在 <code>FujoOS</code>、<code>FujoOS-FujoLang</code> 与 <code>FujoOS-compat</code> 三个仓库里都有同名标签，指向同一个字节快照。" data-en-html="The tag is pushed, and the same name exists in <code>FujoOS</code>, <code>FujoOS-FujoLang</code> and <code>FujoOS-compat</code>, all pointing at the same byte snapshot.">
+              tag 已经推到远端，在 <code>FujoOS</code>、<code>FujoOS-FujoLang</code> 与 <code>FujoOS-compat</code> 三个仓库里都有同名标签，指向同一个字节快照。
+            </p>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <tbody>
+                <tr>
+                  <td data-zh="取到那个快照" data-en="Check out the snapshot">取到那个快照</td>
+                  <td><code>git fetch --tags &amp;&amp; git checkout FOC-0.1.0</code></td>
+                </tr>
+                <tr>
+                  <td data-zh="读 tag 的全文" data-en="Read the full tag message">读 tag 的全文</td>
+                  <td><code>git tag -n99 FOC-0.1.0</code></td>
+                </tr>
+                <tr>
+                  <td data-zh="重跑并行开发门禁" data-en="Re-run the parallel-development gate">重跑并行开发门禁</td>
+                  <td><code>python tools/parallel_gate.py</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="prose" style="margin-top: var(--s4)">
+            <p data-zh-html="想从语言那一侧入手的话，<a href=&quot;../loment/&quot;>Loment · Potato</a> 是同一个项目的语言线；<a href=&quot;../docs/project/roadmap/&quot;>路线图</a> 里写着两者现在各自到哪一步。" data-en-html="To start from the language side instead, <a href=&quot;../loment/&quot;>Loment · Potato</a> is the same project's language line, and the <a href=&quot;../docs/project/roadmap/&quot;>roadmap</a> says where each stands right now.">
+              想从语言那一侧入手的话，<a href="../loment/">Loment · Potato</a> 是同一个项目的语言线；<a href="../docs/project/roadmap/">路线图</a> 里写着两者现在各自到哪一步。
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <div class="wrap">
+        <div class="foot__grid">
+          <div>
+            <div class="nav__brand" style="margin-bottom: 0.7rem">
+              <svg viewBox="0 14 64 46" aria-hidden="true">
+                <path d="M3,58 Q11,38 26,16 Q32,19 38,16 Q53,38 61,58 Z" fill="var(--mark-rock)" />
+                <path d="M15.9,32 Q18,22 26,16 Q32,19 38,16 Q46,22 48.1,32 Q32,38 15.9,32 Z" fill="var(--mark-snow)" />
+              </svg>
+              FujoOS
+            </div>
+            <p class="small dim" style="max-width: 34ch" data-zh="FOC 是内核线。它的 tag 记的是一个可引用的字节快照，不是一次对外发布。" data-en="FOC is the kernel line. Its tags record a citable byte snapshot, not a public release.">
+              FOC 是内核线。它的 tag 记的是一个可引用的字节快照，不是一次对外发布。
+            </p>
+          </div>
+          <div>
+            <h4 data-zh="本页" data-en="On this page">本页</h4>
+            <a href="#commits" data-zh="六个提交" data-en="The six commits">六个提交</a>
+            <a href="#verification" data-zh="验证读数" data-en="Verification readings">验证读数</a>
+            <a href="#limits" data-zh="已知边界" data-en="Known boundaries">已知边界</a>
+            <a href="#get" data-zh="怎么拿到" data-en="How to get it">怎么拿到</a>
+          </div>
+          <div>
+            <h4 data-zh="文档" data-en="Documentation">文档</h4>
+            <a href="../docs/architecture/" data-zh="系统架构" data-en="Architecture">系统架构</a>
+            <a href="../docs/project/roadmap/" data-zh="路线图" data-en="Roadmap">路线图</a>
+            <a href="../docs/project/limitations/" data-zh="已知边界" data-en="Known limits">已知边界</a>
+            <a href="../docs/" data-zh="全部文档 →" data-en="All documentation →">全部文档 →</a>
+          </div>
+          <div>
+            <h4 data-zh="外部" data-en="Elsewhere">外部</h4>
+            <a href="https://zenodo.org/records/22352904" rel="noopener" data-zh="预印本 (Zenodo) ↗" data-en="Preprint (Zenodo) ↗">预印本 (Zenodo) ↗</a>
+            <a href="../docs/project/branches/" data-zh="开发分支 ↗" data-en="Development branches ↗">开发分支 ↗</a>
+          </div>
+        </div>
+        <div class="foot__end">
+          <span>© <span data-year>2026</span> Yuxuan Jiang · MIT</span>
+          <span data-zh="FOC-0.1.0 · 内核线第一个 tag" data-en="FOC-0.1.0 · the kernel line's first tag">FOC-0.1.0 · 内核线第一个 tag</span>
+        </div>
+      </div>
+    </footer>
+
+    <script src="../assets/site.js?v=9d88aa71"></script>
+  </body>
+</html>

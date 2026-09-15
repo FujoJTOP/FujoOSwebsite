@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="presentation">
+  <!-- FOC — the kernel. Same skeleton as the Loment mark: one translucent
+       tile in #3d3a39 at 40%, one light letterform in #b8b3b0, flat, no
+       gradient. What differs is the shape (a heptagon, not a squircle) and
+       the letters (rectilinear paths, not a font, so nothing depends on a
+       font being installed). -->
+  <path d="M128 29 L209.31 68.16 L229.39 156.14 L173.12 226.7 L82.88 226.7 L26.61 156.14 L46.69 68.16 Z" fill="#3d3a39" fill-opacity="0.4" />
+  <g transform="translate(57.48 108.92) scale(0.86)" fill="#b8b3b0">
+    <path d="M0 0h40v11H11v11h20v11H11v23H0z" />
+    <path fill-rule="evenodd" d="M56 0h46v56H56zM67 11h24v34H67z" />
+    <path d="M118 0h46v11h-35v34h35v11h-46z" />
+  </g>
+</svg>

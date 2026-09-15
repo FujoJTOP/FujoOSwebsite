@@ -153,6 +153,7 @@ const JS_V = assetVersion(join(ROOT, "assets", "site.js"));
    tools/admin.mjs, and is never part of the built site. */
 const HAND_WRITTEN = [
   "index.html",
+  "foc/index.html",
   "fuai/index.html",
   "loment/index.html",
   "bugs/index.html",
@@ -173,6 +174,7 @@ const upFrom = (depth) => "../".repeat(depth);
    own. `depth` is how many `../` it takes to reach the site root from a page. */
 const AT = {
   home: "",
+  foc: "foc/",
   fuai: "fuai/",
   loment: "loment/",
   docs: "docs/",
@@ -543,6 +545,7 @@ ${i}</div>`;
 function navLinks(up, current) {
   const items = [
     [`${up || "./"}`, "首页", "Home"],
+    [`${up}${AT.foc}`, "FOC 内核", "FOC kernel"],
     [`${up}${AT.fuai}`, "FUAI 安全体系", "FUAI safety"],
     [`${up}${AT.loment}`, "Loment · Potato", "Loment · Potato"],
     [`${up}${AT.docs}`, "文档", "Docs"],
@@ -750,6 +753,7 @@ ${navLinks(up, `${up}${AT.docs}`)}
       <div class="wrap">
         <div class="nav__drawer" data-open="false">
           <a href="${up || "./"}" data-zh="首页" data-en="Home">首页</a>
+          <a href="${up}${AT.foc}" data-zh="FOC 内核" data-en="FOC kernel">FOC 内核</a>
           <a href="${up}${AT.fuai}" data-zh="FUAI 安全体系" data-en="FUAI safety system">FUAI 安全体系</a>
           <a href="${up}${AT.loment}" data-zh="Loment · Potato 语言" data-en="Loment · Potato language">Loment · Potato 语言</a>
           <a href="${up}${AT.docs}" data-zh="文档" data-en="Documentation">文档</a>
@@ -904,6 +908,7 @@ ${navLinks(up, current)}
       <div class="wrap">
         <div class="nav__drawer" data-open="false">
           <a href="${up || "./"}" data-zh="首页" data-en="Home">首页</a>
+          <a href="${up}${AT.foc}" data-zh="FOC 内核" data-en="FOC kernel">FOC 内核</a>
           <a href="${up}${AT.fuai}" data-zh="FUAI 安全体系" data-en="FUAI safety system">FUAI 安全体系</a>
           <a href="${up}${AT.loment}" data-zh="Loment · Potato 语言" data-en="Loment · Potato language">Loment · Potato 语言</a>
           <a href="${up}${AT.docs}" data-zh="文档" data-en="Documentation">文档</a>
@@ -1092,6 +1097,7 @@ ${items}
   const today = new Date().toISOString().slice(0, 10);
   const urls = [
     "", // the root serves index.html
+    AT.foc,
     AT.fuai,
     AT.loment,
     `${AT.loment}early-use/`,
