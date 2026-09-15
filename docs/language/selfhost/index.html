@@ -10,14 +10,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>自举 — 语言 — FujoOS 文档</title>
-    <meta name="description" content="编译器编译自身：三阶段产物逐字节相同（1002385 B），而且已经能不用任何解释器重建自己。" />
+    <meta name="description" content="编译器编译自身：三阶段产物逐字节相同（1630436 B），而且重建自己既不需要解释器，也不再需要 C 编译器。" />
     <link rel="canonical" href="https://fujojtop.github.io/FujoOSwebsite/docs/language/selfhost/" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="FujoOS" />
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:locale:alternate" content="en" />
     <meta property="og:title" content="自举 — 语言 — FujoOS 文档" />
-    <meta property="og:description" content="编译器编译自身：三阶段产物逐字节相同（1002385 B），而且已经能不用任何解释器重建自己。" />
+    <meta property="og:description" content="编译器编译自身：三阶段产物逐字节相同（1630436 B），而且重建自己既不需要解释器，也不再需要 C 编译器。" />
     <meta property="og:url" content="https://fujojtop.github.io/FujoOSwebsite/docs/language/selfhost/" />
     <meta property="og:image" content="https://fujojtop.github.io/FujoOSwebsite/assets/og-card.png" />
     <meta property="og:image:width" content="1200" />
@@ -66,7 +66,7 @@
       <div class="banner__inner">
         <b>FujoOS docs</b>
         <span class="sep" aria-hidden="true">|</span>
-        <span data-zh="自举 · 三阶段定点 + 无解释器引导" data-en="Self-hosting · fixpoint, and no interpreter to bootstrap">自举 · 三阶段定点 + 无解释器引导</span>
+        <span data-zh="自举 · 三阶段定点 + 无 clang 引导" data-en="Self-hosting · fixpoint, with no interpreter and no C compiler to bootstrap">自举 · 三阶段定点 + 无 clang 引导</span>
         <span class="cadence"
           ><span class="dot" aria-hidden="true"></span
           ><span data-zh="任何“完成”都要给出可重放的命令与输出" data-en="any “done” must come with a replayable command and its output">任何“完成”都要给出可重放的命令与输出</span></span
@@ -224,16 +224,16 @@
 
               <div class="stats" style="margin-top: var(--s4)">
                 <div class="stat">
-                  <span class="stat__v">1002385 B</span>
-                  <span class="stat__k" data-zh="三阶段产物 IR 逐字节全等" data-en="three-stage IR output, byte-identical">三阶段产物 IR 逐字节全等</span>
+                  <span class="stat__v">1630436 B</span>
+                  <span class="stat__k" data-zh="三阶段产物 IR 逐字节全等（自举种子）" data-en="three-stage IR output, byte-identical (the bootstrap seed)">三阶段产物 IR 逐字节全等（自举种子）</span>
                 </div>
                 <div class="stat">
-                  <span class="stat__v">42/42</span>
+                  <span class="stat__v">43/43</span>
                   <span class="stat__k" data-zh="parser 全语料与 Python 版逐字符一致，dump 助手零跳过" data-en="parser matches the Python one character for character across the whole corpus, with zero skipped dump helpers">parser 全语料与 Python 版逐字符一致，dump 助手零跳过</span>
                 </div>
                 <div class="stat">
                   <span class="stat__v">0</span>
-                  <span class="stat__k" data-zh="重建编译器需要的解释器数量 —— 只有 clang、POSIX sh 和 cmp" data-en="interpreters needed to rebuild the compiler — only clang, POSIX sh and cmp">重建编译器需要的解释器数量 —— 只有 clang、POSIX sh 和 cmp</span>
+                  <span class="stat__k" data-zh="重建编译器需要的解释器数量 —— 连 C 编译器也不需要，起点是仓库里的 genesis" data-en="interpreters needed to rebuild the compiler — not even a C compiler, since the chain starts from a genesis binary in the repository">重建编译器需要的解释器数量 —— 连 C 编译器也不需要，起点是仓库里的 genesis</span>
                 </div>
               </div>
 
@@ -255,7 +255,7 @@
                     </tr>
                     <tr>
                       <td data-zh="语法" data-en="Parser">语法</td>
-                      <td data-zh="全语料 42/42 逐字符一致，dump 助手零跳过；两道棘轮（已知缺口表）已清空，且门禁拒绝过期条目 —— 覆盖不准回退。" data-en="42/42 across the whole corpus, character for character, with zero skipped dump helpers. Both ratchets (the known-gap tables) are empty, and the gate rejects stale entries — coverage cannot quietly regress.">全语料 42/42 逐字符一致，dump 助手零跳过；两道棘轮（已知缺口表）已清空，且门禁拒绝过期条目 —— 覆盖不准回退。</td>
+                      <td data-zh="全语料 43/43 逐字符一致，dump 助手零跳过；两道棘轮（已知缺口表）已清空，且门禁拒绝过期条目 —— 覆盖不准回退（下限钉成 CORPUS_FLOOR）。" data-en="43/43 across the whole corpus, character for character, with zero skipped dump helpers. Both ratchets (the known-gap tables) are empty, and the gate rejects stale entries — coverage cannot quietly regress (the floor is pinned as CORPUS_FLOOR).">全语料 43/43 逐字符一致，dump 助手零跳过；两道棘轮（已知缺口表）已清空，且门禁拒绝过期条目 —— 覆盖不准回退（下限钉成 CORPUS_FLOOR）。</td>
                       <td><span class="tag tag--ok">OK</span></td>
                     </tr>
                     <tr>
@@ -274,8 +274,13 @@
                       <td><span class="tag tag--ok">OK</span></td>
                     </tr>
                     <tr>
-                      <td data-zh="无解释器引导" data-en="Interpreter-free bootstrap">无解释器引导</td>
-                      <td data-zh-html="起点是一份<strong>固化的种子</strong>（参考实现为自举驱动发射的 IR）。<code>sh loment/bootstrap.sh</code> 只用 clang、sh、cmp 走完四条判据。" data-en-html="The starting point is a <b>frozen seed</b> — the IR the reference implementation emitted for the self-hosted driver. <code>sh loment/bootstrap.sh</code> runs all four checks with only clang, sh and cmp.">起点是一份<strong>固化的种子</strong>（参考实现为自举驱动发射的 IR）。<code>sh loment/bootstrap.sh</code> 只用 clang、sh、cmp 走完四条判据。</td>
+                      <td data-zh="原生后端" data-en="Native backend">原生后端</td>
+                      <td data-zh="编译一个 Loment 程序从 IR 到可执行文件不再经过 clang：ELF 与 PE 两个目标各有参考实现与自举镜像，四个语料产物与参考逐字节相同；带能力域的程序也在内。" data-en="Compiling a Loment program from IR to an executable no longer goes through clang: both the ELF and the PE target have a reference implementation and a self-hosted mirror, byte-identical to the reference on four corpus programs — capability programs included.">编译一个 Loment 程序从 IR 到可执行文件不再经过 clang：ELF 与 PE 两个目标各有参考实现与自举镜像，四个语料产物与参考逐字节相同；带能力域的程序也在内。</td>
+                      <td><span class="tag tag--ok">OK</span></td>
+                    </tr>
+                    <tr>
+                      <td data-zh="无 clang 引导" data-en="No-C-compiler bootstrap">无 clang 引导</td>
+                      <td data-zh-html="起点是一份<strong>提交进仓库的 genesis</strong>（72136 B，由种子构建出来、可复现、有自己的 SHA256）。<code>sh loment/bootstrap.sh</code> 在 PATH 里<strong>没有 clang</strong> 的环境下走完四条判据。" data-en-html="The starting point is a <b>genesis binary committed to the repository</b> (72136 B, built from the seed, reproducible, with its own SHA256). <code>sh loment/bootstrap.sh</code> runs all four checks with <b>no clang on PATH</b>.">起点是一份<strong>提交进仓库的 genesis</strong>（72136 B，由种子构建出来、可复现、有自己的 SHA256）。<code>sh loment/bootstrap.sh</code> 在 PATH 里<strong>没有 clang</strong> 的环境下走完四条判据。</td>
                       <td><span class="tag tag--ok">OK</span></td>
                     </tr>
                   </tbody>
@@ -287,8 +292,11 @@
                 <p data-zh-html="在此之前，自举链只能从 <strong>Python 版编译器</strong>起步：stage1 由 <code>tools/lomentc.py</code> 现编。也就是说，“想重建 Loment 编译器”这件事本身依赖一个解释器。这条依赖比工具链（格式化、文档、语言服务）更根本 —— 它不在使用侧，在<strong>重建编译器</strong>那一步上。" data-en-html="Until recently the bootstrap chain could only start from the <b>Python compiler</b>: stage1 was built on the spot by <code>tools/lomentc.py</code>. That is, “rebuild the Loment compiler” itself depended on an interpreter. That dependency is more fundamental than the toolchain (format, docs, language server) — it is not on the using side, it is on the <b>rebuilding the compiler</b> step.">
                   在此之前，自举链只能从 <strong>Python 版编译器</strong>起步：stage1 由 <code>tools/lomentc.py</code> 现编。也就是说，“想重建 Loment 编译器”这件事本身依赖一个解释器。这条依赖比工具链（格式化、文档、语言服务）更根本 —— 它不在使用侧，在<strong>重建编译器</strong>那一步上。
                 </p>
-                <p data-zh-html="把起点固化成工件之后，从“重建或使用 Loment”出发的路径上已经没有解释器了。剩下的 Python 在<strong>开发期判据</strong>上（一致性套件、CI）和尚未重写的一个工具上（包管理 <code>lompkg</code>）—— 每一项都有可测量的迁移判据可写，但都不在产品路径上。" data-en-html="Once the starting point is frozen into an artefact, the path from “rebuild or use Loment” contains no interpreter. What Python remains is in <b>dev-time judgement</b> (the parity suites, CI) and in one tool not yet rewritten, the package manager <code>lompkg</code> — each has a measurable migration criterion that could be written, and none is on the product path.">
-                  把起点固化成工件之后，从“重建或使用 Loment”出发的路径上已经没有解释器了。剩下的 Python 在<strong>开发期判据</strong>上（一致性套件、CI）和尚未重写的一个工具上（包管理 <code>lompkg</code>）—— 每一项都有可测量的迁移判据可写，但都不在产品路径上。
+                <p data-zh-html="把起点固化成工件之后，从“重建或使用 Loment”出发的路径上已经没有解释器，也没有 C 编译器。剩下的 Python 只在<strong>开发期判据</strong>（一致性套件、CI）与<strong>构建 / 发布脚本</strong>上 —— 每一项都写了可测量的迁移判据，而产品路径是干净的。" data-en-html="Once the starting point is frozen into an artefact, the path from “rebuild or use Loment” contains no interpreter and no C compiler. What Python remains sits in <b>dev-time judgement</b> (the parity suites, CI) and in the <b>build and release scripts</b> — each with a measurable migration criterion, and none of it on the product path.">
+                  把起点固化成工件之后，从“重建或使用 Loment”出发的路径上已经没有解释器，也没有 C 编译器。剩下的 Python 只在<strong>开发期判据</strong>（一致性套件、CI）与<strong>构建 / 发布脚本</strong>上 —— 每一项都写了可测量的迁移判据，而产品路径是干净的。
+                </p>
+                <p data-zh-html="<strong>clang 原本站在两处必经之路上</strong>：把种子 <code>.ll</code> 变成 stage1，以及把每一个发射出来的 <code>.ll</code> 变成可执行文件。仓库里没有自己的汇编器 / 链接器，IR 到可执行文件这一段一直外包给 LLVM。现在这件事由 <code>lomelf</code> 接手 —— 它是第三个后端，不改冻结面里的 <code>codegen.lomt</code> / <code>driver.lomt</code>，也不动既有的两后端逐字节等价。WSL 是这条依赖的连带后果（产物是 Linux ELF，Windows 侧只能把整套工具链装进 WSL），所以“去 clang”和“去 WSL”是同一根绳子上的两段。" data-en-html="<b>clang stood on two unavoidable paths</b>: turning the seed <code>.ll</code> into stage1, and turning every emitted <code>.ll</code> into an executable. The repository had no assembler or linker of its own, so the IR-to-executable step was outsourced to LLVM. That step now belongs to <code>lomelf</code> — a third backend that leaves <code>codegen.lomt</code> / <code>driver.lomt</code> in the freeze surface untouched and does not disturb the existing two-backend byte-equality. WSL was a knock-on effect of the same dependency (Linux ELF output meant Windows had to host the whole toolchain inside WSL), so removing clang and removing WSL are two ends of one rope.">
+                  <strong>clang 原本站在两处必经之路上</strong>：把种子 <code>.ll</code> 变成 stage1，以及把每一个发射出来的 <code>.ll</code> 变成可执行文件。仓库里没有自己的汇编器 / 链接器，IR 到可执行文件这一段一直外包给 LLVM。现在这件事由 <code>lomelf</code> 接手 —— 它是第三个后端，不改冻结面里的 <code>codegen.lomt</code> / <code>driver.lomt</code>，也不动既有的两后端逐字节等价。WSL 是这条依赖的连带后果（产物是 Linux ELF，Windows 侧只能把整套工具链装进 WSL），所以“去 clang”和“去 WSL”是同一根绳子上的两段。
                 </p>
                 <p data-zh-html="种子本身也有一道棘轮：门禁每次都拿参考实现重新发射一遍并逐字符比对 —— <strong>自举产物变了而种子没跟上，门禁就红</strong>。这是“种子不许过期”。" data-en-html="The seed has its own ratchet: the gate re-emits it from the reference implementation every run and compares character by character — <b>if the bootstrap output moves and the seed does not follow, the gate goes red</b>. The seed is not allowed to go stale.">
                   种子本身也有一道棘轮：门禁每次都拿参考实现重新发射一遍并逐字符比对 —— <strong>自举产物变了而种子没跟上，门禁就红</strong>。这是“种子不许过期”。
@@ -297,14 +305,15 @@
 
               <h2 data-zh="还差什么（写清楚）" data-en="What is still outstanding">还差什么（写清楚）</h2>
               <ul class="list">
-                <li><b data-zh="尚未向开发者发布" data-en="Not yet released to developers">尚未向开发者发布</b> <span data-zh-html="—— 版本 0.1.3.4 Alpha 已经完成并冻结（M96 完成，冻结面见 <code>docs/158</code>），但发布与外部审计（M100）未达。100 个里程碑口径下完成 86 个。" data-en-html=" — version 0.1.3.4 Alpha is complete and frozen (M96 done; the freeze surface is <code>docs/158</code>), but the release and its external audit (M100) are unmet. 86 of 100 milestones are done.">—— 版本 0.1.3.4 Alpha 已经完成并冻结（M96 完成，冻结面见 <code>docs/158</code>），但发布与外部审计（M100）未达。100 个里程碑口径下完成 86 个。</span></li>
+                <li><b data-zh="尚未向开发者发布" data-en="Not yet released to developers">尚未向开发者发布</b> <span data-zh-html="—— 版本 0.1.4 Alpha2 已经完成（冻结面见 <code>docs/158</code>），但发布与外部审计（M100）未达。100 个里程碑口径下完成 87 个、部分 8 个。" data-en-html=" — version 0.1.4 Alpha2 is complete (the freeze surface is <code>docs/158</code>), but the release and its external audit (M100) are unmet. 87 of 100 milestones are done, 8 partial.">—— 版本 0.1.4 Alpha2 已经完成（冻结面见 <code>docs/158</code>），但发布与外部审计（M100）未达。100 个里程碑口径下完成 87 个、部分 8 个。</span></li>
+                <li><b data-zh="构建 / 发布路径还有 Python" data-en="Python is still on the build and release path">构建 / 发布路径还有 Python</b> <span data-zh-html="—— 用户侧工具链（格式化、文档、语言服务、包管理）与 L0 生成器都已 Loment 化，构建路径也走了两格（<code>lomstatus</code>、<code>lomrel</code>）。剩下的在 <code>lom_spec_emit</code> / <code>loment_release</code> / <code>loment_src</code> / <code>loment_dist</code> / <code>loment_seed</code> / <code>loment_manual</code> 与 CLI 上；CLI 里 <code>bench</code> / <code>cov</code> / <code>dbg</code> 三条仍在调 clang。" data-en-html=" — the user-side toolchain (format, docs, language server, package manager) and the L0 generator are all Loment now, and two cells of the build path have moved (<code>lomstatus</code>, <code>lomrel</code>). What remains is <code>lom_spec_emit</code> / <code>loment_release</code> / <code>loment_src</code> / <code>loment_dist</code> / <code>loment_seed</code> / <code>loment_manual</code> and the CLI, where <code>bench</code> / <code>cov</code> / <code>dbg</code> still call clang.">—— 用户侧工具链（格式化、文档、语言服务、包管理）与 L0 生成器都已 Loment 化，构建路径也走了两格（<code>lomstatus</code>、<code>lomrel</code>）。剩下的在 <code>lom_spec_emit</code> / <code>loment_release</code> / <code>loment_src</code> / <code>loment_dist</code> / <code>loment_seed</code> / <code>loment_manual</code> 与 CLI 上；CLI 里 <code>bench</code> / <code>cov</code> / <code>dbg</code> 三条仍在调 clang。</span></li>
                 <li><b data-zh="剩下的几乎全在内核侧" data-en="almost everything left is kernel-side">剩下的几乎全在内核侧</b> <span data-zh="—— 撤销由内核真正实施、A1–A4 的运行时断言、与内核域模型对齐、信任自适应域宽接口，全部标注 P7。语言这一侧已经完整。" data-en=" — revocation actually enforced by the kernel, runtime assertions for A1–A4, aligning with the kernel's domain model, the trust-adaptive width interface — all marked P7. The language side is complete.">—— 撤销由内核真正实施、A1–A4 的运行时断言、与内核域模型对齐、信任自适应域宽接口，全部标注 P7。语言这一侧已经完整。</span></li>
                 <li><b data-zh="自举版比参考实现慢约 10 倍" data-en="the self-hosted compiler is about 10× slower">自举版比参考实现慢约 10 倍</b> <span data-zh-html="—— 编译自身 <strong>12.8 秒</strong>，参考实现 1.2 秒。目前只记了基线与护栏（M86），没做优化。" data-en-html=" — <b>12.8 s</b> to compile itself against the reference implementation's 1.2 s. Only a baseline and a guard rail exist (M86); no optimisation has been done.">—— 编译自身 <strong>12.8 秒</strong>，参考实现 1.2 秒。目前只记了基线与护栏（M86），没做优化。</span></li>
               </ul>
 
               <div class="note note--amber">
                 <strong data-zh="口径检查：" data-en="Wording check: ">口径检查：</strong>
-                <span data-zh="“自举完成”指的是上面那几项已达成；它不等于“已经向开发者发布了”。0.1.3.4 Alpha 的发布与外部审计（M100）仍是未达状态。" data-en="“Self-hosting done” refers to the rows above; it does not mean “released to developers”. The 0.1.3.4 Alpha release and its external audit (M100) are still unmet.">“自举完成”指的是上面那几项已达成；它不等于“已经向开发者发布了”。0.1.3.4 Alpha 的发布与外部审计（M100）仍是未达状态。</span>
+                <span data-zh="“自举完成”指的是上面那几项已达成；它不等于“已经向开发者发布了”。0.1.4 Alpha2 的发布与外部审计（M100）仍是未达状态。" data-en="“Self-hosting done” refers to the rows above; it does not mean “released to developers”. The 0.1.4 Alpha2 release and its external audit (M100) are still unmet.">“自举完成”指的是上面那几项已达成；它不等于“已经向开发者发布了”。0.1.4 Alpha2 的发布与外部审计（M100）仍是未达状态。</span>
               </div>
 
           <nav class="pager" aria-label="文档翻页" data-zh-aria="文档翻页" data-en-aria="Documentation paging">

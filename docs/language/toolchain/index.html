@@ -245,7 +245,7 @@
                     <tr>
                       <td><strong>lompkg</strong></td>
                       <td data-zh="包管理器：依赖解析 + 校验和" data-en="Package manager: dependency resolution + checksums">包管理器：依赖解析 + 校验和</td>
-                      <td data-zh="依赖解析与校验和可复现。这是工具链上唯一还没重写成 Loment 的一个" data-en="Resolution and checksums reproducible. The one tool on this list not yet rewritten in Loment">依赖解析与校验和可复现。这是工具链上唯一还没重写成 Loment 的一个</td>
+                      <td data-zh="已用 Loment 重写（loment/tools/lompkg.lomt），stdout 与退出码都与 Python 版逐字节相同；拓扑序、sha256、环检测、锁往返全部由它自己做——目录遍历与哈希用 syscall 自备，没往运行时里加东西。" data-en="Rewritten in Loment (loment/tools/lompkg.lomt), byte-identical to the Python one on stdout and exit code; topological ordering, sha256, cycle detection and lock round-trip are all its own — directory traversal and hashing go through syscalls, with nothing added to the runtime.">已用 Loment 重写（loment/tools/lompkg.lomt），stdout 与退出码都与 Python 版逐字节相同；拓扑序、sha256、环检测、锁往返全部由它自己做——目录遍历与哈希用 syscall 自备，没往运行时里加东西。</td>
                     </tr>
                     <tr>
                       <td><strong>lomdoc</strong></td>
@@ -255,12 +255,12 @@
                     <tr>
                       <td><strong>loment ir</strong></td>
                       <td data-zh="一条命令同时看 IR 与机器码" data-en="IR and machine code in one command">一条命令同时看 IR 与机器码</td>
-                      <td data-zh="输出可读、与目标一致" data-en="Readable output matching the target">输出可读、与目标一致</td>
+                      <td data-zh="输出可读、与目标一致；反汇编走原生后端，不经 clang" data-en="Readable output matching the target; the disassembly goes through the native backend rather than clang">输出可读、与目标一致；反汇编走原生后端，不经 clang</td>
                     </tr>
                     <tr>
                       <td><strong>loment test / bench / cov</strong></td>
                       <td data-zh="内建测试、基准与 IR 级覆盖率" data-en="Built-in tests, benchmarks and IR-level coverage">内建测试、基准与 IR 级覆盖率</td>
-                      <td data-zh="测试 4/4 PASS；覆盖率报告可复现" data-en="Tests 4/4 PASS; coverage report reproducible">测试 4/4 PASS；覆盖率报告可复现</td>
+                      <td data-zh="测试 4/4 PASS；覆盖率报告可复现。其中 bench / cov 两条仍在外调 clang" data-en="Tests 4/4 PASS; the coverage report is reproducible. Of these, bench and cov still shell out to clang">测试 4/4 PASS；覆盖率报告可复现。其中 bench / cov 两条仍在外调 clang</td>
                     </tr>
                     <tr>
                       <td><strong>loment dbg</strong></td>
@@ -300,13 +300,13 @@
                     </tr>
                     <tr>
                       <td data-zh="任意 LSP 客户端" data-en="Any LSP client">任意 LSP 客户端</td>
-                      <td data-zh-html="指向 <code>scripts/install-lsp.ps1</code> 装好的那个服务（Windows 上经 WSL 调）" data-en-html="Point it at the server <code>scripts/install-lsp.ps1</code> installs (invoked through WSL on Windows)">指向 <code>scripts/install-lsp.ps1</code> 装好的那个服务（Windows 上经 WSL 调）</td>
+                      <td data-zh-html="指向 <code>scripts/install-lsp.ps1</code> 装好的那个服务（Windows 上原生跑，不经 WSL）" data-en-html="Point it at the server <code>scripts/install-lsp.ps1</code> installs (runs natively on Windows, no WSL)">指向 <code>scripts/install-lsp.ps1</code> 装好的那个服务（Windows 上原生跑，不经 WSL）</td>
                       <td data-zh="补全 / 跳转 / 保存即诊断。装服务本身不需要 Python——服务也是自举编译器编译出来的" data-en="Completion / go-to / diagnostics on save. Installing the server needs no Python — the server is compiled by the bootstrap compiler too">补全 / 跳转 / 保存即诊断。装服务本身不需要 Python——服务也是自举编译器编译出来的</td>
                     </tr>
                     <tr>
                       <td data-zh="不开编辑器" data-en="Without an editor">不开编辑器</td>
-                      <td data-zh-html="<code>powershell -File scripts/lomc.ps1 FILE -Run</code>（只用种子 + clang + WSL）" data-en-html="<code>powershell -File scripts/lomc.ps1 FILE -Run</code> (seed + clang + WSL only)"><code>powershell -File scripts/lomc.ps1 FILE -Run</code>（只用种子 + clang + WSL）</td>
-                      <td data-zh="编译并运行一个 .lomt，全程无 Python；目标是 Linux ELF，所以运行那一步走 WSL" data-en="Compiles and runs a .lomt with no Python in the path; the target is a Linux ELF, so the run step goes through WSL">编译并运行一个 .lomt，全程无 Python；目标是 Linux ELF，所以运行那一步走 WSL</td>
+                      <td data-zh-html="<code>powershell -File scripts/lomc.ps1 FILE -Run</code>（只用种子 + 原生后端）" data-en-html="<code>powershell -File scripts/lomc.ps1 FILE -Run</code> (seed + the native backend only)"><code>powershell -File scripts/lomc.ps1 FILE -Run</code>（只用种子 + 原生后端）</td>
+                      <td data-zh="编译并运行一个 .lomt，全程无 Python。编译与运行都在本机原生完成：Windows 上出 PE，Linux 上出 ELF——两边都不经 WSL，也不需要 clang" data-en="Compiles and runs a .lomt with no Python in the path. Both steps happen natively on the host: a PE on Windows, an ELF on Linux — no WSL either way, and no clang">编译并运行一个 .lomt，全程无 Python。编译与运行都在本机原生完成：Windows 上出 PE，Linux 上出 ELF——两边都不经 WSL，也不需要 clang</td>
                     </tr>
                     <tr>
                       <td data-zh="Windows 文件关联" data-en="Windows file association">Windows 文件关联</td>
