@@ -676,6 +676,83 @@ hr {
   color: var(--fg);
   border-bottom-color: var(--fg);
 }
+
+/* A nav item that opens a panel. The panel is a flat surface with a hairline
+   border — no shadow, because the system has none; the lift is --bg-2 against
+   the canvas. It only exists on the wide layout: below 62rem the same links
+   live in the drawer, which is a plain list and does not need nesting. */
+.nav__drop {
+  position: relative;
+}
+/* The button stands in for a top-level link, so on a page under it the button
+   takes the same current marker the link would have. */
+.nav__drop-btn[aria-current] {
+  color: var(--fg);
+  border-bottom-color: var(--fg);
+}
+.nav__drop-btn {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  /* Not `font: inherit` — that would reset the size .nav__link just set and
+     leave this button a different size from the links beside it. */
+  font-family: inherit;
+  font-size: var(--t-sm);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+/* The caret is drawn, not a glyph: a rotated square with two borders. No font
+   is asked to have a triangle in it. */
+.nav__drop-btn::after {
+  content: "";
+  width: 0.3rem;
+  height: 0.3rem;
+  border-right: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
+  transform: translateY(-0.12rem) rotate(45deg);
+  transition: transform 0.15s var(--ease);
+}
+.nav__drop[data-open="true"] > .nav__drop-btn::after {
+  transform: translateY(0.1rem) rotate(225deg);
+}
+.nav__drop-menu {
+  position: absolute;
+  top: calc(100% + 0.55rem);
+  left: 0;
+  min-width: 13rem;
+  display: none;
+  flex-direction: column;
+  padding: 0.3rem;
+  background: var(--bg-2);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+}
+.nav__drop[data-open="true"] > .nav__drop-menu {
+  display: flex;
+}
+.nav__drop-menu a {
+  padding: 0.42rem 0.55rem;
+  border-radius: var(--radius);
+  font-size: var(--t-sm);
+  color: var(--fg-2);
+  white-space: nowrap;
+}
+.nav__drop-menu a:hover {
+  color: var(--fg);
+  background: var(--bg-3);
+}
+.nav__drop-menu a[aria-current="page"] {
+  color: var(--fg);
+}
+.nav__drop-menu .nav__drop-k {
+  padding: 0.4rem 0.55rem 0.25rem;
+  font-family: var(--mono);
+  font-size: var(--t-xs);
+  letter-spacing: 0.06em;
+  color: var(--fg-3);
+}
 @media (min-width: 62rem) {
   .nav__links {
     display: flex;

@@ -89,6 +89,42 @@
     });
   }
 
+  /* ---- nav dropdowns ---- */
+  /* One open at a time. Closes on Escape and on a click outside, which is what
+     a menu has to do — a panel that only closes by clicking its own button
+     leaves a trap open behind whatever the reader moved on to. */
+  var drops = document.querySelectorAll(".nav__drop");
+  var closeDrops = function (except) {
+    for (var d = 0; d < drops.length; d++) {
+      if (drops[d] === except) continue;
+      drops[d].setAttribute("data-open", "false");
+      var b = drops[d].querySelector(".nav__drop-btn");
+      if (b) b.setAttribute("aria-expanded", "false");
+    }
+  };
+  for (var n = 0; n < drops.length; n++) {
+    (function (drop) {
+      var btn = drop.querySelector(".nav__drop-btn");
+      if (!btn) return;
+      btn.setAttribute("aria-expanded", "false");
+      btn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        var open = drop.getAttribute("data-open") === "true";
+        closeDrops(drop);
+        drop.setAttribute("data-open", open ? "false" : "true");
+        btn.setAttribute("aria-expanded", open ? "false" : "true");
+      });
+    })(drops[n]);
+  }
+  if (drops.length) {
+    document.addEventListener("click", function () {
+      closeDrops(null);
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" || e.keyCode === 27) closeDrops(null);
+    });
+  }
+
   /* ---- copy code ---- */
   var copyBtns = document.querySelectorAll(".code__copy");
   for (var c = 0; c < copyBtns.length; c++) {

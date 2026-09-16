@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html
+  lang="zh-CN"
+  class="theme-instrument"
+  data-title-zh="Lompi — Loment 的包管理器"
+  data-title-en="Lompi — Loment's package manager"
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lompi — Loment 的包管理器</title>
+    <link rel="canonical" href="https://fujojtop.github.io/FujoOSwebsite/loment/lompi/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="FujoOS" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:locale:alternate" content="en" />
+    <meta property="og:title" content="Lompi — Loment 的包管理器" />
+    <meta
+      property="og:description"
+      content="第一个库管理工具，用 Loment 自己写的独立程序。依赖从源码的 use 里读，身份是内容哈希，锁把身份钉死再逐字节比对。"
+    />
+    <meta property="og:url" content="https://fujojtop.github.io/FujoOSwebsite/loment/lompi/" />
+    <meta property="og:image" content="https://fujojtop.github.io/FujoOSwebsite/assets/og-card.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="FujoOS — Mount Fuji mark" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="description"
+      content="Lompi 是 Loment 的包管理器，也是第一个库管理工具：一个用 Loment 写的独立程序，不需要 Python。依赖从源码里的 use 读出来，身份是内容哈希，锁把身份钉死再逐字节比对。"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Geist+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/style.css?v=93f82bc7" />
+    <link rel="icon" href="../../favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg" sizes="any" />
+    <link rel="icon" type="image/png" href="../../assets/favicon-32.png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png" />
+    <script>
+      document.documentElement.classList.add("js");
+      /* If site.js never runs, reveal everything instead of leaving it hidden. */
+      setTimeout(function () {
+        var r = document.documentElement;
+        if (!r.hasAttribute("data-motion-on")) r.classList.add("no-motion");
+      }, 1200);
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#main" data-zh="跳到主要内容" data-en="Skip to content">跳到主要内容</a>
+
+    <!-- ticker:start -->
+    <div class="notice notice--alert notice--scroll" role="note" data-notice data-notice-id="release-delay" data-paused="false">
+      <p class="notice__tag"><span class="notice__pip" aria-hidden="true"></span><span data-zh="公告" data-en="Notice">公告</span></p>
+      <div class="notice__view">
+        <div class="notice__track">
+          <span class="notice__item" data-zh="FujoOS公布日延期，以仓库发布为准" data-en="FujoOS release date postponed — the repository is authoritative">FujoOS公布日延期，以仓库发布为准</span>
+          <span class="notice__item" aria-hidden="true" data-zh="FujoOS公布日延期，以仓库发布为准" data-en="FujoOS release date postponed — the repository is authoritative">FujoOS公布日延期，以仓库发布为准</span>
+        </div>
+      </div>
+      <button class="notice__toggle" type="button" data-ticker-toggle aria-pressed="false">
+        <span class="notice__ico" aria-hidden="true"></span>
+        <span class="notice__lbl notice__lbl--pause" data-zh="暂停" data-en="Pause">暂停</span>
+        <span class="notice__lbl notice__lbl--play" data-zh="继续" data-en="Play">继续</span>
+      </button>
+    </div>
+    <!-- ticker:end -->
+
+    <header class="nav">
+      <div class="wrap nav__inner">
+        <a class="nav__brand" href="../../">
+          <svg viewBox="0 14 64 46" aria-hidden="true">
+            <path d="M3,58 Q11,38 26,16 Q32,19 38,16 Q53,38 61,58 Z" fill="var(--mark-rock)" />
+            <path d="M15.9,32 Q18,22 26,16 Q32,19 38,16 Q46,22 48.1,32 Q32,38 15.9,32 Z" fill="var(--mark-snow)" />
+          </svg>
+          FujoOS
+        </a>
+        <nav class="nav__links" aria-label="主导航" data-zh-aria="主导航" data-en-aria="Primary">
+          <a class="nav__link" href="../../" data-zh="首页" data-en="Home">首页</a>
+          <a class="nav__link" href="../../foc/" data-zh="FOC 内核" data-en="FOC kernel">FOC 内核</a>
+          <a class="nav__link" href="../../fuai/" data-zh="FUAI 安全体系" data-en="FUAI safety">FUAI 安全体系</a>
+          <div class="nav__drop" data-open="false">
+            <button class="nav__link nav__drop-btn" type="button" aria-expanded="false" aria-haspopup="true" aria-current="true" data-zh="Loment · Potato" data-en="Loment · Potato">Loment · Potato</button>
+            <div class="nav__drop-menu">
+              <a href="../../loment/" data-zh="概览" data-en="Overview">概览</a>
+              <a href="../../loment/lompi/" aria-current="page" data-zh="Lompi · 包管理器" data-en="Lompi · the package manager">Lompi · 包管理器</a>
+              <a href="../../loment/early-use/" data-zh="Early Use 报名" data-en="Early Use sign-up">Early Use 报名</a>
+            </div>
+          </div>
+          <a class="nav__link" href="../../docs/" data-zh="文档" data-en="Docs">文档</a>
+          <a class="nav__link" href="../../news/" data-zh="新闻" data-en="News">新闻</a>
+          <a class="nav__link" href="../../bugs/" data-zh="Bug 社区" data-en="Bug reports">Bug 社区</a>
+          <a class="nav__link" href="https://zenodo.org/records/22352904" rel="noopener" data-zh="论文 ↗" data-en="Paper ↗">论文 ↗</a>
+          <div class="lang" role="group" aria-label="语言" data-zh-aria="语言" data-en-aria="Language">
+            <button type="button" data-lang="zh" aria-pressed="true">ZH</button>
+            <button type="button" data-lang="en" aria-pressed="false">EN</button>
+          </div>
+        </nav>
+        <button class="nav__toggle" type="button" aria-expanded="false" data-zh="菜单" data-en="Menu">菜单</button>
+      </div>
+      <div class="wrap">
+        <div class="nav__drawer" data-open="false">
+          <a href="../../" data-zh="首页" data-en="Home">首页</a>
+          <a href="../../foc/" data-zh="FOC 内核" data-en="FOC kernel">FOC 内核</a>
+          <a href="../../fuai/" data-zh="FUAI 安全体系" data-en="FUAI safety system">FUAI 安全体系</a>
+          <a href="../../loment/" data-zh="Loment · Potato 语言" data-en="Loment · Potato language">Loment · Potato 语言</a>
+          <a href="../../loment/lompi/" data-zh="— Lompi · 包管理器" data-en="— Lompi · the package manager">— Lompi · 包管理器</a>
+          <a href="../../loment/early-use/" data-zh="— Early Use 报名" data-en="— Early Use sign-up">— Early Use 报名</a>
+          <a href="../../docs/" data-zh="文档" data-en="Documentation">文档</a>
+          <a href="../../news/" data-zh="新闻" data-en="News">新闻</a>
+          <a href="../../bugs/" data-zh="Bug 社区" data-en="Bug reports">Bug 社区</a>
+          <a href="../../docs/start/" data-zh="构建与运行" data-en="Build and run">构建与运行</a>
+          <a href="https://zenodo.org/records/22352904" rel="noopener" data-zh="论文 (Zenodo) ↗" data-en="Paper (Zenodo) ↗">论文 (Zenodo) ↗</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+      <!-- ======================================================== page head -->
+      <section class="section section--flush" style="padding-top: var(--s6); position: relative; overflow: hidden" data-motion>
+        <img
+          src="../../assets/loment-mark.svg"
+          alt=""
+          style="position: absolute; top: var(--s4); right: max(0px, calc((100% - var(--page)) / 2)); height: min(calc(100% - 2 * var(--s4)), 460px, 60vw); width: auto; transform: translateX(30%); opacity: 0.4; pointer-events: none"
+        />
+        <div class="wrap" style="position: relative">
+          <p class="crumbs fade-step" style="--delay: 0.02s">
+            <a href="../../" data-zh="首页" data-en="Home">首页</a>
+            <span class="sep" aria-hidden="true">/</span>
+            <a href="../" data-zh="Loment · Potato" data-en="Loment · Potato">Loment · Potato</a>
+            <span class="sep" aria-hidden="true">/</span>
+            <span data-zh="Lompi" data-en="Lompi">Lompi</span>
+          </p>
+          <div style="max-width: var(--measure)">
+            <h1 class="display fade-step" style="--delay: 0.06s; font-size: clamp(2.1rem, 3.6vw, 2.9rem)" data-zh="第一个库管理工具，用 Loment 自己写的。" data-en="The first library management tool, written in Loment itself.">
+              第一个库管理工具，用 Loment 自己写的。
+            </h1>
+            <p class="lede fade-step" style="--delay: 0.14s; margin-top: var(--s3)" data-zh-html="<strong>Lompi</strong> 管的是 Loment 库——不是可执行文件，也不是二进制分发包。它是<a href=&quot;../&quot;>库系统</a>的第一个独立实现：入口加七个模块，编成一个可执行文件，跑起来<strong>不需要 Python</strong>。它自己读源码里的 <code>use</code> 找出依赖，自己算身份，自己发锁。" data-en-html="<strong>Lompi</strong> manages Loment libraries — not executables, and not binary distributions. It is the first standalone implementation of the <a href=&quot;../&quot;>library system</a>: an entry point plus seven modules compiled into one executable, running with <strong>no Python</strong>. It reads the <code>use</code> lines in the source to find dependencies, computes identity itself, and emits its own lock.">
+              <strong>Lompi</strong> 管的是 Loment 库——不是可执行文件，也不是二进制分发包。它是<a href="../">库系统</a>的第一个独立实现：入口加七个模块，编成一个可执行文件，跑起来<strong>不需要 Python</strong>。它自己读源码里的 <code>use</code> 找出依赖，自己算身份，自己发锁。
+            </p>
+            <div class="hero__actions fade-step" style="--delay: 0.22s; margin-top: var(--s4)">
+              <a class="btn btn--primary" href="../../docs/language/lompi/" data-zh="看完整命令参考" data-en="The full command reference">看完整命令参考</a>
+              <a class="btn" href="../../docs/language/libraries/" data-zh="写一个 Loment 库" data-en="Write a Loment library">写一个 Loment 库</a>
+              <a class="btn btn--ghost" href="../" data-zh="回到 Loment · Potato" data-en="Back to Loment · Potato">回到 Loment · Potato</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================= three calls -->
+      <section class="section" id="what" data-motion>
+        <div class="wrap">
+          <h2 class="h2" data-zh="它和别的包管理器差在哪" data-en="Where it differs from other package managers">它和别的包管理器差在哪</h2>
+          <div class="prose">
+            <p data-zh-html="一句话：<strong>pip 里最难的是「挑版本」，Lompi 里最难的是「把实例身份算准」。</strong>前者是一整个回溯求解器的工程量；后者是一条公式，但那条公式必须对得起一件反直觉的事。" data-en-html="In one line: <strong>the hard part in pip is picking a version; the hard part in Lompi is getting instance identity right.</strong> The first is the engineering of a whole backtracking solver; the second is one formula — but that formula has to honour something counter-intuitive.">
+              一句话：<strong>pip 里最难的是「挑版本」，Lompi 里最难的是「把实例身份算准」。</strong>前者是一整个回溯求解器的工程量；后者是一条公式，但那条公式必须对得起一件反直觉的事。
+            </p>
+          </div>
+          <div class="grid grid--3">
+            <div class="card">
+              <span class="card__k" data-zh="一" data-en="One">一</span>
+              <h3 class="h3" data-zh="依赖从源码来" data-en="Dependencies come from the source">依赖从源码来</h3>
+              <p data-zh-html="依赖不用另行声明——它就是源码里的 <code>use</code>。于是「清单说依赖 A、代码其实不用 A」这类谎言<strong>连存在的地方都没有</strong>。" data-en-html="Dependencies are not declared separately — they <em>are</em> the <code>use</code> lines. So the class of lie where the manifest declares A and the code never uses it has <strong>nowhere to exist</strong>.">依赖不用另行声明——它就是源码里的 <code>use</code>。于是「清单说依赖 A、代码其实不用 A」这类谎言<strong>连存在的地方都没有</strong>。</p>
+            </div>
+            <div class="card">
+              <span class="card__k" data-zh="二" data-en="Two">二</span>
+              <h3 class="h3" data-zh="身份是内容哈希" data-en="Identity is a content hash">身份是内容哈希</h3>
+              <p data-zh-html="锁文件里钉的是哈希，不是版本号。所以「可复现」是<strong>算出来的</strong>，不是靠版本区间推出来的。" data-en-html="A lock pins a hash, not a version number. So reproducibility is <strong>computed</strong> rather than argued from a version range.">锁文件里钉的是哈希，不是版本号。所以「可复现」是<strong>算出来的</strong>，不是靠版本区间推出来的。</p>
+            </div>
+            <div class="card">
+              <span class="card__k" data-zh="三" data-en="Three">三</span>
+              <h3 class="h3" data-zh="多版本共存" data-en="Versions coexist">多版本共存</h3>
+              <p data-zh-html="同一个库的两个版本<strong>可以同时存在于一次构建里</strong>。选版只剩一条规则——版本最大；要钉死就写 <code>名字@版本</code> 或用锁。没有区间，没有冲突消解策略这一整类复杂度。" data-en-html="Two versions of one library <strong>can exist in one build at once</strong>. Selection is down to one rule — highest version wins; to pin, write <code>name@version</code> or use a lock. No ranges, and with them the whole class of conflict-resolution strategy disappears.">同一个库的两个版本<strong>可以同时存在于一次构建里</strong>。选版只剩一条规则——版本最大；要钉死就写 <code>名字@版本</code> 或用锁。没有区间，没有冲突消解策略这一整类复杂度。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================================================== the identity -->
+      <section class="section" id="identity" data-motion>
+        <div class="wrap">
+          <h2 class="h2" data-zh="那条反直觉的事" data-en="The counter-intuitive part">那条反直觉的事</h2>
+          <div class="prose">
+            <p data-zh="Lompi 算的不是「一个包的哈希」，是「一个实例的哈希」：" data-en="What Lompi computes is not a package's hash but an instance's hash:">
+              Lompi 算的不是「一个包的哈希」，是「一个实例的哈希」：
+            </p>
+          </div>
+          <div class="code">
+            <div class="code__bar">
+              <span class="lang-tag">text</span>
+              <span data-zh="实例身份" data-en="instance identity">实例身份</span>
+              <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+            </div>
+            <pre>id(P) = sha256( 自身源码 ⊕ 每条 name 边: 边名 0x00 子实例身份 0x00 )</pre>
+          </div>
+          <div class="prose">
+            <p data-zh-html="边也要进哈希。因为<strong>只看自身源码是错的</strong>——同一份源码在两个构建里绑到不同的依赖上，语义不同，却会被算出同一个身份、被错误地合并成一个实例。这不是理论担忧，它长这样：" data-en-html="The edges go into the hash too. <strong>Hashing the source alone would be wrong</strong> — the same source bound to different dependencies in two builds means two different meanings, yet it would hash to one identity and be merged into a single instance. This is not a theoretical worry; it looks like this:">
+              边也要进哈希。因为<strong>只看自身源码是错的</strong>——同一份源码在两个构建里绑到不同的依赖上，语义不同，却会被算出同一个身份、被错误地合并成一个实例。这不是理论担忧，它长这样：
+            </p>
+          </div>
+          <div class="code">
+            <div class="code__bar">
+              <span class="lang-tag">console</span>
+              <span data-zh="同一份源码，两个身份" data-en="same source, two identities">同一份源码，两个身份</span>
+              <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+            </div>
+            <pre>geom 的源码逐字节相同, 但落在两个仓库里
+  仓库 A 有 mathutil 0.1.0 / 0.2.0  →  geom id = 06b4cc0d3b1f…  (绑 0.2.0)
+  仓库 B 只有 mathutil 0.1.0        →  geom id = 0f4bb3784d09…  (绑 0.1.0)</pre>
+          </div>
+          <div class="prose">
+            <p data-zh-html="<strong>两个 id 不同是对的。</strong>把它们合并才是有害的——那会让「geom 用的是哪个 mathutil」这件事在构建里消失。" data-en-html="<strong>Two different ids is the correct answer.</strong> Merging them is what would be harmful — it would make “which mathutil does geom use” disappear from the build.">
+              <strong>两个 id 不同是对的。</strong>把它们合并才是有害的——那会让「geom 用的是哪个 mathutil」这件事在构建里消失。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================= the output -->
+      <section class="section" id="look" data-motion>
+        <div class="wrap">
+          <h2 class="h2" data-zh="它跑起来是什么样" data-en="What it looks like when it runs">它跑起来是什么样</h2>
+          <div class="prose">
+            <p data-zh="下面是真实输出，不是示意。" data-en="Real output, not an illustration.">
+              下面是真实输出，不是示意。
+            </p>
+          </div>
+          <div class="code">
+            <div class="code__bar">
+              <span class="lang-tag">console</span>
+              <span data-zh="仓库里有什么" data-en="what the store holds">仓库里有什么</span>
+              <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+            </div>
+            <pre>$ lompi index fixture/store
+5 package(s) in store
+geom 1.0.0 06b4cc0d3b1f136f
+mathutil 0.1.0 53ce217a387ed58a
+mathutil 0.2.0 c5f88a0519c41888
+multi 2.0.0 8326d0125e3b111d
+util 0.3.0 e0e90317698ff804</pre>
+          </div>
+          <div class="prose">
+            <p data-zh-html="<code>mathutil</code> 出现两次不是重复——那是<strong>两个实例</strong>。第一行那个 <code>5 package(s)</code> 数的是实例数，不是名字数。" data-en-html="<code>mathutil</code> twice is not a duplicate — those are <strong>two instances</strong>. The <code>5 package(s)</code> on the first line counts instances, not names.">
+              <code>mathutil</code> 出现两次不是重复——那是<strong>两个实例</strong>。第一行那个 <code>5 package(s)</code> 数的是实例数，不是名字数。
+            </p>
+          </div>
+          <div class="code">
+            <div class="code__bar">
+              <span class="lang-tag">console</span>
+              <span data-zh="解析 / 发锁 / 验锁" data-en="resolve, lock, verify">解析 / 发锁 / 验锁</span>
+              <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+            </div>
+            <pre>$ lompi tree fixture/store multi
+multi@2.0.0 8326d0125e3b
+  util@0.3.0 e0e90317698f
+
+$ lompi resolve fixture/store multi
+# lompi lock v1
+multi 2.0.0 8326d0125e3b111d51d050e49395400524a18ddc31eb730f7afbc9cb6a4955fb
+util 0.3.0 e0e90317698ff804db92a01bce6b7a965e9e679eb6bb80b25f02c2d05207b041
+
+$ lompi verify fixture/store multi lompi.lock
+[OK] lompi: 锁与仓库一致 (169 bytes)</pre>
+          </div>
+          <div class="prose">
+            <p data-zh-html="验锁是把整棵树<strong>重算一遍再逐字节比对</strong>。拿错一份锁，得到的是 <code>[DIFF] 锁与仓库不一致</code> 并以 1 退出——不是「差不多能用」。" data-en-html="Verifying <strong>recomputes the whole tree and compares byte for byte</strong>. Hand it the wrong lock and you get <code>[DIFF] 锁与仓库不一致</code> with exit 1 — not “close enough”.">
+              验锁是把整棵树<strong>重算一遍再逐字节比对</strong>。拿错一份锁，得到的是 <code>[DIFF] 锁与仓库不一致</code> 并以 1 退出——不是「差不多能用」。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================= limits -->
+      <section class="section" id="limits" data-motion>
+        <div class="wrap">
+          <h2 class="h2" data-zh="它现在到哪一步" data-en="Where it stands">它现在到哪一步</h2>
+          <ul class="list">
+            <li><b data-zh="覆盖解析与身份，不做物化" data-en="It covers resolution and identity, not materialisation">覆盖解析与身份，不做物化</b> <span data-zh-html="—— 读依赖、算身份、发锁、验锁、给落盘计划。编译器那一侧的<strong>物化改名</strong>是库系统里 <code>materialize</code> 的活，不是它的。" data-en-html=" — reading dependencies, computing identity, emitting and verifying locks, producing a plan. The compiler-side <strong>materialisation renaming</strong> belongs to <code>materialize</code> in the library system, not here.">—— 读依赖、算身份、发锁、验锁、给落盘计划。编译器那一侧的<strong>物化改名</strong>是库系统里 <code>materialize</code> 的活，不是它的。</span></li>
+            <li><b data-zh-html="<code>plan</code> 不建目录" data-en-html="<code>plan</code> does not create directories"> <code>plan</code> 不建目录</b> <span data-zh-html="—— 工具链的 Windows PE 目标没有 <code>mkdir</code>，所以它只打计划，<code>deps/</code> 下的目录要自己先建好。这也是「它就是 install」这句话的完整含义：它算，落盘交给上层。" data-en-html=" — the toolchain's Windows PE target has no <code>mkdir</code>, so it prints a plan and the directories under <code>deps/</code> must exist first. That is the whole of “this is install”: it computes, and putting bytes on disk belongs to the layer above.">—— 工具链的 Windows PE 目标没有 <code>mkdir</code>，所以它只打计划，<code>deps/</code> 下的目录要自己先建好。这也是「它就是 install」这句话的完整含义：它算，落盘交给上层。</span></li>
+            <li><b data-zh="单文件上限 256 KiB" data-en="A 256 KiB per-file ceiling">单文件上限 256 KiB</b> <span data-zh-html="—— 超了它<strong>拒算这个包的身份</strong>，而不是截断。静默截断会算出一个<strong>错的</strong>身份，那比报错坏得多。" data-en-html=" — over that it <strong>refuses to compute the package's identity</strong> rather than truncating. A silent truncation would produce a <strong>wrong</strong> identity, which is far worse than an error.">—— 超了它<strong>拒算这个包的身份</strong>，而不是截断。静默截断会算出一个<strong>错的</strong>身份，那比报错坏得多。</span></li>
+            <li><b data-zh="容量护栏会静默截断" data-en="Capacity guard rails truncate silently">容量护栏会静默截断</b> <span data-zh-html="—— 仓库 512 个实例、单包 <code>use</code> 边 2048 条、目录项 4096 条、依赖树深度 256。<strong>超出这些没有报错</strong>，属于已知上限，不是设计。" data-en-html=" — 512 instances per store, 2048 <code>use</code> edges per package, 4096 directory entries, a tree depth of 256. <strong>Going past these produces no error</strong>; they are known ceilings, not a design.">—— 仓库 512 个实例、单包 <code>use</code> 边 2048 条、目录项 4096 条、依赖树深度 256。<strong>超出这些没有报错</strong>，属于已知上限，不是设计。</span></li>
+            <li><b data-zh="没有注册中心，没有网络" data-en="No registry, no network">没有注册中心，没有网络</b> <span data-zh="—— 仓库就是一个本地目录，取件就是读文件。也不做二进制分发：泛型是类型定向单态化的，使用方必须看得到源码。" data-en=" — a store is a local directory and fetching is reading a file. Nor is there binary distribution: generics are type-directed and monomorphised, so a consumer must be able to see the source.">—— 仓库就是一个本地目录，取件就是读文件。也不做二进制分发：泛型是类型定向单态化的，使用方必须看得到源码。</span></li>
+          </ul>
+          <div class="note note--steel">
+            <strong data-zh="完整参考在文档里：" data-en="The full reference is in the docs: ">完整参考在文档里：</strong>
+            <span data-zh-html="七个命令的逐条说明、两种 <code>use</code> 边的区别、退出码、报错对照，以及和 pip 的一张对照表，都在 <a href=&quot;../../docs/language/lompi/&quot;>Lompi · 包管理器</a>。写库本身怎么开始，看 <a href=&quot;../../docs/language/libraries/&quot;>写一个 Loment 库</a>。" data-en-html="The seven commands one by one, the difference between the two kinds of <code>use</code> edge, exit codes, a table of failures, and a side-by-side with pip are all in <a href=&quot;../../docs/language/lompi/&quot;>Lompi · the package manager</a>. To start writing a library itself, see <a href=&quot;../../docs/language/libraries/&quot;>Writing a Loment library</a>.">
+              七个命令的逐条说明、两种 <code>use</code> 边的区别、退出码、报错对照，以及和 pip 的一张对照表，都在 <a href="../../docs/language/lompi/">Lompi · 包管理器</a>。写库本身怎么开始，看 <a href="../../docs/language/libraries/">写一个 Loment 库</a>。
+            </span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <div class="wrap">
+        <div class="foot__grid">
+          <div>
+            <div class="nav__brand" style="margin-bottom: 0.7rem">
+              <svg viewBox="0 14 64 46" aria-hidden="true">
+                <path d="M3,58 Q11,38 26,16 Q32,19 38,16 Q53,38 61,58 Z" fill="var(--mark-rock)" />
+                <path d="M15.9,32 Q18,22 26,16 Q32,19 38,16 Q46,22 48.1,32 Q32,38 15.9,32 Z" fill="var(--mark-snow)" />
+              </svg>
+              FujoOS
+            </div>
+            <p class="small dim" style="max-width: 34ch" data-zh="Lompi 是 Loment 的包管理器，用 Loment 自己写成。它管的是库，不是可执行文件。" data-en="Lompi is Loment's package manager, written in Loment itself. What it manages is libraries, not executables.">
+              Lompi 是 Loment 的包管理器，用 Loment 自己写成。它管的是库，不是可执行文件。
+            </p>
+          </div>
+          <div>
+            <h4 data-zh="本页" data-en="On this page">本页</h4>
+            <a href="#what" data-zh="差在哪" data-en="Where it differs">差在哪</a>
+            <a href="#identity" data-zh="身份" data-en="Identity">身份</a>
+            <a href="#look" data-zh="跑起来什么样" data-en="What it looks like">跑起来什么样</a>
+            <a href="#limits" data-zh="现在到哪一步" data-en="Where it stands">现在到哪一步</a>
+          </div>
+          <div>
+            <h4 data-zh="文档" data-en="Documentation">文档</h4>
+            <a href="../../docs/language/lompi/" data-zh="Lompi 命令参考" data-en="Lompi command reference">Lompi 命令参考</a>
+            <a href="../../docs/language/libraries/" data-zh="写一个 Loment 库" data-en="Writing a Loment library">写一个 Loment 库</a>
+            <a href="../../docs/language/quickstart/" data-zh="上手文档 (Beta)" data-en="Quickstart (Beta)">上手文档 (Beta)</a>
+            <a href="../../docs/" data-zh="全部文档 →" data-en="All documentation →">全部文档 →</a>
+          </div>
+          <div>
+            <h4 data-zh="Loment · Potato" data-en="Loment · Potato">Loment · Potato</h4>
+            <a href="../" data-zh="概览" data-en="Overview">概览</a>
+            <a href="../early-use/" data-zh="Early Use 报名" data-en="Early Use sign-up">Early Use 报名</a>
+            <a href="https://zenodo.org/records/22352904" rel="noopener" data-zh="预印本 (Zenodo) ↗" data-en="Preprint (Zenodo) ↗">预印本 (Zenodo) ↗</a>
+          </div>
+        </div>
+        <div class="foot__end">
+          <span>© <span data-year>2026</span> Yuxuan Jiang · MIT</span>
+          <span data-zh="Lompi · 第一个库管理工具" data-en="Lompi · the first library management tool">Lompi · 第一个库管理工具</span>
+        </div>
+      </div>
+    </footer>
+
+    <script src="../../assets/site.js?v=a3159b21"></script>
+  </body>
+</html>

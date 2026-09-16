@@ -32,7 +32,7 @@
       href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Geist+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="../assets/style.css?v=91b37345" />
+    <link rel="stylesheet" href="../assets/style.css?v=93f82bc7" />
     <link rel="icon" href="../favicon.ico" sizes="48x48" />
     <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" sizes="any" />
     <link rel="icon" type="image/png" href="../assets/favicon-32.png" sizes="32x32" />
@@ -79,7 +79,14 @@
           <a class="nav__link" href="../" data-zh="首页" data-en="Home">首页</a>
           <a class="nav__link" href="../foc/" data-zh="FOC 内核" data-en="FOC kernel">FOC 内核</a>
           <a class="nav__link" href="../fuai/" data-zh="FUAI 安全体系" data-en="FUAI safety">FUAI 安全体系</a>
-          <a class="nav__link" href="../loment/" data-zh="Loment · Potato" data-en="Loment · Potato">Loment · Potato</a>
+          <div class="nav__drop" data-open="false">
+            <button class="nav__link nav__drop-btn" type="button" aria-expanded="false" aria-haspopup="true" data-zh="Loment · Potato" data-en="Loment · Potato">Loment · Potato</button>
+            <div class="nav__drop-menu">
+              <a href="../loment/" data-zh="概览" data-en="Overview">概览</a>
+              <a href="../loment/lompi/" data-zh="Lompi · 包管理器" data-en="Lompi · the package manager">Lompi · 包管理器</a>
+              <a href="../loment/early-use/" data-zh="Early Use 报名" data-en="Early Use sign-up">Early Use 报名</a>
+            </div>
+          </div>
           <a class="nav__link" href="../docs/" data-zh="文档" data-en="Docs">文档</a>
           <a class="nav__link" href="../news/" data-zh="新闻" data-en="News">新闻</a>
           <a class="nav__link" href="../bugs/" aria-current="page" data-zh="Bug 社区" data-en="Bug reports">Bug 社区</a>
@@ -97,6 +104,8 @@
           <a href="../foc/" data-zh="FOC 内核" data-en="FOC kernel">FOC 内核</a>
           <a href="../fuai/" data-zh="FUAI 安全体系" data-en="FUAI safety system">FUAI 安全体系</a>
           <a href="../loment/" data-zh="Loment · Potato 语言" data-en="Loment · Potato language">Loment · Potato 语言</a>
+          <a href="../loment/lompi/" data-zh="— Lompi · 包管理器" data-en="— Lompi · the package manager">— Lompi · 包管理器</a>
+          <a href="../loment/early-use/" data-zh="— Early Use 报名" data-en="— Early Use sign-up">— Early Use 报名</a>
           <a href="../docs/" data-zh="文档" data-en="Documentation">文档</a>
           <a href="../news/" data-zh="新闻" data-en="News">新闻</a>
           <a href="../bugs/" data-zh="Bug 社区" data-en="Bug reports">Bug 社区</a>
@@ -536,6 +545,6 @@ Windows 11 + WSL2；clang 22.1.8；仓库 Fujoos-FujoLang-DEV @ c47c970</pre></d
       </div>
     </footer>
 
-    <script src="../assets/site.js?v=9d88aa71"></script>
+    <script src="../assets/site.js?v=a3159b21"></script>
   </body>
 </html>

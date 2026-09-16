@@ -158,6 +158,7 @@ const HAND_WRITTEN = [
   "foc/index.html",
   "fuai/index.html",
   "loment/index.html",
+  "loment/lompi/index.html",
   "bugs/index.html",
   "bugs/submit/index.html",
   "bugs/api/index.html",
@@ -545,16 +546,46 @@ ${i}</div>`;
 /* Top nav. `current` is the href of the page being rendered, so the marker
    lands on the right item instead of being hard-coded to Docs. */
 function navLinks(up, current) {
+  /* An entry with a fourth element is a nav item that opens a panel; the
+     fourth element is its menu, in the same [href, zh, en] shape. */
   const items = [
     [`${up || "./"}`, "首页", "Home"],
     [`${up}${AT.foc}`, "FOC 内核", "FOC kernel"],
     [`${up}${AT.fuai}`, "FUAI 安全体系", "FUAI safety"],
-    [`${up}${AT.loment}`, "Loment · Potato", "Loment · Potato"],
+    [
+      `${up}${AT.loment}`,
+      "Loment · Potato",
+      "Loment · Potato",
+      [
+        [`${up}${AT.loment}`, "概览", "Overview"],
+        [`${up}${AT.loment}lompi/`, "Lompi · 包管理器", "Lompi · the package manager"],
+        [`${up}${AT.loment}early-use/`, "Early Use 报名", "Early Use sign-up"],
+      ],
+    ],
     [`${up}${AT.docs}`, "文档", "Docs"],
     [`${up}${AT.news}`, "新闻", "News"],
     [`${up}${AT.bugs}`, "Bug 社区", "Bug reports"],
   ];
-  const links = items.map(([href, zh, en]) => {
+  const links = items.map(([href, zh, en, menu]) => {
+    if (menu) {
+      /* The button carries the current marker when the page is anywhere under
+         it, since the button is what stands where the link used to. */
+      const under = current && current.indexOf(href) === 0;
+      const sub = menu
+        .map(([mh, mz, me]) => {
+          const here = mh === current ? ' aria-current="page"' : "";
+          return `              <a href="${mh}"${here} data-zh="${mz}" data-en="${me}">${mz}</a>`;
+        })
+        .join("\n");
+      return [
+        `          <div class="nav__drop" data-open="false">`,
+        `            <button class="nav__link nav__drop-btn" type="button" aria-expanded="false" aria-haspopup="true"${under ? ' aria-current="true"' : ""} data-zh="${zh}" data-en="${en}">${zh}</button>`,
+        `            <div class="nav__drop-menu">`,
+        sub,
+        `            </div>`,
+        `          </div>`,
+      ].join("\n");
+    }
     const here = href === current ? ' aria-current="page"' : "";
     return `          <a class="nav__link" href="${href}"${here} data-zh="${zh}" data-en="${en}">${zh}</a>`;
   });
@@ -758,6 +789,8 @@ ${navLinks(up, `${up}${AT.docs}`)}
           <a href="${up}${AT.foc}" data-zh="FOC 内核" data-en="FOC kernel">FOC 内核</a>
           <a href="${up}${AT.fuai}" data-zh="FUAI 安全体系" data-en="FUAI safety system">FUAI 安全体系</a>
           <a href="${up}${AT.loment}" data-zh="Loment · Potato 语言" data-en="Loment · Potato language">Loment · Potato 语言</a>
+          <a href="${up}${AT.loment}lompi/" data-zh="— Lompi · 包管理器" data-en="— Lompi · the package manager">— Lompi · 包管理器</a>
+          <a href="${up}${AT.loment}early-use/" data-zh="— Early Use 报名" data-en="— Early Use sign-up">— Early Use 报名</a>
           <a href="${up}${AT.docs}" data-zh="文档" data-en="Documentation">文档</a>
           <a href="${up}${AT.start}" data-zh="构建与运行" data-en="Build and run">构建与运行</a>
           <a href="${up}${AT.bugs}" data-zh="Bug 社区" data-en="Bug reports">Bug 社区</a>
@@ -913,6 +946,8 @@ ${navLinks(up, current)}
           <a href="${up}${AT.foc}" data-zh="FOC 内核" data-en="FOC kernel">FOC 内核</a>
           <a href="${up}${AT.fuai}" data-zh="FUAI 安全体系" data-en="FUAI safety system">FUAI 安全体系</a>
           <a href="${up}${AT.loment}" data-zh="Loment · Potato 语言" data-en="Loment · Potato language">Loment · Potato 语言</a>
+          <a href="${up}${AT.loment}lompi/" data-zh="— Lompi · 包管理器" data-en="— Lompi · the package manager">— Lompi · 包管理器</a>
+          <a href="${up}${AT.loment}early-use/" data-zh="— Early Use 报名" data-en="— Early Use sign-up">— Early Use 报名</a>
           <a href="${up}${AT.docs}" data-zh="文档" data-en="Documentation">文档</a>
           <a href="${up}${AT.news}" data-zh="新闻" data-en="News">新闻</a>
           <a href="${up}${AT.bugs}" data-zh="Bug 社区" data-en="Bug reports">Bug 社区</a>
@@ -1102,6 +1137,7 @@ ${items}
     AT.foc,
     AT.fuai,
     AT.loment,
+    `${AT.loment}lompi/`,
     `${AT.loment}early-use/`,
     AT.bugs,
     `${AT.bugs}submit/`,
