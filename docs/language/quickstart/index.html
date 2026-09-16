@@ -579,15 +579,15 @@ python tools/lomc.py lom/fuc.lom --check</pre>
                 </div>
                 <pre>sh loment/bootstrap.sh
 
-<span class="c">== 起点: genesis (loment-lomelf) —— 无 clang, 无解释器
+<span class="c">== 起点: genesis (lomelf-linux-x64.elf) —— 无 clang, 无解释器
 == 1/4 种子 -&gt; stage1
 == 2/4 stage1 编译 loment/selfhost/driver.lomt -&gt; 必须等于种子
 == 3/4 stage2 -&gt; stage3 定点
 == 4/4 stage1 与 stage2 对非自身入口一致
 SEED BOOTSTRAP OK: 无 Python, 无解释器, 无 clang (genesis 起头); 种子自复现 + 三阶段定点</span></pre>
               </div>
-              <p class="small dim" data-zh-html="起点是一份<strong>固化的种子</strong>：参考实现为自举驱动发射的那份 IR——种子本身就是整个编译器。四条判据依次证明：种子能把自己编出来且逐字节相同；再链一轮仍是定点；换一个<strong>非自身</strong>的入口，两个阶段的产物也一致。最后一条是关键：定点不能是「只会编译自己」的巧合。找不到 genesis 时才退回 clang（`CC=` 可以指定）。细节见 <code>docs/159</code>。" data-en-html="The starting point is a <b>frozen seed</b>: the IR the reference implementation emitted for the self-hosted driver — the seed <i>is</i> the whole compiler. Four checks then prove, in order, that the seed rebuilds itself byte-for-byte, that one more round is still a fixpoint, and that a <b>non-self</b> entry produces identical output at both stages. That last one matters: a fixpoint must not be a coincidence of only compiling itself. Only when no genesis is found does it fall back to clang (`CC=` can name one). Details in <code>docs/159</code>.">
-                起点是一份<strong>固化的种子</strong>：参考实现为自举驱动发射的那份 IR——种子本身就是整个编译器。四条判据依次证明：种子能把自己编出来且逐字节相同；再链一轮仍是定点；换一个<strong>非自身</strong>的入口，两个阶段的产物也一致。最后一条是关键：定点不能是「只会编译自己」的巧合。找不到 genesis 时才退回 clang（<code>CC=</code> 可以指定）。细节见 <code>docs/159</code>。
+              <p class="small dim" data-zh-html="要分清两个东西：<strong>genesis</strong> 是那个工具（<code>lomelf</code> 的二进制，90 504 B，提交进仓库），<strong>种子</strong>是它汇编的输入（<code>selfhost_driver.ll</code>，1 641 696 B）。四条判据依次证明：stage1 编译驱动单元的产物<strong>与种子逐字节相同</strong>（种子自身就是个定点）；再链一轮仍是定点；换一个<strong>非自身</strong>的入口，两个阶段的产物也一致。最后一条是关键：定点不能是「只会编译自己」的巧合。找不到 genesis 时才退回 clang（<code>CC=</code> 可以指定）。细节见 <code>docs/159</code>。" data-en-html="Two things have to be kept apart: <b>genesis</b> is the tool (the <code>lomelf</code> binary, 90,504 B, committed to the repository), while the <b>seed</b> is what it assembles (<code>selfhost_driver.ll</code>, 1,641,696 B). Four checks then prove, in order, that stage1 compiling the driver reproduces the seed <b>byte for byte</b> (the seed is its own fixpoint), that one more round is still a fixpoint, and that a <b>non-self</b> entry produces identical output at both stages. That last one matters: a fixpoint must not be a coincidence of only compiling itself. Only when no genesis is found does it fall back to clang (<code>CC=</code> can name one). Details in <code>docs/159</code>.">
+                要分清两个东西：<strong>genesis</strong> 是那个工具（<code>lomelf</code> 的二进制，90 504 B，提交进仓库），<strong>种子</strong>是它汇编的输入（<code>selfhost_driver.ll</code>，1 641 696 B）。四条判据依次证明：stage1 编译驱动单元的产物<strong>与种子逐字节相同</strong>（种子自身就是个定点）；再链一轮仍是定点；换一个<strong>非自身</strong>的入口，两个阶段的产物也一致。最后一条是关键：定点不能是「只会编译自己」的巧合。找不到 genesis 时才退回 clang（<code>CC=</code> 可以指定）。细节见 <code>docs/159</code>。
               </p>
 
               <h2 data-zh="现在还不能做什么" data-en="What you cannot do yet">现在还不能做什么</h2>

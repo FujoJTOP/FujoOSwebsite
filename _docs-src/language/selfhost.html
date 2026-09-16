@@ -1,4 +1,4 @@
-<!--{"zh":"自举","en":"Self-hosting","desc":"编译器编译自身：三阶段产物逐字节相同（种子 1 641 696 B），而且重建自己既不需要解释器，也不再需要 C 编译器。","banner_zh":"自举 · 三阶段定点 + 无 clang 引导","banner_en":"Self-hosting · fixpoint, with no interpreter and no C compiler to bootstrap"}-->
+<!--{"zh":"自举","en":"Self-hosting","desc":"编译器编译自身：三阶段产物逐字节相同（种子 1 641 696 B），重建自己既不需要解释器，也不需要 C 编译器——链条的起点是一份提交进仓库的 genesis（lomelf，90 504 B）。","banner_zh":"自举 · 三阶段定点 + 无 clang 引导","banner_en":"Self-hosting · fixpoint, with no interpreter and no C compiler to bootstrap"}-->
               <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="自举" data-en="Self-hosting">自举</h1>
 
               <div class="prose">
@@ -55,7 +55,7 @@
                     </tr>
                     <tr>
                       <td data-zh="三阶段定点" data-en="Three-stage fixpoint">三阶段定点</td>
-                      <td data-zh="第 2 / 3 阶段产物逐字节相同；换一个非自身入口，两个阶段的产物也一致 —— 定点不是“只会编译自己”的巧合。" data-en="Stage 2 and 3 outputs byte-identical; and a non-self entry produces identical output at both stages — the fixpoint is not a coincidence of only compiling itself.">第 2 / 3 阶段产物逐字节相同；换一个非自身入口，两个阶段的产物也一致 —— 定点不是“只会编译自己”的巧合。</td>
+                      <td data-zh="stage1 编译 driver.lomt，产物与种子逐字节相同（种子自身就是个定点）；stage2 与 stage3 逐字节相同；换一个非自身入口（native_res.lomt），stage1 与 stage2 的产物也一致 —— 最后一条用来排除“只会编译自己”的巧合。" data-en="stage1 compiling driver.lomt reproduces the seed byte for byte (the seed is its own fixpoint); stage2 and stage3 are byte-identical; and on a non-self entry (native_res.lomt) stage1 and stage2 agree — that last one rules out the coincidence of only compiling itself.">stage1 编译 driver.lomt，产物与种子逐字节相同（种子自身就是个定点）；stage2 与 stage3 逐字节相同；换一个非自身入口（native_res.lomt），stage1 与 stage2 的产物也一致 —— 最后一条用来排除“只会编译自己”的巧合。</td>
                       <td><span class="tag tag--ok">OK</span></td>
                     </tr>
                     <tr>
@@ -65,7 +65,7 @@
                     </tr>
                     <tr>
                       <td data-zh="无 clang 引导" data-en="No-C-compiler bootstrap">无 clang 引导</td>
-                      <td data-zh-html="起点是一份<strong>提交进仓库的 genesis</strong>（72136 B，由种子构建出来、可复现、有自己的 SHA256）。<code>sh loment/bootstrap.sh</code> 在 PATH 里<strong>没有 clang</strong> 的环境下走完四条判据。" data-en-html="The starting point is a <b>genesis binary committed to the repository</b> (72136 B, built from the seed, reproducible, with its own SHA256). <code>sh loment/bootstrap.sh</code> runs all four checks with <b>no clang on PATH</b>.">起点是一份<strong>提交进仓库的 genesis</strong>（72136 B，由种子构建出来、可复现、有自己的 SHA256）。<code>sh loment/bootstrap.sh</code> 在 PATH 里<strong>没有 clang</strong> 的环境下走完四条判据。</td>
+                      <td data-zh-html="起点是一份<strong>提交进仓库的 genesis</strong>：<code>loment/build/genesis/lomelf-linux-x64.elf</code>，<strong>90 504 B</strong>，sha256 <code>926c4ebb…</code>。它就是 <code>lomelf</code>——把 <code>.ll</code> 汇编成可执行文件的那一个后端——由种子加一次 clang/lld 构建、可复现，然后被提交进仓库。<code>sh loment/bootstrap.sh</code> 在 PATH 里<strong>没有 clang</strong> 的环境下走完四条判据。" data-en-html="The starting point is a <b>genesis binary committed to the repository</b>: <code>loment/build/genesis/lomelf-linux-x64.elf</code>, <b>90,504 B</b>, sha256 <code>926c4ebb…</code>. It is <code>lomelf</code> — the backend that assembles <code>.ll</code> into an executable — built from the seed with one clang/lld pass, reproducible, and then committed. <code>sh loment/bootstrap.sh</code> runs all four checks with <b>no clang on PATH</b>.">起点是一份<strong>提交进仓库的 genesis</strong>：<code>loment/build/genesis/lomelf-linux-x64.elf</code>，<strong>90 504 B</strong>，sha256 <code>926c4ebb…</code>。它就是 <code>lomelf</code>——把 <code>.ll</code> 汇编成可执行文件的那一个后端——由种子加一次 clang/lld 构建、可复现，然后被提交进仓库。<code>sh loment/bootstrap.sh</code> 在 PATH 里<strong>没有 clang</strong> 的环境下走完四条判据。</td>
                       <td><span class="tag tag--ok">OK</span></td>
                     </tr>
                   </tbody>
@@ -85,6 +85,9 @@
                 </p>
                 <p data-zh-html="种子本身也有一道棘轮：门禁每次都拿参考实现重新发射一遍并逐字符比对 —— <strong>自举产物变了而种子没跟上，门禁就红</strong>。这是“种子不许过期”。" data-en-html="The seed has its own ratchet: the gate re-emits it from the reference implementation every run and compares character by character — <b>if the bootstrap output moves and the seed does not follow, the gate goes red</b>. The seed is not allowed to go stale.">
                   种子本身也有一道棘轮：门禁每次都拿参考实现重新发射一遍并逐字符比对 —— <strong>自举产物变了而种子没跟上，门禁就红</strong>。这是“种子不许过期”。
+                </p>
+                <p data-zh-html="还有一条要写明的：链条总要有<strong>第一个</strong>可执行文件，genesis 就是那个。它有来源（种子加一次 clang/lld）、有哈希、可复现 —— 但它确实<strong>是个二进制</strong>。所以 clang 并没有从这个项目里消失，它只是被从<strong>链条上</strong>拿掉了：重新铸造 genesis（<code>python tools/loment_genesis.py --emit</code>）仍然要一次 clang 或 WSL；只核对哈希（<code>--check</code>）不需要。另外 genesis 是 Linux ELF，所以这条无 clang 的路跑在 Linux / macOS / WSL 上。" data-en-html="One more thing has to be written down: a chain needs a <b>first</b> executable, and genesis is it. It has provenance (the seed plus one clang/lld pass), a hash, and it is reproducible — but it is <b>a binary</b>. So clang has not vanished from this project; it has been taken off the <b>chain</b>: minting a fresh genesis (<code>python tools/loment_genesis.py --emit</code>) still costs one clang or WSL, while checking the hash (<code>--check</code>) costs nothing. Genesis is also a Linux ELF, so the no-clang path runs on Linux, macOS or WSL.">
+                  还有一条要写明的：链条总要有<strong>第一个</strong>可执行文件，genesis 就是那个。它有来源（种子加一次 clang/lld）、有哈希、可复现 —— 但它确实<strong>是个二进制</strong>。所以 clang 并没有从这个项目里消失，它只是被从<strong>链条上</strong>拿掉了：重新铸造 genesis（<code>python tools/loment_genesis.py --emit</code>）仍然要一次 clang 或 WSL；只核对哈希（<code>--check</code>）不需要。另外 genesis 是 Linux ELF，所以这条无 clang 的路跑在 Linux / macOS / WSL 上。
                 </p>
               </div>
 
