@@ -1,0 +1,325 @@
+<!--{"zh":"官方库 · std 与 host","en":"The official libraries · std and host","desc":"Loment 官方库的模块索引：可移植的 std（127 个模块，一个 syscall 都不发）与宿主层的 host，以及为什么它们必须是两个包。","banner_zh":"官方库 · 128 个模块，两个包","banner_en":"Official libraries · 128 modules, two packages"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="官方库 · std 与 host" data-en="The official libraries · std and host">官方库 · std 与 host</h1>
+
+              <div class="prose">
+                <p data-zh-html="先说清一件事：<strong>Loment 语言本身没有标准库。</strong>语言里只有内建函数（<code>alloc</code> / <code>load8</code> / <code>str_*</code> / <code>syscall4</code> 那一组，二十来个），没有 <code>String</code>、没有 <code>Vec</code>、没有 <code>HashMap</code>。下面这些<strong>是一个库</strong>——和你能写的那个库是同一种东西，只是它是官方维护的。" data-en-html="One thing first: <strong>the Loment language has no standard library.</strong> The language has builtins only (that group of about twenty — <code>alloc</code>, <code>load8</code>, <code>str_*</code>, <code>syscall4</code>) and no <code>String</code>, no <code>Vec</code>, no <code>HashMap</code>. What follows <strong>is a library</strong> — the same kind of thing you can write, only maintained officially.">
+                  先说清一件事：<strong>Loment 语言本身没有标准库。</strong>语言里只有内建函数（<code>alloc</code> / <code>load8</code> / <code>str_*</code> / <code>syscall4</code> 那一组，二十来个），没有 <code>String</code>、没有 <code>Vec</code>、没有 <code>HashMap</code>。下面这些<strong>是一个库</strong>——和你能写的那个库是同一种东西，只是它是官方维护的。
+                </p>
+                <p data-zh-html="所以它没有特权：<strong>依赖一样从源码的 <code>use</code> 来，身份一样是内容哈希，选版一样只有「版本最大」一条规则</strong>。它是<a href=&quot;../libraries/&quot;>库系统</a>的第一个大用户，也是<a href=&quot;../lompi/&quot;>Lompi</a> 的第一个大输入。" data-en-html="So it has no privileges: <strong>dependencies still come from <code>use</code> in the source, identity is still a content hash, and selection still has the single rule “highest version wins”.</strong> It is the first large user of the <a href=&quot;../libraries/&quot;>library system</a> and the first large input to <a href=&quot;../lompi/&quot;>Lompi</a>.">
+                  所以它没有特权：<strong>依赖一样从源码的 <code>use</code> 来，身份一样是内容哈希，选版一样只有「版本最大」一条规则</strong>。它是<a href="../libraries/">库系统</a>的第一个大用户，也是<a href="../lompi/">Lompi</a> 的第一个大输入。
+                </p>
+              </div>
+
+              <div class="stats" style="margin-top: var(--s5)">
+                <div class="stat">
+                  <span class="stat__v">127</span>
+                  <span class="stat__k" data-zh="std 里的模块（外加一个包入口，共 128 个文件）" data-en="modules in std, plus one package entry — 128 files">std 里的模块（外加一个包入口，共 128 个文件）</span>
+                </div>
+                <div class="stat">
+                  <span class="stat__v">0</span>
+                  <span class="stat__k" data-zh="std 里发出去的 syscall 数量" data-en="syscalls issued anywhere in std">std 里发出去的 syscall 数量</span>
+                </div>
+                <div class="stat">
+                  <span class="stat__v">2</span>
+                  <span class="stat__k" data-zh="包：可移植的 std，与带 syscall 的 host" data-en="packages: the portable std, and host with its syscalls">包：可移植的 std，与带 syscall 的 host</span>
+                </div>
+                <div class="stat">
+                  <span class="stat__v">1</span>
+                  <span class="stat__k" data-zh="依赖方向：host → std → numfmt（单向）" data-en="dependency direction: host → std → numfmt, one way">依赖方向：host → std → numfmt（单向）</span>
+                </div>
+              </div>
+              <div class="prose">
+                <p data-zh="127 个模块这个数不是估的：一个包入口 <code>std.lomt</code>，里面 127 条 <code>use</code>，加上它自己就是 128 个文件。" data-en="The 127 is counted, not estimated: one package entry, <code>std.lomt</code>, holding 127 <code>use</code> lines, plus itself makes 128 files.">
+                  127 个模块这个数不是估的：一个包入口 <code>std.lomt</code>，里面 127 条 <code>use</code>，加上它自己就是 128 个文件。
+                </p>
+              </div>
+
+              <h2 data-zh="为什么是两个包，不是一个" data-en="Why two packages and not one">为什么是两个包，不是一个</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="包" data-en="Package">包</th>
+                      <th scope="col" data-zh="内容" data-en="What is in it">内容</th>
+                      <th scope="col" data-zh="发不发 syscall" data-en="Syscalls?">发不发 syscall</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>std</code> · 0.1.0</td>
+                      <td data-zh="127 个模块：数值、容器、文本、摘要、压缩、编解码、图像、时间" data-en="127 modules: numerics, containers, text, digests, compression, codecs, images, time">127 个模块：数值、容器、文本、摘要、压缩、编解码、图像、时间</td>
+                      <td data-zh-html="<strong>一个都不发</strong>" data-en-html="<strong>None</strong>"><strong>一个都不发</strong></td>
+                    </tr>
+                    <tr>
+                      <td><code>host</code> · 0.1.0</td>
+                      <td data-zh-html="7 个模块：<code>argv</code> · <code>dir</code> · <code>fs</code> · <code>io</code> · <code>log</code> · <code>stat</code> · 包入口" data-en-html="7 modules: <code>argv</code>, <code>dir</code>, <code>fs</code>, <code>io</code>, <code>log</code>, <code>stat</code>, and the entry">7 个模块：<code>argv</code> · <code>dir</code> · <code>fs</code> · <code>io</code> · <code>log</code> · <code>stat</code> · 包入口</td>
+                      <td data-zh-html="发（<code>getdents64</code> / <code>openat</code> / <code>newfstatat</code> 这类）" data-en-html="Yes — <code>getdents64</code>, <code>openat</code>, <code>newfstatat</code> and friends">发（<code>getdents64</code> / <code>openat</code> / <code>newfstatat</code> 这类）</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="prose">
+                <p data-zh-html="依赖方向是单向的：<strong>host → std → numfmt</strong>，反不过来。这条方向是刻意的，不是碰巧——<strong>裸机、无宿主、或者只想要一段 CRC 的消费者，只依赖 <code>std</code>，不会把 <code>getdents64</code> 和目录遍历一起拖进二进制</strong>。基础内建之外最底下的那一层是 <code>numfmt</code>（整数转文本），它上面才长别的。" data-en-html="The dependency direction is one way: <strong>host → std → numfmt</strong>, and it does not reverse. That direction is deliberate rather than incidental — <strong>a bare-metal consumer, or one that only wants a CRC, depends on <code>std</code> alone and does not drag <code>getdents64</code> and directory traversal into the binary</strong>. The bottom of the stack above the builtins is <code>numfmt</code> (integers to text); everything else grows on top of it.">
+                  依赖方向是单向的：<strong>host → std → numfmt</strong>，反不过来。这条方向是刻意的，不是碰巧——<strong>裸机、无宿主、或者只想要一段 CRC 的消费者，只依赖 <code>std</code>，不会把 <code>getdents64</code> 和目录遍历一起拖进二进制</strong>。基础内建之外最底下的那一层是 <code>numfmt</code>（整数转文本），它上面才长别的。
+                </p>
+                <p data-zh-html="一句话：<strong>把「需要操作系统的」和「不需要的」分成两个包</strong>，是为了让后者能去没有操作系统的地方。" data-en-html="In one line: <strong>splitting “needs an operating system” from “does not” into two packages is what lets the second one go where there is no operating system.</strong>">
+                  一句话：<strong>把「需要操作系统的」和「不需要的」分成两个包</strong>，是为了让后者能去没有操作系统的地方。
+                </p>
+              </div>
+
+              <h2 data-zh="怎么用它" data-en="How to use it">怎么用它</h2>
+              <div class="prose">
+                <p data-zh-html="消费方在源码里写依赖——没有别的清单要维护。库里<strong>公开的名字带前缀</strong>（<code>math_gcd</code> / <code>crc32_str</code> / <code>out_str</code>），因为发射出来的符号名是平的，一个单元里顶层名字必须唯一。" data-en-html="A consumer declares dependencies in its own source — there is no other manifest to keep. Public names in the library <strong>carry a prefix</strong> (<code>math_gcd</code>, <code>crc32_str</code>, <code>out_str</code>) because emitted symbols are flat and top-level names must be unique within a unit.">
+                  消费方在源码里写依赖——没有别的清单要维护。库里<strong>公开的名字带前缀</strong>（<code>math_gcd</code> / <code>crc32_str</code> / <code>out_str</code>），因为发射出来的符号名是平的，一个单元里顶层名字必须唯一。
+                </p>
+              </div>
+              <div class="code">
+                <div class="code__bar">
+                  <span class="lang-tag">loment</span>
+                  <span data-zh="一个消费方" data-en="a consumer">一个消费方</span>
+                  <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+                </div>
+                <pre>module consumer
+
+use std
+
+fn _start() {
+    let b: ptr = alloc(256);
+    let o: u32 = 0;
+    o = out_str(b, o, "gcd=");
+    o = out_dec(b, o, math_gcd(12, 18) as u64);
+    ...
+}</pre>
+              </div>
+              <div class="note note--amber">
+                <strong data-zh="一条工具链边界，实测出来的：" data-en="A toolchain boundary, measured rather than assumed: ">一条工具链边界，实测出来的：</strong>
+                <span data-zh-html="打包版编译器有两个限制——<strong>单文件最多 8 条 <code>use</code></strong>，以及<strong>菱形导入会崩</strong>。而 <code>std.lomt</code> 两条都不满足（127 条 <code>use</code>；<code>mem</code> / <code>wide</code> 被多个模块共用，就是菱形）。所以：<strong>参考实现</strong>能直接吃它（它做去重、不限条数），<code>loment lib materialize</code> 走的正是那条路；而在打包版编译器上，消费方要<strong>按需 <code>use</code> 具体模块</strong>，不要写 <code>use std</code>。这不是这一层能自己解决的事——要让它变成一条 <code>use</code>，得先让编译器支持去重与不限条数。" data-en-html="The packaged compiler carries two limits — <strong>at most 8 <code>use</code> lines per file</strong>, and <strong>diamond imports crash</strong>. <code>std.lomt</code> satisfies neither (127 <code>use</code> lines; <code>mem</code> and <code>wide</code> are shared by several modules, which is a diamond). So the <strong>reference implementation</strong> can consume it directly (it deduplicates and has no limit) — which is the path <code>loment lib materialize</code> takes — while on the packaged compiler a consumer must <strong>name the modules it wants</strong> rather than writing <code>use std</code>. This is not something this layer can fix on its own: turning it into a single <code>use</code> requires the compiler to deduplicate and to drop the limit.">
+                  打包版编译器有两个限制——<strong>单文件最多 8 条 <code>use</code></strong>，以及<strong>菱形导入会崩</strong>。而 <code>std.lomt</code> 两条都不满足（127 条 <code>use</code>；<code>mem</code> / <code>wide</code> 被多个模块共用，就是菱形）。所以：<strong>参考实现</strong>能直接吃它（它做去重、不限条数），<code>loment lib materialize</code> 走的正是那条路；而在打包版编译器上，消费方要<strong>按需 <code>use</code> 具体模块</strong>，不要写 <code>use std</code>。这不是这一层能自己解决的事——要让它变成一条 <code>use</code>，得先让编译器支持去重与不限条数。
+                </span>
+              </div>
+
+              <h2 data-zh="模块索引" data-en="The module index">模块索引</h2>
+              <div class="prose">
+                <p data-zh="下面每一行的说明都来自那个模块自己文件头的第一行，不是概括出来的。" data-en="Every description below is the first line of that module's own file header, not a summary of it.">
+                  下面每一行的说明都来自那个模块自己文件头的第一行，不是概括出来的。
+                </p>
+              </div>
+
+              <h3 class="h3" data-zh="数值：整数、浮点、大数" data-en="Numerics: integers, floats, big numbers">数值：整数、浮点、大数</h3>
+              <div class="table-wrap">
+                <table>
+                  <tbody>
+                    <tr><td><code>math</code></td><td data-zh="整数数学" data-en="Integer mathematics">整数数学</td></tr>
+                    <tr><td><code>intmath</code></td><td data-zh="整数数论（gcd / lcm / isqrt / powmod / invmod / 素性 / 试除分解）" data-en="Integer number theory (gcd, lcm, isqrt, powmod, invmod, primality, trial factoring)">整数数论（gcd / lcm / isqrt / powmod / invmod / 素性 / 试除分解）</td></tr>
+                    <tr><td><code>num</code></td><td data-zh="整数打包、上下界与夹取" data-en="Integer packing, bounds and clamping">整数打包、上下界与夹取</td></tr>
+                    <tr><td><code>numfmt</code></td><td data-zh="纯数字格式化（整数 → 文本）——<strong>整棵树最底下的一层</strong>" data-en="Pure number formatting (integers to text) — <strong>the bottom of the whole stack</strong>">纯数字格式化（整数 → 文本）——<strong>整棵树最底下的一层</strong></td></tr>
+                    <tr><td><code>round</code></td><td data-zh="取整语义（浮点四种模式 + 整数除法 / 倍数）" data-en="Rounding semantics (the four float modes, plus integer division and multiples)">取整语义（浮点四种模式 + 整数除法 / 倍数）</td></tr>
+                    <tr><td><code>comb</code></td><td data-zh="组合数学（阶乘 / 二项式 / 排列 / 卡特兰 / 斯特林）" data-en="Combinatorics (factorials, binomials, permutations, Catalan, Stirling)">组合数学（阶乘 / 二项式 / 排列 / 卡特兰 / 斯特林）</td></tr>
+                    <tr><td><code>f64</code></td><td data-zh="双精度浮点算术（IEEE 754，软实现）" data-en="Double-precision float arithmetic (IEEE 754, in software)">双精度浮点算术（IEEE 754，软实现）</td></tr>
+                    <tr><td><code>f64bits</code></td><td data-zh="IEEE 754 双精度的位级视图" data-en="A bit-level view of an IEEE 754 double">IEEE 754 双精度的位级视图</td></tr>
+                    <tr><td><code>f64conv</code></td><td data-zh="整数 ↔ 浮点，以及单精度 ↔ 双精度" data-en="Integers to floats and back; single to double and back">整数 ↔ 浮点，以及单精度 ↔ 双精度</td></tr>
+                    <tr><td><code>f64fmt</code></td><td data-zh="浮点的十进制文本（dtoa）" data-en="Floats as decimal text (dtoa)">浮点的十进制文本（dtoa）</td></tr>
+                    <tr><td><code>mathf</code></td><td data-zh="浮点超越函数（sqrt / exp / log / 三角）" data-en="Float transcendental functions (sqrt, exp, log, trigonometry)">浮点超越函数（sqrt / exp / log / 三角）</td></tr>
+                    <tr><td><code>fixed</code></td><td data-zh="定点小数（i64，六位小数）" data-en="Fixed-point decimals (i64, six fractional digits)">定点小数（i64，六位小数）</td></tr>
+                    <tr><td><code>rational</code></td><td data-zh="精确分数（有理数）算术" data-en="Exact fraction (rational) arithmetic">精确分数（有理数）算术</td></tr>
+                    <tr><td><code>bigint</code></td><td data-zh="任意精度无符号整数" data-en="Arbitrary-precision unsigned integers">任意精度无符号整数</td></tr>
+                    <tr><td><code>bigdec</code></td><td data-zh="十进制定点大数（系数 + 标度）" data-en="Large decimal fixed-point numbers (coefficient plus scale)">十进制定点大数（系数 + 标度）</td></tr>
+                    <tr><td><code>wide</code></td><td data-zh="64 位之上的算术（128 位积、128/64 除、跨字移位、位计数）" data-en="Arithmetic beyond 64 bits (128-bit products, 128/64 division, cross-word shifts, bit counts)">64 位之上的算术（128 位积、128/64 除、跨字移位、位计数）</td></tr>
+                    <tr><td><code>matrix</code></td><td data-zh="稠密矩阵（i64，行主序）" data-en="Dense matrices (i64, row-major)">稠密矩阵（i64，行主序）</td></tr>
+                    <tr><td><code>stats</code></td><td data-zh="基本统计量（均值 / 方差 / 中位数 / 分位数 / 直方图 / 相关系数）" data-en="Basic statistics (mean, variance, median, quantiles, histograms, correlation)">基本统计量（均值 / 方差 / 中位数 / 分位数 / 直方图 / 相关系数）</td></tr>
+                    <tr><td><code>noise</code></td><td data-zh="定点值噪声 / Perlin 噪声 / 分形叠加（fbm）" data-en="Value noise, Perlin noise and fractal sums (fbm)">定点值噪声 / Perlin 噪声 / 分形叠加（fbm）</td></tr>
+                    <tr><td><code>interp</code></td><td data-zh="定点插值与缓动（t 是千分比 0..1024）" data-en="Fixed-point interpolation and easing (t is per-mille, 0..1024)">定点插值与缓动（t 是千分比 0..1024）</td></tr>
+                    <tr><td><code>rand</code></td><td data-zh="确定性伪随机（xorshift）" data-en="Deterministic pseudorandom (xorshift)">确定性伪随机（xorshift）</td></tr>
+                    <tr><td><code>rng</code></td><td data-zh="确定性伪随机（splitmix64 播种 + xoshiro256&#42;&#42; 生成 + 无偏取模 + 洗牌）" data-en="Deterministic pseudorandom (splitmix64 seeding, xoshiro256&#42;&#42; generation, unbiased modulo, shuffling)">确定性伪随机（splitmix64 播种 + xoshiro256** 生成 + 无偏取模 + 洗牌）</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h3 class="h3" data-zh="内存、缓冲与容器" data-en="Memory, buffers and containers">内存、缓冲与容器</h3>
+              <div class="table-wrap">
+                <table>
+                  <tbody>
+                    <tr><td><code>mem</code></td><td data-zh="多字节读写与块操作" data-en="Multi-byte reads and writes, and block operations">多字节读写与块操作</td></tr>
+                    <tr><td><code>endian</code></td><td data-zh="字节序读写与翻转" data-en="Endian reads, writes and swaps">字节序读写与翻转</td></tr>
+                    <tr><td><code>bit</code></td><td data-zh="位操作" data-en="Bit operations">位操作</td></tr>
+                    <tr><td><code>atomics</code></td><td data-zh="原子操作：有什么、缺什么、缺的怎么替" data-en="Atomics: what exists, what does not, and what to use instead">原子操作：有什么、缺什么、缺的怎么替</td></tr>
+                    <tr><td><code>arena</code></td><td data-zh="基于调用方缓冲的 bump 分配器" data-en="A bump allocator over a caller-supplied buffer">基于调用方缓冲的 bump 分配器</td></tr>
+                    <tr><td><code>mall</code></td><td data-zh="空闲块分配器（在调用方给的 arena 上）" data-en="A free-list allocator (over an arena the caller provides)">空闲块分配器（在调用方给的 arena 上）</td></tr>
+                    <tr><td><code>pool</code></td><td data-zh="定长对象池（slab）" data-en="A fixed-size object pool (slab)">定长对象池（slab）</td></tr>
+                    <tr><td><code>memdbg</code></td><td data-zh="分配记账与哨兵" data-en="Allocation accounting and sentinels">分配记账与哨兵</td></tr>
+                    <tr><td><code>buf</code></td><td data-zh="有容量检查的字节构建器" data-en="A byte builder with capacity checks">有容量检查的字节构建器</td></tr>
+                    <tr><td><code>vec</code></td><td data-zh="u32 动态数组（调用方持有缓冲）" data-en="A dynamic u32 array (caller owns the buffer)">u32 动态数组（调用方持有缓冲）</td></tr>
+                    <tr><td><code>deque</code></td><td data-zh="双端队列（环形缓冲）" data-en="A double-ended queue (ring buffer)">双端队列（环形缓冲）</td></tr>
+                    <tr><td><code>ring</code></td><td data-zh="环形缓冲（FIFO，调用方持有数组）" data-en="A ring buffer (FIFO, caller owns the array)">环形缓冲（FIFO，调用方持有数组）</td></tr>
+                    <tr><td><code>ilist</code></td><td data-zh="侵入式双向链表（节点池在调用方的缓冲里）" data-en="An intrusive doubly-linked list (node pool in the caller's buffer)">侵入式双向链表（节点池在调用方的缓冲里）</td></tr>
+                    <tr><td><code>map</code></td><td data-zh="开放寻址哈希表（u64 → u64）" data-en="An open-addressing hash map (u64 to u64)">开放寻址哈希表（u64 → u64）</td></tr>
+                    <tr><td><code>mapstr</code></td><td data-zh="字符串键哈希表（字节串 → u64）" data-en="A string-keyed hash map (byte string to u64)">字符串键哈希表（字节串 → u64）</td></tr>
+                    <tr><td><code>set</code></td><td data-zh="哈希集合（u64）" data-en="A hash set (u64)">哈希集合（u64）</td></tr>
+                    <tr><td><code>lru</code></td><td data-zh="LRU 缓存（开放寻址哈希 + 双向链表，节点用下标不用指针）" data-en="An LRU cache (open addressing plus a linked list, nodes by index rather than pointer)">LRU 缓存（开放寻址哈希 + 双向链表，节点用下标不用指针）</td></tr>
+                    <tr><td><code>trie</code></td><td data-zh="前缀树（字节串键）" data-en="A prefix tree (byte-string keys)">前缀树（字节串键）</td></tr>
+                    <tr><td><code>bst</code></td><td data-zh="二叉搜索树（有序映射，节点池在调用方的缓冲里）" data-en="A binary search tree (ordered map, node pool in the caller's buffer)">二叉搜索树（有序映射，节点池在调用方的缓冲里）</td></tr>
+                    <tr><td><code>heap</code></td><td data-zh="二叉最小堆（优先队列）" data-en="A binary min-heap (priority queue)">二叉最小堆（优先队列）</td></tr>
+                    <tr><td><code>bitset</code></td><td data-zh="位图（调用方持有字节缓冲）" data-en="A bit set (caller owns the byte buffer)">位图（调用方持有字节缓冲）</td></tr>
+                    <tr><td><code>flags</code></td><td data-zh="位标志集合（通用小位集工具）" data-en="A bit-flag set (a general small-bitset tool)">位标志集合（通用小位集工具）</td></tr>
+                    <tr><td><code>bloom</code></td><td data-zh="布隆过滤器（位数组 + k 个哈希）" data-en="A Bloom filter (bit array plus k hashes)">布隆过滤器（位数组 + k 个哈希）</td></tr>
+                    <tr><td><code>intern</code></td><td data-zh="字符串驻留（string interning）" data-en="String interning">字符串驻留（string interning）</td></tr>
+                    <tr><td><code>unionfind</code></td><td data-zh="并查集（不相交集合；按秩合并 + 路径压缩）" data-en="Union-find (disjoint sets; union by rank with path compression)">并查集（不相交集合；按秩合并 + 路径压缩）</td></tr>
+                    <tr><td><code>fenwick</code></td><td data-zh="树状数组 / BIT（单点加 + 前缀和）" data-en="A Fenwick tree (point add, prefix sum)">树状数组 / BIT（单点加 + 前缀和）</td></tr>
+                    <tr><td><code>graph</code></td><td data-zh="图的基础表示与遍历" data-en="Basic graph representation and traversal">图的基础表示与遍历</td></tr>
+                    <tr><td><code>shortest</code></td><td data-zh="最短路：Dijkstra / Bellman-Ford / Floyd-Warshall" data-en="Shortest paths: Dijkstra, Bellman-Ford, Floyd-Warshall">最短路：Dijkstra / Bellman-Ford / Floyd-Warshall</td></tr>
+                    <tr><td><code>mst</code></td><td data-zh="最小生成树：Kruskal 与 Prim" data-en="Minimum spanning trees: Kruskal and Prim">最小生成树：Kruskal 与 Prim</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h3 class="h3" data-zh="文本与字符串" data-en="Text and strings">文本与字符串</h3>
+              <div class="table-wrap">
+                <table>
+                  <tbody>
+                    <tr><td><code>utf8</code></td><td data-zh="UTF-8 编解码与码点计数" data-en="UTF-8 encode and decode, and code-point counting">UTF-8 编解码与码点计数</td></tr>
+                    <tr><td><code>char</code></td><td data-zh="字节分类与大小写" data-en="Byte classification and case">字节分类与大小写</td></tr>
+                    <tr><td><code>case</code></td><td data-zh="Unicode 简单大小写映射与不区分大小写比较" data-en="Unicode simple case mapping and case-insensitive comparison">Unicode 简单大小写映射与不区分大小写比较</td></tr>
+                    <tr><td><code>text</code></td><td data-zh="字节段的比较与查找" data-en="Comparing and searching byte spans">字节段的比较与查找</td></tr>
+                    <tr><td><code>split</code></td><td data-zh="按分隔符切分" data-en="Splitting on a delimiter">按分隔符切分</td></tr>
+                    <tr><td><code>trim</code></td><td data-zh="去空白" data-en="Trimming whitespace">去空白</td></tr>
+                    <tr><td><code>quote</code></td><td data-zh="转义与反转义" data-en="Escaping and unescaping">转义与反转义</td></tr>
+                    <tr><td><code>line</code></td><td data-zh="按行遍历" data-en="Iterating by line">按行遍历</td></tr>
+                    <tr><td><code>bufio</code></td><td data-zh="缓冲读：行切分 + 环形缓冲" data-en="Buffered reading: line splitting and a ring buffer">缓冲读：行切分 + 环形缓冲</td></tr>
+                    <tr><td><code>parse</code></td><td data-zh="文本 → 整数" data-en="Text to integers">文本 → 整数</td></tr>
+                    <tr><td><code>path</code></td><td data-zh="路径切分" data-en="Splitting paths">路径切分</td></tr>
+                    <tr><td><code>glob</code></td><td data-zh="glob 通配匹配（* ? [...] \），含路径语义" data-en="glob matching (*, ?, [...], backslash), with path semantics">glob 通配匹配（* ? [...] \），含路径语义</td></tr>
+                    <tr><td><code>search</code></td><td data-zh="文本搜索：朴素 / KMP / Boyer-Moore-Horspool" data-en="Text search: naive, KMP, Boyer-Moore-Horspool">文本搜索：朴素 / KMP / Boyer-Moore-Horspool</td></tr>
+                    <tr><td><code>hash</code></td><td data-zh="非加密哈希" data-en="Non-cryptographic hashing">非加密哈希</td></tr>
+                    <tr><td><code>hashx</code></td><td data-zh="非加密哈希（FNV-1a / xxHash32）+ 一致性哈希环" data-en="Non-cryptographic hashing (FNV-1a, xxHash32) plus a consistent-hash ring">非加密哈希（FNV-1a / xxHash32）+ 一致性哈希环</td></tr>
+                    <tr><td><code>fmt</code></td><td data-zh="对齐与填充" data-en="Alignment and padding">对齐与填充</td></tr>
+                    <tr><td><code>table</code></td><td data-zh="对齐表格渲染（列宽 + 填充 + 分隔线）" data-en="Aligned table rendering (column widths, padding, rules)">对齐表格渲染（列宽 + 填充 + 分隔线）</td></tr>
+                    <tr><td><code>width</code></td><td data-zh="终端里的显示宽度（东亚宽度）" data-en="Display width in a terminal (East Asian widths)">终端里的显示宽度（东亚宽度）</td></tr>
+                    <tr><td><code>wrap</code></td><td data-zh="按显示宽度折行（word wrap）" data-en="Wrapping to a display width">按显示宽度折行（word wrap）</td></tr>
+                    <tr><td><code>word</code></td><td data-zh="排版语义上的「词」（word segmentation）" data-en="Words in the typographic sense (word segmentation)">排版语义上的「词」（word segmentation）</td></tr>
+                    <tr><td><code>sort</code></td><td data-zh="u32 数组排序（原地）" data-en="Sorting a u32 array in place">u32 数组排序（原地）</td></tr>
+                    <tr><td><code>bsearch</code></td><td data-zh="已排序 u32 数组上的二分" data-en="Binary search over a sorted u32 array">已排序 u32 数组上的二分</td></tr>
+                    <tr><td><code>udiff</code></td><td data-zh="行级差异（LCS + 统一 diff）" data-en="Line-level diffing (LCS plus unified diff)">行级差异（LCS + 统一 diff）</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h3 class="h3" data-zh="摘要、校验与压缩" data-en="Digests, checksums and compression">摘要、校验与压缩</h3>
+              <div class="table-wrap">
+                <table>
+                  <tbody>
+                    <tr><td><code>sha256</code></td><td data-zh="SHA-256（FIPS 180-4）" data-en="SHA-256 (FIPS 180-4)">SHA-256（FIPS 180-4）</td></tr>
+                    <tr><td><code>sha1</code></td><td data-zh="SHA-1（FIPS 180-4）" data-en="SHA-1 (FIPS 180-4)">SHA-1（FIPS 180-4）</td></tr>
+                    <tr><td><code>sha512</code></td><td data-zh="SHA-512（FIPS 180-4）" data-en="SHA-512 (FIPS 180-4)">SHA-512（FIPS 180-4）</td></tr>
+                    <tr><td><code>md5</code></td><td data-zh="MD5（RFC 1321）" data-en="MD5 (RFC 1321)">MD5（RFC 1321）</td></tr>
+                    <tr><td><code>hmac</code></td><td data-zh="HMAC（RFC 2104）" data-en="HMAC (RFC 2104)">HMAC（RFC 2104）</td></tr>
+                    <tr><td><code>kdf</code></td><td data-zh="密钥派生（PBKDF2 与 HKDF，都基于 HMAC-SHA256）" data-en="Key derivation (PBKDF2 and HKDF, both over HMAC-SHA256)">密钥派生（PBKDF2 与 HKDF，都基于 HMAC-SHA256）</td></tr>
+                    <tr><td><code>crc32</code></td><td data-zh="CRC-32（IEEE 802.3，反射多项式 0xEDB88320）" data-en="CRC-32 (IEEE 802.3, reflected polynomial 0xEDB88320)">CRC-32（IEEE 802.3，反射多项式 0xEDB88320）</td></tr>
+                    <tr><td><code>crc32c</code></td><td data-zh="CRC-32 的几种参数" data-en="Several CRC-32 parameterisations">CRC-32 的几种参数</td></tr>
+                    <tr><td><code>crc16</code></td><td data-zh="CRC-16 的几种常见参数" data-en="Several common CRC-16 parameterisations">CRC-16 的几种常见参数</td></tr>
+                    <tr><td><code>adler32</code></td><td data-zh="Adler-32" data-en="Adler-32">Adler-32</td></tr>
+                    <tr><td><code>sum</code></td><td data-zh="加法族校验和（Fletcher / 反码和 / 字节和 / 异或）" data-en="Additive checksums (Fletcher, ones-complement sum, byte sum, xor)">加法族校验和（Fletcher / 反码和 / 字节和 / 异或）</td></tr>
+                    <tr><td><code>deflate</code></td><td data-zh="DEFLATE 压缩（RFC 1951）" data-en="DEFLATE compression (RFC 1951)">DEFLATE 压缩（RFC 1951）</td></tr>
+                    <tr><td><code>inflate</code></td><td data-zh="DEFLATE 解压（RFC 1951）" data-en="DEFLATE decompression (RFC 1951)">DEFLATE 解压（RFC 1951）</td></tr>
+                    <tr><td><code>zlibc</code></td><td data-zh="zlib（RFC 1950）容器：头 + DEFLATE 数据 + 大端 Adler-32" data-en="The zlib container (RFC 1950): header, DEFLATE data, big-endian Adler-32">zlib（RFC 1950）容器：头 + DEFLATE 数据 + 大端 Adler-32</td></tr>
+                    <tr><td><code>lzss</code></td><td data-zh="LZSS（滑动窗口 + 长度 / 距离对）" data-en="LZSS (sliding window with length/distance pairs)">LZSS（滑动窗口 + 长度 / 距离对）</td></tr>
+                    <tr><td><code>huffman</code></td><td data-zh="霍夫曼编码：频率表 → 码长 → 规范码" data-en="Huffman coding: frequency table, code lengths, canonical codes">霍夫曼编码：频率表 → 码长 → 规范码</td></tr>
+                    <tr><td><code>rle</code></td><td data-zh="行程编码（RLE）的两种常见形态" data-en="Run-length encoding in its two common shapes">行程编码（RLE）的两种常见形态</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h3 class="h3" data-zh="编解码与格式（全部游标式读取）" data-en="Codecs and formats (all cursor-style readers)">编解码与格式（全部游标式读取）</h3>
+              <div class="prose">
+                <p data-zh-html="这一组有一个共同点：<strong>值留在原文里，不建树</strong>。读取是游标式的——你拿着原文和一个位置往前走，而不是先把整个文档变成一个对象图。没有 DOM，因为建 DOM 要分配，而这个语言的空间是调用方给的。" data-en-html="This group shares one property: <strong>values stay in the source text; no tree is built.</strong> Reading is cursor-style — you hold the original bytes and a position and move forward, rather than turning the document into an object graph first. There is no DOM, because building one means allocating, and in this language space is something the caller supplies.">
+                  这一组有一个共同点：<strong>值留在原文里，不建树</strong>。读取是游标式的——你拿着原文和一个位置往前走，而不是先把整个文档变成一个对象图。没有 DOM，因为建 DOM 要分配，而这个语言的空间是调用方给的。
+                </p>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <tbody>
+                    <tr><td><code>base64</code></td><td data-zh="Base64（标准字母表，带 = 填充）" data-en="Base64 (standard alphabet, with = padding)">Base64（标准字母表，带 = 填充）</td></tr>
+                    <tr><td><code>base32</code></td><td data-zh="Base32（RFC 4648，字母表 A-Z2-7）" data-en="Base32 (RFC 4648, alphabet A-Z2-7)">Base32（RFC 4648，字母表 A-Z2-7）</td></tr>
+                    <tr><td><code>base58</code></td><td data-zh="Base58（Bitcoin 字母表）" data-en="Base58 (Bitcoin alphabet)">Base58（Bitcoin 字母表）</td></tr>
+                    <tr><td><code>base85</code></td><td data-zh="Base85（Z85 字母表，4 字节 → 5 字符）" data-en="Base85 (Z85 alphabet, four bytes to five characters)">Base85（Z85 字母表，4 字节 → 5 字符）</td></tr>
+                    <tr><td><code>hex</code></td><td data-zh="十六进制编解码与转储" data-en="Hex encoding, decoding and dumping">十六进制编解码与转储</td></tr>
+                    <tr><td><code>hexdump</code></td><td data-zh="十六进制转储（hexdump -C / xxd 风格）" data-en="Hex dumps in the hexdump -C / xxd style">十六进制转储（hexdump -C / xxd 风格）</td></tr>
+                    <tr><td><code>url</code></td><td data-zh="URL 百分号编码 / 解码 + 查询串取值" data-en="URL percent encoding and decoding, plus query-string lookup">URL 百分号编码 / 解码 + 查询串取值</td></tr>
+                    <tr><td><code>varint</code></td><td data-zh="LEB128 变长整数 + zigzag" data-en="LEB128 variable-length integers with zigzag">LEB128 变长整数 + zigzag</td></tr>
+                    <tr><td><code>jsn</code></td><td data-zh="JSON 读取（游标式，不建 DOM）" data-en="JSON reading (cursor-style, no DOM)">JSON 读取（游标式，不建 DOM）</td></tr>
+                    <tr><td><code>cbor</code></td><td data-zh="CBOR 读取（RFC 8949，游标式）" data-en="CBOR reading (RFC 8949, cursor-style)">CBOR 读取（RFC 8949，游标式）</td></tr>
+                    <tr><td><code>mpk</code></td><td data-zh="MessagePack 读取（游标式）" data-en="MessagePack reading (cursor-style)">MessagePack 读取（游标式）</td></tr>
+                    <tr><td><code>asn1</code></td><td data-zh="ASN.1 DER 读取（游标式）" data-en="ASN.1 DER reading (cursor-style)">ASN.1 DER 读取（游标式）</td></tr>
+                    <tr><td><code>toml</code></td><td data-zh="TOML 读取（游标式）" data-en="TOML reading (cursor-style)">TOML 读取（游标式）</td></tr>
+                    <tr><td><code>ini</code></td><td data-zh="INI / 键值配置文件" data-en="INI and key/value config files">INI / 键值配置文件</td></tr>
+                    <tr><td><code>csv</code></td><td data-zh="CSV 字段的读写（RFC 4180 的那套引号规则）" data-en="Reading and writing CSV fields (the RFC 4180 quoting rules)">CSV 字段的读写（RFC 4180 的那套引号规则）</td></tr>
+                    <tr><td><code>ansi</code></td><td data-zh="ANSI 转义序列（SGR / 光标 / 屏幕）+ 流解析" data-en="ANSI escape sequences (SGR, cursor, screen) plus stream parsing">ANSI 转义序列（SGR / 光标 / 屏幕）+ 流解析</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h3 class="h3" data-zh="图像与终端" data-en="Images and terminals">图像与终端</h3>
+              <div class="table-wrap">
+                <table>
+                  <tbody>
+                    <tr><td><code>raster</code></td><td data-zh="像素缓冲：填充 / 矩形 / 直线 / 圆" data-en="A pixel buffer: fills, rectangles, lines, circles">像素缓冲：填充 / 矩形 / 直线 / 圆</td></tr>
+                    <tr><td><code>blit</code></td><td data-zh="位块传送：拷贝 / alpha 混合 / 缩放 / 着色 / 颜色键" data-en="Bit blits: copy, alpha blend, scale, tint, colour key">位块传送：拷贝 / alpha 混合 / 缩放 / 着色 / 颜色键</td></tr>
+                    <tr><td><code>font</code></td><td data-zh="8×8 点阵字体与文字绘制" data-en="An 8×8 bitmap font and text drawing">8×8 点阵字体与文字绘制</td></tr>
+                    <tr><td><code>bmp</code></td><td data-zh="BMP 读写（只做未压缩 24/32 位）" data-en="BMP reading and writing (uncompressed 24/32-bit only)">BMP 读写（只做未压缩 24/32 位）</td></tr>
+                    <tr><td><code>png</code></td><td data-zh="PNG 容器：签名 / 块遍历 / IHDR / 扫描线反滤波" data-en="The PNG container: signature, chunk walking, IHDR, scanline unfiltering">PNG 容器：签名 / 块遍历 / IHDR / 扫描线反滤波</td></tr>
+                    <tr><td><code>qoi</code></td><td data-zh="QOI 图像格式（Quite Ok Image，规范 v1.0）" data-en="The QOI image format (Quite Ok Image, spec v1.0)">QOI 图像格式（Quite Ok Image，规范 v1.0）</td></tr>
+                    <tr><td><code>tui</code></td><td data-zh="终端界面：单元格网格 + 差异渲染 + 画框" data-en="Terminal UI: a cell grid, differential rendering, boxes">终端界面：单元格网格 + 差异渲染 + 画框</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h3 class="h3" data-zh="时间、系统与其他" data-en="Time, system and the rest">时间、系统与其他</h3>
+              <div class="table-wrap">
+                <table>
+                  <tbody>
+                    <tr><td><code>civil</code></td><td data-zh="公历日期 / 时间的纯整数换算" data-en="Gregorian date and time conversion in pure integers">公历日期 / 时间的纯整数换算</td></tr>
+                    <tr><td><code>clock</code></td><td data-zh="时间的文本表示与时长算术" data-en="Textual time representation and duration arithmetic">时间的文本表示与时长算术</td></tr>
+                    <tr><td><code>assert</code></td><td data-zh="断言与定位" data-en="Assertions and location">断言与定位</td></tr>
+                    <tr><td><code>out</code></td><td data-zh="游标式输出层（可移植层）" data-en="A cursor-style output layer (in the portable layer)">游标式输出层（可移植层）</td></tr>
+                    <tr><td><code>once</code></td><td data-zh="一次性初始化（赢家选举 + 三态迁移）" data-en="One-time initialisation (winner election with a three-state transition)">一次性初始化（赢家选举 + 三态迁移）</td></tr>
+                    <tr><td><code>spin</code></td><td data-zh="ticket 锁 / 有界自旋等待 / 计数信号量 / latch" data-en="Ticket locks, bounded spin-waits, counting semaphores, latches">ticket 锁 / 有界自旋等待 / 计数信号量 / latch</td></tr>
+                    <tr><td><code>coro</code></td><td data-zh="可恢复的状态机（不是有独立栈的协程）" data-en="A resumable state machine (not a coroutine with its own stack)">可恢复的状态机（<strong>不是</strong>有独立栈的协程）</td></tr>
+                    <tr><td><code>sched</code></td><td data-zh="数据驱动的合作式调度表（不是抢占式调度器）" data-en="A data-driven cooperative schedule table (not a preemptive scheduler)">数据驱动的合作式调度表（<strong>不是</strong>抢占式调度器）</td></tr>
+                    <tr><td><code>perm</code></td><td data-zh="权限位 ↔ rwxr-xr-x 文本" data-en="Permission bits to and from rwxr-xr-x text">权限位 ↔ rwxr-xr-x 文本</td></tr>
+                    <tr><td><code>proc</code></td><td data-zh="/proc/self/* 的解析" data-en="Parsing /proc/self/*">/proc/self/* 的解析</td></tr>
+                    <tr><td><code>env</code></td><td data-zh="环境块 / argv 的解析（\0 分隔的连续字节区）" data-en="Parsing the environment block and argv (a contiguous NUL-separated region)">环境块 / argv 的解析（\0 分隔的连续字节区）</td></tr>
+                    <tr><td><code>fwalk</code></td><td data-zh="linux_dirent64 记录的解析与路径拼接" data-en="Parsing linux_dirent64 records and joining paths">linux_dirent64 记录的解析与路径拼接</td></tr>
+                    <tr><td><code>tmpf</code></td><td data-zh="临时文件名的生成（没有 mkdir/unlink/getpid 时怎么不撞名）" data-en="Generating temporary file names (how not to collide without mkdir, unlink or getpid)">临时文件名的生成（没有 mkdir/unlink/getpid 时怎么不撞名）</td></tr>
+                    <tr><td><code>std</code></td><td data-zh="包入口（把 127 个模块拉进同一个单元）" data-en="The package entry (pulls the 127 modules into one unit)">包入口（把 127 个模块拉进同一个单元）</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h3 class="h3" data-zh="宿主层 · host" data-en="The host layer">宿主层 · host</h3>
+              <div class="table-wrap">
+                <table>
+                  <tbody>
+                    <tr><td><code>io</code></td><td data-zh="Loment 的第一个库：宿主侧 IO 与字节原语" data-en="Loment's first library: host-side IO and byte primitives">Loment 的第一个库：宿主侧 IO 与字节原语</td></tr>
+                    <tr><td><code>fs</code></td><td data-zh="整文件读写（在 io 之上）" data-en="Whole-file reads and writes (on top of io)">整文件读写（在 io 之上）</td></tr>
+                    <tr><td><code>argv</code></td><td data-zh="进程启动参数" data-en="Process start arguments">进程启动参数</td></tr>
+                    <tr><td><code>dir</code></td><td data-zh="目录遍历（getdents64）" data-en="Directory traversal (getdents64)">目录遍历（getdents64）</td></tr>
+                    <tr><td><code>stat</code></td><td data-zh="文件元信息（newfstatat）" data-en="File metadata (newfstatat)">文件元信息（newfstatat）</td></tr>
+                    <tr><td><code>log</code></td><td data-zh="工具链那套诊断行的约定" data-en="The diagnostic-line convention the toolchain uses">工具链那套诊断行的约定</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 data-zh="几条贯穿全库的约定" data-en="Conventions that run through the whole library">几条贯穿全库的约定</h2>
+              <ul class="list">
+                <li><b data-zh="公开名字带模块前缀" data-en="Public names carry a module prefix">公开名字带模块前缀</b> <span data-zh-html="—— <code>hex_*</code>、<code>crc32_*</code>、<code>math_*</code>、<code>out_*</code>。因为发射的符号名是平的、一个单元里顶层名字必须唯一，<strong>前缀是这条约束的纪律</strong>，不是命名癖好。" data-en-html=" — <code>hex_*</code>, <code>crc32_*</code>, <code>math_*</code>, <code>out_*</code>. Because emitted symbols are flat and top-level names must be unique within a unit, <strong>the prefix is the discipline that constraint demands</strong>, not a naming taste.">—— <code>hex_*</code>、<code>crc32_*</code>、<code>math_*</code>、<code>out_*</code>。因为发射的符号名是平的、一个单元里顶层名字必须唯一，<strong>前缀是这条约束的纪律</strong>，不是命名癖好。</span></li>
+                <li><b data-zh="容器不收自己的账" data-en="Containers do not own their memory">容器不收自己的账</b> <span data-zh-html="—— <code>vec</code> / <code>arena</code> / <code>bst</code> / <code>pool</code> / <code>ring</code> / <code>bitset</code> 一律<strong>由调用方持有缓冲</strong>。bump 堆只有 64 KiB，库自己分配会把上限摊到每一个使用者身上。" data-en-html=" — <code>vec</code>, <code>arena</code>, <code>bst</code>, <code>pool</code>, <code>ring</code> and <code>bitset</code> all <strong>take the buffer from the caller</strong>. The bump heap is 64 KiB, and a library that allocates for itself spreads that ceiling onto every consumer.">—— <code>vec</code> / <code>arena</code> / <code>bst</code> / <code>pool</code> / <code>ring</code> / <code>bitset</code> 一律<strong>由调用方持有缓冲</strong>。bump 堆只有 64 KiB，库自己分配会把上限摊到每一个使用者身上。</span></li>
+                <li><b data-zh="格式读取是游标式的" data-en="Format readers are cursor-style">格式读取是游标式的</b> <span data-zh-html="—— <code>jsn</code> / <code>cbor</code> / <code>mpk</code> / <code>asn1</code> / <code>toml</code> 都不建树。同一个理由：建树要分配。" data-en-html=" — <code>jsn</code>, <code>cbor</code>, <code>mpk</code>, <code>asn1</code> and <code>toml</code> build no tree. Same reason: a tree means allocating.">—— <code>jsn</code> / <code>cbor</code> / <code>mpk</code> / <code>asn1</code> / <code>toml</code> 都不建树。同一个理由：建树要分配。</span></li>
+                <li><b data-zh="先定义后使用" data-en="Define before use">先定义后使用</b> <span data-zh-html="—— 语言要求如此（skill §6.7）。<code>hex.lomt</code> 里 <code>hex_val</code> 排在 <code>hex_decode</code> 前面，那不是风格，是编译器会拦。" data-en-html=" — the language requires it. In <code>hex.lomt</code>, <code>hex_val</code> sits before <code>hex_decode</code>; that is not style, it is what the compiler enforces.">—— 语言要求如此。<code>hex.lomt</code> 里 <code>hex_val</code> 排在 <code>hex_decode</code> 前面，那不是风格，是编译器会拦。</span></li>
+                <li><b data-zh="名字里有「不是」的东西会写明" data-en="Modules say what they are not">名字里有「不是」的东西会写明</b> <span data-zh-html="—— <code>coro</code> 的文件头第一句就是「<strong>不是</strong>有独立栈的协程」，<code>sched</code> 是「<strong>不是</strong>抢占式调度器」。免得有人按名字想当然。" data-en-html=" — <code>coro</code>'s header opens with “<strong>not</strong> a coroutine with its own stack”, and <code>sched</code> with “<strong>not</strong> a preemptive scheduler”. So that nobody assumes from the name.">—— <code>coro</code> 的文件头第一句就是「<strong>不是</strong>有独立栈的协程」，<code>sched</code> 是「<strong>不是</strong>抢占式调度器」。免得有人按名字想当然。</span></li>
+              </ul>
+
+              <div class="note note--steel">
+                <strong data-zh="想找某一个函数：" data-en="Looking for a particular function: ">想找某一个函数：</strong>
+                <span data-zh-html="每个模块的文件头写着它的约定与命名，<code>pub fn</code> 上面那行 <code>///</code> 是文档注释，<code>loment doc FILE</code> 会把它们抽出来。<a href=&quot;../libraries/&quot;>写一个 Loment 库</a> 讲的是一个库该怎么组织，<a href=&quot;../lompi/&quot;>Lompi</a> 讲的是怎么把它解析、发锁、物化。" data-en-html="Each module's header states its conventions and naming, the <code>///</code> line above a <code>pub fn</code> is a doc comment, and <code>loment doc FILE</code> extracts them. <a href=&quot;../libraries/&quot;>Writing a Loment library</a> covers how to organise one; <a href=&quot;../lompi/&quot;>Lompi</a> covers resolving, locking and materialising it.">
+                  每个模块的文件头写着它的约定与命名，<code>pub fn</code> 上面那行 <code>///</code> 是文档注释，<code>loment doc FILE</code> 会把它们抽出来。<a href="../libraries/">写一个 Loment 库</a> 讲的是一个库该怎么组织，<a href="../lompi/">Lompi</a> 讲的是怎么把它解析、发锁、物化。
+                </span>
+              </div>

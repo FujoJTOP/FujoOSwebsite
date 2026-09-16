@@ -84,6 +84,7 @@ const SECTIONS = [
       { slug: "loment", zh: "Loment 语言", en: "The Loment language" },
       { slug: "libraries", zh: "写一个 Loment 库", en: "Writing a Loment library" },
       { slug: "lompi", zh: "Lompi · 包管理器", en: "Lompi · the package manager" },
+      { slug: "std", zh: "官方库 · std 与 host", en: "Official libraries · std and host" },
       { slug: "freeze", zh: "冻结面", en: "The freeze surface" },
       { slug: "l0", zh: "L0 单一真源", en: "L0 source of truth" },
       { slug: "capability", zh: "能力域即语言构造", en: "Capability as a construct" },
@@ -559,6 +560,7 @@ function navLinks(up, current) {
       [
         [`${up}${AT.loment}`, "概览", "Overview"],
         [`${up}${AT.loment}lompi/`, "Lompi · 包管理器", "Lompi · the package manager"],
+        [`${up}${AT.docs}language/std/`, "标准库 · std 与 host", "Standard library · std and host"],
         [`${up}${AT.loment}early-use/`, "Early Use 报名", "Early Use sign-up"],
       ],
     ],
@@ -790,6 +792,7 @@ ${navLinks(up, `${up}${AT.docs}`)}
           <a href="${up}${AT.fuai}" data-zh="FUAI 安全体系" data-en="FUAI safety system">FUAI 安全体系</a>
           <a href="${up}${AT.loment}" data-zh="Loment · Potato 语言" data-en="Loment · Potato language">Loment · Potato 语言</a>
           <a href="${up}${AT.loment}lompi/" data-zh="— Lompi · 包管理器" data-en="— Lompi · the package manager">— Lompi · 包管理器</a>
+          <a href="${up}${AT.docs}language/std/" data-zh="— 标准库 · std 与 host" data-en="— Standard library · std and host">— 标准库 · std 与 host</a>
           <a href="${up}${AT.loment}early-use/" data-zh="— Early Use 报名" data-en="— Early Use sign-up">— Early Use 报名</a>
           <a href="${up}${AT.docs}" data-zh="文档" data-en="Documentation">文档</a>
           <a href="${up}${AT.start}" data-zh="构建与运行" data-en="Build and run">构建与运行</a>
@@ -947,6 +950,7 @@ ${navLinks(up, current)}
           <a href="${up}${AT.fuai}" data-zh="FUAI 安全体系" data-en="FUAI safety system">FUAI 安全体系</a>
           <a href="${up}${AT.loment}" data-zh="Loment · Potato 语言" data-en="Loment · Potato language">Loment · Potato 语言</a>
           <a href="${up}${AT.loment}lompi/" data-zh="— Lompi · 包管理器" data-en="— Lompi · the package manager">— Lompi · 包管理器</a>
+          <a href="${up}${AT.docs}language/std/" data-zh="— 标准库 · std 与 host" data-en="— Standard library · std and host">— 标准库 · std 与 host</a>
           <a href="${up}${AT.loment}early-use/" data-zh="— Early Use 报名" data-en="— Early Use sign-up">— Early Use 报名</a>
           <a href="${up}${AT.docs}" data-zh="文档" data-en="Documentation">文档</a>
           <a href="${up}${AT.news}" data-zh="新闻" data-en="News">新闻</a>
