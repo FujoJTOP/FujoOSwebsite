@@ -1,188 +1,106 @@
-<!--{"zh":"Loment 快速上手","en":"Loment quickstart","desc":"Loment 使用文档（Beta）：六十秒跑起来、最小程序、强制导出、能力域、测试与诊断。命令与输出均为实跑结果。","banner_zh":"快速上手 · Beta","banner_en":"Quickstart · Beta"}-->
+<!--{"zh":"Loment 快速上手","en":"Loment quickstart","desc":"Loment 使用文档（Beta）：怎么拿到它、六十秒跑起来、最小程序、能力域、诊断、38 条命令、以及从源码重建。语言与工具的命令与输出均为实跑结果。","banner_zh":"快速上手 · Beta","banner_en":"Quickstart · Beta"}-->
               <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="Loment 快速上手" data-en="Loment quickstart">Loment 快速上手</h1>
 
               <div class="note note--amber">
                 <strong data-zh="Beta。" data-en="Beta.">Beta。</strong>
-                <span data-zh="Loment 目前是 0.1.4 Alpha2.2：100 个里程碑完成 87 个（另有 8 项部分完成），语言已经完成并冻结（冻结面见 docs/158），但尚未向开发者发布。下面的命令今天可用。本页每一条命令与输出都是在仓库里实跑得到的，不是示意——如果哪条跟你跑出来的不一样，那是我们其中一方的版本不对，请以你的输出为准。" data-en=" Loment is at 0.1.4 Alpha2.2: 87 of 100 milestones done (8 more partial), the language complete and frozen (the freeze surface is docs/158), but not yet released to developers. The commands below work today. Every command and output on this page was actually run in the repository, not sketched — if one disagrees with what you get, one of us is on the wrong version; trust your output."> Loment 目前是 0.1.4 Alpha2.2：100 个里程碑完成 87 个（另有 8 项部分完成），语言已经完成并冻结（冻结面见 docs/158），但尚未向开发者发布。下面的命令今天可用。本页每一条命令与输出都是在仓库里实跑得到的，不是示意——如果哪条跟你跑出来的不一样，那是我们其中一方的版本不对，请以你的输出为准。</span>
+                <span data-zh="Loment 目前是 0.1.4 Alpha2.3：100 个里程碑完成 96 个（另有 2 项部分完成、1 项未达、1 项未开始），语言已经完成并冻结（冻结面见 docs/158），但尚未向开发者发布——未达的那一项（M100）就是发布与外部审计本身。下面的命令今天可用。本页语言与工具部分的每一条命令与输出都是在装好 0.1.4 Alpha2.3 的机器上实跑得到的，不是示意；安装那两行取自安装器自己的用法说明。如果哪条跟你跑出来的不一样，那是我们其中一方的版本不对，请以你的输出为准。" data-en=" Loment is at 0.1.4 Alpha2.3: 96 of 100 milestones done (2 more partial, 1 unmet, 1 not started), the language complete and frozen (the freeze surface is docs/158), but not yet released to developers — the unmet one (M100) is the release and its external audit. The commands below work today. Every command and output in the language and tool sections was actually run on a machine with 0.1.4 Alpha2.3 installed, not sketched; the two install lines are the installer's own usage. If one disagrees with what you get, one of us is on the wrong version; trust your output."> Loment 目前是 0.1.4 Alpha2.3：100 个里程碑完成 96 个（另有 2 项部分完成、1 项未达、1 项未开始），语言已经完成并冻结（冻结面见 docs/158），但尚未向开发者发布——未达的那一项（M100）就是发布与外部审计本身。下面的命令今天可用。本页语言与工具部分的每一条命令与输出都是在装好 0.1.4 Alpha2.3 的机器上实跑得到的，不是示意；安装那两行取自安装器自己的用法说明。如果哪条跟你跑出来的不一样，那是我们其中一方的版本不对，请以你的输出为准。</span>
               </div>
 
-              <h2 data-zh="前置" data-en="Prerequisites">前置</h2>
-              <div class="table-wrap">
-                <table>
-                  <thead>
-                    <tr>
-                      <th scope="col" data-zh="需要" data-en="Need">需要</th>
-                      <th scope="col" data-zh="什么时候需要" data-en="When you need it">什么时候需要</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><strong>clang</strong></td>
-                      <td data-zh-html="重建编译器、编译程序。<strong>这是地基语言</strong>，项目明确保留它——不打算去掉。" data-en-html="Rebuilding the compiler and compiling programs. <strong>This is the base language</strong>, deliberately kept — there is no plan to remove it.">重建编译器、编译程序。<strong>这是地基语言</strong>，项目明确保留它——不打算去掉。</td>
-                    </tr>
-                    <tr>
-                      <td><strong>POSIX sh</strong></td>
-                      <td data-zh-html="跑 <code>loment/bootstrap.sh</code>。整个引导脚本只用 <code>clang</code>、<code>sh</code> 和 <code>cmp</code>。" data-en-html="For <code>loment/bootstrap.sh</code>. The whole bootstrap uses only <code>clang</code>, <code>sh</code> and <code>cmp</code>.">跑 <code>loment/bootstrap.sh</code>。整个引导脚本只用 <code>clang</code>、<code>sh</code> 和 <code>cmp</code>。</td>
-                    </tr>
-                    <tr>
-                      <td><strong>rustc</strong></td>
-                      <td data-zh-html="只有要走<strong>转译路径</strong>（Loment → Rust）时。<code>loment test</code> 用它，所以在宿主上快速跑一段代码最省事。" data-en-html="Only for the <b>transpile path</b> (Loment → Rust). <code>loment test</code> uses it, which makes it the easiest way to run something on the host.">只有要走<strong>转译路径</strong>（Loment → Rust）时。<code>loment test</code> 用它，所以在宿主上快速跑一段代码最省事。</td>
-                    </tr>
-                    <tr>
-                      <td><strong>Python 3</strong></td>
-                      <td data-zh-html="只有跑测试判据、或使用尚未重写的工具（<code>lomdoc</code> / <code>loment_lsp</code> / <code>lompkg</code>）时才需要。<strong>从「重建或使用 Loment」出发的路径已经不含解释器</strong>；剩下的 Python 在开发期判据上，不在产品路径上。" data-en-html="Only for the test-side judgements, or for tools not yet rewritten (<code>lomdoc</code> / <code>loment_lsp</code> / <code>lompkg</code>). <b>The path from “rebuild or use Loment” no longer contains an interpreter</b>; what Python remains is dev-time judgement, not product path.">只有跑测试判据、或使用尚未重写的工具（<code>lomdoc</code> / <code>loment_lsp</code> / <code>lompkg</code>）时才需要。<strong>从「重建或使用 Loment」出发的路径已经不含解释器</strong>；剩下的 Python 在开发期判据上，不在产品路径上。</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-
-              <h2 data-zh="六十秒" data-en="Sixty seconds">六十秒</h2>
-              <p class="muted" data-zh-html="在仓库根目录下。先看这一条，因为它一次说明的东西最多：<strong>不经过任何解释器，把整个编译器重建出来</strong>。" data-en-html="From the repository root. Start here, because it says the most at once: <b>rebuild the entire compiler without going through an interpreter</b>.">
-                在仓库根目录下。先看这一条，因为它一次说明的东西最多：<strong>不经过任何解释器，把整个编译器重建出来</strong>。
+              <h2 data-zh="拿到它" data-en="Getting it">拿到它</h2>
+              <p class="muted" data-zh-html="包本身已经做好了：<strong>同一份 IR 各链一遍</strong>，Linux 出 ELF、Windows 出<strong>原生 PE</strong>（<code>.exe</code>），链接器是包里自带的 <code>loment-lomelf</code>。装完的机器上<strong>不需要 clang，不需要 WSL，也不需要 Python</strong>——<code>loment build</code> 在一台干净的 Windows 上开箱即用。" data-en-html="The package itself is done: <b>the same IR linked twice</b> — ELF on Linux, a <b>native PE</b> (<code>.exe</code>) on Windows — by the package's own <code>loment-lomelf</code>. An installed machine needs <b>no clang, no WSL and no Python</b>: <code>loment build</code> works out of the box on a clean Windows.">
+                包本身已经做好了：<strong>同一份 IR 各链一遍</strong>，Linux 出 ELF、Windows 出<strong>原生 PE</strong>（<code>.exe</code>），链接器是包里自带的 <code>loment-lomelf</code>。装完的机器上<strong>不需要 clang，不需要 WSL，也不需要 Python</strong>——<code>loment build</code> 在一台干净的 Windows 上开箱即用。
+              </p>
+              <p class="muted" data-zh-html="但它<strong>还没有公开的下载地址</strong>。发布口是两个私有库（<code>github.com/FujoJTOP/loment</code> 与 <code>github.com/FujoJTOP/lompi</code>），门是 M100 的外部审计——那一项作者无法自证。所以你现在要么手上已经有 Early Use 那份，要么从源码自己构建，见本页最后一节。" data-en-html="But it has <b>no public download yet</b>. The publishing outlets are two private repositories (<code>github.com/FujoJTOP/loment</code> and <code>github.com/FujoJTOP/lompi</code>), and the gate is M100's external audit — which the author cannot self-certify. So either you already have the Early Use package, or you build from source; see the last section.">
+                但它<strong>还没有公开的下载地址</strong>。发布口是两个私有库（<code>github.com/FujoJTOP/loment</code> 与 <code>github.com/FujoJTOP/lompi</code>），门是 M100 的外部审计——那一项作者无法自证。所以你现在要么手上已经有 Early Use 那份，要么从源码自己构建，见本页最后一节。
               </p>
               <div class="code">
                 <div class="code__bar">
-                  <span class="lang-tag">sh</span>
-                  <span data-zh="无解释器自举" data-en="interpreter-free bootstrap">无解释器自举</span>
+                  <span class="lang-tag">powershell</span>
+                  <span data-zh="Windows：解包后安装" data-en="Windows: install after unpacking">Windows：解包后安装</span>
                   <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
                 </div>
-                <pre>sh loment/bootstrap.sh
-
-<span class="c">== 1/4 clang(种子) -&gt; stage1
-== 2/4 stage1 编译 loment/selfhost/driver.lomt -&gt; 必须等于种子
-== 3/4 stage2 -&gt; stage3 定点
-== 4/4 stage1 与 stage2 对非自身入口一致
-SEED BOOTSTRAP OK: 只用 clang + sh (无 Python); 种子自复现 + 三阶段定点</span></pre>
+                <pre>powershell -File install.ps1
+<span class="c"># 默认装到 %LOCALAPPDATA%\Loment；-Prefix D:\Loment 可换
+# -NoPath 不加 PATH，-NoSkill 不装 agent 指南，-DryRun 先看要做什么</span></pre>
               </div>
-              <p class="small dim" data-zh-html="起点是一份<strong>固化的种子</strong>：参考实现为自举驱动发射的那份 IR——种子本身就是整个编译器。四条判据依次证明：种子能把自己编出来且逐字节相同；再链一轮仍是定点；换一个<strong>非自身</strong>的入口，两个阶段的产物也一致。最后一条是关键：定点不能是「只会编译自己」的巧合。" data-en-html="The starting point is a <b>frozen seed</b>: the IR the reference implementation emitted for the self-hosted driver — the seed <i>is</i> the whole compiler. Four checks then prove, in order, that the seed rebuilds itself byte-for-byte, that one more round is still a fixpoint, and that a <b>non-self</b> entry produces identical output at both stages. That last one matters: a fixpoint must not be a coincidence of only compiling itself.">
-                起点是一份<strong>固化的种子</strong>：参考实现为自举驱动发射的那份 IR——种子本身就是整个编译器。四条判据依次证明：种子能把自己编出来且逐字节相同；再链一轮仍是定点；换一个<strong>非自身</strong>的入口，两个阶段的产物也一致。最后一条是关键：定点不能是「只会编译自己」的巧合。
-              </p>
-
-              <p class="muted" style="margin-top: var(--s4)" data-zh-html="同一条脚本，带上一个入口，就是把它的 IR 打到 stdout —— 这就是<strong>用 Loment 编译 Loment 程序</strong>：" data-en-html="The same script, given an entry file, prints that file's IR to stdout — this is <b>Loment compiling a Loment program</b>:">
-                同一条脚本，带上一个入口，就是把它的 IR 打到 stdout —— 这就是<strong>用 Loment 编译 Loment 程序</strong>：
-              </p>
-              <div class="code">
-                <div class="code__bar">
-                  <span class="lang-tag">sh</span>
-                  <span data-zh="编译一个文件" data-en="compile one file">编译一个文件</span>
-                  <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
-                </div>
-                <pre>sh loment/bootstrap.sh hello.lomt
-
-<span class="c">== 发射 hello.lomt (stage1)
-; 由 tools/lomentc.py 生成 (native: LLVM IR, docs/144/145)
-; clang -O1 driver.c this.ll -o exe
-...</span></pre>
-              </div>
-
-              <p class="muted" style="margin-top: var(--s4)" data-zh-html="想在宿主上直接<strong>跑</strong>一段代码，转译路径更省事——它把 Loment 转成 Rust 再用 rustc 编，因此在 Windows 上也能跑（原生路径产出的是 Linux ELF）。" data-en-html="To actually <b>run</b> something on the host, the transpile path is easier: it turns Loment into Rust and compiles that with rustc, so it works on Windows too (the native path emits a Linux ELF).">
-                想在宿主上直接<strong>跑</strong>一段代码，转译路径更省事——它把 Loment 转成 Rust 再用 rustc 编，因此在 Windows 上也能跑（原生路径产出的是 Linux ELF）。
+              <p class="small dim" data-zh-html="安装器做完六件事：校验 <code>SHA256SUMS</code>、把 <code>bin/</code> 与 <code>share/</code> 拷进前缀、把 <code>bin</code> 加进用户 <code>PATH</code>、注册 <code>.lomt</code>/<code>.lom</code> 的文件类型、跑一次冒烟测试（<code>loment version</code> 加编一个 <code>user_hello.lomt</code>）、再把 <strong>agent 指南</strong>写到 <code>~/.claude/skills/loment/</code>。装完自查一条命令就知道齐没齐：" data-en-html="The installer does six things: verify <code>SHA256SUMS</code>, copy <code>bin/</code> and <code>share/</code> under the prefix, add <code>bin</code> to the user <code>PATH</code>, register the <code>.lomt</code>/<code>.lom</code> file types, run a smoke test (<code>loment version</code> plus compiling a <code>user_hello.lomt</code>), then write the <b>agent guide</b> to <code>~/.claude/skills/loment/</code>. One command tells you whether it is all there:">
+                安装器做完六件事：校验 <code>SHA256SUMS</code>、把 <code>bin/</code> 与 <code>share/</code> 拷进前缀、把 <code>bin</code> 加进用户 <code>PATH</code>、注册 <code>.lomt</code>/<code>.lom</code> 的文件类型、跑一次冒烟测试（<code>loment version</code> 加编一个 <code>user_hello.lomt</code>）、再把 <strong>agent 指南</strong>写到 <code>~/.claude/skills/loment/</code>。装完自查一条命令就知道齐没齐：
               </p>
               <div class="code">
                 <div class="code__bar">
                   <span class="lang-tag">bash</span>
-                  <span data-zh="跑内建测试" data-en="run the built-in tests">跑内建测试</span>
+                  <span data-zh="装完自查" data-en="check the install">装完自查</span>
                   <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
                 </div>
-                <pre>python tools/loment.py test hello.lomt
+                <pre>loment doctor
 
-<span class="c">PASS test_double_5
-PASS test_double_0
-RESULT: 2/2 PASS</span></pre>
+  Health check
+  ok       loment-driver
+  ok       loment-lsp
+  ok       loment-fmt
+  ok       loment-doc
+  ok       loment-lomelf
+  ok       loment-cli
+  ok       version Loment 0.1.4 Alpha2.3 (0.1.4-alpha2.3)
+
+  all green</pre>
               </div>
-              <p class="small dim" data-zh-html="这条命令替你做了三件容易忘的事：转译成 Rust、套一个 <code>main</code> 调用每个 <code>test_*</code> 函数、用 rustc 编译并执行。失败时它以退出码 1 结束。它仍然是 Python —— 测试判据是<strong>有意</strong>留在 Python 上的，理由见「现在还不能做什么」。" data-en-html="This one does three easily-forgotten things for you: transpile to Rust, wrap a <code>main</code> that calls every <code>test_*</code> function, and compile and run it with rustc. It exits 1 if anything fails. It is still Python — the test-side judgements are <b>deliberately</b> left in Python; see “what you cannot do yet” below.">
-                这条命令替你做了三件容易忘的事：转译成 Rust、套一个 <code>main</code> 调用每个 <code>test_*</code> 函数、用 rustc 编译并执行。失败时它以退出码 1 结束。它仍然是 Python —— 测试判据是<strong>有意</strong>留在 Python 上的，理由见「现在还不能做什么」。
+              <div class="note note--steel">
+                <strong data-zh="为什么工具自己说的是英文：" data-en="Why the tool speaks English: ">为什么工具自己说的是英文：</strong>
+                <span data-zh-html="<code>loment</code> 自己的输出<strong>是纯 ASCII</strong>，而且这是判据守着的——936 代码页的控制台上中文必乱码，与其时好时坏，不如一条都不留。所以这个页面上工具的输出是英文、正文是中文。语言自己的诊断（编译器那侧）仍然可以说中文。" data-en-html="<code>loment</code>'s own output is <b>pure ASCII</b>, and a gate enforces it — Chinese garbles on a 936-codepage console, so rather than being intermittently broken it is left out entirely. That is why the tool output on this page is English while the prose is Chinese. The compiler's own diagnostics still speak Chinese."><code>loment</code> 自己的输出<strong>是纯 ASCII</strong>，而且这是判据守着的——936 代码页的控制台上中文必乱码，与其时好时坏，不如一条都不留。所以这个页面上工具的输出是英文、正文是中文。语言自己的诊断（编译器那侧）仍然可以说中文。</span>
+              </div>
+
+              <h2 data-zh="六十秒" data-en="Sixty seconds">六十秒</h2>
+              <p class="muted" data-zh-html="两条命令。第一条写出一份能跑的骨架，第二条编出来并运行：" data-en-html="Two commands. The first writes a skeleton that runs; the second compiles and runs it:">
+                两条命令。第一条写出一份能跑的骨架，第二条编出来并运行：
               </p>
+              <div class="code">
+                <div class="code__bar">
+                  <span class="lang-tag">bash</span>
+                  <span data-zh="写一份 + 跑起来" data-en="write one, run it">写一份 + 跑起来</span>
+                  <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+                </div>
+                <pre>loment new hi
+  wrote hi.lomt
+  run it:  loment run hi.lomt
+
+loment run hi.lomt
+hello from Loment</pre>
+              </div>
+              <p class="muted" style="margin-top: var(--s4)" data-zh-html="要一个可执行文件，就把 <code>run</code> 换成 <code>build</code>。产物是<strong>本机原生格式</strong>——Windows 上 <code>.exe</code>，Linux 上 ELF——而且<strong>没有 clang 参与</strong>：" data-en-html="For an executable, swap <code>run</code> for <code>build</code>. The artefact is in the <b>host's native format</b> — <code>.exe</code> on Windows, ELF on Linux — and <b>no clang is involved</b>:">
+                要一个可执行文件，就把 <code>run</code> 换成 <code>build</code>。产物是<strong>本机原生格式</strong>——Windows 上 <code>.exe</code>，Linux 上 ELF——而且<strong>没有 clang 参与</strong>：
+              </p>
+              <div class="code">
+                <div class="code__bar">
+                  <span class="lang-tag">bash</span>
+                  <span data-zh="产出可执行文件" data-en="produce an executable">产出可执行文件</span>
+                  <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+                </div>
+                <pre>loment build hi.lomt -o hi
+loment: hi.exe</pre>
+              </div>
 
               <h2 data-zh="一个最小程序" data-en="A minimal program">一个最小程序</h2>
-              <p class="muted" data-zh="存成 hello.lomt。语法是 Rust 的严格子集，所以如果你写过 Rust，这里没有新东西要学——新东西在能力域那一层。" data-en="Save it as hello.lomt. The grammar is a strict subset of Rust, so if you have written Rust there is nothing new to learn here — the new part is the capability layer.">
-                存成 <code>hello.lomt</code>。语法是 Rust 的严格子集，所以如果你写过 Rust，这里没有新东西要学——新东西在能力域那一层。
+              <p class="muted" data-zh-html="上面那条 <code>new</code> 写出来的就是这份。语法是 Rust 的严格子集，所以如果你写过 Rust，这里没有新东西要学——新东西在能力域那一层。" data-en-html="This is what <code>new</code> just wrote. The grammar is a strict subset of Rust, so if you have written Rust there is nothing new to learn here — the new part is the capability layer.">
+                上面那条 <code>new</code> 写出来的就是这份。语法是 Rust 的严格子集，所以如果你写过 Rust，这里没有新东西要学——新东西在能力域那一层。
               </p>
               <div class="code">
                 <div class="code__bar">
                   <span class="lang-tag">loment</span>
-                  <span class="docs">hello.lomt</span>
+                  <span class="docs">hi.lomt</span>
                   <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
                 </div>
-                <pre>module hello
+                <pre>module hi
 
-fn double(x: u32) -&gt; u32 {
-    return x * 2;
-}
-
-fn test_double_5() -&gt; bool { return double(5) == 10; }
-fn test_double_0() -&gt; bool { return double(0) == 0; }</pre>
+fn _start() {
+    let s: str = "hello from Loment\n";
+    syscall4(1, 1, str_ptr(s) as u64, str_len(s) as u64);
+    syscall4(60, 0, 0, 0);
+}</pre>
               </div>
-              <p class="small dim" data-zh-html="<code>module</code> 是必需的。其余与 Rust 一样：<code>fn</code>、显式类型、<code>let</code>、<code>while</code>、<code>for i in 0..n</code>、<code>match</code>。<code>test_*() -&gt; bool</code> 是约定，不是语法——工具链按名字找它们。" data-en-html="<code>module</code> is required. Everything else matches Rust: <code>fn</code>, explicit types, <code>let</code>, <code>while</code>, <code>for i in 0..n</code>, <code>match</code>. <code>test_*() -&gt; bool</code> is a convention rather than syntax — the toolchain finds them by name.">
-                <code>module</code> 是必需的。其余与 Rust 一样：<code>fn</code>、显式类型、<code>let</code>、<code>while</code>、<code>for i in 0..n</code>、<code>match</code>。<code>test_*() -&gt; bool</code> 是约定，不是语法——工具链按名字找它们。
+              <p class="small dim" data-zh-html="<code>module</code> 是必需的。<code>_start</code> 是入口——它<strong>就是</strong>进程入口，没有 libc 在前面垫一层，也没有运行时帮你把参数收好，所以收尾要自己 <code>syscall4(60, ...)</code> 退出。<code>syscall4</code> 是语言的内建，不是库：Loment 没有标准库可依赖，能碰系统的就这一层。其余与 Rust 一样：<code>fn</code>、显式类型、<code>let</code>、<code>while</code>、<code>for i in 0..n</code>、<code>match</code>。" data-en-html="<code>module</code> is required. <code>_start</code> is the entry point — it <i>is</i> the process entry, with no libc in front of it and no runtime to marshal arguments, so you exit yourself with <code>syscall4(60, ...)</code>. <code>syscall4</code> is a language builtin, not a library: Loment has no standard library to depend on, and this is the only layer that touches the system. Everything else matches Rust: <code>fn</code>, explicit types, <code>let</code>, <code>while</code>, <code>for i in 0..n</code>, <code>match</code>.">
+                <code>module</code> 是必需的。<code>_start</code> 是入口——它<strong>就是</strong>进程入口，没有 libc 在前面垫一层，也没有运行时帮你把参数收好，所以收尾要自己 <code>syscall4(60, ...)</code> 退出。<code>syscall4</code> 是语言的内建，不是库：Loment 没有标准库可依赖，能碰系统的就这一层。
               </p>
-
-              <h2 data-zh="一条会立刻绊到你的规矩" data-en="The rule that trips you up immediately">一条会立刻绊到你的规矩</h2>
-              <p class="muted" data-zh="你想把程序转译出来，很自然会这么写：" data-en="Wanting to transpile your program, you will naturally write this:">
-                你想把程序转译出来，很自然会这么写：
-              </p>
-              <div class="code">
-                <div class="code__bar">
-                  <span class="lang-tag">bash</span>
-                  <span data-zh="会被拒绝" data-en="this is rejected">会被拒绝</span>
-                  <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
-                </div>
-                <pre>python tools/lomentc.py hello.lomt --emit-rust hello.rs
-
-<span class="c">[ERR] M46: 编译器强制导出形式对象 —— 需同时给出 --emit-potato PATH</span></pre>
-              </div>
-              <p class="muted" data-zh-html="这不是 bug，是设计：编译器<strong>不允许</strong>只产出目标代码而不产出形式对象。正确写法是两个一起给。" data-en-html="This is not a bug, it is the design: the compiler <b>refuses</b> to emit target code without also emitting the formal object. Give both.">
-                这不是 bug，是设计：编译器<strong>不允许</strong>只产出目标代码而不产出形式对象。正确写法是两个一起给。
-              </p>
-              <div class="code">
-                <div class="code__bar">
-                  <span class="lang-tag">bash</span>
-                  <span data-zh="转译 + 强制导出" data-en="transpile + forced export">转译 + 强制导出</span>
-                  <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
-                </div>
-                <pre>python tools/lomentc.py hello.lomt \
-    --emit-rust hello.rs \
-    --emit-potato hello.potato.json
-
-<span class="c">[OK] hello.lomt -&gt; hello.rs (1241B)
-[OK] hello.lomt -&gt; hello.potato.json (815B)</span></pre>
-              </div>
-              <div class="note note--steel">
-                <strong data-zh="为什么值得别扭一下：" data-en="Why it is worth the friction: ">为什么值得别扭一下：</strong>
-                <span data-zh-html="同一个约束在三个层面都不可关闭：编译器内部有错即编译失败；CLI 上要 emit 目标就必须同时 emit 形式对象；仓库里要求每个示例都带一份逐字节一致的对象。这是为了让「内核读得懂这段代码被允许做什么」成为常态而不是努力。见 <a href=&quot;../potato/&quot;>Potato 形式对象</a>。" data-en-html="the same constraint is non-disableable at three levels: inside the compiler any error fails the build; at the CLI emitting a target requires emitting the formal object; at the repository every example must carry a byte-identical object. The point is to make “the kernel can read what this code is allowed to do” the default rather than an effort. See <a href=&quot;../potato/&quot;>The Potato object</a>.">同一个约束在三个层面都不可关闭：编译器内部有错即编译失败；CLI 上要 emit 目标就必须同时 emit 形式对象；仓库里要求每个示例都带一份逐字节一致的对象。这是为了让「内核读得懂这段代码被允许做什么」成为常态而不是努力。见 <a href="../potato/">Potato 形式对象</a>。</span>
-              </div>
-
-              <h2 data-zh="形式对象：让机器看懂这段代码" data-en="The formal object: what a machine reads">形式对象：让机器看懂这段代码</h2>
-              <p class="muted" data-zh-html="上一步顺带产出的 <code>hello.potato.json</code>，就是 Potato 形式对象。它不描述代码「长什么样」，只描述「它声明了什么」：" data-en-html="The <code>hello.potato.json</code> from the previous step is the Potato formal object. It does not describe what the code looks like, only what it declares:">
-                上一步顺带产出的 <code>hello.potato.json</code>，就是 Potato 形式对象。它不描述代码「长什么样」，只描述「它声明了什么」：
-              </p>
-              <div class="code">
-                <div class="code__bar">
-                  <span class="lang-tag">json</span>
-                  <span class="docs">hello.potato.json</span>
-                  <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
-                </div>
-                <pre>{ "potato": <span class="s">"v1"</span>, "unit": <span class="s">"hello"</span>, "language": <span class="s">"loment"</span>,
-  "capabilities": [],
-  "functions": [
-    { "name": <span class="s">"double"</span>, "params": [{"name": <span class="s">"x"</span>, "type": <span class="s">"u32"</span>}], "ret": <span class="s">"u32"</span> }
-  ],
-  "guards": 0,
-  "excluded": [] }</pre>
-              </div>
-              <p class="muted" data-zh-html="用<strong>独立</strong>校验器验它——注意这个词：校验器不 import 编译器的任何代码。" data-en-html="Validate it with the <b>independent</b> validator — note the word: it imports nothing from the compiler.">
-                用<strong>独立</strong>校验器验它——注意这个词：校验器不 import 编译器的任何代码。
-              </p>
-              <div class="code">
-                <div class="code__bar">
-                  <span class="lang-tag">bash</span>
-                  <span data-zh="校验" data-en="validate">校验</span>
-                  <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
-                </div>
-                <pre>python tools/potato.py validate hello.potato.json
-
-<span class="c">[OK] hello.potato.json: 形式对象合法</span></pre>
-              </div>
 
               <h2 data-zh="能力域：真正的新东西" data-en="Capability domains: the actually new part">能力域：真正的新东西</h2>
               <p class="muted" data-zh-html="你想让某段代码只能碰磁盘块 0 到 4，并且可以随时被收回。这不是一个运行时检查函数，而是一条<strong>语言声明</strong>：" data-en-html="Say you want a piece of code to touch disk blocks 0 to 4 and nothing else, and to be revocable. That is not a runtime checking function; it is a <b>language declaration</b>:">
@@ -191,15 +109,31 @@ fn test_double_0() -&gt; bool { return double(0) == 0; }</pre>
               <div class="code">
                 <div class="code__bar">
                   <span class="lang-tag">loment</span>
-                  <span class="docs">native_cap.lomt</span>
+                  <span class="docs">cap.lomt</span>
                   <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
                 </div>
-                <pre>capability blk_write : disk[0..4] revocable
+                <pre>module cap
 
-fn write(slot: u32) -&gt; u32 {
-    guard blk_write(slot);   <span class="c">// 越界：字面量在编译期拒绝，运行期落到 trap</span>
+capability blk_write : disk[0..4] revocable
+
+fn write(slot: u32) -> u32 {
+    guard blk_write(slot);   <span class="c">// 字面量越界：编译期就拒</span>
     return slot;
 }</pre>
+              </div>
+              <p class="muted" data-zh-html="把 <code>guard</code> 里的实参换成一个越界字面量，程序<strong>编不出来</strong>——不是警告，是错误：" data-en-html="Change the argument to <code>guard</code> into an out-of-range literal and the program <b>does not build</b> — an error, not a warning:">
+                把 <code>guard</code> 里的实参换成一个越界字面量，程序<strong>编不出来</strong>——不是警告，是错误：
+              </p>
+              <div class="code">
+                <div class="code__bar">
+                  <span class="lang-tag">bash</span>
+                  <span data-zh="越界字面量" data-en="an out-of-range literal">越界字面量</span>
+                  <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+                </div>
+                <pre>loment check cap.lomt     <span class="c"># 域是 disk[0..4]，这里 guard 了 9</span>
+
+fujoc-s: 静态检查未通过
+  E4 @27 line 5: blk_write</pre>
               </div>
               <div class="table-wrap">
                 <table>
@@ -217,13 +151,28 @@ fn write(slot: u32) -&gt; u32 {
                   </tbody>
                 </table>
               </div>
-              <p class="small dim" data-zh-html="还有一个配套的声明叫 <code>excluded</code>，用来明确写出「本单元不申请哪些能力」。它同样会进入形式对象的 <code>excluded</code> 字段——也就是内核能读到你的边界声明。细节见 <a href=&quot;../capability/&quot;>能力域即语言构造</a>。" data-en-html="There is a companion declaration, <code>excluded</code>, for stating which capabilities a unit does not request. It also lands in the object's <code>excluded</code> field — so the kernel can read your boundary declaration. Details under <a href=&quot;../capability/&quot;>Capability as a construct</a>.">
-                还有一个配套的声明叫 <code>excluded</code>，用来明确写出「本单元不申请哪些能力」。它同样会进入形式对象的 <code>excluded</code> 字段——也就是内核能读到你的边界声明。细节见 <a href="../capability/">能力域即语言构造</a>。
+              <p class="small dim" data-zh-html="配套的声明还有 <code>excluded</code>，用来明确写出「本单元不申请哪些能力」——碰了它划出去的区间就报 E5。更值得记住的是工具自己给出的那条<strong>诚实边界</strong>：" data-en-html="A companion declaration, <code>excluded</code>, states which capabilities a unit does not request — touching the space it rules out reports E5. More worth remembering is the <b>honest limit</b> the tool prints itself:">
+                配套的声明还有 <code>excluded</code>，用来明确写出「本单元不申请哪些能力」——碰了它划出去的区间就报 E5。更值得记住的是工具自己给出的那条<strong>诚实边界</strong>：
+              </p>
+              <div class="code">
+                <div class="code__bar">
+                  <span class="lang-tag">bash</span>
+                  <span data-zh="工具自己怎么说" data-en="what the tool says itself">工具自己怎么说</span>
+                  <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+                </div>
+                <pre>loment caps
+
+  honest limit: `guard` only constrains the INDEX to the domain, it is NOT authorisation -
+  it does not check whether the current subject holds that capability. Subject-to-capability
+  binding lives in the kernel.</pre>
+              </div>
+              <p class="small dim" data-zh-html="也就是说 <code>guard</code> 管的是<strong>下标不越界</strong>，不是<strong>你有没有这个权限</strong>。谁持有哪个能力，是内核的事（M37/M39 仍在内核线上排队）。细节见 <a href=&quot;../capability/&quot;>能力域即语言构造</a>。" data-en-html="So <code>guard</code> constrains the <b>index</b>, not whether you hold the capability. Who holds what is the kernel's business (M37/M39 are still queued on the kernel line). Details under <a href=&quot;../capability/&quot;>Capability as a construct</a>.">
+                也就是说 <code>guard</code> 管的是<strong>下标不越界</strong>，不是<strong>你有没有这个权限</strong>。谁持有哪个能力，是内核的事（M37/M39 仍在内核线上排队）。细节见 <a href="../capability/">能力域即语言构造</a>。
               </p>
 
               <h2 data-zh="出错了会看到什么" data-en="What an error looks like">出错了会看到什么</h2>
-              <p class="muted" data-zh="诊断是分好类的，每一条都带修复建议——不是一句「语法错误」然后让你自己找。" data-en="Diagnostics are classified and every one of them carries a repair suggestion — not a bare “syntax error” and good luck.">
-                诊断是分好类的，每一条都带修复建议——不是一句「语法错误」然后让你自己找。
+              <p class="muted" data-zh-html="把 <code>g(1)</code> 写成 <code>g(1, 2)</code>，编译器直接告诉你哪一行哪个符号、以及<strong>是哪一类</strong>错：" data-en-html="Write <code>g(1, 2)</code> where <code>g</code> takes one argument and the compiler tells you the line, the symbol, and <b>which class</b> of error it is:">
+                把 <code>g(1)</code> 写成 <code>g(1, 2)</code>，编译器直接告诉你哪一行哪个符号、以及<strong>是哪一类</strong>错：
               </p>
               <div class="code">
                 <div class="code__bar">
@@ -231,46 +180,143 @@ fn write(slot: u32) -&gt; u32 {
                   <span data-zh="诊断" data-en="diagnose">诊断</span>
                   <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
                 </div>
-                <pre>python tools/loment.py diag loment/selfhost/neg/arity.lomt
+                <pre>loment check bad.lomt
 
-<span class="c">E003 [实参数量不符] 8: g 需要 1 个实参，得到 2
-      建议: 对照函数签名补/删实参；方法调用的 self 不计入实参。</span></pre>
+fujoc-s: 静态检查未通过
+  E3 @27 line 4: g</pre>
               </div>
-              <p class="small dim" data-zh="错误分成 E001–E013 十三类，每一类都有一条对应的反例——也就是说这些分类不是文档里的一张表，是真的会触发的代码路径。" data-en="Diagnostics fall into thirteen classes, E001–E013, each with a matching counterexample — meaning the classification is not a table in a document but code paths that actually fire.">
-                错误分成 E001–E013 十三类，每一类都有一条对应的反例——也就是说这些分类不是文档里的一张表，是真的会触发的代码路径。
+              <p class="muted" data-zh-html="<code>E3</code> 是类别，<code>@27</code> 是第 27 个 token，<code>line 4</code> 是源行。类别总共 <strong>E1 到 E19 十九种</strong>，而且<strong>按「该做什么」分组，不按措辞分组</strong>——同一类错误换了说法也还是同一个号。查表一条命令：" data-en-html="<code>E3</code> is the class, <code>@27</code> the 27th token, <code>line 4</code> the source line. There are <b>nineteen classes, E1 through E19</b>, and they are <b>grouped by what to do, not by wording</b> — the same class keeps its number whatever the message says. The table is one command away:">
+                <code>E3</code> 是类别，<code>@27</code> 是第 27 个 token，<code>line 4</code> 是源行。类别总共 <strong>E1 到 E19 十九种</strong>，而且<strong>按「该做什么」分组，不按措辞分组</strong>——同一类错误换了说法也还是同一个号。查表一条命令：
+              </p>
+              <div class="code">
+                <div class="code__bar">
+                  <span class="lang-tag">bash</span>
+                  <span data-zh="十九类错误码" data-en="nineteen error codes">十九类错误码</span>
+                  <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+                </div>
+                <pre>loment codes
+
+  E1   type mismatch (return / payload / builtin argument)
+  E2   something is not declared - usually a missing type annotation or a misspelt name
+  E3   wrong number of arguments
+  E4   capability domain problem (undeclared / out of range / duplicate)
+  E5   used space that an `excluded` declaration put out of bounds
+  E6   value has been moved
+  E7   borrow conflict (mutable borrow next to a borrow / two mutable borrows)
+  E8   match / enum (not exhaustive, duplicate pattern, bad payload binding)
+  E9   name clashes with a base type / empty struct / empty enum
+  E10  `?` used where there is no Result or Option
+  E11  slice mutability (cannot write a read-only slice; the parameter needs `mut`)
+  E12  dangling reference
+  E13  duplicate definition / duplicate name
+  E14  assignment target is not an lvalue
+  E15  field or index (no such field, missing field, duplicate init, field on a non-struct)
+  E16  array literal / length does not match the declaration
+  E17  illegal `as` cast
+  E18  `use &lt;name&gt;` does not resolve - rename it, add the file, or use the path form
+  E19  parse error - fix that line as the `line:col` in the message says</pre>
+              </div>
+              <p class="small dim" data-zh-html="要看一条的细节：<code>loment explain E4</code>。每一类都有一条对应的反例在仓库里真的会触发——也就是说这不是文档里的一张表，是活着的代码路径。" data-en-html="For one in detail: <code>loment explain E4</code>. Every class has a counterexample in the repository that really fires — the classification is not a table in a document but live code paths.">
+                要看一条的细节：<code>loment explain E4</code>。每一类都有一条对应的反例在仓库里真的会触发——也就是说这不是文档里的一张表，是活着的代码路径。
               </p>
 
-              <h2 data-zh="工具链一览" data-en="The toolchain">工具链一览</h2>
-              <p class="muted" data-zh-html="统一入口是 <code>tools/loment.py</code>。它自己不编译，只是把活分派给对应的工具。" data-en-html="The entry point is <code>tools/loment.py</code>. It does not compile anything itself; it dispatches to the tool that does.">
-                统一入口是 <code>tools/loment.py</code>。它自己不编译，只是把活分派给对应的工具。
+              <h2 data-zh="命令面：38 条" data-en="The command surface: 38 of them">命令面：38 条</h2>
+              <p class="muted" data-zh-html="<code>loment</code> 不是一层壳。它有 <strong>38 条命令、分六组</strong>，而命令面本身就是<strong>用 Loment 写的</strong>——一个 <code>lomcli.lomt</code>。前两组由启动器直接转发给对应的工具，其余落在 <code>loment-cli</code> 里。分区跟 <code>loment help</code> 打出来的完全一致：" data-en-html="<code>loment</code> is not a thin shell. It has <b>38 commands in six groups</b>, and the command surface is itself <b>written in Loment</b> — one <code>lomcli.lomt</code>. The first two groups are forwarded by the launcher to the matching tool; the rest live in <code>loment-cli</code>. The grouping is exactly what <code>loment help</code> prints:">
+                <code>loment</code> 不是一层壳。它有 <strong>38 条命令、分六组</strong>，而命令面本身就是<strong>用 Loment 写的</strong>——一个 <code>lomcli.lomt</code>。前两组由启动器直接转发给对应的工具，其余落在 <code>loment-cli</code> 里。分区跟 <code>loment help</code> 打出来的完全一致：
               </p>
+              <h3 data-zh="编译与运行" data-en="Compile &amp; run">编译与运行</h3>
               <div class="table-wrap">
                 <table>
-                  <thead>
-                    <tr>
-                      <th scope="col" data-zh="命令" data-en="Command">命令</th>
-                      <th scope="col" data-zh="做什么" data-en="What it does">做什么</th>
-                    </tr>
-                  </thead>
                   <tbody>
-                    <tr><td class="docs">loment test FILE</td><td data-zh="跑所有 test_*() -> bool 函数" data-en="Runs every test_*() -> bool function">跑所有 test_*() -&gt; bool 函数</td></tr>
-                    <tr><td class="docs">loment diag FILE [--json]</td><td data-zh="错误分类 + 修复建议" data-en="Error classification plus a repair suggestion">错误分类 + 修复建议</td></tr>
-                    <tr><td class="docs">loment fmt FILE...</td><td data-zh="格式化（幂等：两次结果相同）。已用 Loment 重写，与 Python 版逐字节相同——工具链去 Python 的第一块。" data-en="Format (idempotent: running it twice gives the same result). Already rewritten in Loment, byte-identical to the Python one — the first piece of the toolchain to leave Python.">格式化（幂等：两次结果相同）。已用 Loment 重写，与 Python 版逐字节相同——工具链去 Python 的第一块。</td></tr>
-                    <tr><td class="docs">loment ir FILE [--objdump]</td><td data-zh="看 IR，或连同机器码一起看" data-en="Show the IR, or the IR together with machine code">看 IR，或连同机器码一起看</td></tr>
-                    <tr><td class="docs">loment cov FILE [--call F]</td><td data-zh="IR 级块覆盖率" data-en="IR-level block coverage">IR 级块覆盖率</td></tr>
-                    <tr><td class="docs">loment bench FILE [--n N]</td><td data-zh="Rust 路径与 IR 路径对比" data-en="Contrasts the Rust path against the IR path">Rust 路径与 IR 路径对比</td></tr>
-                    <tr><td class="docs">loment dbg FILE [--fn F]</td><td data-zh="符号化：按函数列源行" data-en="Symbolisation: list source lines by function">符号化：按函数列源行</td></tr>
-                    <tr><td class="docs">loment build DIR [--out DIR]</td><td data-zh="增量构建（冷 82.6 ms → 热 9.0 ms）" data-en="Incremental build (82.6 ms cold → 9.0 ms warm)">增量构建（冷 82.6 ms → 热 9.0 ms）</td></tr>
-                    <tr><td class="docs">loment doc FILE [--out]</td><td data-zh="从源码生成 API 文档" data-en="Generate API docs from source">从源码生成 API 文档</td></tr>
-                    <tr><td class="docs">loment pkg ...</td><td data-zh="包管理：依赖解析 + 校验和" data-en="Package manager: dependency resolution and checksums">包管理：依赖解析 + 校验和</td></tr>
-                    <tr><td class="docs">loment lsp</td><td data-zh="语言服务（编辑器补全 / 跳转 / 诊断）" data-en="Language server (editor completion / go-to / diagnostics)">语言服务（编辑器补全 / 跳转 / 诊断）</td></tr>
+                    <tr><td class="docs">ir FILE</td><td data-zh="把 LLVM IR 打到 stdout" data-en="Print LLVM IR to stdout">把 LLVM IR 打到 stdout</td></tr>
+                    <tr><td class="docs">check FILE</td><td data-zh="只检查，丢弃 IR（诊断走 stderr）" data-en="Check only, discard the IR (diagnostics on stderr)">只检查，丢弃 IR（诊断走 stderr）</td></tr>
+                    <tr><td class="docs">build FILE [-o NAME]</td><td data-zh="编译并链接成可执行文件" data-en="Compile and link to an executable">编译并链接成可执行文件</td></tr>
+                    <tr><td class="docs">run FILE</td><td data-zh="编译、链接、运行" data-en="Compile, link and run">编译、链接、运行</td></tr>
+                    <tr><td class="docs">version</td><td data-zh="打版本行" data-en="Print the version line">打版本行</td></tr>
+                    <tr><td class="docs">lsp</td><td data-zh="语言服务（stdio）" data-en="Language server over stdio">语言服务（stdio）</td></tr>
                   </tbody>
                 </table>
               </div>
+              <h3 data-zh="源码工具" data-en="Source tools">源码工具</h3>
+              <div class="table-wrap">
+                <table>
+                  <tbody>
+                    <tr><td class="docs">fmt FILE</td><td data-zh="格式化（打到 stdout，不改原文件）" data-en="Format (prints the result, does not touch the file)">格式化（打到 stdout，不改原文件）</td></tr>
+                    <tr><td class="docs">doc FILE</td><td data-zh-html="从 <code>///</code> 注释生成 API 文档" data-en-html="API docs from <code>///</code> comments">从 <code>///</code> 注释生成 API 文档</td></tr>
+                    <tr><td class="docs">skill [--print]</td><td data-zh="agent 指南（路径，或全文）" data-en="The AI-agent guide (its path, or the whole text)">agent 指南（路径，或全文）</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <h3 data-zh="读源码" data-en="Read source">读源码</h3>
+              <div class="table-wrap">
+                <table>
+                  <tbody>
+                    <tr><td class="docs">cat FILE</td><td data-zh="带行号打印" data-en="Print with line numbers">带行号打印</td></tr>
+                    <tr><td class="docs">stat FILE</td><td data-zh="行数 / 字节数 / 最长行" data-en="Lines / bytes / longest line">行数 / 字节数 / 最长行</td></tr>
+                    <tr><td class="docs">count FILE</td><td data-zh="函数 / 结构体 / 枚举计数" data-en="fn / struct / enum counts">函数 / 结构体 / 枚举计数</td></tr>
+                    <tr><td class="docs">fns FILE</td><td data-zh="列出函数签名" data-en="List function signatures">列出函数签名</td></tr>
+                    <tr><td class="docs">tokens FILE</td><td data-zh="token 直方图（词法层近似）" data-en="Token histogram (a lexical approximation)">token 直方图（词法层近似）</td></tr>
+                    <tr><td class="docs">grep PAT FILE</td><td data-zh="子串搜索，带行号（不是正则）" data-en="Substring search with line numbers (not regex)">子串搜索，带行号（不是正则）</td></tr>
+                    <tr><td class="docs">todo FILE</td><td data-zh="列出 TODO / FIXME / XXX" data-en="List TODO / FIXME / XXX">列出 TODO / FIXME / XXX</td></tr>
+                    <tr><td class="docs">hash FILE</td><td data-zh="内容 sha256" data-en="sha256 content hash">内容 sha256</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <h3 data-zh="工程" data-en="Project">工程</h3>
+              <div class="table-wrap">
+                <table>
+                  <tbody>
+                    <tr><td class="docs">ls [DIR]</td><td data-zh-html="列目录（目录带尾随 <code>/</code>）" data-en-html="List a directory (directories get a trailing <code>/</code>)">列目录（目录带尾随 <code>/</code>）</td></tr>
+                    <tr><td class="docs">tree [DIR]</td><td data-zh="递归目录树" data-en="Recursive directory tree">递归目录树</td></tr>
+                    <tr><td class="docs">new NAME</td><td data-zh="写出 hello 骨架（不覆盖已存在的文件）" data-en="Write a hello skeleton (never overwrites an existing file)">写出 hello 骨架（不覆盖已存在的文件）</td></tr>
+                    <tr><td class="docs">examples</td><td data-zh="列出包内自带的示例" data-en="List the examples shipped in this package">列出包内自带的示例</td></tr>
+                    <tr><td class="docs">example NAME</td><td data-zh="打印其中一个示例" data-en="Print one example">打印其中一个示例</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <h3 data-zh="语言速查" data-en="Language reference">语言速查</h3>
+              <div class="table-wrap">
+                <table>
+                  <tbody>
+                    <tr><td class="docs">syntax</td><td data-zh="语法速查表" data-en="Syntax cheat-sheet">语法速查表</td></tr>
+                    <tr><td class="docs">builtins</td><td data-zh="内建函数表" data-en="Builtin function table">内建函数表</td></tr>
+                    <tr><td class="docs">types</td><td data-zh="类型表" data-en="Type table">类型表</td></tr>
+                    <tr><td class="docs">keywords</td><td data-zh="关键字" data-en="Keywords">关键字</td></tr>
+                    <tr><td class="docs">caps</td><td data-zh="能力域 / guard" data-en="Capability / guard">能力域 / guard</td></tr>
+                    <tr><td class="docs">codes</td><td data-zh="错误码表 E1–E19" data-en="Error code table E1-E19">错误码表 E1–E19</td></tr>
+                    <tr><td class="docs">explain CODE</td><td data-zh="解释单个错误码" data-en="One error code explained">解释单个错误码</td></tr>
+                    <tr><td class="docs">cheat</td><td data-zh="一页速查" data-en="One-page cheat sheet">一页速查</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <h3 data-zh="本机" data-en="This install">本机</h3>
+              <div class="table-wrap">
+                <table>
+                  <tbody>
+                    <tr><td class="docs">tools</td><td data-zh="这个包里的工具：在或不在" data-en="Tools in this package: present or missing">这个包里的工具：在或不在</td></tr>
+                    <tr><td class="docs">where [TOOL]</td><td data-zh="某个工具的绝对路径（不认识的名字退 2）" data-en="Absolute path of a tool (exit 2 on an unknown name)">某个工具的绝对路径（不认识的名字退 2）</td></tr>
+                    <tr><td class="docs">env</td><td data-zh="安装前缀与环境" data-en="Install prefix and environment">安装前缀与环境</td></tr>
+                    <tr><td class="docs">doctor</td><td data-zh="体检：齐了就绿退 0，缺了就红退 1" data-en="Health check: green and exit 0 when complete, red and exit 1 otherwise">体检：齐了就绿退 0，缺了就红退 1</td></tr>
+                    <tr><td class="docs">about</td><td data-zh="构建信息" data-en="Build info">构建信息</td></tr>
+                    <tr><td class="docs">color [on|off]</td><td data-zh="ANSI 颜色开关" data-en="ANSI colour switch">ANSI 颜色开关</td></tr>
+                    <tr><td class="docs">commands</td><td data-zh="只打命令名（给补全用）" data-en="Every command name (for completion)">只打命令名（给补全用）</td></tr>
+                    <tr><td class="docs">help [COMMAND]</td><td data-zh="这张总览，或单条命令" data-en="This overview, or one command">这张总览，或单条命令</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="note note--steel">
+                <strong data-zh="这不是唯一的入口：" data-en="This is not the only entry point: ">这不是唯一的入口：</strong>
+                <span data-zh-html="上面这张表是<strong>发行包</strong>里的 <code>loment</code>。源码仓库里另有一个开发侧入口 <code>python tools/loment.py</code>，它要 Python，有 <strong>12 条子命令</strong>：<code>fmt</code> <code>doc</code> <code>diag</code> <code>ir</code> <code>test</code> <code>bench</code> <code>cov</code> <code>dbg</code> <code>build</code> <code>pkg</code> <code>lsp</code> <code>lib</code>。<strong>测试、覆盖率、基准、调试符号化、库系统都只在这一侧</strong>——它们不在产品路径上，也不必跟着包发出去。所以「<code>loment cov</code>」敲不出来是正常的：那是开发侧的命令。" data-en-html="The table above is the <code>loment</code> in the <b>distribution</b>. The source repository also has a dev-side entry, <code>python tools/loment.py</code>, which needs Python and has <b>twelve subcommands</b>: <code>fmt</code> <code>doc</code> <code>diag</code> <code>ir</code> <code>test</code> <code>bench</code> <code>cov</code> <code>dbg</code> <code>build</code> <code>pkg</code> <code>lsp</code> <code>lib</code>. <b>Testing, coverage, benchmarks, debug symbolisation and the library system live only on that side</b> — they are not on the product path and need not ship. So “<code>loment cov</code>” not existing is expected: that is a dev-side command.">上面这张表是<strong>发行包</strong>里的 <code>loment</code>。源码仓库里另有一个开发侧入口 <code>python tools/loment.py</code>，它要 Python，有 <strong>12 条子命令</strong>：<code>fmt</code> <code>doc</code> <code>diag</code> <code>ir</code> <code>test</code> <code>bench</code> <code>cov</code> <code>dbg</code> <code>build</code> <code>pkg</code> <code>lsp</code> <code>lib</code>。<strong>测试、覆盖率、基准、调试符号化、库系统都只在这一侧</strong>——它们不在产品路径上，也不必跟着包发出去。所以「<code>loment cov</code>」敲不出来是正常的：那是开发侧的命令。</span>
+              </div>
+
+              <div class="note note--steel">
+                <strong data-zh="两条边界，别猜错：" data-en="Two boundaries, not to be guessed at: ">两条边界，别猜错：</strong>
+                <span data-zh-html="<strong>库系统不在这张表里。</strong><code>lib</code> / <code>pkg</code> 只在<strong>源码仓库</strong>侧可用（<code>python tools/loment.py lib ...</code>）——发行包里没有 Python，也就没有它。把它列进 <code>help</code> 而敲下去得到「未知命令」，那是骗人。<br /><br /><strong>Lompi 也不在这张表里，而且理由不同。</strong>它是 Loment 库的包管理器，<strong>随 Loment 一起安装</strong>，但它<strong>不是 Loment 官方工具</strong>：不编 Loment、不读源码树，是<strong>另一个命令</strong>。装在一起不等于它是同一件工具的部件——所以要用就直接敲 <code>lompi</code>，见 <a href=&quot;../lompi/&quot;>Lompi 一页</a>。" data-en-html="<strong>The library system is not in this table.</strong> <code>lib</code> / <code>pkg</code> exist only on the <b>source-repo</b> side (<code>python tools/loment.py lib ...</code>) — the distribution has no Python, so it has no lib/pkg. Listing them in <code>help</code> when typing them yields “unknown command” would be a lie.<br /><br /><strong>Nor is Lompi, for a different reason.</strong> It is the package manager for Loment libraries and it <b>installs alongside Loment</b>, but it is <b>not a Loment official tool</b>: it does not compile Loment, does not read the source tree, and is a <b>different command</b>. Installing together does not make it a component of the same tool — so type <code>lompi</code> directly; see <a href=&quot;../lompi/&quot;>the Lompi page</a>."><strong>库系统不在这张表里。</strong><code>lib</code> / <code>pkg</code> 只在<strong>源码仓库</strong>侧可用（<code>python tools/loment.py lib ...</code>）——发行包里没有 Python，也就没有它。把它列进 <code>help</code> 而敲下去得到「未知命令」，那是骗人。<br /><br /><strong>Lompi 也不在这张表里，而且理由不同。</strong>它是 Loment 库的包管理器，<strong>随 Loment 一起安装</strong>，但它<strong>不是 Loment 官方工具</strong>：不编 Loment、不读源码树，是<strong>另一个命令</strong>。装在一起不等于它是同一件工具的部件——所以要用就直接敲 <code>lompi</code>，见 <a href="../lompi/">Lompi 一页</a>。</span>
+              </div>
 
               <h2 data-zh="另一条线：L0" data-en="The other line: L0">另一条线：L0</h2>
-              <p class="muted" data-zh-html="上面讲的都是 L1（语言本体）。还有一条更靠底下的线：<code>.lom</code> 文件是布局与契约的<strong>单一真源</strong>，由 <code>lomc</code> 生成 Rust / C / Python / JSON。" data-en-html="Everything above is L1, the language itself. There is a layer below it: a <code>.lom</code> file is the <b>single source of truth</b> for a layout or a contract, and <code>lomc</code> generates Rust / C / Python / JSON from it.">
-                上面讲的都是 L1（语言本体）。还有一条更靠底下的线：<code>.lom</code> 文件是布局与契约的<strong>单一真源</strong>，由 <code>lomc</code> 生成 Rust / C / Python / JSON。
+              <p class="muted" data-zh-html="上面讲的都是 L1（语言本体）。还有一条更靠底下的线：<code>.lom</code> 文件是布局与契约的<strong>单一真源</strong>，由 <code>lomc</code> 生成 Rust / C / Python / JSON。它也是 0.1.4 里<strong>离开 Python</strong>的工具之一——四个后端与 Python 版逐字节相同。" data-en-html="Everything above is L1, the language itself. There is a layer below it: a <code>.lom</code> file is the <b>single source of truth</b> for a layout or a contract, and <code>lomc</code> generates Rust / C / Python / JSON from it. It is also one of the tools that <b>left Python</b> in 0.1.4 — all four backends byte-identical to the Python ones.">
+                上面讲的都是 L1（语言本体）。还有一条更靠底下的线：<code>.lom</code> 文件是布局与契约的<strong>单一真源</strong>，由 <code>lomc</code> 生成 Rust / C / Python / JSON。它也是 0.1.4 里<strong>离开 Python</strong>的工具之一——四个后端与 Python 版逐字节相同。
               </p>
               <div class="code">
                 <div class="code__bar">
@@ -290,17 +336,39 @@ python tools/lomc.py lom/fuc.lom --check</pre>
                 L1 的源文件可以 <code>use</code> 一个 L0 文件——声明来自 L0，行为来自 <code>.lomt</code>。这是「Loment 是 .lom 的超集」这句话的实际含义。见 <a href="../l0/">L0 单一真源</a>。
               </p>
 
+              <h2 data-zh="从源码重建：起点不是 clang 了" data-en="Rebuilding from source: the origin is no longer clang">从源码重建：起点不是 clang 了</h2>
+              <p class="muted" data-zh-html="没有包、想从源码把编译器重建出来的话，一条脚本。注意它<strong>现在的起点是一份提交进仓库的 genesis 二进制</strong>，不是 clang——clang 降级成了后备路线：" data-en-html="If you have no package and want to rebuild the compiler from source, it is one script. Note that <b>its origin is now a genesis binary committed to the repository</b>, not clang — clang has been demoted to a fallback:">
+                没有包、想从源码把编译器重建出来的话，一条脚本。注意它<strong>现在的起点是一份提交进仓库的 genesis 二进制</strong>，不是 clang——clang 降级成了后备路线：
+              </p>
+              <div class="code">
+                <div class="code__bar">
+                  <span class="lang-tag">sh</span>
+                  <span data-zh="无 clang、无解释器自举" data-en="bootstrap with no clang and no interpreter">无 clang、无解释器自举</span>
+                  <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+                </div>
+                <pre>sh loment/bootstrap.sh
+
+<span class="c">== 起点: genesis (loment-lomelf) —— 无 clang, 无解释器
+== 1/4 种子 -&gt; stage1
+== 2/4 stage1 编译 loment/selfhost/driver.lomt -&gt; 必须等于种子
+== 3/4 stage2 -&gt; stage3 定点
+== 4/4 stage1 与 stage2 对非自身入口一致
+SEED BOOTSTRAP OK: 无 Python, 无解释器, 无 clang (genesis 起头); 种子自复现 + 三阶段定点</span></pre>
+              </div>
+              <p class="small dim" data-zh-html="起点是一份<strong>固化的种子</strong>：参考实现为自举驱动发射的那份 IR——种子本身就是整个编译器。四条判据依次证明：种子能把自己编出来且逐字节相同；再链一轮仍是定点；换一个<strong>非自身</strong>的入口，两个阶段的产物也一致。最后一条是关键：定点不能是「只会编译自己」的巧合。找不到 genesis 时才退回 clang（`CC=` 可以指定）。细节见 <code>docs/159</code>。" data-en-html="The starting point is a <b>frozen seed</b>: the IR the reference implementation emitted for the self-hosted driver — the seed <i>is</i> the whole compiler. Four checks then prove, in order, that the seed rebuilds itself byte-for-byte, that one more round is still a fixpoint, and that a <b>non-self</b> entry produces identical output at both stages. That last one matters: a fixpoint must not be a coincidence of only compiling itself. Only when no genesis is found does it fall back to clang (`CC=` can name one). Details in <code>docs/159</code>.">
+                起点是一份<strong>固化的种子</strong>：参考实现为自举驱动发射的那份 IR——种子本身就是整个编译器。四条判据依次证明：种子能把自己编出来且逐字节相同；再链一轮仍是定点；换一个<strong>非自身</strong>的入口，两个阶段的产物也一致。最后一条是关键：定点不能是「只会编译自己」的巧合。找不到 genesis 时才退回 clang（<code>CC=</code> 可以指定）。细节见 <code>docs/159</code>。
+              </p>
+
               <h2 data-zh="现在还不能做什么" data-en="What you cannot do yet">现在还不能做什么</h2>
               <ul class="list">
-                <li><b data-zh="尚未向开发者发布" data-en="Not yet released to developers">尚未向开发者发布</b> <span data-zh-html="—— 版本本身<strong>已经完成并冻结</strong>（M96 完成：语法与类型规则、诊断 E001–E017、单元装载、跨线发射符号约定、两后端逐字节等价，附 7 条已知开放项）；触及冻结面的改动要走 <code>docs/158</code> §5 的流程，不再是随手改。未过的是发布与外部审计（M100）——缺的不是门禁（<code>tools/loment_audit.py</code> 一条命令跑完 <strong>16</strong> 条主张并落盘证据），是第三方复核本身。" data-en-html=" — the version itself is <b>complete and frozen</b> (M96 done: syntax and type rules, diagnostics E001–E017, unit loading, the cross-line emission symbol convention, byte-identical parity between the two backends, with 7 known open items); a change to the freeze surface now goes through the process in <code>docs/158</code> §5 rather than being made casually. What is unmet is the release and its external audit (M100) — not for want of gates (<code>tools/loment_audit.py</code> runs all <b>sixteen</b> claims in one command and writes the evidence to disk) but for want of third-party review.">—— 版本本身<strong>已经完成并冻结</strong>（M96 完成：语法与类型规则、诊断 E001–E017、单元装载、跨线发射符号约定、两后端逐字节等价，附 7 条已知开放项）；触及冻结面的改动要走 <code>docs/158</code> §5 的流程，不再是随手改。未过的是发布与外部审计（M100）——缺的不是门禁（<code>tools/loment_audit.py</code> 一条命令跑完 <strong>16</strong> 条主张并落盘证据），是第三方复核本身。</span></li>
-                <li><b data-zh="剩下的基本在内核侧" data-en="What is left is mostly kernel-side">剩下的基本在内核侧</b> <span data-zh-html="—— 撤销由内核真正实施（M37）、与内核域模型对齐（M39）、A1–A4 的运行时断言（M40）、信任自适应域宽接口（M42），加上中断与断言表的内核接入（M33/M50），全部标注 <strong>P7</strong>，等内核线排期。语言这一侧已经完整。" data-en-html=" — revocation actually enforced by the kernel (M37), aligning with the kernel's domain model (M39), runtime assertions for A1–A4 (M40), the trust-adaptive width interface (M42), plus kernel integration for interrupts and the assertion table (M33/M50). All are marked <b>P7</b>, waiting on the kernel line. The language side is complete.">—— 撤销由内核真正实施（M37）、与内核域模型对齐（M39）、A1–A4 的运行时断言（M40）、信任自适应域宽接口（M42），加上中断与断言表的内核接入（M33/M50），全部标注 <strong>P7</strong>，等内核线排期。语言这一侧已经完整。</span></li>
-                <li><b data-zh="原生路径产出的是 Linux ELF" data-en="The native path emits a Linux ELF">原生路径产出的是 Linux ELF</b> <span data-zh-html="—— 按 <code>x86_64-unknown-linux-gnu</code> 链接。在 Windows 上走转译路径（本页所述）即可，两者能力不完全等价。" data-en-html=" — it links as <code>x86_64-unknown-linux-gnu</code>. On Windows take the transpile path described on this page; the two are not fully equivalent.">—— 按 <code>x86_64-unknown-linux-gnu</code> 链接。在 Windows 上走转译路径（本页所述）即可，两者能力不完全等价。</span></li>
-                <li><b data-zh="测试判据仍是 Python" data-en="The test judgements are still Python">测试判据仍是 Python</b> <span data-zh-html="—— 这是有意留的：它不在产品路径上，只影响开发期判据。两条路都合理——把一致性套件写成 Loment 程序，或保持 Python 作为「第三方审计工具」。" data-en-html=" — deliberately: they are not on the product path, only on dev-time judgement. Either path is defensible — write the parity suites as Loment programs, or keep Python as a third-party auditor.">—— 这是有意留的：它不在产品路径上，只影响开发期判据。两条路都合理——把一致性套件写成 Loment 程序，或保持 Python 作为「第三方审计工具」。</span></li>
-                <li><b data-zh="还有一个工具是 Python" data-en="One tool is still Python">还有一个工具是 Python</b> <span data-zh-html="—— 包管理 <code>lompkg</code> 尚未重写（它需要目录遍历与 JSON 子集）。格式化器、语言服务、文档生成器<strong>都已经</strong>重写成 Loment，判据是与 Python 版逐字节相同。" data-en-html=" — the package manager, <code>lompkg</code>, is not yet rewritten (it needs directory traversal and a JSON subset). The formatter, the language server and the doc generator <b>have all</b> been rewritten in Loment, judged byte-identical to the Python ones.">—— 包管理 <code>lompkg</code> 尚未重写（它需要目录遍历与 JSON 子集）。格式化器、语言服务、文档生成器<strong>都已经</strong>重写成 Loment，判据是与 Python 版逐字节相同。</span></li>
-                <li><b data-zh="自举版比参考实现慢约 10 倍" data-en="The self-hosted compiler is about 10× slower">自举版比参考实现慢约 10 倍</b> <span data-zh-html="—— 编译自身 12.8 秒，参考实现 1.2 秒。目前只记了基线与护栏（M86），没有做优化——所以别把它当性能版本用。另外 aarch64 交叉编译通过但没有模拟器验证，DWARF 只有语句级行表、没有变量信息。" data-en-html=" — 12.8 s to compile itself against the reference implementation's 1.2 s. Only a baseline and a guard rail exist (M86); no optimisation has been done, so do not treat it as the fast path. Separately, aarch64 cross-compiles but has no emulator to verify on, and DWARF carries statement-level line tables only, with no variable information.">—— 编译自身 12.8 秒，参考实现 1.2 秒。目前只记了基线与护栏（M86），没有做优化——所以别把它当性能版本用。另外 aarch64 交叉编译通过但没有模拟器验证，DWARF 只有语句级行表、没有变量信息。</span></li>
+                <li><b data-zh="尚未向开发者发布" data-en="Not yet released to developers">尚未向开发者发布</b> <span data-zh-html="—— 版本本身<strong>已经完成并冻结</strong>（M96 完成：语法与类型规则、诊断 E1–E19、单元装载、跨线发射符号约定、两后端逐字节等价，附 7 条已知开放项）；触及冻结面的改动要走 <code>docs/158</code> §5 的流程，不再是随手改。100 个里程碑里完成 <strong>96</strong> 个、部分完成 <strong>2</strong> 个（M56 的 LSP 宿主已就位、编辑器里人工点验待做；M92 的 aarch64 交叉编译通过但没有模拟器可验）。未达的是发布与外部审计（M100）——缺的不是门禁（<code>tools/loment_audit.py</code> 一条命令跑完 <strong>24</strong> 条主张并落盘证据），是第三方复核本身。" data-en-html=" — the version itself is <b>complete and frozen</b> (M96 done: syntax and type rules, diagnostics E1–E19, unit loading, the cross-line emission symbol convention, byte-identical parity between the two backends, with 7 known open items); a change to the freeze surface now goes through the process in <code>docs/158</code> §5 rather than being made casually. Of the 100 milestones <b>96</b> are done and <b>2</b> partial (M56's LSP host is in place with manual editor checking left; M92's aarch64 cross-compiles but has no emulator to verify on). What is unmet is the release and its external audit (M100) — not for want of gates (<code>tools/loment_audit.py</code> runs all <b>twenty-four</b> claims in one command and writes the evidence to disk) but for want of third-party review.">—— 版本本身<strong>已经完成并冻结</strong>（M96 完成：语法与类型规则、诊断 E1–E19、单元装载、跨线发射符号约定、两后端逐字节等价，附 7 条已知开放项）；触及冻结面的改动要走 <code>docs/158</code> §5 的流程，不再是随手改。100 个里程碑里完成 <strong>96</strong> 个、部分完成 <strong>2</strong> 个（M56 的 LSP 宿主已就位、编辑器里人工点验待做；M92 的 aarch64 交叉编译通过但没有模拟器可验）。未达的是发布与外部审计（M100）——缺的不是门禁（<code>tools/loment_audit.py</code> 一条命令跑完 <strong>24</strong> 条主张并落盘证据），是第三方复核本身。</span></li>
+                <li><b data-zh="内核侧已经接上了" data-en="The kernel side is wired in">内核侧已经接上了</b> <span data-zh-html="—— 这一片原先整排标着 <strong>P7</strong> 等内核线排期，现在只剩一项：撤销由内核真正实施（M37，串口 <code>INV_RUN … rev=2 nonrev=0</code>）、A1–A4 断言接进内核并启动自检（M40/M50，<code>CAP_ASSERTS n=2 bad=0 guards=2</code>）、域宽随质量台账变化可观测（M42）、中断与断言表接入（M33）<strong>都已完成</strong>，证据来自 compat 线 2026-09-15 的报告。唯一没翻的是 <strong>M39</strong>（与内核域模型对齐），而那次复核的结论是<strong>内核侧不缺东西</strong>：域表早已从静态初值搬进 arena、由 <code>replay_init()</code> 在启动时填满，而对比工具 <code>tools/loment_caps_diff.py</code> 还在找静态初值——那两条红是假阳性。要修的是工具，不是内核。" data-en-html=" — this whole block used to be marked <b>P7</b>, waiting on the kernel line; only one item is left. Revocation enforced by the kernel (M37, serial <code>INV_RUN … rev=2 nonrev=0</code>), A1–A4 assertions wired into the kernel with a boot-time self-check (M40/M50, <code>CAP_ASSERTS n=2 bad=0 guards=2</code>), domain width observably tracking the quality ledger (M42) and interrupt/assertion-table integration (M33) are <b>all done</b>, on the compat line's 2026-09-15 report. The one that has not turned is <b>M39</b> (alignment with the kernel's domain model), and that review concluded the <b>kernel is not missing anything</b>: the domain table moved out of a static initialiser into the arena, filled at boot by <code>replay_init()</code>, while the comparison tool <code>tools/loment_caps_diff.py</code> is still looking for the static initialiser — the two reds are false positives. What needs fixing is the tool, not the kernel.">—— 这一片原先整排标着 <strong>P7</strong> 等内核线排期，现在只剩一项：撤销由内核真正实施（M37，串口 <code>INV_RUN … rev=2 nonrev=0</code>）、A1–A4 断言接进内核并启动自检（M40/M50，<code>CAP_ASSERTS n=2 bad=0 guards=2</code>）、域宽随质量台账变化可观测（M42）、中断与断言表接入（M33）<strong>都已完成</strong>，证据来自 compat 线 2026-09-15 的报告。唯一没翻的是 <strong>M39</strong>（与内核域模型对齐），而那次复核的结论是<strong>内核侧不缺东西</strong>：域表早已从静态初值搬进 arena、由 <code>replay_init()</code> 在启动时填满，而对比工具 <code>tools/loment_caps_diff.py</code> 还在找静态初值——那两条红是假阳性。要修的是工具，不是内核。</span></li>
+                <li><b data-zh="没有 TTY 探测，也没有单条命令的手册页" data-en="No TTY detection, and manual pages for only some commands">没有 TTY 探测，也没有单条命令的手册页</b> <span data-zh-html="—— 颜色默认开，重定向到文件时不会自己关掉，要 <code>--no-color</code>。单条命令的手册页只覆盖了 13 条，其余 <code>help &lt;名&gt;</code> 会明说「没有更详细的手册页」并指回总览，不装样子。另外 <code>tokens</code> 是词法层近似、<code>grep</code> 是子串匹配不是正则、<code>tree</code> 有 16 层深度上限。" data-en-html=" — colour is on by default and does not switch itself off when you redirect to a file; use <code>--no-color</code>. Manual pages cover only 13 commands; for the rest <code>help &lt;name&gt;</code> says outright that there is no more detailed page and points back at the overview, rather than pretending. Separately, <code>tokens</code> is a lexical approximation, <code>grep</code> is substring matching rather than regex, and <code>tree</code> caps depth at 16.">—— 颜色默认开，重定向到文件时不会自己关掉，要 <code>--no-color</code>。单条命令的手册页只覆盖了 13 条，其余 <code>help &lt;名&gt;</code> 会明说「没有更详细的手册页」并指回总览，不装样子。另外 <code>tokens</code> 是词法层近似、<code>grep</code> 是子串匹配不是正则、<code>tree</code> 有 16 层深度上限。</span></li>
+                <li><b data-zh="测试判据仍是 Python" data-en="The test judgements are still Python">测试判据仍是 Python</b> <span data-zh-html="—— 这是有意留的：它不在产品路径上，只影响开发期判据。产品路径上已经没有解释器了——格式化器、文档生成器、语言服务、包管理器、L0 生成器<strong>全部</strong>有 Loment 实现，判据是与 Python 版逐字节相同。" data-en-html=" — deliberately: they are not on the product path, only on dev-time judgement. The product path has no interpreter left — the formatter, doc generator, language server, package manager and L0 generator <b>all</b> have Loment implementations, judged byte-identical to the Python ones.">—— 这是有意留的：它不在产品路径上，只影响开发期判据。产品路径上已经没有解释器了——格式化器、文档生成器、语言服务、包管理器、L0 生成器<strong>全部</strong>有 Loment 实现，判据是与 Python 版逐字节相同。</span></li>
+                <li><b data-zh="自举版比参考实现慢约 10 倍" data-en="The self-hosted compiler is about 10× slower">自举版比参考实现慢约 10 倍</b> <span data-zh-html="—— 目前只记了基线与护栏（M86），没有做优化——所以别把它当性能版本用。原生后端也明确<strong>不做寄存器分配</strong>，产物比 <code>clang -O1</code> 大且慢；v0 要的是正确性。" data-en-html=" — only a baseline and a guard rail exist (M86); no optimisation has been done, so do not treat it as the fast path. The native backend also deliberately <b>does no register allocation</b>, so its output is larger and slower than <code>clang -O1</code>; v0 is about correctness.">—— 目前只记了基线与护栏（M86），没有做优化——所以别把它当性能版本用。原生后端也明确<strong>不做寄存器分配</strong>，产物比 <code>clang -O1</code> 大且慢；v0 要的是正确性。</span></li>
               </ul>
 
               <div class="note note--steel">
                 <strong data-zh="接下来：" data-en="Next: ">接下来：</strong>
-                <span data-zh-html="语言的设计取舍见 <a href=&quot;../loment/&quot;>Loment 语言</a>；能力域那一层见 <a href=&quot;../capability/&quot;>能力域即语言构造</a>；编译器强制导出的那半边见 <a href=&quot;../potato/&quot;>Potato 形式对象</a>。" data-en-html="the language's design trade-offs are under <a href=&quot;../loment/&quot;>The Loment language</a>; the capability layer under <a href=&quot;../capability/&quot;>Capability as a construct</a>; the mandatory-export half under <a href=&quot;../potato/&quot;>The Potato object</a>.">语言的设计取舍见 <a href="../loment/">Loment 语言</a>；能力域那一层见 <a href="../capability/">能力域即语言构造</a>；编译器强制导出的那半边见 <a href="../potato/">Potato 形式对象</a>。</span>
+                <span data-zh-html="语言的设计取舍见 <a href=&quot;../loment/&quot;>Loment 语言</a>；能力域那一层见 <a href=&quot;../capability/&quot;>能力域即语言构造</a>；编译器强制导出的那半边见 <a href=&quot;../potato/&quot;>Potato 形式对象</a>；库与包管理见 <a href=&quot;../libraries/&quot;>库系统</a> 与 <a href=&quot;../lompi/&quot;>Lompi</a>；官方库见 <a href=&quot;../std/&quot;>std 与 host</a>。" data-en-html="the language's design trade-offs are under <a href=&quot;../loment/&quot;>The Loment language</a>; the capability layer under <a href=&quot;../capability/&quot;>Capability as a construct</a>; the mandatory-export half under <a href=&quot;../potato/&quot;>The Potato object</a>; libraries and package management under <a href=&quot;../libraries/&quot;>the library system</a> and <a href=&quot;../lompi/&quot;>Lompi</a>; the official libraries under <a href=&quot;../std/&quot;>std and host</a>.">语言的设计取舍见 <a href="../loment/">Loment 语言</a>；能力域那一层见 <a href="../capability/">能力域即语言构造</a>；编译器强制导出的那半边见 <a href="../potato/">Potato 形式对象</a>；库与包管理见 <a href="../libraries/">库系统</a> 与 <a href="../lompi/">Lompi</a>；官方库见 <a href="../std/">std 与 host</a>。</span>
               </div>

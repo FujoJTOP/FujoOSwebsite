@@ -96,12 +96,12 @@
 
               <h2 data-zh="一处必须标注的边界" data-en="One boundary that must be labelled">一处必须标注的边界</h2>
               <div class="note note--amber">
-                <strong data-zh="LLM 臂尚未运行。" data-en="The LLM arm has not been run.">LLM 臂尚未运行。</strong>
-                <span data-zh="本环境没有外部模型凭据，所以“工具链 vs 宿主 LLM”这组对照还没有数据。协议已就绪：任何外部转写器按同一报告 schema 产出结果即可并入主表。但当前主表的“两臂”是工具链的严格 / 宽松两档，<b>不得</b>在论文中当作 LLM 对照。" data-en=" There are no external model credentials in this environment, so the “toolchain vs host LLM” comparison has no data yet. The protocol is ready: any external translator emitting a report against the same schema can join the table. But the current two arms are the toolchain's strict / lenient settings and <b>must not</b> be presented as an LLM comparison in the paper."> 本环境没有外部模型凭据，所以“工具链 vs 宿主 LLM”这组对照还没有数据。协议已就绪：任何外部转写器按同一报告 schema 产出结果即可并入主表。但当前主表的“两臂”是工具链的严格 / 宽松两档，<b>不得</b>在论文中当作 LLM 对照。</span>
+                <strong data-zh="LLM 臂跑过了，但跑的是本地小模型。" data-en="The LLM arm has run — on small local models.">LLM 臂跑过了，但跑的是本地小模型。</strong>
+                <span data-zh="2026-09-11 用本机 Ollama 上的 qwen3:4b 与 llama3.2:3b 跑了一轮：12 个文件 × 2 模型 = 24 行，工件 loment/build/wave-c-llm.json。所以「工具链 vs 宿主 LLM」这组对照<b>有</b>数据了——但它是 1.5–4B 的本地小模型，不是前沿 LLM 对照；要拿它当 A/B，得换前沿模型按同一协议重跑。另外，当前主表的“两臂”是工具链的严格 / 宽松两档，<b>不得</b>在论文中当作 LLM 对照。" data-en=" A run happened on 2026-09-11 against qwen3:4b and llama3.2:3b on a local Ollama: 12 files × 2 models = 24 rows, artefact loment/build/wave-c-llm.json. So the “toolchain vs host LLM” comparison <b>does</b> have data — but from 1.5–4B local models, not a frontier-LLM comparison; to use it as an A/B you would rerun the same protocol on a frontier model. Separately, the current two arms are the toolchain's strict / lenient settings and <b>must not</b> be presented as an LLM comparison in the paper."> 2026-09-11 用本机 Ollama 上的 qwen3:4b 与 llama3.2:3b 跑了一轮：12 个文件 × 2 模型 = 24 行，工件 loment/build/wave-c-llm.json。所以「工具链 vs 宿主 LLM」这组对照<b>有</b>数据了——但它是 1.5–4B 的本地小模型，不是前沿 LLM 对照；要拿它当 A/B，得换前沿模型按同一协议重跑。另外，当前主表的“两臂”是工具链的严格 / 宽松两档，<b>不得</b>在论文中当作 LLM 对照。</span>
               </div>
 
               <div class="prose">
-                <p data-zh="另有一条样本量提醒：当前 n = 48 / 33 / 116，Wilson 区间在 n &lt; 30 时明显偏宽。要把半宽压到 ±5% 以内，主表语料需要扩到每语言 ≥200 实体（约 15–20 个文件）。" data-en="One more caveat on sample size: currently n = 48 / 33 / 116, and Wilson intervals are noticeably wide below n &lt; 30. To bring the half-width under ±5%, the main-table corpus needs roughly ≥200 entities per language (about 15–20 files).">
-                  另有一条样本量提醒：当前 n = 48 / 33 / 116，Wilson 区间在 n &lt; 30 时明显偏宽。要把半宽压到 ±5% 以内，主表语料需要扩到每语言 ≥200 实体（约 15–20 个文件）。
+                <p data-zh="另有一条样本量提醒：当前 n = 48 / 37 / 116，Wilson 区间在 n &lt; 30 时明显偏宽。要把半宽压到 ±5% 以内，主表语料需要扩到每语言 ≥200 实体（约 15–20 个文件）。" data-en="One more caveat on sample size: currently n = 48 / 37 / 116, and Wilson intervals are noticeably wide below n &lt; 30. To bring the half-width under ±5%, the main-table corpus needs roughly ≥200 entities per language (about 15–20 files).">
+                  另有一条样本量提醒：当前 n = 48 / 37 / 116，Wilson 区间在 n &lt; 30 时明显偏宽。要把半宽压到 ±5% 以内，主表语料需要扩到每语言 ≥200 实体（约 15–20 个文件）。
                 </p>
               </div>

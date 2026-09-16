@@ -384,20 +384,20 @@ export fn flush(req: FlushReq) contract(hex64) {
 
           <div class="stats" style="margin-top: var(--s4)">
             <div class="stat fade-step" style="--delay: 0.24s">
-              <span class="stat__v">87</span>
+              <span class="stat__v">96</span>
               <span class="stat__k" data-zh="完成" data-en="done">完成</span>
             </div>
             <div class="stat fade-step" style="--delay: 0.32s">
-              <span class="stat__v">8</span>
-              <span class="stat__k" data-zh="部分完成（边界在文档里逐条写明）" data-en="partially done (each boundary written down)">部分完成（边界在文档里逐条写明）</span>
+              <span class="stat__v">2</span>
+              <span class="stat__k" data-zh="部分完成：M56 的 LSP 宿主已就位、编辑器内人工点验待做；M92 交叉编译到 aarch64 通过但没有模拟器可验" data-en="partially done: M56's LSP host is in place with manual editor checking left; M92 cross-compiles to aarch64 with no emulator to verify on">部分完成：M56 的 LSP 宿主已就位、编辑器内人工点验待做；M92 交叉编译到 aarch64 通过但没有模拟器可验</span>
             </div>
             <div class="stat fade-step" style="--delay: 0.4s">
               <span class="stat__v">1</span>
-              <span class="stat__k" data-zh="未达：M100 —— 0.1.4 Alpha2.2 的发布与外部审计" data-en="not met: M100 — the 0.1.4 Alpha2.2 release and its external audit">未达：M100 —— 0.1.4 Alpha2.2 的发布与外部审计</span>
+              <span class="stat__k" data-zh="未达：M100 —— 0.1.4 Alpha2.3 的发布与外部审计" data-en="not met: M100 — the 0.1.4 Alpha2.3 release and its external audit">未达：M100 —— 0.1.4 Alpha2.3 的发布与外部审计</span>
             </div>
             <div class="stat fade-step" style="--delay: 0.48s">
-              <span class="stat__v">4</span>
-              <span class="stat__k" data-zh="未开始：全部在内核侧（撤销实施、A1–A4 断言、域宽接口、域模型对齐）" data-en="not started: all kernel-side (revocation enforcement, A1–A4 assertions, the width interface, domain-model alignment)">未开始：全部在内核侧（撤销实施、A1–A4 断言、域宽接口、域模型对齐）</span>
+              <span class="stat__v">1</span>
+              <span class="stat__k" data-zh="未开始：M39 与内核域模型对齐（2026-09-15 复核：内核侧不缺东西，是对比工具的解析口径过期）" data-en="not started: M39, aligning with the kernel's domain model (a 2026-09-15 review found the kernel is not missing anything — the comparison tool's parsing is stale)">未开始：M39 与内核域模型对齐（2026-09-15 复核：内核侧不缺东西，是对比工具的解析口径过期）</span>
             </div>
           </div>
 
@@ -405,7 +405,7 @@ export fn flush(req: FlushReq) contract(hex64) {
             <div>
               <h3 class="h3" data-zh="已经闭环的几件事" data-en="A few things that are closed">已经闭环的几件事</h3>
               <ul class="list list--check">
-                <li><b data-zh="自举定点" data-en="Self-host fixpoint">自举定点</b> <span data-zh="—— 编译器编译自身；三阶段产物 IR 逐字节全等（1002385 B）。" data-en=" — the compiler compiles itself; the three-stage IR products are byte-identical (1002385 B).">—— 编译器编译自身；三阶段产物 IR 逐字节全等（1002385 B）。</span></li>
+                <li><b data-zh="自举定点" data-en="Self-host fixpoint">自举定点</b> <span data-zh="—— 编译器编译自身；三阶段产物 IR 逐字节全等（种子 1 641 696 B——这个数随驱动单元变化，由 loment_seed_test 每次重算钉住，不是常量）。" data-en=" — the compiler compiles itself; the three-stage IR products are byte-identical (the seed is 1,641,696 B — a figure that moves with the driver unit and that loment_seed_test recomputes and pins every run, not a constant).">—— 编译器编译自身；三阶段产物 IR 逐字节全等（种子 1 641 696 B——这个数随驱动单元变化，由 loment_seed_test 每次重算钉住，不是常量）。</span></li>
                 <li><b data-zh="原生后端" data-en="Native backend">原生后端</b> <span data-zh="—— LLVM IR 路径与 Rust 转译路径双路径差分，逐值一致；差分曾抓出真实的掩码 bug。" data-en=" — the LLVM IR path and the Rust transpile path are diffed value-by-value; the differ once caught a real mask bug.">—— LLVM IR 路径与 Rust 转译路径双路径差分，逐值一致；差分曾抓出真实的掩码 bug。</span></li>
                 <li><b data-zh="工具链" data-en="Toolchain">工具链</b> <span data-zh="—— lomfmt、LSP、包管理器、文档生成器、DWARF 语句级行表、增量构建（冷 82.6 ms → 热 9.0 ms）。" data-en=" — lomfmt, an LSP, a package manager, a doc generator, DWARF statement-level line tables, incremental builds (82.6 ms cold → 9.0 ms warm).">—— lomfmt、LSP、包管理器、文档生成器、DWARF 语句级行表、增量构建（冷 82.6 ms → 热 9.0 ms）。</span></li>
                 <li><b data-zh="内核内运行" data-en="Runs in the kernel">内核内运行</b> <span data-zh="—— Loment 用户态程序跑在 FujoOS 上；syscall 层由 .lom 生成，46/46 opcode 覆盖。" data-en=" — Loment user-space programs run on FujoOS; the syscall layer is generated from .lom, covering 46/46 opcodes.">—— Loment 用户态程序跑在 FujoOS 上；syscall 层由 .lom 生成，46/46 opcode 覆盖。</span></li>
@@ -413,8 +413,8 @@ export fn flush(req: FlushReq) contract(hex64) {
             </div>
             <div>
               <h3 class="h3" data-zh="止损线写在前面" data-en="The stop-loss is written down in advance">止损线写在前面</h3>
-              <p class="small muted" data-zh-html="P2 若三个月内无法与 Rust 原版逐位对齐，就回退到“L0 + 代码生成”路线，L1 归档。这条线在立项文档里就写定了，而不是事后追认。<br /><br />当时担心的两件事后来都过了：自举 parser 在全语料上与 Python 版逐字符一致（42/42），检查器的规则等价也到了 63/63。所以 L1 没有触发这条止损线。" data-en-html="If P2 cannot align bit-for-bit with the Rust original within three months, the project falls back to “L0 + code generation” and archives L1. That line was fixed in the founding document, not added retroactively.<br /><br />Both things that worried us at the time have since passed: the self-hosted parser matches the Python one character for character across the whole corpus (42/42), and the checker's rules are equivalent 63/63. So L1 never tripped the stop-loss.">
-                P2 若三个月内无法与 Rust 原版逐位对齐，就回退到“L0 + 代码生成”路线，L1 归档。这条线在立项文档里就写定了，而不是事后追认。<br /><br />当时担心的两件事后来都过了：自举 parser 在全语料上与 Python 版逐字符一致（42/42），检查器的规则等价也到了 63/63。所以 L1 没有触发这条止损线。
+              <p class="small muted" data-zh-html="P2 若三个月内无法与 Rust 原版逐位对齐，就回退到“L0 + 代码生成”路线，L1 归档。这条线在立项文档里就写定了，而不是事后追认。<br /><br />当时担心的两件事后来都过了：自举 parser 在全语料上与 Python 版逐字符一致（43/43），检查器的规则等价也到了 63/63。所以 L1 没有触发这条止损线。" data-en-html="If P2 cannot align bit-for-bit with the Rust original within three months, the project falls back to “L0 + code generation” and archives L1. That line was fixed in the founding document, not added retroactively.<br /><br />Both things that worried us at the time have since passed: the self-hosted parser matches the Python one character for character across the whole corpus (43/43), and the checker's rules are equivalent 63/63. So L1 never tripped the stop-loss.">
+                P2 若三个月内无法与 Rust 原版逐位对齐，就回退到“L0 + 代码生成”路线，L1 归档。这条线在立项文档里就写定了，而不是事后追认。<br /><br />当时担心的两件事后来都过了：自举 parser 在全语料上与 Python 版逐字符一致（43/43），检查器的规则等价也到了 63/63。所以 L1 没有触发这条止损线。
               </p>
             </div>
           </div>
@@ -559,7 +559,7 @@ export fn flush(req: FlushReq) contract(hex64) {
         </div>
         <div class="foot__end">
           <span>© <span data-year>2026</span> Yuxuan Jiang · MIT</span>
-          <span data-zh="Loment 0.1.4 Alpha2.2 · Potato v1" data-en="Loment 0.1.4 Alpha2.2 · Potato v1">Loment 0.1.4 Alpha2.2 · Potato v1</span>
+          <span data-zh="Loment 0.1.4 Alpha2.3 · Potato v1" data-en="Loment 0.1.4 Alpha2.3 · Potato v1">Loment 0.1.4 Alpha2.3 · Potato v1</span>
         </div>
       </div>
     </footer>
@@ -568,8 +568,8 @@ export fn flush(req: FlushReq) contract(hex64) {
       <div class="modal__inner">
         <span class="modal__k" data-zh="Loment · Potato" data-en="Loment · Potato">Loment · Potato</span>
         <h2 id="loment-cta-title" data-zh="9 月 20 日面向开发者社区" data-en="Opening to the developer community on 20 September">9 月 20 日面向开发者社区</h2>
-        <p data-zh="Loment 与 Potato 目前是 0.1.4 Alpha2.2，已经完成（冻结面见 docs/158），但尚未向开发者发布。开发组工具已经准备完成——格式化器、文档生成器、语言服务、包管理器都有了 Loment 版本，判据是与 Python 版逐字节相同。100 个里程碑完成 87 个（另有 8 项部分完成），编译器不仅能不经过任何解释器把自己重建出来，现在连 C 编译器也不需要了——链条的起点是提交进仓库的 genesis 二进制。想提前用的话，9 月 15 日开放 Early Use 表单。" data-en="Loment and Potato are at 0.1.4 Alpha2.2 — complete (the freeze surface is docs/158) but not yet released to developers. The developer tooling is done — the formatter, doc generator, language server and package manager all have Loment versions, judged byte-identical to the Python ones. 87 of 100 milestones are complete (8 more partial), and the compiler now rebuilds itself with no interpreter and no C compiler — the chain starts from a genesis binary committed to the repository. To get in early, an Early Use form opens on 15 September.">
-          Loment 与 Potato 目前是 0.1.4 Alpha2.2，已经完成（冻结面见 docs/158），但尚未向开发者发布。开发组工具已经准备完成——格式化器、文档生成器、语言服务、包管理器都有了 Loment 版本，判据是与 Python 版逐字节相同。100 个里程碑完成 87 个（另有 8 项部分完成），编译器不仅能不经过任何解释器把自己重建出来，现在连 C 编译器也不需要了——链条的起点是提交进仓库的 genesis 二进制。想提前用的话，9 月 15 日开放 Early Use 表单。
+        <p data-zh="Loment 与 Potato 目前是 0.1.4 Alpha2.3，已经完成（冻结面见 docs/158），但尚未向开发者发布。开发组工具已经准备完成——格式化器、文档生成器、语言服务、包管理器都有了 Loment 版本，判据是与 Python 版逐字节相同；命令面本身也从 9 条扩到 38 条，而且是用 Loment 写的。100 个里程碑完成 96 个（另有 2 项部分完成、1 项未达、1 项未开始），编译器不仅能不经过任何解释器把自己重建出来，现在连 C 编译器也不需要了——链条的起点是提交进仓库的 genesis 二进制。随包一起落地的还有库管理器 lompi 和一份 agent 指南。Early Use 表单已经开放。" data-en="Loment and Potato are at 0.1.4 Alpha2.3 — complete (the freeze surface is docs/158) but not yet released to developers. The developer tooling is done — the formatter, doc generator, language server and package manager all have Loment versions, judged byte-identical to the Python ones — and the command surface itself grew from 9 to 38 commands, written in Loment. 96 of 100 milestones are complete (2 more partial, 1 unmet, 1 not started), and the compiler now rebuilds itself with no interpreter and no C compiler — the chain starts from a genesis binary committed to the repository. The library manager lompi and an agent guide land with the package too. The Early Use form is open.">
+          Loment 与 Potato 目前是 0.1.4 Alpha2.3，已经完成（冻结面见 docs/158），但尚未向开发者发布。开发组工具已经准备完成——格式化器、文档生成器、语言服务、包管理器都有了 Loment 版本，判据是与 Python 版逐字节相同；命令面本身也从 9 条扩到 38 条，而且是用 Loment 写的。100 个里程碑完成 96 个（另有 2 项部分完成、1 项未达、1 项未开始），编译器不仅能不经过任何解释器把自己重建出来，现在连 C 编译器也不需要了——链条的起点是提交进仓库的 genesis 二进制。随包一起落地的还有库管理器 lompi 和一份 agent 指南。Early Use 表单已经开放。
         </p>
         <div class="modal__actions">
           <a class="btn btn--primary" href="early-use/" data-zh="填写 Early Use 报名" data-en="Sign up for Early Use">填写 Early Use 报名</a>

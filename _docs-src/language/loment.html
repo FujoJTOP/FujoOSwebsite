@@ -18,7 +18,7 @@
                 <li><b data-zh="确定性" data-en="Determinism">确定性</b> <span data-zh="—— 无 GC、显式所有权、no_std 优先。内核里不能有“偶尔停顿一下”的东西。" data-en=" — no GC, explicit ownership, no_std first. Nothing that “pauses occasionally” belongs in a kernel.">—— 无 GC、显式所有权、no_std 优先。内核里不能有“偶尔停顿一下”的东西。</span></li>
                 <li><b data-zh="能力域语法化" data-en="Capability domains as syntax">能力域语法化</b> <span data-zh="—— capability 是语言构造，A1–A4 可以在编译期静态检查。见下一节。" data-en=" — capability is a language construct, so A1–A4 can be checked statically. See the next page.">—— capability 是语言构造，A1–A4 可以在编译期静态检查。见下一节。</span></li>
                 <li><b data-zh="语义模型导出" data-en="Semantic model export">语义模型导出</b> <span data-zh="—— 每个编译单元产出可审计的 Potato 形式对象。这是硬性的，不是可选优化。" data-en=" — every compilation unit emits an auditable Potato formal object. Mandatory, not an optional optimisation.">—— 每个编译单元产出可审计的 Potato 形式对象。这是硬性的，不是可选优化。</span></li>
-                <li><b data-zh="跨后端" data-en="Multiple backends">跨后端</b> <span data-zh="—— 先做 transpile-to-Rust，再谈 LLVM 与自研后端。可行性判据是“能否不写后端就跑起来”。" data-en=" — transpile-to-Rust first, then LLVM and a self-built backend. The feasibility test was whether it could run at all without writing a backend.">—— 先做 transpile-to-Rust，再谈 LLVM 与自研后端。可行性判据是“能否不写后端就跑起来”。</span></li>
+                <li><b data-zh="跨后端" data-en="Multiple backends">跨后端</b> <span data-zh="—— 先做 transpile-to-Rust，再谈 LLVM 与自研后端；可行性判据是“能否不写后端就跑起来”。三条都跑通了：Rust 转译与 LLVM IR 双路径差分逐值一致，自研原生后端 lomelf 把同一份 IR 链成 ELF 或 PE——链条上已经不需要 C 编译器。" data-en=" — transpile-to-Rust first, then LLVM and a self-built backend; the feasibility test was whether it could run at all without writing a backend. All three are through: the Rust transpile and LLVM IR paths diff value-by-value, and the self-built native backend lomelf links the same IR to ELF or PE — the chain no longer needs a C compiler.">—— 先做 transpile-to-Rust，再谈 LLVM 与自研后端；可行性判据是“能否不写后端就跑起来”。三条都跑通了：Rust 转译与 LLVM IR 双路径差分逐值一致，自研原生后端 lomelf 把同一份 IR 链成 ELF 或 PE——链条上已经不需要 C 编译器。</span></li>
                 <li><b data-zh="内核内可用" data-en="Usable inside the kernel">内核内可用</b> <span data-zh="—— 不依赖宿主，与既有的汇编器 / 链接器 / 编译壳路线衔接。" data-en=" — no host dependency, joining up with the existing assembler / linker / compiler-shell line.">—— 不依赖宿主，与既有的汇编器 / 链接器 / 编译壳路线衔接。</span></li>
               </ul>
 
@@ -41,7 +41,7 @@
                     <tr>
                       <td><strong>L1</strong></td>
                       <td data-zh="系统语言：Loment 本体，转译到 Rust 起步" data-en="System language: Loment itself, starting with transpilation to Rust">系统语言：Loment 本体，转译到 Rust 起步</td>
-                      <td><span class="tag tag--part" data-zh="0.1.4 Alpha2.2" data-en="0.1.4 Alpha2.2">0.1.4 Alpha2.2</span></td>
+                      <td><span class="tag tag--part" data-zh="0.1.4 Alpha2.3" data-en="0.1.4 Alpha2.3">0.1.4 Alpha2.3</span></td>
                     </tr>
                     <tr>
                       <td><strong>L2</strong></td>

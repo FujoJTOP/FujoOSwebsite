@@ -233,8 +233,8 @@
 <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="L0 单一真源" data-en="L0 source of truth">L0 单一真源</h1>
 
               <div class="prose">
-                <p data-zh="L0 是整个语言计划里唯一“现在就该做”的一层，因为它不依赖任何语言设计决策，只依赖一件已经存在的事实：同一个接口被写了很多遍。" data-en="L0 is the one layer of the language plan that should be built now, because it depends on no language-design decisions — only on a fact that already exists: the same interface written many times over.">
-                  L0 是整个语言计划里唯一“现在就该做”的一层，因为它不依赖任何语言设计决策，只依赖一件已经存在的事实：同一个接口被写了很多遍。
+                <p data-zh="L0 是整个语言计划里最先落地的一层，因为它不依赖任何语言设计决策，只依赖一件已经存在的事实：同一个接口被写了很多遍。它落地得比语言本体还早，而语言本体（L1）现在也已经完成。" data-en="L0 was the first layer of the language plan to land, because it depends on no language-design decisions — only on a fact that already exists: the same interface written many times over. It landed before the language itself, and the language (L1) is now complete too.">
+                  L0 是整个语言计划里最先落地的一层，因为它不依赖任何语言设计决策，只依赖一件已经存在的事实：同一个接口被写了很多遍。它落地得比语言本体还早，而语言本体（L1）现在也已经完成。
                 </p>
               </div>
 
@@ -293,8 +293,8 @@ enum Opcode: u16 {
               </div>
 
               <div class="prose">
-                <p data-zh="生成物：Rust 常量与解码器、C 头文件、Python 打包器、JSON 规范，以及一个漂移检查器。判据是那个漂移检查器可以退役——因为漂移在生成期就不可能发生了。" data-en="Generated: Rust constants and decoders, C headers, the Python packer, the JSON spec, and a drift checker. The criterion is that the drift checker can be retired — because drift becomes impossible at generation time.">
-                  生成物：Rust 常量与解码器、C 头文件、Python 打包器、JSON 规范，以及一个漂移检查器。判据是那个漂移检查器可以退役——因为漂移在生成期就不可能发生了。
+                <p data-zh="生成物：Rust 常量与解码器、C 头文件、Python 打包器、JSON 规范，以及一个漂移检查器。判据是那个漂移检查器可以退役——因为漂移在生成期就不可能发生了。生成器本身也从 Python 换成了 Loment：loment/tools/lomc.lomt 的四个后端与 Python 版逐字节相同（审计主张 C18），所以这条线现在也不需要解释器了。" data-en="Generated: Rust constants and decoders, C headers, the Python packer, the JSON spec, and a drift checker. The criterion is that the drift checker can be retired — because drift becomes impossible at generation time. The generator itself moved from Python to Loment: the four backends of loment/tools/lomc.lomt are byte-identical to the Python ones (audit claim C18), so this line no longer needs an interpreter either.">
+                  生成物：Rust 常量与解码器、C 头文件、Python 打包器、JSON 规范，以及一个漂移检查器。判据是那个漂移检查器可以退役——因为漂移在生成期就不可能发生了。生成器本身也从 Python 换成了 Loment：loment/tools/lomc.lomt 的四个后端与 Python 版逐字节相同（审计主张 C18），所以这条线现在也不需要解释器了。
                 </p>
               </div>
 
@@ -306,8 +306,8 @@ enum Opcode: u16 {
               </div>
 
               <div class="note note--steel">
-                <strong data-zh="下一步：" data-en="Next: ">下一步：</strong>
-                <span data-zh-html="L0 是 L1 的必要前提。语言本身见 <a href=&quot;../loment/&quot;>Loment 语言</a>；编译器强制导出的那半边见 <a href=&quot;../potato/&quot;>Potato 形式对象</a>。" data-en-html="L0 is a precondition for L1. The language itself is under <a href=&quot;../loment/&quot;>The Loment language</a>; the mandatory-export half is under <a href=&quot;../potato/&quot;>The Potato object</a>.">L0 是 L1 的必要前提。语言本身见 <a href="../loment/">Loment 语言</a>；编译器强制导出的那半边见 <a href="../potato/">Potato 形式对象</a>。</span>
+                <strong data-zh="接下来：" data-en="Next: ">接下来：</strong>
+                <span data-zh-html="L0 曾是 L1 的必要前提，两步现在都已落地。语言本身见 <a href=&quot;../loment/&quot;>Loment 语言</a>；编译器强制导出的那半边见 <a href=&quot;../potato/&quot;>Potato 形式对象</a>。" data-en-html="L0 was the precondition for L1, and both have now landed. The language itself is under <a href=&quot;../loment/&quot;>The Loment language</a>; the mandatory-export half is under <a href=&quot;../potato/&quot;>The Potato object</a>.">L0 曾是 L1 的必要前提，两步现在都已落地。语言本身见 <a href="../loment/">Loment 语言</a>；编译器强制导出的那半边见 <a href="../potato/">Potato 形式对象</a>。</span>
               </div>
 
           <nav class="pager" aria-label="文档翻页" data-zh-aria="文档翻页" data-en-aria="Documentation paging">

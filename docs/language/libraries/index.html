@@ -405,17 +405,17 @@ pub fn version() -> str {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr><td><code>loment lib tree DIR</code></td><td data-zh="依赖树，以及每个库的实例数" data-en="The dependency tree, and how many instances each library has">依赖树，以及每个库的实例数</td></tr>
-                    <tr><td><code>loment lib id DIR</code></td><td data-zh="实例身份（递归哈希）" data-en="Instance identity (the recursive hash)">实例身份（递归哈希）</td></tr>
-                    <tr><td><code>loment lib cap DIR</code></td><td data-zh="能力需求闭包，带来源链" data-en="The capability closure, with provenance">能力需求闭包，带来源链</td></tr>
-                    <tr><td><code>loment lib check DIR</code></td><td data-zh="冲突检查：同名顶层项 / 同名不同域 / 入口" data-en="Conflict check: duplicate top-level names, same name in different domains, entry points">冲突检查：同名顶层项 / 同名不同域 / 入口</td></tr>
-                    <tr><td><code>loment lib materialize DIR --out DIR</code></td><td data-zh="把嵌套与多版本摊成编译器能直接吃的树" data-en="Flattens nesting and multiple versions into a tree the compiler can consume directly">把嵌套与多版本摊成编译器能直接吃的树</td></tr>
+                    <tr><td><code>python tools/loment.py lib tree DIR</code></td><td data-zh="依赖树，以及每个库的实例数" data-en="The dependency tree, and how many instances each library has">依赖树，以及每个库的实例数</td></tr>
+                    <tr><td><code>python tools/loment.py lib id DIR</code></td><td data-zh="实例身份（递归哈希）" data-en="Instance identity (the recursive hash)">实例身份（递归哈希）</td></tr>
+                    <tr><td><code>python tools/loment.py lib cap DIR</code></td><td data-zh="能力需求闭包，带来源链" data-en="The capability closure, with provenance">能力需求闭包，带来源链</td></tr>
+                    <tr><td><code>python tools/loment.py lib check DIR</code></td><td data-zh="冲突检查：同名顶层项 / 同名不同域 / 入口" data-en="Conflict check: duplicate top-level names, same name in different domains, entry points">冲突检查：同名顶层项 / 同名不同域 / 入口</td></tr>
+                    <tr><td><code>python tools/loment.py lib materialize DIR --out DIR</code></td><td data-zh="把嵌套与多版本摊成编译器能直接吃的树" data-en="Flattens nesting and multiple versions into a tree the compiler can consume directly">把嵌套与多版本摊成编译器能直接吃的树</td></tr>
                   </tbody>
                 </table>
               </div>
               <div class="prose">
-                <p data-zh-html="这一层由仓库的参考工具链承载（<code>tools/lomlib.py</code>，`loment lib` 派发到它）。<code>use</code> 本身的解析仍在编译器里：名字形式在 <code>loment/lib</code> → <code>examples</code> → <code>selfhost</code> → <code>tools</code> 下找，<strong>命中的必须唯一</strong>，找不到或有歧义都报错，不静默取第一个。" data-en-html="This layer is carried by the repository's reference toolchain (<code>tools/lomlib.py</code>, which <code>loment lib</code> dispatches to). Resolution of <code>use</code> itself still lives in the compiler: the name form searches <code>loment/lib</code> → <code>examples</code> → <code>selfhost</code> → <code>tools</code>, and <strong>a hit must be unique</strong> — not found or ambiguous are both errors, never a silent first match.">
-                  这一层由仓库的参考工具链承载（<code>tools/lomlib.py</code>，<code>loment lib</code> 派发到它）。<code>use</code> 本身的解析仍在编译器里：名字形式在 <code>loment/lib</code> → <code>examples</code> → <code>selfhost</code> → <code>tools</code> 下找，<strong>命中的必须唯一</strong>，找不到或有歧义都报错，不静默取第一个。
+                <p data-zh-html="这一层<strong>只在源码仓库里可用</strong>：<code>python tools/loment.py lib ...</code> 派发到 <code>tools/lomlib.py</code>。发行包没有 Python，所以发行版的 <code>loment</code> 命令面里没有 <code>lib</code> 这一组——把它列进 <code>help</code> 而敲下去得到「未知命令」，那是骗人。<code>use</code> 本身的解析则仍在编译器里：名字形式在 <code>loment/lib</code> → <code>examples</code> → <code>selfhost</code> → <code>tools</code> 下找，<strong>命中的必须唯一</strong>，找不到或有歧义都报错，不静默取第一个。" data-en-html="This layer is <strong>available only in the source repository</strong>: <code>python tools/loment.py lib ...</code> dispatches to <code>tools/lomlib.py</code>. The distribution has no Python, so the shipped <code>loment</code> has no <code>lib</code> group — listing it in <code>help</code> and then answering “unknown command” would be a lie. Resolution of <code>use</code> itself still lives in the compiler: the name form searches <code>loment/lib</code> → <code>examples</code> → <code>selfhost</code> → <code>tools</code>, and <strong>a hit must be unique</strong> — not found or ambiguous are both errors, never a silent first match.">
+                  这一层<strong>只在源码仓库里可用</strong>：<code>python tools/loment.py lib ...</code> 派发到 <code>tools/lomlib.py</code>。发行包没有 Python，所以发行版的 <code>loment</code> 命令面里没有 <code>lib</code> 这一组——把它列进 <code>help</code> 而敲下去得到「未知命令」，那是骗人。<code>use</code> 本身的解析则仍在编译器里：名字形式在 <code>loment/lib</code> → <code>examples</code> → <code>selfhost</code> → <code>tools</code> 下找，<strong>命中的必须唯一</strong>，找不到或有歧义都报错，不静默取第一个。
                 </p>
               </div>
               <div class="note note--steel">
