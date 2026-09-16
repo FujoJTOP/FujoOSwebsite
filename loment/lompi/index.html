@@ -278,6 +278,37 @@ $ lompi verify fixture/store multi lompi.lock
         </div>
       </section>
 
+      <!-- ======================================================== fetching -->
+      <section class="section" id="fetching" data-motion>
+        <div class="wrap">
+          <h2 class="h2" data-zh="取件那一半" data-en="The fetching half">取件那一半</h2>
+          <div class="prose">
+            <p data-zh="前面那些命令只读。这一半会动你的磁盘，而且它有一条不太一样的边界——先说这条。" data-en="The commands above only read. This half touches your disk, and it carries one boundary that is a little different — that comes first.">
+              前面那些命令只读。这一半会动你的磁盘，而且它有一条不太一样的边界——先说这条。
+            </p>
+          </div>
+          <ul class="list">
+            <li><b data-zh="网址库是一个 git 仓库" data-en="The registry is a git repository">网址库是一个 git 仓库</b> <span data-zh-html="—— 布局和 store 一模一样（<code>&lt;名字&gt;/&lt;版本&gt;/*.lomt</code>），没有服务端要运维。地址写在<strong>执行文件旁边</strong>的 <code>lompi.conf</code> 里，而那份配置<strong>本身就是 Loment 源码</strong>。" data-en-html=" — the layout is exactly a store (<code>&lt;name&gt;/&lt;version&gt;/*.lomt</code>), with no server to run. The address lives in <code>lompi.conf</code> <strong>next to the executable</strong>, and that config <strong>is Loment source</strong>.">—— 布局和 store 一模一样（<code>&lt;名字&gt;/&lt;版本&gt;/*.lomt</code>），没有服务端要运维。地址写在<strong>执行文件旁边</strong>的 <code>lompi.conf</code> 里，而那份配置<strong>本身就是 Loment 源码</strong>。</span></li>
+            <li><b data-zh="fetch 不联网，它打印计划" data-en="fetch does not go online; it prints a plan">fetch 不联网，它打印计划</b> <span data-zh-html="—— <strong>Lompi 自己做不到联网</strong>：PE 上那 8 个 syscall 里没有 socket，垫片也没有 <code>ws2_32</code>。所以它把 <code>git clone</code> 打出来交给 shell 或 CI——和「<code>plan</code> 不建目录」是同一条边界。" data-en-html=" — <strong>Lompi cannot go online by itself</strong>: the eight PE syscalls include no socket and the shim carries no <code>ws2_32</code>. So it prints the <code>git clone</code> for a shell or CI — the same boundary as <code>plan</code> not creating directories.">—— <strong>Lompi 自己做不到联网</strong>：PE 上那 8 个 syscall 里没有 socket，垫片也没有 <code>ws2_32</code>。所以它把 <code>git clone</code> 打出来交给 shell 或 CI——和「<code>plan</code> 不建目录」是同一条边界。</span></li>
+            <li><b data-zh="install 才动盘，而且要明说" data-en="install is what writes, and it must be asked to">install 才动盘，而且要明说</b> <span data-zh-html="—— 默认装进<strong>全局 store</strong>，<code>--into DIR</code> 装进项目；<strong>不带 <code>--apply</code> 只出计划</strong>。<code>--from-lock F</code> 只装 F 钉死的那些实例，对不上就拒。" data-en-html=" — the default destination is the <strong>global store</strong>, <code>--into DIR</code> targets a project, and <strong>without <code>--apply</code> it only prints a plan</strong>. <code>--from-lock F</code> installs exactly the instances F pins and refuses on a mismatch.">—— 默认装进<strong>全局 store</strong>，<code>--into DIR</code> 装进项目；<strong>不带 <code>--apply</code> 只出计划</strong>。<code>--from-lock F</code> 只装 F 钉死的那些实例，对不上就拒。</span></li>
+            <li><b data-zh="装之前先校验" data-en="Validated before it is installed">装之前先校验</b> <span data-zh-html="—— <code>lompi check</code> 逐条报：有没有 <code>*.lomt</code>、包名与目录名对不对、每个模块名与文件名对不对、<code>pkg.lomp</code> 的两个标签对不对。过不了的写 <code>[BAD]</code>，而且<strong>说清是哪一条</strong>。" data-en-html=" — <code>lompi check</code> reports line by line: are there <code>*.lomt</code> files, does the package name match the directory, does every module name match its file name, do the two <code>pkg.lomp</code> labels agree. Failures are marked <code>[BAD]</code> and <strong>named</strong>.">—— <code>lompi check</code> 逐条报：有没有 <code>*.lomt</code>、包名与目录名对不对、每个模块名与文件名对不对、<code>pkg.lomp</code> 的两个标签对不对。过不了的写 <code>[BAD]</code>，而且<strong>说清是哪一条</strong>。</span></li>
+          </ul>
+          <div class="code">
+            <div class="code__bar">
+              <span class="lang-tag">console</span>
+              <span data-zh="fetch 打出什么" data-en="what fetch prints">fetch 打出什么</span>
+              <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+            </div>
+            <pre>$ lompi fetch --registry https://example.invalid/loment-registry.git
+# lompi fetch plan (lompi cannot do network on PE -- no socket in the 8 syscalls)
+# registry: https://example.invalid/loment-registry.git  (from --registry)
+mkdir -p &lt;global&gt;\cache
+git clone --depth 1 https://example.invalid/loment-registry.git &lt;global&gt;\cache\loment-registry
+# to update later:  git -C &lt;global&gt;\cache\loment-registry pull</pre>
+          </div>
+        </div>
+      </section>
+
       <!-- ========================================================= limits -->
       <section class="section" id="limits" data-motion>
         <div class="wrap">
@@ -287,7 +318,7 @@ $ lompi verify fixture/store multi lompi.lock
             <li><b data-zh-html="<code>plan</code> 不建目录" data-en-html="<code>plan</code> does not create directories"> <code>plan</code> 不建目录</b> <span data-zh-html="—— 工具链的 Windows PE 目标没有 <code>mkdir</code>，所以它只打计划，<code>deps/</code> 下的目录要自己先建好。这也是「它就是 install」这句话的完整含义：它算，落盘交给上层。" data-en-html=" — the toolchain's Windows PE target has no <code>mkdir</code>, so it prints a plan and the directories under <code>deps/</code> must exist first. That is the whole of “this is install”: it computes, and putting bytes on disk belongs to the layer above.">—— 工具链的 Windows PE 目标没有 <code>mkdir</code>，所以它只打计划，<code>deps/</code> 下的目录要自己先建好。这也是「它就是 install」这句话的完整含义：它算，落盘交给上层。</span></li>
             <li><b data-zh="单文件上限 256 KiB" data-en="A 256 KiB per-file ceiling">单文件上限 256 KiB</b> <span data-zh-html="—— 超了它<strong>拒算这个包的身份</strong>，而不是截断。静默截断会算出一个<strong>错的</strong>身份，那比报错坏得多。" data-en-html=" — over that it <strong>refuses to compute the package's identity</strong> rather than truncating. A silent truncation would produce a <strong>wrong</strong> identity, which is far worse than an error.">—— 超了它<strong>拒算这个包的身份</strong>，而不是截断。静默截断会算出一个<strong>错的</strong>身份，那比报错坏得多。</span></li>
             <li><b data-zh="容量护栏会静默截断" data-en="Capacity guard rails truncate silently">容量护栏会静默截断</b> <span data-zh-html="—— 仓库 512 个实例、单包 <code>use</code> 边 2048 条、目录项 4096 条、依赖树深度 256。<strong>超出这些没有报错</strong>，属于已知上限，不是设计。" data-en-html=" — 512 instances per store, 2048 <code>use</code> edges per package, 4096 directory entries, a tree depth of 256. <strong>Going past these produces no error</strong>; they are known ceilings, not a design.">—— 仓库 512 个实例、单包 <code>use</code> 边 2048 条、目录项 4096 条、依赖树深度 256。<strong>超出这些没有报错</strong>，属于已知上限，不是设计。</span></li>
-            <li><b data-zh="没有注册中心，没有网络" data-en="No registry, no network">没有注册中心，没有网络</b> <span data-zh="—— 仓库就是一个本地目录，取件就是读文件。也不做二进制分发：泛型是类型定向单态化的，使用方必须看得到源码。" data-en=" — a store is a local directory and fetching is reading a file. Nor is there binary distribution: generics are type-directed and monomorphised, so a consumer must be able to see the source.">—— 仓库就是一个本地目录，取件就是读文件。也不做二进制分发：泛型是类型定向单态化的，使用方必须看得到源码。</span></li>
+            <li><b data-zh="没有注册中心服务端，Lompi 也不自己联网" data-en="No registry server, and Lompi does not go online itself">没有注册中心服务端，Lompi 也不自己联网</b> <span data-zh-html="—— 网址库就是一个 <strong>git 仓库</strong>（布局与 store 相同），没有服务端要运维。而 <code>fetch</code> 给出的是<strong>计划</strong>：PE 上那 8 个 syscall 里没有 socket，垫片也没有 <code>ws2_32</code>，所以网络那一步交给 git、由 shell 或 CI 执行。也不做二进制分发：泛型是类型定向单态化的，使用方必须看得到源码。" data-en-html=" — a registry is a <strong>git repository</strong> with the same layout as a store, and there is no server to run. And <code>fetch</code> prints a <strong>plan</strong>: the eight PE syscalls include no socket and the shim carries no <code>ws2_32</code>, so the network step goes to git, run by a shell or CI. Nor is there binary distribution: generics are type-directed and monomorphised, so a consumer must be able to see the source.">—— 网址库就是一个 <strong>git 仓库</strong>（布局与 store 相同），没有服务端要运维。而 <code>fetch</code> 给出的是<strong>计划</strong>：PE 上那 8 个 syscall 里没有 socket，垫片也没有 <code>ws2_32</code>，所以网络那一步交给 git、由 shell 或 CI 执行。也不做二进制分发：泛型是类型定向单态化的，使用方必须看得到源码。</span></li>
           </ul>
           <div class="note note--steel">
             <strong data-zh="完整参考在文档里：" data-en="The full reference is in the docs: ">完整参考在文档里：</strong>
@@ -319,6 +350,7 @@ $ lompi verify fixture/store multi lompi.lock
             <a href="#what" data-zh="差在哪" data-en="Where it differs">差在哪</a>
             <a href="#identity" data-zh="身份" data-en="Identity">身份</a>
             <a href="#look" data-zh="跑起来什么样" data-en="What it looks like">跑起来什么样</a>
+            <a href="#fetching" data-zh="取件那一半" data-en="The fetching half">取件那一半</a>
             <a href="#limits" data-zh="现在到哪一步" data-en="Where it stands">现在到哪一步</a>
           </div>
           <div>

@@ -299,12 +299,17 @@
                     </tr>
                   </thead>
                   <tbody>
+                    <tr><td><code>lompi install &lt;名字&gt; [--into DIR] [--apply] [--from-lock F]</code></td><td data-zh-html="取件 / 校验 / 安装。默认装进<strong>全局 store</strong>；<code>--apply</code> 才真写盘" data-en-html="Fetch, validate, install. Goes to the <strong>global store</strong> by default; <code>--apply</code> is what actually writes">取件 / 校验 / 安装。默认装进<strong>全局 store</strong>；<code>--apply</code> 才真写盘</td></tr>
+                    <tr><td><code>lompi check &lt;目录&gt;</code></td><td data-zh="这个目录是不是一个合法的 Loment 库" data-en="Is this directory a valid Loment library?">这个目录是不是一个合法的 Loment 库</td></tr>
+                    <tr><td><code>lompi fetch [--registry URL]</code></td><td data-zh="打出网址库的下载计划" data-en="Prints the plan for downloading the registry">打出网址库的下载计划</td></tr>
+                    <tr><td><code>lompi config</code></td><td data-zh="显示全局根与网址库（含命中了哪条规则）" data-en="Shows the global root and the registry, including which rule fired">显示全局根与网址库（含命中了哪条规则）</td></tr>
+                    <tr><td><code>lompi version</code></td><td data-zh="版本" data-en="The version">版本</td></tr>
                     <tr><td><code>lompi index &lt;store&gt;</code></td><td data-zh="仓库里有哪些包" data-en="What packages the store holds">仓库里有哪些包</td></tr>
                     <tr><td><code>lompi show &lt;store&gt; &lt;名字[@版本]&gt;</code></td><td data-zh="元数据 / use 边 / 身份" data-en="Metadata, use edges, identity">元数据 / use 边 / 身份</td></tr>
                     <tr><td><code>lompi tree &lt;store&gt; &lt;名字[@版本]&gt;</code></td><td data-zh="依赖树" data-en="The dependency tree">依赖树</td></tr>
                     <tr><td><code>lompi resolve &lt;store&gt; &lt;名字[@版本]&gt;</code></td><td data-zh="打出锁（身份钉死的清单）" data-en="Emits a lock: the list with identities pinned">打出锁（身份钉死的清单）</td></tr>
                     <tr><td><code>lompi verify &lt;store&gt; &lt;名字[@版本]&gt; &lt;锁文件&gt;</code></td><td data-zh="重算并逐字节比对" data-en="Recomputes and compares byte for byte">重算并逐字节比对</td></tr>
-                    <tr><td><code>lompi plan &lt;store&gt; &lt;名字[@版本]&gt; [--into D]</code></td><td data-zh-html="落盘计划——<strong>这就是 install</strong>" data-en-html="The on-disk plan — <strong>this is install</strong>">落盘计划——<strong>这就是 install</strong></td></tr>
+                    <tr><td><code>lompi plan &lt;store&gt; &lt;名字[@版本]&gt; [--into D]</code></td><td data-zh="闭包与物化计划" data-en="The closure and materialisation plan">闭包与物化计划</td></tr>
                     <tr><td><code>lompi hash &lt;包目录&gt;</code></td><td data-zh="单个包的自身源码哈希" data-en="One package's own-source hash">单个包的自身源码哈希</td></tr>
                   </tbody>
                 </table>
@@ -377,6 +382,104 @@ $ lompi verify fixture/store multi lompi.lock
                 <p data-zh-html="缩进表示层次；菱形依赖（两个包依赖同一个）第二次出现时会标 <code>(already shown)</code>，不重复展开——那是<strong>同一个实例</strong>，展开两次会骗人。锁是<strong>身份</strong>清单而不是版本清单；验锁会把整棵树重算一遍再逐字节比对，拿错一份锁得到的是 <code>[DIFF] 锁与仓库不一致</code> 并以 1 退出，不是「差不多能用」。" data-en-html="Indentation is depth; when a diamond appears (two packages depending on the same one) the second occurrence is marked <code>(already shown)</code> rather than expanded again — it is <strong>one instance</strong>, and expanding it twice would mislead. A lock is a list of <strong>identities</strong>, not versions; verifying recomputes the whole tree and compares byte for byte, so the wrong lock yields <code>[DIFF] 锁与仓库不一致</code> and exit 1, not “close enough”.">
                   缩进表示层次；菱形依赖（两个包依赖同一个）第二次出现时会标 <code>(already shown)</code>，不重复展开——那是<strong>同一个实例</strong>，展开两次会骗人。锁是<strong>身份</strong>清单而不是版本清单；验锁会把整棵树重算一遍再逐字节比对，拿错一份锁得到的是 <code>[DIFF] 锁与仓库不一致</code> 并以 1 退出，不是「差不多能用」。
                 </p>
+              </div>
+
+              <h2 data-zh="取件那一半：全局根、网址库、install" data-en="The fetching half: the global root, the registry, install">取件那一半：全局根、网址库、install</h2>
+              <div class="prose">
+                <p data-zh="上面那七条是只读的。下面这一半会动你的磁盘，所以先说清楚它从哪儿拿、往哪儿放。" data-en="The seven commands above only read. This half touches your disk, so where it fetches from and where it puts things come first.">
+                  上面那七条是只读的。下面这一半会动你的磁盘，所以先说清楚它从哪儿拿、往哪儿放。
+                </p>
+              </div>
+              <div class="prose">
+                <h3 class="h3" data-zh="全局根是「推」出来的，不是读环境变量" data-en="The global root is derived, not read from the environment">全局根是「推」出来的，不是读环境变量</h3>
+                <p data-zh-html="因为没法读：实测 <code>/proc/self/environ</code> 在 PE 垫片上打不开（它只合成 cmdline），语言也没有 <code>getenv</code>。但 <code>argv[0]</code> 是执行文件的<strong>全路径</strong>，所以从它反推是可行的。规则按可靠性排序，<strong>命中哪条 <code>lompi config</code> 会打出来</strong>——推错了要看得见，不能静默走错目录。" data-en-html="Because it cannot be read: on the PE shim <code>/proc/self/environ</code> does not open (the shim synthesises cmdline only), and the language has no <code>getenv</code>. But <code>argv[0]</code> is the executable's <strong>full path</strong>, so deriving it from there works. The rules are ordered by reliability and <strong><code>lompi config</code> prints which one fired</strong> — a wrong guess has to be visible rather than sending files quietly to the wrong directory.">
+                  因为没法读：实测 <code>/proc/self/environ</code> 在 PE 垫片上打不开（它只合成 cmdline），语言也没有 <code>getenv</code>。但 <code>argv[0]</code> 是执行文件的<strong>全路径</strong>，所以从它反推是可行的。规则按可靠性排序，<strong>命中哪条 <code>lompi config</code> 会打出来</strong>——推错了要看得见，不能静默走错目录。
+                </p>
+              </div>
+              <div class="code">
+                <div class="code__bar">
+                  <span class="lang-tag">console</span>
+                  <span data-zh="全局根与网址库" data-en="global root and registry">全局根与网址库</span>
+                  <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+                </div>
+                <pre>$ lompi config
+version:  0.1.0
+exe:      D:\Dev\Lolment-ku\lompi
+global:   D:\Dev\Lolment-ku\.lompi
+  rule:   fallback: &lt;exe dir&gt;\.lompi (exe is not under AppData or Users)
+store:    D:\Dev\Lolment-ku\.lompi\store
+cache:    D:\Dev\Lolment-ku\.lompi\cache
+conf:     D:\Dev\Lolment-ku\lompi\lompi.conf  (absent)
+registry: (not set) -- install will use the global store</pre>
+              </div>
+              <div class="prose">
+                <h3 class="h3" data-zh="网址库是一个 git 仓库" data-en="The registry is a git repository">网址库是一个 git 仓库</h3>
+                <p data-zh-html="布局和 store 完全一样：<code>&lt;名字&gt;/&lt;版本&gt;/*.lomt</code>。它的地址写在<strong>执行文件旁边</strong>的 <code>lompi.conf</code> 里，内容是 <strong>Loment 源码</strong>，形状与 <code>pkg.lomp</code> 一样——不新造格式，读它用的就是读清单那套。" data-en-html="The layout is exactly a store: <code>&lt;name&gt;/&lt;version&gt;/*.lomt</code>. Its address lives in <code>lompi.conf</code> <strong>next to the executable</strong>, which is <strong>Loment source</strong> shaped like <code>pkg.lomp</code> — no new format, read with the same label lexer the manifests use.">
+                  布局和 store 完全一样：<code>&lt;名字&gt;/&lt;版本&gt;/*.lomt</code>。它的地址写在<strong>执行文件旁边</strong>的 <code>lompi.conf</code> 里，内容是 <strong>Loment 源码</strong>，形状与 <code>pkg.lomp</code> 一样——不新造格式，读它用的就是读清单那套。
+                </p>
+              </div>
+              <div class="code">
+                <div class="code__bar">
+                  <span class="lang-tag">loment</span>
+                  <span data-zh="lompi.conf" data-en="lompi.conf">lompi.conf</span>
+                  <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+                </div>
+                <pre>module conf
+
+pub fn registry() -> str {
+    return "https://example.invalid/loment-registry.git";
+}</pre>
+              </div>
+              <div class="prose">
+                <h3 class="h3" data-zh="fetch 不联网，install 才动盘" data-en="fetch does not go online; install is what writes">fetch 不联网，install 才动盘</h3>
+                <p data-zh-html="<strong>Lompi 自己做不到联网。</strong>PE 目标上只有 8 个 syscall，里面没有 socket；垫片也没有 <code>ws2_32</code> / <code>winhttp</code>。所以 <code>fetch</code> 给出的是<strong>计划</strong>，由 shell 或 CI 执行——与「<code>plan</code> 不建目录」是同一条边界，只是这次让出去的是 git。" data-en-html="<strong>Lompi cannot go online by itself.</strong> The PE target has 8 syscalls and none of them is a socket; the shim has no <code>ws2_32</code> or <code>winhttp</code>. So <code>fetch</code> prints a <strong>plan</strong> for a shell or CI to run — the same boundary as <code>plan</code> not creating directories, except what is handed off this time is git.">
+                  <strong>Lompi 自己做不到联网。</strong>PE 目标上只有 8 个 syscall，里面没有 socket；垫片也没有 <code>ws2_32</code> / <code>winhttp</code>。所以 <code>fetch</code> 给出的是<strong>计划</strong>，由 shell 或 CI 执行——与「<code>plan</code> 不建目录」是同一条边界，只是这次让出去的是 git。
+                </p>
+              </div>
+              <div class="code">
+                <div class="code__bar">
+                  <span class="lang-tag">console</span>
+                  <span data-zh="fetch 打出什么" data-en="what fetch prints">fetch 打出什么</span>
+                  <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+                </div>
+                <pre>$ lompi fetch --registry https://example.invalid/loment-registry.git
+# lompi fetch plan (lompi cannot do network on PE -- no socket in the 8 syscalls)
+# registry: https://example.invalid/loment-registry.git  (from --registry)
+mkdir -p &lt;global&gt;\cache
+git clone --depth 1 https://example.invalid/loment-registry.git &lt;global&gt;\cache\loment-registry
+# to update later:  git -C &lt;global&gt;\cache\loment-registry pull</pre>
+              </div>
+              <div class="prose">
+                <p data-zh-html="克隆下来之后，<code>install</code> 从<strong>缓存里的网址库</strong>取件；没配网址库，就从<strong>全局 store</strong> 取。取到之后先<strong>校验</strong>——不是合法的 Loment 库就拒装，并且说清是哪一条不过。" data-en-html="Once that clone exists, <code>install</code> fetches from <strong>the registry in the cache</strong>; with no registry configured it fetches from the <strong>global store</strong>. What it fetches is then <strong>validated</strong> — if it is not a valid Loment library the install is refused, and which check failed is named.">
+                  克隆下来之后，<code>install</code> 从<strong>缓存里的网址库</strong>取件；没配网址库，就从<strong>全局 store</strong> 取。取到之后先<strong>校验</strong>——不是合法的 Loment 库就拒装，并且说清是哪一条不过。
+                </p>
+                <p data-zh-html="默认装进<strong>全局 store</strong>；<code>--into DIR</code> 装到 <code>DIR\&lt;名字&gt;\</code>（项目内）。<strong>不带 <code>--apply</code> 就只出计划</strong>，要它真写盘得显式加。<code>--from-lock F</code> 则只装 F 钉死的那些实例，对不上就拒。" data-en-html="The default destination is the <strong>global store</strong>; <code>--into DIR</code> targets <code>DIR\&lt;name&gt;\</code> for a project. <strong>Without <code>--apply</code> it only prints a plan</strong> — writing requires saying so. <code>--from-lock F</code> installs exactly the instances F pins and refuses on a mismatch.">
+                  默认装进<strong>全局 store</strong>；<code>--into DIR</code> 装到 <code>DIR\&lt;名字&gt;\</code>（项目内）。<strong>不带 <code>--apply</code> 就只出计划</strong>，要它真写盘得显式加。<code>--from-lock F</code> 则只装 F 钉死的那些实例，对不上就拒。
+                </p>
+              </div>
+              <div class="prose">
+                <h3 class="h3" data-zh="check：一个目录算不算合法的 Loment 库" data-en="check: is this directory a valid Loment library?">check：一个目录算不算合法的 Loment 库</h3>
+                <p data-zh="装之前校验的就是这一组。它逐条报，过不了的写 [BAD]：" data-en="This is the set that validation runs before an install. It reports line by line, marking failures [BAD]:">
+                  装之前校验的就是这一组。它逐条报，过不了的写 [BAD]：
+                </p>
+              </div>
+              <div class="code">
+                <div class="code__bar">
+                  <span class="lang-tag">console</span>
+                  <span data-zh="check 通过 / 不通过" data-en="check passing and failing">check 通过 / 不通过</span>
+                  <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+                </div>
+                <pre>$ lompi check fixture/store/mathutil/0.1.0
+[ok] source files: 1
+[ok] package name: mathutil
+[ok] every module name matches its file name
+[ok] no pkg.lomp (optional)
+[OK] lompi: this is a valid Loment library
+
+$ lompi check fixture/store_broken
+[ok] source files: 0
+[BAD] no *.lomt in this directory
+[BAD] lompi: 1 check(s) failed</pre>
               </div>
 
               <h2 data-zh="身份怎么算" data-en="How identity is computed">身份怎么算</h2>
@@ -510,7 +613,7 @@ $ lompi verify fixture/store multi lompi.lock
 
               <h2 data-zh="边界（诚实清单）" data-en="Boundaries (stated plainly)">边界（诚实清单）</h2>
               <ul class="list">
-                <li><b data-zh="没有注册中心、没有网络" data-en="No registry, no network">没有注册中心、没有网络</b> <span data-zh="—— 仓库就是一个本地目录，取件就是读文件。" data-en=" — a store is a local directory; fetching is reading a file.">—— 仓库就是一个本地目录，取件就是读文件。</span></li>
+                <li><b data-zh="没有注册中心服务端，Lompi 也不自己联网" data-en="No registry server, and Lompi does not go online itself">没有注册中心服务端，Lompi 也不自己联网</b> <span data-zh-html="—— 网址库就是一个 <strong>git 仓库</strong>（布局与 store 相同），不需要谁去运维一个服务端。<strong>Lompi 自己做不到联网</strong>：PE 上那 8 个 syscall 里没有 socket，垫片也没有 <code>ws2_32</code> / <code>winhttp</code>；所以网络那一步是 <code>fetch</code> <strong>打印出来交给 git 的</strong>，由 shell 或 CI 执行。" data-en-html=" — a registry is a <strong>git repository</strong> (same layout as a store); there is no server for anyone to run. And <strong>Lompi cannot go online itself</strong>: the eight PE syscalls include no socket, and the shim carries no <code>ws2_32</code> or <code>winhttp</code>. So the network step is <strong>printed by <code>fetch</code> and handed to git</strong>, for a shell or CI to run.">—— 网址库就是一个 <strong>git 仓库</strong>（布局与 store 相同），不需要谁去运维一个服务端。<strong>Lompi 自己做不到联网</strong>：PE 上那 8 个 syscall 里没有 socket，垫片也没有 <code>ws2_32</code> / <code>winhttp</code>；所以网络那一步是 <code>fetch</code> <strong>打印出来交给 git 的</strong>，由 shell 或 CI 执行。</span></li>
                 <li><b data-zh="不做二进制分发" data-en="No binary distribution">不做二进制分发</b> <span data-zh="—— 泛型是类型定向单态化的，使用方必须看得到源码。" data-en=" — generics are type-directed and monomorphised, so a consumer must be able to see the source.">—— 泛型是类型定向单态化的，使用方必须看得到源码。</span></li>
                 <li><b data-zh-html="<code>plan</code> 不建目录" data-en-html="<code>plan</code> does not create directories"> <code>plan</code> 不建目录</b> <span data-zh-html="—— 工具链的 Windows PE 目标没有 <code>mkdir</code>，它只打计划；<code>deps/</code> 下的目录要自己先建好。" data-en-html=" — the toolchain's Windows PE target has no <code>mkdir</code>, so it only prints a plan; the directories under <code>deps/</code> have to exist first.">—— 工具链的 Windows PE 目标没有 <code>mkdir</code>，它只打计划；<code>deps/</code> 下的目录要自己先建好。</span></li>
                 <li><b data-zh="单文件上限 256 KiB" data-en="A 256 KiB per-file ceiling">单文件上限 256 KiB</b> <span data-zh-html="—— 超了 Lompi <strong>拒算这个包的身份</strong>，而不是截断。静默截断会算出一个<strong>错的</strong>身份，那比报错坏得多。" data-en-html=" — over that, Lompi <strong>refuses to compute the package's identity</strong> rather than truncating. A silent truncation would produce a <strong>wrong</strong> identity, which is far worse than an error.">—— 超了 Lompi <strong>拒算这个包的身份</strong>，而不是截断。静默截断会算出一个<strong>错的</strong>身份，那比报错坏得多。</span></li>
