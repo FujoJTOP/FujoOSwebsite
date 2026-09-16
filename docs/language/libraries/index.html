@@ -10,14 +10,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>写一个 Loment 库 — 语言 — FujoOS 文档</title>
-    <meta name="description" content="一个库就是一个 .lomt 文件加 pub 标记——没有单独的产物，也没有 ABI。这里写清楚 use 怎么找到它、pub 划在哪、平坦符号名带来的那条最硬约束，以及仓库里两张真实库为什么长成那样。" />
+    <meta name="description" content="一个库就是一个目录。依赖是源码里的 use，导出是 pub，清单是可选的标签文件——写库没有新东西要学。多版本靠实例身份与物化共存，能力需求是推导出来的。" />
     <link rel="canonical" href="https://fujojtop.github.io/FujoOSwebsite/docs/language/libraries/" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="FujoOS" />
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:locale:alternate" content="en" />
     <meta property="og:title" content="写一个 Loment 库 — 语言 — FujoOS 文档" />
-    <meta property="og:description" content="一个库就是一个 .lomt 文件加 pub 标记——没有单独的产物，也没有 ABI。这里写清楚 use 怎么找到它、pub 划在哪、平坦符号名带来的那条最硬约束，以及仓库里两张真实库为什么长成那样。" />
+    <meta property="og:description" content="一个库就是一个目录。依赖是源码里的 use，导出是 pub，清单是可选的标签文件——写库没有新东西要学。多版本靠实例身份与物化共存，能力需求是推导出来的。" />
     <meta property="og:url" content="https://fujojtop.github.io/FujoOSwebsite/docs/language/libraries/" />
     <meta property="og:image" content="https://fujojtop.github.io/FujoOSwebsite/assets/og-card.png" />
     <meta property="og:image:width" content="1200" />
@@ -66,7 +66,7 @@
       <div class="banner__inner">
         <b>FujoOS docs</b>
         <span class="sep" aria-hidden="true">|</span>
-        <span data-zh="写库 · 源级复用，没有 ABI" data-en="Libraries · reuse at the source level, with no ABI">写库 · 源级复用，没有 ABI</span>
+        <span data-zh="写库 · 目录即库，依赖从源码来" data-en="Libraries · a directory is a library; dependencies come from the source">写库 · 目录即库，依赖从源码来</span>
         <span class="cadence"
           ><span class="dot" aria-hidden="true"></span
           ><span data-zh="任何“完成”都要给出可重放的命令与输出" data-en="any “done” must come with a replayable command and its output">任何“完成”都要给出可重放的命令与输出</span></span
@@ -220,135 +220,202 @@
 <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="写一个 Loment 库" data-en="Writing a Loment library">写一个 Loment 库</h1>
 
               <div class="prose">
-                <p data-zh-html="Loment 没有单独的库产物。一个库就是一个 <code>.lomt</code> 文件：首行 <code>module</code>，里面用 <code>pub</code> 标出要给外面看的项。使用者写 <code>use</code>，编译器把这个文件读进来，和使用方<strong>拼成一个编译单元</strong>一起编。" data-en-html="Loment has no separate library artefact. A library is a <code>.lomt</code> file: a <code>module</code> line at the top, with <code>pub</code> marking what the outside may see. A consumer writes <code>use</code>, and the compiler pulls that file in and compiles it <strong>as one unit with the caller</strong>.">
-                  Loment 没有单独的库产物。一个库就是一个 <code>.lomt</code> 文件：首行 <code>module</code>，里面用 <code>pub</code> 标出要给外面看的项。使用者写 <code>use</code>，编译器把这个文件读进来，和使用方<strong>拼成一个编译单元</strong>一起编。
-                </p>
-                <p data-zh="这带来两个后果，一个是好处一个是代价，动手前都得知道：好处是没有 ABI 要维护、没有版本兼容矩阵、没有符号导出表，改一个库使用者重编就完了；代价是顶层名字全单元共用——你叫 parse、使用者也叫 parse，那就是重名错误。" data-en="That has two consequences, one a benefit and one a cost, and both matter before you start. The benefit: no ABI to maintain, no version compatibility matrix, no symbol export table — change a library and consumers just rebuild. The cost: top-level names are shared across the whole unit — if you call something parse and the consumer does too, that is a duplicate-name error.">
-                  这带来两个后果，一个是好处一个是代价，动手前都得知道：好处是没有 ABI 要维护、没有版本兼容矩阵、没有符号导出表，改一个库使用者重编就完了；代价是顶层名字全单元共用——你叫 parse、使用者也叫 parse，那就是重名错误。
+                <p data-zh-html="库系统有一条宪法：<strong>学完 Loment，写库不该再学任何新东西。</strong>所以这里没有 <code>pyproject.toml</code>，没有 <code>pom.xml</code>，也没有第二种清单语言——任何「写库要额外学一门语法 / 格式 / 工具」的设计都被直接判负。" data-en-html="The library system has a constitution: <strong>having learned Loment, writing a library should teach you nothing new.</strong> So there is no <code>pyproject.toml</code>, no <code>pom.xml</code>, and no second manifest language — any design where “writing a library means learning an extra syntax, format or tool” is ruled out on sight.">
+                  库系统有一条宪法：<strong>学完 Loment，写库不该再学任何新东西。</strong>所以这里没有 <code>pyproject.toml</code>，没有 <code>pom.xml</code>，也没有第二种清单语言——任何「写库要额外学一门语法 / 格式 / 工具」的设计都被直接判负。
                 </p>
               </div>
 
-              <h2 data-zh="最小的一个库" data-en="The smallest library">最小的一个库</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="一件事" data-en="Thing">一件事</th>
+                      <th scope="col" data-zh="怎么做" data-en="How">怎么做</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td data-zh="一个库" data-en="A library">一个库</td>
+                      <td data-zh-html="<strong>一个目录里的一堆 Loment 文件</strong>——不是编译产物，没有单独的库文件" data-en-html="<strong>A directory full of Loment files</strong> — not a build artefact, and there is no separate library file">一个目录里的一堆 Loment 文件——不是编译产物，没有单独的库文件</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="依赖" data-en="Dependencies">依赖</td>
+                      <td data-zh-html="源码里的 <code>use</code>。<strong>不用另行声明</strong>" data-en-html="<code>use</code> in the source. <strong>Nothing to declare separately</strong>">源码里的 <code>use</code>。<strong>不用另行声明</strong></td>
+                    </tr>
+                    <tr>
+                      <td data-zh="导出" data-en="Exports">导出</td>
+                      <td><code>pub</code></td>
+                    </tr>
+                    <tr>
+                      <td data-zh="清单" data-en="Manifest">清单</td>
+                      <td data-zh-html="<strong>可选</strong>，而且它自己就是 Loment 源码（<code>pkg.lomp</code>）" data-en-html="<strong>Optional</strong>, and it is Loment source itself (<code>pkg.lomp</code>)"><strong>可选</strong>，而且它自己就是 Loment 源码（<code>pkg.lomp</code>）</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 data-zh="依赖从源码来，不从清单来" data-en="Dependencies come from the source, not a manifest">依赖从源码来，不从清单来</h2>
               <div class="prose">
-                <p data-zh-html="库这边：一个文件，一个模块名，两个 <code>pub</code> 项。" data-en-html="On the library side: one file, one module name, two <code>pub</code> items.">
-                  库这边：一个文件，一个模块名，两个 <code>pub</code> 项。
+                <p data-zh-html="依赖<strong>不需要声明</strong>——它就是源码里的 <code>use</code>。解析器读一个模块的边，跟读它的函数一样自然。于是「依赖列表」这种东西在 Loment 里<strong>不存在</strong>，也就没有「声明与实际不符」这一类错。" data-en-html="Dependencies are <strong>not declared</strong> — they <em>are</em> the <code>use</code> lines in the source. Reading a module's edges is as natural to the resolver as reading its functions. So a “dependency list” does not exist in Loment, and neither does the class of error where the list and the code disagree.">
+                  依赖<strong>不需要声明</strong>——它就是源码里的 <code>use</code>。解析器读一个模块的边，跟读它的函数一样自然。于是「依赖列表」这种东西在 Loment 里<strong>不存在</strong>，也就没有「声明与实际不符」这一类错。
+                </p>
+                <p data-zh="这一条值得停一下：别的生态里，「清单写了依赖 A、代码其实不用 A」是一种长期存在的谎言类别——要靠额外的工具去检测它有没有过期。在这里，它连存在的地方都没有。" data-en="Worth pausing on: in other ecosystems, “the manifest declares A but the code never uses it” is a durable class of lie, and you need extra tooling just to detect that it has gone stale. Here it has nowhere to exist.">
+                  这一条值得停一下：别的生态里，「清单写了依赖 A、代码其实不用 A」是一种长期存在的谎言类别——要靠额外的工具去检测它有没有过期。在这里，它连存在的地方都没有。
                 </p>
               </div>
+
+              <h2 data-zh="pkg.lomp：可选的标签文件" data-en="pkg.lomp: an optional label file">pkg.lomp：可选的标签文件</h2>
               <div class="code">
                 <div class="code__bar">
                   <span class="lang-tag">loment</span>
-                  <span data-zh="库" data-en="the library">库</span>
+                  <span data-zh="pkg.lomp" data-en="pkg.lomp">pkg.lomp</span>
                   <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
                 </div>
-                <pre>// loment/lib/units.lomt
-module units
+                <pre>module pkg
 
-pub const SCALE: u32 = 1000;
+pub fn name() -> str {
+    return "mathutil";
+}
 
-pub fn to_grams(kg: u32) -> u32 {
-    return kg * SCALE;
-}</pre>
-              </div>
-              <div class="prose">
-                <p data-zh-html="使用方：<code>use</code> 之后<strong>直接写裸名字调</strong>，不写 <code>units::to_grams</code>。" data-en-html="On the consumer side: after <code>use</code>, the call is written <strong>as the bare name</strong> — not <code>units::to_grams</code>.">
-                  使用方：<code>use</code> 之后<strong>直接写裸名字调</strong>，不写 <code>units::to_grams</code>。
-                </p>
-              </div>
-              <div class="code">
-                <div class="code__bar">
-                  <span class="lang-tag">loment</span>
-                  <span data-zh="使用方" data-en="the consumer">使用方</span>
-                  <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
-                </div>
-                <pre>module app
-
-use units
-
-fn _start() {
-    let g: u32 = to_grams(3);
-    // g == 3000
-    syscall4(60, 0, 0, 0);
+pub fn version() -> str {
+    return "0.1.0";
 }</pre>
               </div>
               <ul class="list">
-                <li><b data-zh="调用是裸名字" data-en="Calls are bare names">调用是裸名字</b> <span data-zh-html="—— 符号名本来就是平的（见下面「最硬的一条约束」），所以没有 <code>::</code> 前缀这回事。" data-en-html=" — symbol names are flat to begin with (see “the hardest constraint” below), so there is no <code>::</code> prefix to write.">—— 符号名本来就是平的（见下面「最硬的一条约束」），所以没有 <code>::</code> 前缀这回事。</span></li>
-                <li><b data-zh="_start 只有使用方写" data-en="Only the consumer writes _start">_start 只有使用方写</b> <span data-zh="—— 库文件里不要放入口。一个单元里也只能有一个。" data-en=" — a library file must not contain the entry point, and a unit can only have one anyway.">—— 库文件里不要放入口。一个单元里也只能有一个。</span></li>
+                <li><b data-zh="没有 deps 段" data-en="No deps section">没有 deps 段</b> <span data-zh="—— 依赖在源码里。" data-en=" — dependencies live in the source.">—— 依赖在源码里。</span></li>
+                <li><b data-zh="可选" data-en="Optional">可选</b> <span data-zh="—— 没有它就用目录名当包名，版本记为 0.0.0。" data-en=" — without it, the directory name becomes the package name and the version is 0.0.0.">—— 没有它就用目录名当包名，版本记为 0.0.0。</span></li>
+                <li><b data-zh="只认字面量返回" data-en="Literal returns only">只认字面量返回</b> <span data-zh="—— 清单是标签，不接表达式，免得逼出「清单能算多复杂」这种问题。" data-en=" — the manifest is a label, not an expression, which avoids the whole “how complex may a manifest compute” question.">—— 清单是标签，不接表达式，免得逼出「清单能算多复杂」这种问题。</span></li>
               </ul>
-
-              <h2 data-zh="use 怎么找到它" data-en="How use finds it">use 怎么找到它</h2>
-              <div class="table-wrap">
-                <table>
-                  <thead>
-                    <tr>
-                      <th scope="col" data-zh="写法" data-en="Form">写法</th>
-                      <th scope="col" data-zh="去哪儿找" data-en="Where it looks">去哪儿找</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><code>use units</code></td>
-                      <td data-zh-html="按顺序在 <code>loment/lib/</code> → <code>loment/examples/</code> → <code>loment/selfhost/</code> → <code>loment/tools/</code> 里找 <code>units.lomt</code>" data-en-html="In order: <code>loment/lib/</code> → <code>loment/examples/</code> → <code>loment/selfhost/</code> → <code>loment/tools/</code>, looking for <code>units.lomt</code>">按顺序在 <code>loment/lib/</code> → <code>loment/examples/</code> → <code>loment/selfhost/</code> → <code>loment/tools/</code> 里找 <code>units.lomt</code></td>
-                    </tr>
-                    <tr>
-                      <td><code>use "lib/units.lomt"</code></td>
-                      <td data-zh="按路径，相对当前文件或工作目录" data-en="By path, relative to the current file or the working directory">按路径，相对当前文件或工作目录</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div class="prose">
-                <p data-zh-html="找不到、或者同时命中多处，都报 <strong>E18</strong>。名字形式是给「装在 <code>lib/</code> 里的公共库」用的；库自己的伴生文件（比如 <code>json.lomt</code> 与它旁边的辅助文件）要用<strong>路径形式</strong>，否则会跟着使用者的目录结构漂移。" data-en-html="Not finding it, or matching more than one place, both raise <strong>E18</strong>. The bare-name form is for public libraries that live in <code>lib/</code>; a library's own companion files must use the <strong>path form</strong>, or they drift with the consumer's directory layout.">
-                  找不到、或者同时命中多处，都报 <strong>E18</strong>。名字形式是给「装在 <code>lib/</code> 里的公共库」用的；库自己的伴生文件（比如 <code>json.lomt</code> 与它旁边的辅助文件）要用<strong>路径形式</strong>，否则会跟着使用者的目录结构漂移。
-                </p>
-              </div>
-
-              <h2 data-zh="最硬的一条约束：符号名是平的" data-en="The hardest constraint: symbol names are flat">最硬的一条约束：符号名是平的</h2>
-              <div class="prose">
-                <p data-zh-html="发射出来的符号名<strong>不会</strong>被加上模块前缀：<code>to_grams</code> 就是 <code>to_grams</code>，不会变成 <code>units_to_grams</code>。这是刻意的——内核线按<strong>名字</strong>找入口，mangling 会把那条路打断。" data-en-html="Emitted symbol names are <strong>not</strong> prefixed with the module: <code>to_grams</code> stays <code>to_grams</code>, it does not become <code>units_to_grams</code>. That is deliberate — the kernel line finds entry points <strong>by name</strong>, and mangling would break that.">
-                  发射出来的符号名<strong>不会</strong>被加上模块前缀：<code>to_grams</code> 就是 <code>to_grams</code>，不会变成 <code>units_to_grams</code>。这是刻意的——内核线按<strong>名字</strong>找入口，mangling 会把那条路打断。
-                </p>
-                <p data-zh-html="代价落在库作者头上：<strong>一个编译单元里，顶层名字必须唯一</strong>——函数、结构体、枚举、常量都算。两个文件都定义 <code>parse</code>，编译器报 <strong>E-DUP</strong>，而且错误信息会直接告诉你「单元的发射符号是平的 (ABI)，请改名」。" data-en-html="The cost lands on the library author: <strong>top-level names must be unique within one compilation unit</strong> — functions, structs, enums and constants alike. If two files both define <code>parse</code>, the compiler raises <strong>E-DUP</strong>, and the message says outright that the unit's emitted symbols are flat (ABI) and the name should change.">
-                  代价落在库作者头上：<strong>一个编译单元里，顶层名字必须唯一</strong>——函数、结构体、枚举、常量都算。两个文件都定义 <code>parse</code>，编译器报 <strong>E-DUP</strong>，而且错误信息会直接告诉你「单元的发射符号是平的 (ABI)，请改名」。
-                </p>
-                <p data-zh-html="所以真实的两张库，公开名字<strong>全部带前缀</strong>。" data-en-html="So the two real libraries in the repository prefix <strong>every</strong> public name.">
-                  所以真实的两张库，公开名字<strong>全部带前缀</strong>。
-                </p>
-              </div>
-              <div class="table-wrap">
-                <table>
-                  <thead>
-                    <tr>
-                      <th scope="col" data-zh="库" data-en="Library">库</th>
-                      <th scope="col" data-zh="公开面" data-en="Public surface">公开面</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><code>loment/lib/sha256.lomt</code></td>
-                      <td><code>SH_CNT</code> · <code>sha_init</code> · <code>sha_update</code> · <code>sha_final</code> · <code>hex_dig</code></td>
-                    </tr>
-                    <tr>
-                      <td><code>loment/lib/json.lomt</code></td>
-                      <td><code>json_parse</code> · <code>json_get</code> · <code>json_nkind</code> · <code>json_emit_u32</code> …</td>
-                    </tr>
-                    <tr>
-                      <td><code>loment/examples/bytes.lomt</code></td>
-                      <td><code>load16</code> · <code>load32</code> · <code>store16</code> · <code>store32</code></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
               <div class="note note--amber">
-                <strong data-zh="注意最后一行的差别：" data-en="Note the difference in the last row: ">注意最后一行的差别：</strong>
-                <span data-zh-html="<code>bytes</code> 是<strong>示例</strong>，不是给人当依赖用的，所以它的名字没带前缀。你要发一个库，就带前缀——发出去之后再改名，所有使用方都得跟着改。" data-en-html="<code>bytes</code> is an <strong>example</strong>, not something meant to be depended on, so its names carry no prefix. If you are publishing a library, prefix it — renaming after release means every consumer has to change too.">
-                  <code>bytes</code> 是<strong>示例</strong>，不是给人当依赖用的，所以它的名字没带前缀。你要发一个库，就带前缀——发出去之后再改名，所有使用方都得跟着改。
+                <strong data-zh="为什么是函数不是常量：" data-en="Why functions and not constants: ">为什么是函数不是常量：</strong>
+                <span data-zh-html="语言只有<strong>整数</strong>常量——<code>pub const NAME: str = &quot;x&quot;;</code> 是语法错。所以标签写成 <code>pub fn … -&gt; str</code>，零语言改动。<strong>不为此新增字符串常量</strong>：那是参考实现与自举镜像都要跟的语言特性，而它对这个设计没有必要。" data-en-html="The language has <strong>integer</strong> constants only — <code>pub const NAME: str = &quot;x&quot;;</code> is a syntax error. So the labels are written as <code>pub fn … -&gt; str</code>, with zero language changes. A string constant is <strong>not</strong> added for this: it would be a language feature both the reference implementation and the self-hosted mirror have to carry, and the design does not need it.">
+                  语言只有<strong>整数</strong>常量——<code>pub const NAME: str = "x";</code> 是语法错。所以标签写成 <code>pub fn … -&gt; str</code>，零语言改动。<strong>不为此新增字符串常量</strong>：那是参考实现与自举镜像都要跟的语言特性，而它对这个设计没有必要。
                 </span>
               </div>
 
-              <h2 data-zh="为什么两张真库都收 ptr 和偏移量" data-en="Why both real libraries take pointers and offsets">为什么两张真库都收 ptr 和偏移量</h2>
+              <h2 data-zh="身份 = 递归哈希" data-en="Identity is a recursive hash">身份 = 递归哈希</h2>
               <div class="prose">
-                <p data-zh="看一眼真实签名，它们长这样：" data-en="Look at the real signatures — they read like this:">
-                  看一眼真实签名，它们长这样：
+                <p data-zh-html="「同一个库」不是你说了算，也不是版本号说了算——是<strong>算出来的</strong>：" data-en-html="“The same library” is not something you assert, and it is not decided by a version number — it is <strong>computed</strong>:">
+                  「同一个库」不是你说了算，也不是版本号说了算——是<strong>算出来的</strong>：
+                </p>
+              </div>
+              <div class="code">
+                <div class="code__bar">
+                  <span class="lang-tag">text</span>
+                  <span data-zh="实例身份" data-en="instance identity">实例身份</span>
+                  <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+                </div>
+                <pre>id(P) = H( 自身源码 ⊕ { 边名 → id(子) } )</pre>
+              </div>
+              <div class="prose">
+                <p data-zh="只看自身源码是错的：同一份源码在两个构建里绑到不同的依赖上，语义不同，却会被错误地合并成一份。" data-en="Hashing the source alone would be wrong: the same source bound to different dependencies in two builds means two different meanings, and hashing only the file would merge them into one.">
+                  只看自身源码是错的：同一份源码在两个构建里绑到不同的依赖上，语义不同，却会被错误地合并成一份。
+                </p>
+              </div>
+
+              <h2 data-zh="多版本共存：靠物化，不靠运行期技巧" data-en="Multiple versions coexist — by materialisation, not runtime tricks">多版本共存：靠物化，不靠运行期技巧</h2>
+              <div class="prose">
+                <p data-zh="这是库系统最实的一块。同一个库的多个版本<strong>可以同时存在于一次构建里</strong>，而且不靠任何运行期机制：" data-en="This is the substantial part. Several versions of the same library <strong>can exist in one build at once</strong>, with no runtime machinery involved:">
+                  这是库系统最实的一块。同一个库的多个版本<strong>可以同时存在于一次构建里</strong>，而且不靠任何运行期机制：
+                </p>
+              </div>
+              <ul class="list">
+                <li><b data-zh="每个实例有自己的身份" data-en="Every instance has its own identity">每个实例有自己的身份</b> <span data-zh="—— 身份不同的就是不同的实例。" data-en=" — a different identity is a different instance.">—— 身份不同的就是不同的实例。</span></li>
+                <li><b data-zh="实例被物化成各自独立的模块" data-en="Instances are materialised as separate modules">实例被物化成各自独立的模块</b> <span data-zh-html="—— 编译器眼里它们是<strong>不同名字的模块</strong>。于是 v1 的 <code>Point</code> 和 v2 的 <code>Point</code> 是<strong>不同的名义类型</strong>：把 v1 的喂给要 v2 的地方是类型错误——这正是对的。" data-en-html=" — to the compiler they are <strong>modules with different names</strong>. So v1's <code>Point</code> and v2's <code>Point</code> are <strong>different nominal types</strong>: handing a v1 value to something expecting v2 is a type error, which is exactly right.">—— 编译器眼里它们是<strong>不同名字的模块</strong>。于是 v1 的 <code>Point</code> 和 v2 的 <code>Point</code> 是<strong>不同的名义类型</strong>：把 v1 的喂给要 v2 的地方是类型错误——这正是对的。</span></li>
+                <li><b data-zh="相同子树自动去重" data-en="Identical subtrees deduplicate">相同子树自动去重</b> <span data-zh="—— 五个包依赖同一版，就是一份实例。" data-en=" — five packages depending on the same version means one instance.">—— 五个包依赖同一版，就是一份实例。</span></li>
+              </ul>
+              <div class="prose">
+                <p data-zh-html="于是语义冲突<strong>由类型系统抓住</strong>，而不是靠「选一个版本」去回避。物化做三件事：" data-en-html="Semantic conflicts are then <strong>caught by the type system</strong> rather than dodged by picking one version. Materialisation does three things:">
+                  于是语义冲突<strong>由类型系统抓住</strong>，而不是靠「选一个版本」去回避。物化做三件事：
+                </p>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <tbody>
+                    <tr>
+                      <td data-zh="一" data-en="One">一</td>
+                      <td data-zh-html="模块名带身份后缀：<code>mathutil</code> → <code>mathutil__7509dbd4</code>" data-en-html="The module name gets an identity suffix: <code>mathutil</code> → <code>mathutil__7509dbd4</code>">模块名带身份后缀：<code>mathutil</code> → <code>mathutil__7509dbd4</code></td>
+                    </tr>
+                    <tr>
+                      <td data-zh="二" data-en="Two">二</td>
+                      <td data-zh-html="<code>use &lt;名字&gt;</code> 改写成指向<strong>它绑定的那个实例</strong>的显式路径" data-en-html="<code>use &lt;name&gt;</code> is rewritten to an explicit path pointing at <strong>the instance it bound to</strong>"><code>use &lt;名字&gt;</code> 改写成指向<strong>它绑定的那个实例</strong>的显式路径</td>
+                    </tr>
+                    <tr>
+                      <td data-zh="三" data-en="Three">三</td>
+                      <td data-zh-html="顶层名带实例后缀：<code>scale</code> → <code>scale__7509dbd4</code> / <code>scale__2d54513b</code>" data-en-html="Top-level names get an instance suffix: <code>scale</code> → <code>scale__7509dbd4</code> / <code>scale__2d54513b</code>">顶层名带实例后缀：<code>scale</code> → <code>scale__7509dbd4</code> / <code>scale__2d54513b</code></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="prose">
+                <p data-zh-html="第三步是共存的关键。编译器的发射符号是<strong>平的</strong>（`funcs[name]` / `structs[name]`），同一库的两个版本必然导出同名顶层项。<strong>在物化这一层改名，而不是去改编译器内核</strong>——换来的是：编译器完全不需要知道「版本」存在，两个后端的发射符号一个字节都不用动，也就不牵动逐字节 IR 一致与自举定点。" data-en-html="The third step is what makes coexistence work. The compiler's emitted symbols are <strong>flat</strong> (<code>funcs[name]</code> / <code>structs[name]</code>), so two versions of one library necessarily export the same top-level names. Renaming <strong>at the materialisation layer instead of inside the compiler</strong> buys this: the compiler never needs to know that versions exist, and neither backend's emitted symbols move by a byte — so neither byte-identical IR nor the bootstrap fixpoint is disturbed.">
+                  第三步是共存的关键。编译器的发射符号是<strong>平的</strong>（<code>funcs[name]</code> / <code>structs[name]</code>），同一库的两个版本必然导出同名顶层项。<strong>在物化这一层改名，而不是去改编译器内核</strong>——换来的是：编译器完全不需要知道「版本」存在，两个后端的发射符号一个字节都不用动，也就不牵动逐字节 IR 一致与自举定点。
+                </p>
+                <p data-zh="改名只动顶层名。字段名、枚举变体、局部变量都不动：它们的作用域在类型或函数内部，两个实例各有一份也不撞。_start 也不动——那是链接器要找的入口名。" data-en="The renaming touches top-level names only. Field names, enum variants and local variables are left alone: their scope is inside a type or a function, so two instances each having one cannot collide. _start is left alone too — that is the entry name the linker looks for.">
+                  改名<strong>只动顶层名</strong>。字段名、枚举变体、局部变量都不动：它们的作用域在类型或函数内部，两个实例各有一份也不撞。_start 也不动——那是链接器要找的入口名。
+                </p>
+              </div>
+              <div class="note">
+                <strong data-zh="唯一一条边界，而且它是真歧义：" data-en="The one boundary, and it is a real ambiguity: ">唯一一条边界，而且它是真歧义：</strong>
+                <span data-zh-html="一个文件<strong>同时</strong>要用两个版本的同名项时，语言没有限定名语法可用。工具把它精确报出来，并拒绝物化。<strong>这不是「没做完」</strong>——多版本共存的前提本来就是「没有一个文件同时点两个版本的同名项」（app 用 mid1 和 mid2，两个 mid 各自用自己那份 mathutil）。" data-en-html="When one file needs the same name from <strong>two</strong> versions at once, the language has no qualified-name syntax to reach for. The tooling reports it precisely and refuses to materialise. <strong>This is not “unfinished”</strong> — coexistence already presupposes that no single file points at two versions of one name (an app uses mid1 and mid2, and each mid uses its own mathutil).">
+                  一个文件<strong>同时</strong>要用两个版本的同名项时，语言没有限定名语法可用。工具把它精确报出来，并拒绝物化。<strong>这不是「没做完」</strong>——多版本共存的前提本来就是「没有一个文件同时点两个版本的同名项」（app 用 mid1 和 mid2，两个 mid 各自用自己那份 mathutil）。
+                </span>
+              </div>
+
+              <h2 data-zh="能力需求是算出来的" data-en="Capability requirements are computed">能力需求是算出来的</h2>
+              <div class="prose">
+                <p data-zh-html="编译器看得见每一个 <code>guard</code> 和每一条 <code>capability</code> 声明，所以「这个包需要哪些能力」是一个<strong>可计算的事实</strong>：" data-en-html="The compiler can see every <code>guard</code> and every <code>capability</code> declaration, so “which capabilities does this package need” is a <strong>computable fact</strong>:">
+                  编译器看得见每一个 <code>guard</code> 和每一条 <code>capability</code> 声明，所以「这个包需要哪些能力」是一个<strong>可计算的事实</strong>：
+                </p>
+              </div>
+              <div class="code">
+                <div class="code__bar">
+                  <span class="lang-tag">text</span>
+                  <span data-zh="能力闭包" data-en="capability closure">能力闭包</span>
+                  <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+                </div>
+                <pre>requires(P) = 自身 guard 的域  ∪  ⋃ requires(子)</pre>
+              </div>
+              <div class="prose">
+                <p data-zh="工具把它<strong>打出来</strong>，而且带来源链——哪一段来自哪个依赖。它不要求作者手写一遍，因为写错的声明比没有声明更坏：没有声明时工具会去算，写错了则会让所有人信一份假的清单。" data-en="The tool <strong>prints</strong> it, with a provenance chain showing which part came from which dependency. The author is not asked to write it down, because a wrong declaration is worse than none: with no declaration the tool computes it, while a wrong one makes everyone trust a false list.">
+                  工具把它<strong>打出来</strong>，而且带来源链——哪一段来自哪个依赖。它不要求作者手写一遍，因为写错的声明比没有声明更坏：没有声明时工具会去算，写错了则会让所有人信一份假的清单。
+                </p>
+              </div>
+
+              <h2 data-zh="工具" data-en="The tools">工具</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="命令" data-en="Command">命令</th>
+                      <th scope="col" data-zh="作用" data-en="What it does">作用</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td><code>loment lib tree DIR</code></td><td data-zh="依赖树，以及每个库的实例数" data-en="The dependency tree, and how many instances each library has">依赖树，以及每个库的实例数</td></tr>
+                    <tr><td><code>loment lib id DIR</code></td><td data-zh="实例身份（递归哈希）" data-en="Instance identity (the recursive hash)">实例身份（递归哈希）</td></tr>
+                    <tr><td><code>loment lib cap DIR</code></td><td data-zh="能力需求闭包，带来源链" data-en="The capability closure, with provenance">能力需求闭包，带来源链</td></tr>
+                    <tr><td><code>loment lib check DIR</code></td><td data-zh="冲突检查：同名顶层项 / 同名不同域 / 入口" data-en="Conflict check: duplicate top-level names, same name in different domains, entry points">冲突检查：同名顶层项 / 同名不同域 / 入口</td></tr>
+                    <tr><td><code>loment lib materialize DIR --out DIR</code></td><td data-zh="把嵌套与多版本摊成编译器能直接吃的树" data-en="Flattens nesting and multiple versions into a tree the compiler can consume directly">把嵌套与多版本摊成编译器能直接吃的树</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="prose">
+                <p data-zh-html="这一层由仓库的参考工具链承载（<code>tools/lomlib.py</code>，`loment lib` 派发到它）。<code>use</code> 本身的解析仍在编译器里：名字形式在 <code>loment/lib</code> → <code>examples</code> → <code>selfhost</code> → <code>tools</code> 下找，<strong>命中的必须唯一</strong>，找不到或有歧义都报错，不静默取第一个。" data-en-html="This layer is carried by the repository's reference toolchain (<code>tools/lomlib.py</code>, which <code>loment lib</code> dispatches to). Resolution of <code>use</code> itself still lives in the compiler: the name form searches <code>loment/lib</code> → <code>examples</code> → <code>selfhost</code> → <code>tools</code>, and <strong>a hit must be unique</strong> — not found or ambiguous are both errors, never a silent first match.">
+                  这一层由仓库的参考工具链承载（<code>tools/lomlib.py</code>，<code>loment lib</code> 派发到它）。<code>use</code> 本身的解析仍在编译器里：名字形式在 <code>loment/lib</code> → <code>examples</code> → <code>selfhost</code> → <code>tools</code> 下找，<strong>命中的必须唯一</strong>，找不到或有歧义都报错，不静默取第一个。
+                </p>
+              </div>
+              <div class="note note--steel">
+                <strong data-zh="还有一层更早的模型：" data-en="There is also an earlier model: ">还有一层更早的模型：</strong>
+                <span data-zh-html="仓库里还有一个基于清单的解析器（<code>lompkg</code>，读 <code>pkg.json</code>，逐包哈希）。它有孪生实现与逐字节判据，所以保留着，供已经在用它的工具走。上面讲的<strong>才是库系统</strong>——两者不是同一个东西。" data-en-html="The repository also carries a manifest-based resolver (<code>lompkg</code>, reading <code>pkg.json</code>, hashing package by package). It has a twin implementation and byte-exact criteria, so it stays for the tools already using it. What is described above <strong>is the library system</strong>, and the two are not the same thing.">
+                  仓库里还有一个基于清单的解析器（<code>lompkg</code>，读 <code>pkg.json</code>，逐包哈希）。它有孪生实现与逐字节判据，所以保留着，供已经在用它的工具走。上面讲的<strong>才是库系统</strong>——两者不是同一个东西。
+                </span>
+              </div>
+
+              <h2 data-zh="库的接口怎么设计" data-en="How to shape a library's interface">库的接口怎么设计</h2>
+              <div class="prose">
+                <p data-zh="看一眼仓库里两张真库的签名，它们长这样：" data-en="Look at the real signatures in the repository — they read like this:">
+                  看一眼仓库里两张真库的签名，它们长这样：
                 </p>
               </div>
               <div class="code">
@@ -362,8 +429,8 @@ pub fn json_parse(js: ptr, len: u32, arena: ptr) -> u32
 pub fn load32(p: ptr, off: u32) -> u32</pre>
               </div>
               <div class="prose">
-                <p data-zh="没有切片参数、没有按值的 struct、没有容器类型。这是三个原因叠在一起的结果，不是风格：">
-                  没有切片参数、没有按值的 struct、没有容器类型。这是三个原因叠在一起的结果，不是风格：
+                <p data-zh="没有切片参数、没有按值的 struct、没有容器类型。这是三个约束叠在一起的结果，不是风格：">
+                  没有切片参数、没有按值的 struct、没有容器类型。这是三个约束叠在一起的结果，不是风格：
                 </p>
               </div>
               <ul class="list">
@@ -377,44 +444,9 @@ pub fn load32(p: ptr, off: u32) -> u32</pre>
                 </p>
               </div>
 
-              <h2 data-zh="打包与依赖" data-en="Packaging and dependencies">打包与依赖</h2>
-              <div class="prose">
-                <p data-zh-html="一个包是一份 <code>pkg.json</code>。依赖写成<strong>本地路径</strong>，没有网络仓库。" data-en-html="A package is one <code>pkg.json</code>. Dependencies are written as <strong>local paths</strong>; there is no network registry.">
-                  一个包是一份 <code>pkg.json</code>。依赖写成<strong>本地路径</strong>，没有网络仓库。
-                </p>
-              </div>
-              <div class="code">
-                <div class="code__bar">
-                  <span class="lang-tag">json</span>
-                  <span data-zh="pkg.json" data-en="pkg.json">pkg.json</span>
-                  <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
-                </div>
-                <pre>{
-  "name": "units",
-  "version": "0.1.0",
-  "deps": {
-    "bytes": { "path": "../bytes" }
-  }
-}</pre>
-              </div>
-              <div class="code">
-                <div class="code__bar">
-                  <span class="lang-tag">bash</span>
-                  <span data-zh="包管理器" data-en="package manager">包管理器</span>
-                  <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
-                </div>
-                <pre>lompkg resolve pkg.json --lock lompkg.lock --write   # 解析拓扑序并写锁
-lompkg verify  pkg.json --lock lompkg.lock           # 拿锁核对每个包的内容哈希</pre>
-              </div>
-              <ul class="list">
-                <li><b data-zh="依赖按拓扑序排，环会被拒" data-en="Dependencies are ordered topologically; cycles are rejected">依赖按拓扑序排，环会被拒</b> <span data-zh="—— 同一个依赖被两个模块引用时只装一次。" data-en=" — a dependency referenced by two modules is loaded once.">—— 同一个依赖被两个模块引用时只装一次。</span></li>
-                <li><b data-zh="锁文件记的是 name → hash" data-en="The lock file records name → hash">锁文件记的是 name → hash</b> <span data-zh-html="—— 哈希由库自己的 <code>sha256.lomt</code> 算出来，没有外部工具参与。" data-en-html=" — the hash is computed by the library's own <code>sha256.lomt</code>, with no external tool involved.">—— 哈希由库自己的 <code>sha256.lomt</code> 算出来，没有外部工具参与。</span></li>
-                <li><b data-zh="退出码" data-en="Exit codes">退出码</b> <span data-zh="—— 0 表示通过，1 表示解析或校验失败，2 表示用法错误。" data-en=" — 0 passes, 1 is a resolution or verification failure, 2 is a usage error.">—— 0 表示通过，1 表示解析或校验失败，2 表示用法错误。</span></li>
-              </ul>
-
               <h2 data-zh="写库时会踩到的坑" data-en="Traps you will hit writing a library">写库时会踩到的坑</h2>
               <ul class="list">
-                <li><b data-zh="形参最多 10 个" data-en="At most 10 parameters">形参最多 10 个</b> <span data-zh-html="—— 超了会让自举阶段的编译器<strong>自己崩掉</strong>，症状是「编译这个文件时编译器死了」，而参考实现编同一份文件正常。超了就把参数打包：<code>lompkg</code> 里 <code>do_div</code> 就是把三个参数打包成一个来绕的。" data-en-html=" — exceeding it makes the self-hosted stage <strong>crash itself</strong>, with the symptom “the compiler died while compiling this file” while the reference compiles the same file fine. Pack them instead: <code>do_div</code> in <code>lompkg</code> folds three parameters into one.">—— 超了会让自举阶段的编译器<strong>自己崩掉</strong>，症状是「编译这个文件时编译器死了」，而参考实现编同一份文件正常。超了就把参数打包：<code>lompkg</code> 里 <code>do_div</code> 就是把三个参数打包成一个来绕的。</span></li>
+                <li><b data-zh="形参最多 10 个" data-en="At most 10 parameters">形参最多 10 个</b> <span data-zh-html="—— 超了会让自举阶段的编译器<strong>自己崩掉</strong>，症状是「编译这个文件时编译器死了」，而参考实现编同一份文件正常。超了就把参数打包。" data-en-html=" — exceeding it makes the self-hosted stage <strong>crash itself</strong>, with the symptom “the compiler died while compiling this file” while the reference compiles the same file fine. Pack them instead.">—— 超了会让自举阶段的编译器<strong>自己崩掉</strong>，症状是「编译这个文件时编译器死了」，而参考实现编同一份文件正常。超了就把参数打包。</span></li>
                 <li><b data-zh-html="<code>let</code> 必须写类型" data-en-html="<code>let</code> must carry a type"> <code>let</code> 必须写类型</b> <span data-zh-html="—— 语言没有类型推断，<code>let x = 1;</code> 不合法。另外没有无值的 <code>return;</code>，要写 <code>return &lt;expr&gt;;</code>。" data-en-html=" — there is no type inference, so <code>let x = 1;</code> is not valid. There is also no valueless <code>return;</code>; write <code>return &lt;expr&gt;;</code>.">—— 语言没有类型推断，<code>let x = 1;</code> 不合法。另外没有无值的 <code>return;</code>，要写 <code>return &lt;expr&gt;;</code>。</span></li>
                 <li><b data-zh="match 的臂体是块" data-en="match arms are blocks">match 的臂体是块</b> <span data-zh-html="—— 写 <code>Kind::A =&gt; { return 0; }</code>，不是 <code>Kind::A =&gt; 0,</code>。" data-en-html=" — write <code>Kind::A =&gt; { return 0; }</code>, not <code>Kind::A =&gt; 0,</code>.">—— 写 <code>Kind::A =&gt; { return 0; }</code>，不是 <code>Kind::A =&gt; 0,</code>。</span></li>
                 <li><b data-zh="泛型调用的实参要能把类型定出来" data-en="A generic call's arguments must pin the type">泛型调用的实参要能把类型定出来</b> <span data-zh-html="—— <code>pick(4, 9)</code> 报的是「调用未定义的函数 pick」，<strong>这条消息会骗人</strong>，它不是跨模块问题。先 <code>let a: u32 = 4;</code> 再 <code>pick(a, b)</code> 就对了。" data-en-html=" — <code>pick(4, 9)</code> reports “call to undefined function pick”, and <strong>that message misleads</strong>; it is not a cross-module problem. Bind first: <code>let a: u32 = 4;</code> then <code>pick(a, b)</code>.">—— <code>pick(4, 9)</code> 报的是「调用未定义的函数 pick」，<strong>这条消息会骗人</strong>，它不是跨模块问题。先 <code>let a: u32 = 4;</code> 再 <code>pick(a, b)</code> 就对了。</span></li>
@@ -424,17 +456,28 @@ lompkg verify  pkg.json --lock lompkg.lock           # 拿锁核对每个包的�
                 <li><b data-zh="check 通过不等于能出可执行文件" data-en="check passing does not mean it builds">check 通过不等于能出可执行文件</b> <span data-zh-html="—— 按值传聚合、以及用 <code>==</code> 比较 struct / enum，检查器放行而原生后端会拒。库的接口避开这两个形状。" data-en-html=" — passing aggregates by value, and comparing structs or enums with <code>==</code>, both pass the checker and are refused by the native backend. Keep those two shapes out of a library's interface.">—— 按值传聚合、以及用 <code>==</code> 比较 struct / enum，检查器放行而原生后端会拒。库的接口避开这两个形状。</span></li>
               </ul>
 
-              <h2 data-zh="现在做不到的" data-en="What a library cannot do yet">现在做不到的</h2>
+              <h2 data-zh="现在做不到的" data-en="What the library system does not do">现在做不到的</h2>
               <ul class="list">
-                <li><b data-zh="没有分开编译" data-en="No separate compilation">没有分开编译</b> <span data-zh="—— 库每次和使用方一起编。大库会拖慢每一次改动的迭代，这是「拼成一个单元」的直接代价。" data-en=" — a library is compiled together with its consumer every time. A large library slows every edit; that is the direct cost of compiling as one unit.">—— 库每次和使用方一起编。大库会拖慢每一次改动的迭代，这是「拼成一个单元」的直接代价。</span></li>
-                <li><b data-zh="没有版本化的 ABI" data-en="No versioned ABI">没有版本化的 ABI</b> <span data-zh="—— 符号名是平的，同名即冲突，所以「同一个库的两个版本共存」做不到。" data-en=" — symbol names are flat, so a duplicate is a conflict; two versions of the same library cannot coexist.">—— 符号名是平的，同名即冲突，所以「同一个库的两个版本共存」做不到。</span></li>
-                <li><b data-zh="没有动态链接" data-en="No dynamic linking">没有动态链接</b> <span data-zh="—— 全部静态编进最终产物。" data-en=" — everything is linked statically into the final artefact.">—— 全部静态编进最终产物。</span></li>
-                <li><b data-zh="只有本地路径依赖" data-en="Local path dependencies only">只有本地路径依赖</b> <span data-zh-html="—— <code>pkg.json</code> 不认识版本区间，也没有中心仓库。谁依赖谁、用哪个版本，目前靠约定和锁文件。" data-en-html=" — <code>pkg.json</code> knows no version ranges and there is no central registry. Who depends on what, and at which version, currently rests on convention and the lock file.">—— <code>pkg.json</code> 不认识版本区间，也没有中心仓库。谁依赖谁、用哪个版本，目前靠约定和锁文件。</span></li>
+                <li><b data-zh="不做二进制分发" data-en="No binary distribution">不做二进制分发</b> <span data-zh-html="—— 而且<strong>不可能</strong>：泛型是类型定向单态化的（<code>Result_i64_u32</code>），使用方必须看得到源码才能定出实例。" data-en-html=" — and it is <strong>not possible</strong>: generics are type-directed and monomorphised (<code>Result_i64_u32</code>), so a consumer has to see the source to instantiate them.">—— 而且<strong>不可能</strong>：泛型是类型定向单态化的（<code>Result_i64_u32</code>），使用方必须看得到源码才能定出实例。</span></li>
+                <li><b data-zh="不做版本区间语言" data-en="No version-range language">不做版本区间语言</b> <span data-zh-html="—— 版本号对机器只是标签，机器的身份是内容哈希，所以没有版本比较、没有优先级、没有区间，也就没有「冲突消解策略」这一整类复杂度。" data-en-html=" — to the machine a version number is a label; identity is the content hash. So there is no version comparison, no priority, no ranges — and with them the entire class of “conflict resolution strategy” disappears.">—— 版本号对机器只是标签，机器的身份是内容哈希，所以没有版本比较、没有优先级、没有区间，也就没有「冲突消解策略」这一整类复杂度。</span></li>
+                <li><b data-zh="不做注册中心、不做全局安装" data-en="No registry server, no global install">不做注册中心、不做全局安装</b> <span data-zh="—— 依赖是本地目录。" data-en=" — dependencies are local directories.">—— 依赖是本地目录。</span></li>
+                <li><b data-zh="没有动态链接" data-en="No dynamic linking">没有动态链接</b> <span data-zh-html="—— 目标是 freestanding 的 PE / ELF，单一 <code>_start</code>，没有动态装载器。" data-en-html=" — the targets are freestanding PE / ELF with a single <code>_start</code> and no dynamic loader.">—— 目标是 freestanding 的 PE / ELF，单一 <code>_start</code>，没有动态装载器。</span></li>
+              </ul>
+
+              <h2 data-zh="已知边界（诚实清单）" data-en="Known boundaries (stated plainly)">已知边界（诚实清单）</h2>
+              <ul class="list">
+                <li><b data-zh="改名是 token 级的" data-en="The renaming is token-level">改名是 token 级的</b> <span data-zh-html="—— 它靠「作用域在类型内部的名字不动」加「逐文件统一改名」保语义。失效路径是<strong>响亮的</strong>（漏改或多改 → 编译器报未声明 / 未定义，不会静默编错），但它是这一层的<strong>实现方式</strong>，不是语言保证。真要语言级保证，得让编译器按实例做名字解析——那时这一层就该删掉。" data-en-html=" — it preserves meaning by leaving names scoped inside a type alone and by renaming a file uniformly. Its failure mode is <strong>loud</strong> (a missed or extra rename makes the compiler report an undeclared or undefined name rather than miscompiling silently), but it is this layer's <strong>implementation technique</strong>, not a language guarantee. A real guarantee would mean the compiler doing per-instance name resolution — at which point this layer should be deleted.">—— 它靠「作用域在类型内部的名字不动」加「逐文件统一改名」保语义。失效路径是<strong>响亮的</strong>（漏改或多改 → 编译器报未声明 / 未定义，不会静默编错），但它是这一层的<strong>实现方式</strong>，不是语言保证。真要语言级保证，得让编译器按实例做名字解析——那时这一层就该删掉。</span></li>
+                <li><b data-zh="孪生只覆盖了身份这一步" data-en="The twin covers identity only">孪生只覆盖了身份这一步</b> <span data-zh-html="—— <code>lomlib.lomt</code> 只做到 <code>id</code>：<code>tree</code> / <code>cap</code> / <code>check</code> / <code>materialize</code> 还没有 Loment 版。<strong>别把「孪生」读成「全等」。</strong>" data-en-html=" — <code>lomlib.lomt</code> reaches <code>id</code> only: <code>tree</code> / <code>cap</code> / <code>check</code> / <code>materialize</code> have no Loment version yet. <strong>Do not read “twin” as “equal”.</strong>">—— <code>lomlib.lomt</code> 只做到 <code>id</code>：<code>tree</code> / <code>cap</code> / <code>check</code> / <code>materialize</code> 还没有 Loment 版。<strong>别把「孪生」读成「全等」。</strong></span></li>
+                <li><b data-zh="实例会重复进二进制" data-en="Instances are duplicated into the binary">实例会重复进二进制</b> <span data-zh="—— 多版本共存意味着体积按实例数增长。工具会把它显示出来（tree / check 都会打印同名多实例）；藏起来的多份才是问题。" data-en=" — coexistence means size grows with the instance count. The tooling shows it (both tree and check print same-name multi-instances); duplicated bytes you cannot see are the problem, not duplicated bytes you can.">—— 多版本共存意味着体积按实例数增长。工具会把它显示出来（tree / check 都会打印同名多实例）；藏起来的多份才是问题。</span></li>
+                <li><b data-zh-html="<code>_start</code> 冲突" data-en-html="<code>_start</code> conflicts"> <code>_start</code> 冲突</b> <span data-zh-html="—— 依赖里也定义了 <code>_start</code> 时，<code>check</code> 报出来、<code>materialize</code> 拒绝。入口只能有一个，这条不是改名能消掉的。" data-en-html=" — if a dependency also defines <code>_start</code>, <code>check</code> reports it and <code>materialize</code> refuses. There can only be one entry point, and renaming cannot make that go away.">—— 依赖里也定义了 <code>_start</code> 时，<code>check</code> 报出来、<code>materialize</code> 拒绝。入口只能有一个，这条不是改名能消掉的。</span></li>
+                <li><b data-zh="物化会改写源码副本" data-en="Materialisation rewrites a copy of the source">物化会改写源码副本</b> <span data-zh-html="—— 它不碰仓库里那棵。报错行号指的是副本，<code>materialize-map.json</code> 记了副本回原文件的映射。" data-en-html=" — it does not touch the tree in your repository. Reported line numbers refer to the copy, and <code>materialize-map.json</code> records the mapping back to the original files.">—— 它不碰仓库里那棵。报错行号指的是副本，<code>materialize-map.json</code> 记了副本回原文件的映射。</span></li>
               </ul>
 
               <div class="note note--steel">
-                <strong data-zh="一句话总结接口设计：" data-en="The interface rule in one line: ">一句话总结接口设计：</strong>
-                <span data-zh="在没有标准库、没有按值聚合、堆只有 64 KiB 的前提下，当前最站得住的公开接口是 ptr 加偏移量、缓冲由调用方传进来。这也是仓库里两张真库长成那样的原因——不是因为风格，是因为约束。" data-en="With no standard library, no by-value aggregates and a 64 KiB heap, the public interface that currently holds up is pointers plus offsets, with buffers passed in by the caller. That is also why the two real libraries look the way they do — not style, constraints.">在没有标准库、没有按值聚合、堆只有 64 KiB 的前提下，当前最站得住的公开接口是 ptr 加偏移量、缓冲由调用方传进来。这也是仓库里两张真库长成那样的原因——不是因为风格，是因为约束。</span>
+                <strong data-zh="一句话总结：" data-en="In one line: ">一句话总结：</strong>
+                <span data-zh-html="库 = 一个目录；依赖 = 源码里的 <code>use</code>；身份 = 递归哈希；多版本 = 物化改名；能力 = 推导出来的。<strong>作者要学的东西是零。</strong>" data-en-html="A library is a directory; a dependency is a <code>use</code> in the source; identity is a recursive hash; multiple versions come from renaming at materialisation; capabilities are computed. <strong>There is nothing new for the author to learn.</strong>">
+                  库 = 一个目录；依赖 = 源码里的 <code>use</code>；身份 = 递归哈希；多版本 = 物化改名；能力 = 推导出来的。<strong>作者要学的东西是零。</strong>
+                </span>
               </div>
 
           <nav class="pager" aria-label="文档翻页" data-zh-aria="文档翻页" data-en-aria="Documentation paging">
