@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html
+  lang="zh-CN"
+  class="theme-instrument"
+  data-title-zh="std 与 host — Loment 的官方库"
+  data-title-en="std and host — Loment's official libraries"
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>std 与 host — Loment 的官方库</title>
+    <link rel="canonical" href="https://fujojtop.github.io/FujoOSwebsite/loment/std/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="FujoOS" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:locale:alternate" content="en" />
+    <meta property="og:title" content="std 与 host — Loment 的官方库" />
+    <meta
+      property="og:description"
+      content="Loment 语言本身没有标准库。这两个包是官方维护的库：可移植的 std 一个 syscall 都不发，需要操作系统的部分在 host。"
+    />
+    <meta property="og:url" content="https://fujojtop.github.io/FujoOSwebsite/loment/std/" />
+    <meta property="og:image" content="https://fujojtop.github.io/FujoOSwebsite/assets/og-card.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="FujoOS — Mount Fuji mark" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="description"
+      content="Loment 的官方库：可移植的 std（127 个模块，一个 syscall 都不发）与宿主层的 host。依赖方向单向，是为了让 std 能去没有操作系统的地方。"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Geist+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/style.css?v=93f82bc7" />
+    <link rel="icon" href="../../favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg" sizes="any" />
+    <link rel="icon" type="image/png" href="../../assets/favicon-32.png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png" />
+    <script>
+      document.documentElement.classList.add("js");
+      /* If site.js never runs, reveal everything instead of leaving it hidden. */
+      setTimeout(function () {
+        var r = document.documentElement;
+        if (!r.hasAttribute("data-motion-on")) r.classList.add("no-motion");
+      }, 1200);
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#main" data-zh="跳到主要内容" data-en="Skip to content">跳到主要内容</a>
+
+    <!-- ticker:start -->
+    <div class="notice notice--alert notice--scroll" role="note" data-notice data-notice-id="release-delay" data-paused="false">
+      <p class="notice__tag"><span class="notice__pip" aria-hidden="true"></span><span data-zh="公告" data-en="Notice">公告</span></p>
+      <div class="notice__view">
+        <div class="notice__track">
+          <span class="notice__item" data-zh="FujoOS公布日延期，以仓库发布为准" data-en="FujoOS release date postponed — the repository is authoritative">FujoOS公布日延期，以仓库发布为准</span>
+          <span class="notice__item" aria-hidden="true" data-zh="FujoOS公布日延期，以仓库发布为准" data-en="FujoOS release date postponed — the repository is authoritative">FujoOS公布日延期，以仓库发布为准</span>
+        </div>
+      </div>
+      <button class="notice__toggle" type="button" data-ticker-toggle aria-pressed="false">
+        <span class="notice__ico" aria-hidden="true"></span>
+        <span class="notice__lbl notice__lbl--pause" data-zh="暂停" data-en="Pause">暂停</span>
+        <span class="notice__lbl notice__lbl--play" data-zh="继续" data-en="Play">继续</span>
+      </button>
+    </div>
+    <!-- ticker:end -->
+
+    <header class="nav">
+      <div class="wrap nav__inner">
+        <a class="nav__brand" href="../../">
+          <svg viewBox="0 14 64 46" aria-hidden="true">
+            <path d="M3,58 Q11,38 26,16 Q32,19 38,16 Q53,38 61,58 Z" fill="var(--mark-rock)" />
+            <path d="M15.9,32 Q18,22 26,16 Q32,19 38,16 Q46,22 48.1,32 Q32,38 15.9,32 Z" fill="var(--mark-snow)" />
+          </svg>
+          FujoOS
+        </a>
+        <nav class="nav__links" aria-label="主导航" data-zh-aria="主导航" data-en-aria="Primary">
+          <a class="nav__link" href="../../" data-zh="首页" data-en="Home">首页</a>
+          <a class="nav__link" href="../../foc/" data-zh="FOC 内核" data-en="FOC kernel">FOC 内核</a>
+          <a class="nav__link" href="../../fuai/" data-zh="FUAI 安全体系" data-en="FUAI safety">FUAI 安全体系</a>
+          <div class="nav__drop" data-open="false">
+            <button class="nav__link nav__drop-btn" type="button" aria-expanded="false" aria-haspopup="true" aria-current="true" data-zh="Loment · Potato" data-en="Loment · Potato">Loment · Potato</button>
+            <div class="nav__drop-menu">
+              <a href="../../loment/" data-zh="概览" data-en="Overview">概览</a>
+              <a href="../../loment/lompi/" data-zh="Lompi · 包管理器" data-en="Lompi · the package manager">Lompi · 包管理器</a>
+              <a href="../../loment/std/" aria-current="page" data-zh="标准库 · std 与 host" data-en="Standard library · std and host">标准库 · std 与 host</a>
+              <a href="../../loment/early-use/" data-zh="Early Use 报名" data-en="Early Use sign-up">Early Use 报名</a>
+            </div>
+          </div>
+          <a class="nav__link" href="../../docs/" data-zh="文档" data-en="Docs">文档</a>
+          <a class="nav__link" href="../../news/" data-zh="新闻" data-en="News">新闻</a>
+          <a class="nav__link" href="../../bugs/" data-zh="Bug 社区" data-en="Bug reports">Bug 社区</a>
+          <a class="nav__link" href="https://zenodo.org/records/22352904" rel="noopener" data-zh="论文 ↗" data-en="Paper ↗">论文 ↗</a>
+          <div class="lang" role="group" aria-label="语言" data-zh-aria="语言" data-en-aria="Language">
+            <button type="button" data-lang="zh" aria-pressed="true">ZH</button>
+            <button type="button" data-lang="en" aria-pressed="false">EN</button>
+          </div>
+        </nav>
+        <button class="nav__toggle" type="button" aria-expanded="false" data-zh="菜单" data-en="Menu">菜单</button>
+      </div>
+      <div class="wrap">
+        <div class="nav__drawer" data-open="false">
+          <a href="../../" data-zh="首页" data-en="Home">首页</a>
+          <a href="../../foc/" data-zh="FOC 内核" data-en="FOC kernel">FOC 内核</a>
+          <a href="../../fuai/" data-zh="FUAI 安全体系" data-en="FUAI safety system">FUAI 安全体系</a>
+          <a href="../../loment/" data-zh="Loment · Potato 语言" data-en="Loment · Potato language">Loment · Potato 语言</a>
+          <a href="../../loment/lompi/" data-zh="— Lompi · 包管理器" data-en="— Lompi · the package manager">— Lompi · 包管理器</a>
+          <a href="../../loment/std/" data-zh="— 标准库 · std 与 host" data-en="— Standard library · std and host">— 标准库 · std 与 host</a>
+          <a href="../../loment/early-use/" data-zh="— Early Use 报名" data-en="— Early Use sign-up">— Early Use 报名</a>
+          <a href="../../docs/" data-zh="文档" data-en="Documentation">文档</a>
+          <a href="../../news/" data-zh="新闻" data-en="News">新闻</a>
+          <a href="../../bugs/" data-zh="Bug 社区" data-en="Bug reports">Bug 社区</a>
+          <a href="../../docs/start/" data-zh="构建与运行" data-en="Build and run">构建与运行</a>
+          <a href="https://zenodo.org/records/22352904" rel="noopener" data-zh="论文 (Zenodo) ↗" data-en="Paper (Zenodo) ↗">论文 (Zenodo) ↗</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+      <!-- ======================================================== page head -->
+      <section class="section section--flush" style="padding-top: var(--s6); position: relative; overflow: hidden" data-motion>
+        <img
+          src="../../assets/loment-mark.svg"
+          alt=""
+          style="position: absolute; top: var(--s4); right: max(0px, calc((100% - var(--page)) / 2)); height: min(calc(100% - 2 * var(--s4)), 460px, 60vw); width: auto; transform: translateX(30%); opacity: 0.4; pointer-events: none"
+        />
+        <div class="wrap" style="position: relative">
+          <p class="crumbs fade-step" style="--delay: 0.02s">
+            <a href="../../" data-zh="首页" data-en="Home">首页</a>
+            <span class="sep" aria-hidden="true">/</span>
+            <a href="../" data-zh="Loment · Potato" data-en="Loment · Potato">Loment · Potato</a>
+            <span class="sep" aria-hidden="true">/</span>
+            <span data-zh="官方库" data-en="Official libraries">官方库</span>
+          </p>
+          <div style="max-width: var(--measure)">
+            <h1 class="display fade-step" style="--delay: 0.06s; font-size: clamp(2.1rem, 3.6vw, 2.9rem)" data-zh="语言里没有标准库。这是一份库。" data-en="There is no standard library in the language. This is a library.">
+              语言里没有标准库。这是一份库。
+            </h1>
+            <p class="lede fade-step" style="--delay: 0.14s; margin-top: var(--s3)" data-zh-html="Loment 里只有内建函数——<code>alloc</code> / <code>load8</code> / <code>str_*</code> / <code>syscall4</code> 那一组，二十来个；没有 <code>String</code>，没有 <code>Vec</code>，没有 <code>HashMap</code>。<strong>std 与 host 是官方维护的库</strong>，和你能写的那个库是同一种东西——依赖一样从源码的 <code>use</code> 来，身份一样是内容哈希。" data-en-html="Loment has builtins only — that group of about twenty (<code>alloc</code>, <code>load8</code>, <code>str_*</code>, <code>syscall4</code>) — and no <code>String</code>, no <code>Vec</code>, no <code>HashMap</code>. <strong>std and host are libraries, maintained officially</strong>, and the same kind of thing you can write: dependencies still come from <code>use</code> in the source, identity is still a content hash.">
+              Loment 里只有内建函数——<code>alloc</code> / <code>load8</code> / <code>str_*</code> / <code>syscall4</code> 那一组，二十来个；没有 <code>String</code>，没有 <code>Vec</code>，没有 <code>HashMap</code>。<strong>std 与 host 是官方维护的库</strong>，和你能写的那个库是同一种东西——依赖一样从源码的 <code>use</code> 来，身份一样是内容哈希。
+            </p>
+            <div class="hero__actions fade-step" style="--delay: 0.22s; margin-top: var(--s4)">
+              <a class="btn btn--primary" href="../../docs/language/std/" data-zh="看完整模块索引" data-en="The full module index">看完整模块索引</a>
+              <a class="btn" href="../lompi/" data-zh="Lompi · 包管理器" data-en="Lompi · the package manager">Lompi · 包管理器</a>
+              <a class="btn btn--ghost" href="../../docs/language/libraries/" data-zh="写一个 Loment 库" data-en="Write a Loment library">写一个 Loment 库</a>
+            </div>
+          </div>
+          <div class="stats fade-step" style="--delay: 0.3s; margin-top: var(--s5)">
+            <div class="stat">
+              <span class="stat__v">127</span>
+              <span class="stat__k" data-zh="std 里的模块（外加一个包入口，共 128 个文件）" data-en="modules in std, plus one package entry — 128 files">std 里的模块（外加一个包入口，共 128 个文件）</span>
+            </div>
+            <div class="stat">
+              <span class="stat__v">0</span>
+              <span class="stat__k" data-zh="std 里发出去的 syscall 数量" data-en="syscalls issued anywhere in std">std 里发出去的 syscall 数量</span>
+            </div>
+            <div class="stat">
+              <span class="stat__v">2</span>
+              <span class="stat__k" data-zh="包：可移植的 std，与带 syscall 的 host" data-en="packages: the portable std, and host with its syscalls">包：可移植的 std，与带 syscall 的 host</span>
+            </div>
+            <div class="stat">
+              <span class="stat__v">1</span>
+              <span class="stat__k" data-zh="依赖方向：host → std → numfmt（单向）" data-en="dependency direction: host → std → numfmt, one way">依赖方向：host → std → numfmt（单向）</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================== two packages -->
+      <section class="section" id="split" data-motion>
+        <div class="wrap">
+          <h2 class="h2" data-zh="为什么是两个包，不是一个" data-en="Why two packages and not one">为什么是两个包，不是一个</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col" data-zh="包" data-en="Package">包</th>
+                  <th scope="col" data-zh="内容" data-en="What is in it">内容</th>
+                  <th scope="col" data-zh="发不发 syscall" data-en="Syscalls?">发不发 syscall</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>std</code> · 0.1.0</td>
+                  <td data-zh="127 个模块：数值、容器、文本、摘要、压缩、编解码、图像、时间" data-en="127 modules: numerics, containers, text, digests, compression, codecs, images, time">127 个模块：数值、容器、文本、摘要、压缩、编解码、图像、时间</td>
+                  <td data-zh-html="<strong>一个都不发</strong>" data-en-html="<strong>None</strong>"><strong>一个都不发</strong></td>
+                </tr>
+                <tr>
+                  <td><code>host</code> · 0.1.0</td>
+                  <td data-zh-html="7 个模块：<code>argv</code> · <code>dir</code> · <code>fs</code> · <code>io</code> · <code>log</code> · <code>stat</code> · 包入口" data-en-html="7 modules: <code>argv</code>, <code>dir</code>, <code>fs</code>, <code>io</code>, <code>log</code>, <code>stat</code>, and the entry">7 个模块：<code>argv</code> · <code>dir</code> · <code>fs</code> · <code>io</code> · <code>log</code> · <code>stat</code> · 包入口</td>
+                  <td data-zh-html="发（<code>getdents64</code> / <code>openat</code> / <code>newfstatat</code> 这类）" data-en-html="Yes — <code>getdents64</code>, <code>openat</code>, <code>newfstatat</code> and friends">发（<code>getdents64</code> / <code>openat</code> / <code>newfstatat</code> 这类）</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="prose">
+            <p data-zh-html="依赖方向是单向的：<strong>host → std → numfmt</strong>，反不过来。这条方向是刻意的，不是碰巧——<strong>裸机、无宿主、或者只想要一段 CRC 的消费者，只依赖 <code>std</code>，不会把 <code>getdents64</code> 和目录遍历一起拖进二进制</strong>。基础内建之外最底下的那一层是 <code>numfmt</code>（整数转文本），它上面才长别的。" data-en-html="The dependency direction is one way: <strong>host → std → numfmt</strong>, and it does not reverse. That direction is deliberate rather than incidental — <strong>a bare-metal consumer, or one that only wants a CRC, depends on <code>std</code> alone and does not drag <code>getdents64</code> and directory traversal into the binary</strong>. The bottom of the stack above the builtins is <code>numfmt</code> (integers to text); everything else grows on top of it.">
+              依赖方向是单向的：<strong>host → std → numfmt</strong>，反不过来。这条方向是刻意的，不是碰巧——<strong>裸机、无宿主、或者只想要一段 CRC 的消费者，只依赖 <code>std</code>，不会把 <code>getdents64</code> 和目录遍历一起拖进二进制</strong>。基础内建之外最底下的那一层是 <code>numfmt</code>（整数转文本），它上面才长别的。
+            </p>
+            <p data-zh-html="一句话：<strong>把「需要操作系统的」和「不需要的」分成两个包</strong>，是为了让后者能去没有操作系统的地方。" data-en-html="In one line: <strong>splitting “needs an operating system” from “does not” into two packages is what lets the second one go where there is no operating system.</strong>">
+              一句话：<strong>把「需要操作系统的」和「不需要的」分成两个包</strong>，是为了让后者能去没有操作系统的地方。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ inside -->
+      <section class="section" id="inside" data-motion>
+        <div class="wrap">
+          <h2 class="h2" data-zh="里面有什么" data-en="What is inside">里面有什么</h2>
+          <div class="prose">
+            <p data-zh-html="这里只列大类与几个代表。<strong>逐条索引在文档里</strong>——127 个模块每个一行说明，而且每行的说明都来自那个模块自己文件头的第一行，不是概括出来的。" data-en-html="Only the areas and a few representatives are listed here. <strong>The entry-by-entry index is in the docs</strong> — one line for each of the 127 modules, and each line is the first line of that module's own file header rather than a summary of it.">
+              这里只列大类与几个代表。<strong>逐条索引在文档里</strong>——127 个模块每个一行说明，而且每行的说明都来自那个模块自己文件头的第一行，不是概括出来的。
+            </p>
+          </div>
+          <div class="grid grid--3">
+            <div class="card">
+              <span class="card__k" data-zh="数值" data-en="Numerics">数值</span>
+              <h3 class="h3" data-zh="整数、浮点、大数" data-en="Integers, floats, big numbers">整数、浮点、大数</h3>
+              <p data-zh-html="<code>math</code> · <code>intmath</code>（gcd / powmod / 素性）· <code>f64</code>（软实现的 IEEE 754）· <code>mathf</code> · <code>bigint</code> · <code>bigdec</code> · <code>rational</code> · <code>wide</code>（128 位积）· <code>matrix</code> · <code>stats</code>" data-en-html="<code>math</code>, <code>intmath</code> (gcd, powmod, primality), <code>f64</code> (IEEE 754 in software), <code>mathf</code>, <code>bigint</code>, <code>bigdec</code>, <code>rational</code>, <code>wide</code> (128-bit products), <code>matrix</code>, <code>stats</code>"><code>math</code> · <code>intmath</code>（gcd / powmod / 素性）· <code>f64</code>（软实现的 IEEE 754）· <code>mathf</code> · <code>bigint</code> · <code>bigdec</code> · <code>rational</code> · <code>wide</code>（128 位积）· <code>matrix</code> · <code>stats</code></p>
+            </div>
+            <div class="card">
+              <span class="card__k" data-zh="容器" data-en="Containers">容器</span>
+              <h3 class="h3" data-zh="内存由调用方持有" data-en="The caller owns the memory">内存由调用方持有</h3>
+              <p data-zh-html="<code>arena</code> · <code>mall</code> · <code>pool</code> · <code>vec</code> · <code>deque</code> · <code>ring</code> · <code>map</code> · <code>mapstr</code> · <code>set</code> · <code>lru</code> · <code>trie</code> · <code>bst</code> · <code>heap</code> · <code>bitset</code> · <code>bloom</code>，以及 <code>graph</code> / <code>shortest</code> / <code>mst</code> / <code>unionfind</code>" data-en-html="<code>arena</code>, <code>mall</code>, <code>pool</code>, <code>vec</code>, <code>deque</code>, <code>ring</code>, <code>map</code>, <code>mapstr</code>, <code>set</code>, <code>lru</code>, <code>trie</code>, <code>bst</code>, <code>heap</code>, <code>bitset</code>, <code>bloom</code>, plus <code>graph</code>, <code>shortest</code>, <code>mst</code>, <code>unionfind</code>"><code>arena</code> · <code>mall</code> · <code>pool</code> · <code>vec</code> · <code>deque</code> · <code>ring</code> · <code>map</code> · <code>mapstr</code> · <code>set</code> · <code>lru</code> · <code>trie</code> · <code>bst</code> · <code>heap</code> · <code>bitset</code> · <code>bloom</code>，以及 <code>graph</code> / <code>shortest</code> / <code>mst</code> / <code>unionfind</code></p>
+            </div>
+            <div class="card">
+              <span class="card__k" data-zh="文本" data-en="Text">文本</span>
+              <h3 class="h3" data-zh="从字节到折行" data-en="From bytes to line breaking">从字节到折行</h3>
+              <p data-zh-html="<code>utf8</code> · <code>char</code> · <code>case</code> · <code>text</code> · <code>split</code> · <code>trim</code> · <code>quote</code> · <code>bufio</code> · <code>path</code> · <code>glob</code> · <code>search</code>（KMP / BMH）· <code>sort</code> · <code>udiff</code> · <code>width</code>（东亚宽度）· <code>wrap</code> · <code>table</code>" data-en-html="<code>utf8</code>, <code>char</code>, <code>case</code>, <code>text</code>, <code>split</code>, <code>trim</code>, <code>quote</code>, <code>bufio</code>, <code>path</code>, <code>glob</code>, <code>search</code> (KMP, BMH), <code>sort</code>, <code>udiff</code>, <code>width</code> (East Asian), <code>wrap</code>, <code>table</code>"><code>utf8</code> · <code>char</code> · <code>case</code> · <code>text</code> · <code>split</code> · <code>trim</code> · <code>quote</code> · <code>bufio</code> · <code>path</code> · <code>glob</code> · <code>search</code>（KMP / BMH）· <code>sort</code> · <code>udiff</code> · <code>width</code>（东亚宽度）· <code>wrap</code> · <code>table</code></p>
+            </div>
+            <div class="card">
+              <span class="card__k" data-zh="摘要与压缩" data-en="Digests and compression">摘要与压缩</span>
+              <h3 class="h3" data-zh="实现都在源码里" data-en="Implemented in the source">实现都在源码里</h3>
+              <p data-zh-html="<code>sha256</code> · <code>sha1</code> · <code>sha512</code> · <code>md5</code> · <code>hmac</code> · <code>kdf</code>（PBKDF2 / HKDF）· <code>crc32</code> · <code>crc16</code> · <code>adler32</code> · <code>deflate</code> / <code>inflate</code> · <code>zlibc</code> · <code>lzss</code> · <code>huffman</code> · <code>rle</code>" data-en-html="<code>sha256</code>, <code>sha1</code>, <code>sha512</code>, <code>md5</code>, <code>hmac</code>, <code>kdf</code> (PBKDF2, HKDF), <code>crc32</code>, <code>crc16</code>, <code>adler32</code>, <code>deflate</code> / <code>inflate</code>, <code>zlibc</code>, <code>lzss</code>, <code>huffman</code>, <code>rle</code>"><code>sha256</code> · <code>sha1</code> · <code>sha512</code> · <code>md5</code> · <code>hmac</code> · <code>kdf</code>（PBKDF2 / HKDF）· <code>crc32</code> · <code>crc16</code> · <code>adler32</code> · <code>deflate</code> / <code>inflate</code> · <code>zlibc</code> · <code>lzss</code> · <code>huffman</code> · <code>rle</code></p>
+            </div>
+            <div class="card">
+              <span class="card__k" data-zh="格式" data-en="Formats">格式</span>
+              <h3 class="h3" data-zh="读，但不建树" data-en="Read, without building a tree">读，但不建树</h3>
+              <p data-zh-html="<code>jsn</code>（JSON）· <code>cbor</code> · <code>mpk</code>（MessagePack）· <code>asn1</code> · <code>toml</code> · <code>ini</code> · <code>csv</code> · <code>base64</code> / <code>base32</code> / <code>base58</code> / <code>base85</code> · <code>hex</code> · <code>url</code> · <code>varint</code> · <code>ansi</code>" data-en-html="<code>jsn</code> (JSON), <code>cbor</code>, <code>mpk</code> (MessagePack), <code>asn1</code>, <code>toml</code>, <code>ini</code>, <code>csv</code>, <code>base64</code> / <code>base32</code> / <code>base58</code> / <code>base85</code>, <code>hex</code>, <code>url</code>, <code>varint</code>, <code>ansi</code>"><code>jsn</code>（JSON）· <code>cbor</code> · <code>mpk</code>（MessagePack）· <code>asn1</code> · <code>toml</code> · <code>ini</code> · <code>csv</code> · <code>base64</code> / <code>base32</code> / <code>base58</code> / <code>base85</code> · <code>hex</code> · <code>url</code> · <code>varint</code> · <code>ansi</code></p>
+            </div>
+            <div class="card">
+              <span class="card__k" data-zh="图像与终端" data-en="Images and terminals">图像与终端</span>
+              <h3 class="h3" data-zh="像素到单元格" data-en="Pixels to cells">像素到单元格</h3>
+              <p data-zh-html="<code>raster</code>（填充 / 线 / 圆）· <code>blit</code>（alpha 混合 / 缩放）· <code>font</code>（8×8 点阵）· <code>bmp</code> · <code>png</code> · <code>qoi</code> · <code>tui</code>（单元格网格 + 差异渲染）" data-en-html="<code>raster</code> (fills, lines, circles), <code>blit</code> (alpha blending, scaling), <code>font</code> (8×8 bitmap), <code>bmp</code>, <code>png</code>, <code>qoi</code>, <code>tui</code> (cell grid with differential rendering)"><code>raster</code>（填充 / 线 / 圆）· <code>blit</code>（alpha 混合 / 缩放）· <code>font</code>（8×8 点阵）· <code>bmp</code> · <code>png</code> · <code>qoi</code> · <code>tui</code>（单元格网格 + 差异渲染）</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================================================== conventions -->
+      <section class="section" id="conventions" data-motion>
+        <div class="wrap">
+          <h2 class="h2" data-zh="几条贯穿全库的约定" data-en="Conventions that run through the whole library">几条贯穿全库的约定</h2>
+          <ul class="list">
+            <li><b data-zh="公开名字带模块前缀" data-en="Public names carry a module prefix">公开名字带模块前缀</b> <span data-zh-html="—— <code>hex_*</code>、<code>crc32_*</code>、<code>math_*</code>、<code>out_*</code>。因为发射的符号名是平的、一个单元里顶层名字必须唯一，<strong>前缀是这条约束的纪律</strong>，不是命名癖好。" data-en-html=" — <code>hex_*</code>, <code>crc32_*</code>, <code>math_*</code>, <code>out_*</code>. Because emitted symbols are flat and top-level names must be unique within a unit, <strong>the prefix is the discipline that constraint demands</strong>, not a naming taste.">—— <code>hex_*</code>、<code>crc32_*</code>、<code>math_*</code>、<code>out_*</code>。因为发射的符号名是平的、一个单元里顶层名字必须唯一，<strong>前缀是这条约束的纪律</strong>，不是命名癖好。</span></li>
+            <li><b data-zh="容器不收自己的账" data-en="Containers do not own their memory">容器不收自己的账</b> <span data-zh-html="—— <code>vec</code> / <code>arena</code> / <code>bst</code> / <code>pool</code> / <code>ring</code> / <code>bitset</code> 一律<strong>由调用方持有缓冲</strong>。bump 堆只有 64 KiB，库自己分配会把上限摊到每一个使用者身上。" data-en-html=" — <code>vec</code>, <code>arena</code>, <code>bst</code>, <code>pool</code>, <code>ring</code> and <code>bitset</code> all <strong>take the buffer from the caller</strong>. The bump heap is 64 KiB, and a library that allocates for itself spreads that ceiling onto every consumer.">—— <code>vec</code> / <code>arena</code> / <code>bst</code> / <code>pool</code> / <code>ring</code> / <code>bitset</code> 一律<strong>由调用方持有缓冲</strong>。bump 堆只有 64 KiB，库自己分配会把上限摊到每一个使用者身上。</span></li>
+            <li><b data-zh="格式读取是游标式的" data-en="Format readers are cursor-style">格式读取是游标式的</b> <span data-zh-html="—— <code>jsn</code> / <code>cbor</code> / <code>mpk</code> / <code>asn1</code> / <code>toml</code> 都不建树。同一个理由：建树要分配。" data-en-html=" — <code>jsn</code>, <code>cbor</code>, <code>mpk</code>, <code>asn1</code> and <code>toml</code> build no tree. Same reason: a tree means allocating.">—— <code>jsn</code> / <code>cbor</code> / <code>mpk</code> / <code>asn1</code> / <code>toml</code> 都不建树。同一个理由：建树要分配。</span></li>
+            <li><b data-zh="名字里有「不是」的东西会写明" data-en="Modules say what they are not">名字里有「不是」的东西会写明</b> <span data-zh-html="—— <code>coro</code> 的文件头第一句就是「<strong>不是</strong>有独立栈的协程」，<code>sched</code> 是「<strong>不是</strong>抢占式调度器」。免得有人按名字想当然。" data-en-html=" — <code>coro</code>'s header opens with “<strong>not</strong> a coroutine with its own stack”, and <code>sched</code> with “<strong>not</strong> a preemptive scheduler”. So that nobody assumes from the name.">—— <code>coro</code> 的文件头第一句就是「<strong>不是</strong>有独立栈的协程」，<code>sched</code> 是「<strong>不是</strong>抢占式调度器」。免得有人按名字想当然。</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ========================================================= limits -->
+      <section class="section" id="limits" data-motion>
+        <div class="wrap">
+          <h2 class="h2" data-zh="用它之前要知道的一条边界" data-en="One boundary to know before using it">用它之前要知道的一条边界</h2>
+          <div class="prose">
+            <p data-zh-html="打包版编译器有两个限制——<strong>单文件最多 8 条 <code>use</code></strong>，以及<strong>菱形导入会崩</strong>。而 <code>std.lomt</code> 两条都不满足（127 条 <code>use</code>；<code>mem</code> / <code>wide</code> 被多个模块共用，就是菱形）。" data-en-html="The packaged compiler carries two limits — <strong>at most 8 <code>use</code> lines per file</strong>, and <strong>diamond imports crash</strong>. <code>std.lomt</code> satisfies neither (127 <code>use</code> lines; <code>mem</code> and <code>wide</code> are shared by several modules, which is a diamond).">
+              打包版编译器有两个限制——<strong>单文件最多 8 条 <code>use</code></strong>，以及<strong>菱形导入会崩</strong>。而 <code>std.lomt</code> 两条都不满足（127 条 <code>use</code>；<code>mem</code> / <code>wide</code> 被多个模块共用，就是菱形）。
+            </p>
+            <p data-zh-html="所以：<strong>参考实现</strong>能直接吃它（它做去重、不限条数），<code>loment lib materialize</code> 走的正是那条路；而在打包版编译器上，消费方要<strong>按需 <code>use</code> 具体模块</strong>，不要写 <code>use std</code>。这不是这一层能自己解决的事——要让它变成一条 <code>use</code>，得先让编译器支持去重与不限条数。" data-en-html="So the <strong>reference implementation</strong> can consume it directly (it deduplicates and has no limit) — which is the path <code>loment lib materialize</code> takes — while on the packaged compiler a consumer must <strong>name the modules it wants</strong> rather than writing <code>use std</code>. This is not something this layer can fix on its own: turning it into a single <code>use</code> requires the compiler to deduplicate and to drop the limit.">
+              所以：<strong>参考实现</strong>能直接吃它（它做去重、不限条数），<code>loment lib materialize</code> 走的正是那条路；而在打包版编译器上，消费方要<strong>按需 <code>use</code> 具体模块</strong>，不要写 <code>use std</code>。这不是这一层能自己解决的事——要让它变成一条 <code>use</code>，得先让编译器支持去重与不限条数。
+            </p>
+            <p data-zh-html="修好之后，<code>use std</code> 就会像别的依赖一样只是一行 <code>use</code>。" data-en-html="Once that is fixed, <code>use std</code> becomes just another <code>use</code> line like any other dependency.">
+              修好之后，<code>use std</code> 就会像别的依赖一样只是一行 <code>use</code>。
+            </p>
+          </div>
+          <div class="note note--steel">
+            <strong data-zh="完整模块索引在文档里：" data-en="The full module index is in the docs: ">完整模块索引在文档里：</strong>
+            <span data-zh-html="127 个模块逐条一行说明、七个命令的用法、以及它们和 <code>use</code> 的关系，都在 <a href=&quot;../../docs/language/std/&quot;>官方库 · std 与 host</a>。<a href=&quot;../lompi/&quot;>Lompi</a> 负责把依赖解析出来、发锁、物化；库本身怎么写，看 <a href=&quot;../../docs/language/libraries/&quot;>写一个 Loment 库</a>。" data-en-html="One line for each of the 127 modules, how the tooling works, and how it relates to <code>use</code> are all in <a href=&quot;../../docs/language/std/&quot;>Official libraries · std and host</a>. <a href=&quot;../lompi/&quot;>Lompi</a> resolves dependencies, emits locks and materialises; for how to write a library yourself, see <a href=&quot;../../docs/language/libraries/&quot;>Writing a Loment library</a>.">
+              127 个模块逐条一行说明、以及它们和 <code>use</code> 的关系，都在 <a href="../../docs/language/std/">官方库 · std 与 host</a>。<a href="../lompi/">Lompi</a> 负责把依赖解析出来、发锁、物化；库本身怎么写，看 <a href="../../docs/language/libraries/">写一个 Loment 库</a>。
+            </span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <div class="wrap">
+        <div class="foot__grid">
+          <div>
+            <div class="nav__brand" style="margin-bottom: 0.7rem">
+              <svg viewBox="0 14 64 46" aria-hidden="true">
+                <path d="M3,58 Q11,38 26,16 Q32,19 38,16 Q53,38 61,58 Z" fill="var(--mark-rock)" />
+                <path d="M15.9,32 Q18,22 26,16 Q32,19 38,16 Q46,22 48.1,32 Q32,38 15.9,32 Z" fill="var(--mark-snow)" />
+              </svg>
+              FujoOS
+            </div>
+            <p class="small dim" style="max-width: 34ch" data-zh="std 与 host 是 Loment 的官方库。语言里只有内建，其余都长在这两个包上。" data-en="std and host are Loment's official libraries. The language holds the builtins; everything else grows on these two packages.">
+              std 与 host 是 Loment 的官方库。语言里只有内建，其余都长在这两个包上。
+            </p>
+          </div>
+          <div>
+            <h4 data-zh="本页" data-en="On this page">本页</h4>
+            <a href="#split" data-zh="为什么是两个包" data-en="Why two packages">为什么是两个包</a>
+            <a href="#inside" data-zh="里面有什么" data-en="What is inside">里面有什么</a>
+            <a href="#conventions" data-zh="贯穿全库的约定" data-en="Conventions">贯穿全库的约定</a>
+            <a href="#limits" data-zh="一条边界" data-en="One boundary">一条边界</a>
+          </div>
+          <div>
+            <h4 data-zh="文档" data-en="Documentation">文档</h4>
+            <a href="../../docs/language/std/" data-zh="完整模块索引" data-en="Full module index">完整模块索引</a>
+            <a href="../../docs/language/libraries/" data-zh="写一个 Loment 库" data-en="Writing a Loment library">写一个 Loment 库</a>
+            <a href="../../docs/language/lompi/" data-zh="Lompi 命令参考" data-en="Lompi command reference">Lompi 命令参考</a>
+            <a href="../../docs/" data-zh="全部文档 →" data-en="All documentation →">全部文档 →</a>
+          </div>
+          <div>
+            <h4 data-zh="Loment · Potato" data-en="Loment · Potato">Loment · Potato</h4>
+            <a href="../" data-zh="概览" data-en="Overview">概览</a>
+            <a href="../lompi/" data-zh="Lompi · 包管理器" data-en="Lompi · the package manager">Lompi · 包管理器</a>
+            <a href="../early-use/" data-zh="Early Use 报名" data-en="Early Use sign-up">Early Use 报名</a>
+          </div>
+        </div>
+        <div class="foot__end">
+          <span>© <span data-year>2026</span> Yuxuan Jiang · MIT</span>
+          <span data-zh="std 0.1.0 · host 0.1.0 · 127 个模块" data-en="std 0.1.0 · host 0.1.0 · 127 modules">std 0.1.0 · host 0.1.0 · 127 个模块</span>
+        </div>
+      </div>
+    </footer>
+
+    <script src="../../assets/site.js?v=a3159b21"></script>
+  </body>
+</html>
