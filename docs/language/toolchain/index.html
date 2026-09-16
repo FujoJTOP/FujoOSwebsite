@@ -166,6 +166,7 @@
                   <a href="../../../docs/language/" data-zh="总览" data-en="Overview">总览</a>
                   <a href="../../../docs/language/loment/" data-zh="Loment 语言" data-en="The Loment language">Loment 语言</a>
                   <a href="../../../docs/language/libraries/" data-zh="写一个 Loment 库" data-en="Writing a Loment library">写一个 Loment 库</a>
+                  <a href="../../../docs/language/lompi/" data-zh="Lompi · 包管理器" data-en="Lompi · the package manager">Lompi · 包管理器</a>
                   <a href="../../../docs/language/freeze/" data-zh="冻结面" data-en="The freeze surface">冻结面</a>
                   <a href="../../../docs/language/l0/" data-zh="L0 单一真源" data-en="L0 source of truth">L0 单一真源</a>
                   <a href="../../../docs/language/capability/" data-zh="能力域即语言构造" data-en="Capability as a construct">能力域即语言构造</a>
@@ -254,6 +255,11 @@
                       <td><strong>loment lib</strong></td>
                       <td data-zh="库系统：依赖树 / 实例身份 / 能力闭包 / 冲突检查 / 物化" data-en="The library system: dependency tree, instance identity, capability closure, conflict check, materialisation">库系统：依赖树 / 实例身份 / 能力闭包 / 冲突检查 / 物化</td>
                       <td data-zh-html="这是与上面那个包管理器<strong>不同的一层</strong>。一个库就是一个目录；依赖是源码里的 <code>use</code>，不用另行声明；实例身份是递归哈希；多个版本靠物化改名共存；能力需求是从 <code>guard</code> 推导出来的，不由作者手写。写库没有新东西要学——<a href=&quot;../libraries/&quot;>见「写一个 Loment 库」</a>。" data-en-html="This is a <strong>different layer</strong> from the package manager above. A library is a directory; dependencies are the <code>use</code> lines in the source, not something declared separately; instance identity is a recursive hash; several versions coexist by renaming at materialisation; capability requirements are derived from <code>guard</code>, not written by hand. Writing a library teaches you nothing new — <a href=&quot;../libraries/&quot;>see “Writing a Loment library”</a>.">这是与上面那个包管理器<strong>不同的一层</strong>。一个库就是一个目录；依赖是源码里的 <code>use</code>，不用另行声明；实例身份是递归哈希；多个版本靠物化改名共存；能力需求是从 <code>guard</code> 推导出来的，不由作者手写。写库没有新东西要学——<a href="../libraries/">见「写一个 Loment 库」</a>。</td>
+                    </tr>
+                    <tr>
+                      <td><strong>lompi</strong></td>
+                      <td data-zh="库管理工具：清点仓库 / 依赖树 / 发锁 / 验锁 / 落盘计划" data-en="Library tool: index a store, dependency tree, emit a lock, verify a lock, plan">库管理工具：清点仓库 / 依赖树 / 发锁 / 验锁 / 落盘计划</td>
+                      <td data-zh-html="第一个库管理工具，也是<strong>用 Loment 写的独立程序</strong>——入口加七个模块编成一个可执行文件，跑起来不需要 Python。它自己读源码里的 <code>use</code> 找依赖，自己算身份（递归哈希），发出来的锁是<strong>身份</strong>清单而不是版本清单。<a href=&quot;../lompi/&quot;>见 Lompi 一页</a>。" data-en-html="The first library management tool, and <strong>a standalone program written in Loment</strong> — an entry point plus seven modules compiled into one executable, running with no Python. It reads the <code>use</code> lines in the source to find dependencies and computes identity itself (a recursive hash); the lock it emits is a list of <strong>identities</strong>, not of versions. <a href=&quot;../lompi/&quot;>See the Lompi page</a>.">第一个库管理工具，也是<strong>用 Loment 写的独立程序</strong>——入口加七个模块编成一个可执行文件，跑起来不需要 Python。它自己读源码里的 <code>use</code> 找依赖，自己算身份（递归哈希），发出来的锁是<strong>身份</strong>清单而不是版本清单。<a href="../lompi/">见 Lompi 一页</a>。</td>
                     </tr>
                     <tr>
                       <td><strong>lomdoc</strong></td>

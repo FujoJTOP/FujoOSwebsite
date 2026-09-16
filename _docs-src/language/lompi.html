@@ -1,0 +1,295 @@
+<!--{"zh":"Lompi · 包管理器","en":"Lompi · the package manager","desc":"第一个库管理工具：用 Loment 写的独立程序，不需要 Python。依赖从源码的 use 里读，身份是递归哈希，锁把身份钉死再逐字节比对。","banner_zh":"Lompi · 第一个库管理工具","banner_en":"Lompi · the first library management tool"}-->
+              <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="Lompi · 包管理器" data-en="Lompi · the package manager">Lompi · 包管理器</h1>
+
+              <div class="prose">
+                <p data-zh-html="Lompi 是<a href=&quot;../libraries/&quot;>库系统</a>的工具，也是它的第一个独立实现：<strong>一个用 Loment 写的程序</strong>——入口加七个模块编成一个可执行文件，跑起来不需要 Python。它自己读源码里的 <code>use</code> 找出依赖，自己算身份，自己发锁。" data-en-html="Lompi is the tool for the <a href=&quot;../libraries/&quot;>library system</a> and its first standalone implementation: <strong>a program written in Loment</strong> — an entry point plus seven modules compiled into one executable, running with no Python involved. It reads the <code>use</code> lines in the source to find dependencies, computes identity itself, and emits its own lock.">
+                  Lompi 是<a href="../libraries/">库系统</a>的工具，也是它的第一个独立实现：<strong>一个用 Loment 写的程序</strong>——入口加七个模块编成一个可执行文件，跑起来不需要 Python。它自己读源码里的 <code>use</code> 找出依赖，自己算身份，自己发锁。
+                </p>
+                <p data-zh-html="一句话说清它和别的包管理器差在哪：<strong>pip 里最难的是「挑版本」，Lompi 里最难的是「把实例身份算准」。</strong>选版只剩一条规则——版本最大；而身份要对得起「同一份源码绑到不同依赖上就该是两个东西」这件事。" data-en-html="In one line, where it differs from other package managers: <strong>the hard part in pip is picking a version; the hard part in Lompi is getting instance identity right.</strong> Selection is down to one rule — highest version wins; identity has to honour the fact that the same source bound to different dependencies is two different things.">
+                  一句话说清它和别的包管理器差在哪：<strong>pip 里最难的是「挑版本」，Lompi 里最难的是「把实例身份算准」。</strong>选版只剩一条规则——版本最大；而身份要对得起「同一份源码绑到不同依赖上就该是两个东西」这件事。
+                </p>
+              </div>
+
+              <h2 data-zh="仓库长什么样" data-en="What a store looks like">仓库长什么样</h2>
+              <div class="code">
+                <div class="code__bar">
+                  <span class="lang-tag">text</span>
+                  <span data-zh="仓库布局" data-en="store layout">仓库布局</span>
+                  <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+                </div>
+                <pre>&lt;store&gt;/
+  &lt;名字&gt;/
+    &lt;版本&gt;/
+      &lt;名字&gt;.lomt     ← 入口。文件名必须与包名一致
+      *.lomt          ← 包内其余模块
+      pkg.lomp        ← 可选。只放两个给人看的标签</pre>
+              </div>
+              <div class="prose">
+                <p data-zh-html="<code>pkg.lomp</code> 是可选的，写成普通 Loment 源码。<code>deps/</code> 里的东西<strong>不算本包的源码</strong>——否则会凭空多出依赖边，并把 vendored 的副本算进身份。" data-en-html="<code>pkg.lomp</code> is optional and is ordinary Loment source. Whatever sits under <code>deps/</code> is <strong>not part of the package's own source</strong> — otherwise phantom dependency edges appear and vendored copies get folded into the identity.">
+                  <code>pkg.lomp</code> 是可选的，写成普通 Loment 源码。<code>deps/</code> 里的东西<strong>不算本包的源码</strong>——否则会凭空多出依赖边，并把 vendored 的副本算进身份。
+                </p>
+              </div>
+
+              <h2 data-zh="两种边，只有一种算依赖" data-en="Two kinds of edge, only one of them a dependency">两种边，只有一种算依赖</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="写法" data-en="Form">写法</th>
+                      <th scope="col" data-zh="含义" data-en="Meaning">含义</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>use 名字</code></td>
+                      <td data-zh-html="指向<strong>另一个包</strong>。解析、算身份、进锁，都看它。" data-en-html="Points at <strong>another package</strong>. Resolution, identity and the lock all rest on it.">指向<strong>另一个包</strong>。解析、算身份、进锁，都看它。</td>
+                    </tr>
+                    <tr>
+                      <td><code>use "io.lomt"</code></td>
+                      <td data-zh-html="<strong>包内</strong>引用。列出来是为了看得见，但那个文件本来就在本包源码里，所以<strong>不参与解析，也不进哈希</strong>。" data-en-html="An <strong>in-package</strong> reference. It is listed so you can see it, but that file is already part of this package's source, so it <strong>takes no part in resolution and is not hashed</strong>."><strong>包内</strong>引用。列出来是为了看得见，但那个文件本来就在本包源码里，所以<strong>不参与解析，也不进哈希</strong>。</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="note note--amber">
+                <strong data-zh="一条边界：" data-en="One boundary: ">一条边界：</strong>
+                <span data-zh-html="路径边如果指向<strong>包外</strong>（<code>use &quot;../other/x.lomt&quot;</code>），Lompi 不跟踪。跨包引用请一律写成 <code>use 名字</code>，并让那个名字落在仓库里。" data-en-html="A path edge pointing <strong>outside</strong> the package (<code>use &quot;../other/x.lomt&quot;</code>) is not followed. Cross-package references should always be written <code>use name</code>, with that name present in the store.">
+                  路径边如果指向<strong>包外</strong>（<code>use "../other/x.lomt"</code>），Lompi 不跟踪。跨包引用请一律写成 <code>use 名字</code>，并让那个名字落在仓库里。
+                </span>
+              </div>
+
+              <h2 data-zh="命令全表" data-en="Every command">命令全表</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="命令" data-en="Command">命令</th>
+                      <th scope="col" data-zh="作用" data-en="What it does">作用</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td><code>lompi index &lt;store&gt;</code></td><td data-zh="仓库里有哪些包" data-en="What packages the store holds">仓库里有哪些包</td></tr>
+                    <tr><td><code>lompi show &lt;store&gt; &lt;名字[@版本]&gt;</code></td><td data-zh="元数据 / use 边 / 身份" data-en="Metadata, use edges, identity">元数据 / use 边 / 身份</td></tr>
+                    <tr><td><code>lompi tree &lt;store&gt; &lt;名字[@版本]&gt;</code></td><td data-zh="依赖树" data-en="The dependency tree">依赖树</td></tr>
+                    <tr><td><code>lompi resolve &lt;store&gt; &lt;名字[@版本]&gt;</code></td><td data-zh="打出锁（身份钉死的清单）" data-en="Emits a lock: the list with identities pinned">打出锁（身份钉死的清单）</td></tr>
+                    <tr><td><code>lompi verify &lt;store&gt; &lt;名字[@版本]&gt; &lt;锁文件&gt;</code></td><td data-zh="重算并逐字节比对" data-en="Recomputes and compares byte for byte">重算并逐字节比对</td></tr>
+                    <tr><td><code>lompi plan &lt;store&gt; &lt;名字[@版本]&gt; [--into D]</code></td><td data-zh-html="落盘计划——<strong>这就是 install</strong>" data-en-html="The on-disk plan — <strong>this is install</strong>">落盘计划——<strong>这就是 install</strong></td></tr>
+                    <tr><td><code>lompi hash &lt;包目录&gt;</code></td><td data-zh="单个包的自身源码哈希" data-en="One package's own-source hash">单个包的自身源码哈希</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="prose">
+                <p data-zh-html="<code>&lt;名字[@版本]&gt;</code> 的写法：<code>mathutil</code> 意思是「版本最大的那个」，<code>mathutil@0.1.0</code> 是钉死版本。版本按 <code>.</code> 分段做数值比较，所以 <code>0.10.0</code> 大于 <code>0.9.0</code>。" data-en-html="On <code>&lt;name[@version]&gt;</code>: <code>mathutil</code> means “the highest version”, while <code>mathutil@0.1.0</code> pins one. Versions compare numerically per <code>.</code> segment, so <code>0.10.0</code> beats <code>0.9.0</code>.">
+                  <code>&lt;名字[@版本]&gt;</code> 的写法：<code>mathutil</code> 意思是「版本最大的那个」，<code>mathutil@0.1.0</code> 是钉死版本。版本按 <code>.</code> 分段做数值比较，所以 <code>0.10.0</code> 大于 <code>0.9.0</code>。
+                </p>
+                <p data-zh="下面每一条都是在真实仓库上跑出来的，不是示意。" data-en="Every output below was produced against a real store, not sketched.">
+                  下面每一条都是在真实仓库上跑出来的，不是示意。
+                </p>
+              </div>
+              <div class="code">
+                <div class="code__bar">
+                  <span class="lang-tag">console</span>
+                  <span data-zh="清点仓库" data-en="index">清点仓库</span>
+                  <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+                </div>
+                <pre>$ lompi index fixture/store
+5 package(s) in store
+geom 1.0.0 06b4cc0d3b1f136f
+mathutil 0.1.0 53ce217a387ed58a
+mathutil 0.2.0 c5f88a0519c41888
+multi 2.0.0 8326d0125e3b111d
+util 0.3.0 e0e90317698ff804</pre>
+              </div>
+              <div class="prose">
+                <p data-zh-html="每行是「名字 版本 身份前 16 位」。<strong>同一个名字出现两次是正常的</strong>——那是两个实例（多版本共存），不是重复；第一行那个 <code>5 package(s)</code> 数的是<strong>实例</strong>数。" data-en-html="Each line is “name, version, first sixteen of the identity”. <strong>One name appearing twice is normal</strong> — those are two instances coexisting, not a duplicate; the <code>5 package(s)</code> on the first line counts <strong>instances</strong>.">
+                  每行是「名字 版本 身份前 16 位」。<strong>同一个名字出现两次是正常的</strong>——那是两个实例（多版本共存），不是重复；第一行那个 <code>5 package(s)</code> 数的是<strong>实例</strong>数。
+                </p>
+              </div>
+              <div class="code">
+                <div class="code__bar">
+                  <span class="lang-tag">console</span>
+                  <span data-zh="看一个包的底细" data-en="show">看一个包的底细</span>
+                  <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+                </div>
+                <pre>$ lompi show fixture/store multi
+name:    multi
+version: 2.0.0
+id:      8326d0125e3b111d51d050e49395400524a18ddc31eb730f7afbc9cb6a4955fb
+dir:     fixture/store/multi/2.0.0
+1 use edge(s):
+  name util</pre>
+              </div>
+              <div class="prose">
+                <p data-zh-html="<code>id</code> 是<strong>实例身份</strong>（64 位十六进制）。把它和别的构建里同一个包的 id 比一比，就知道两边是不是同一个东西。" data-en-html="<code>id</code> is the <strong>instance identity</strong>, sixty-four hex characters. Compare it with the same package's id in another build and you know whether the two are the same thing.">
+                  <code>id</code> 是<strong>实例身份</strong>（64 位十六进制）。把它和别的构建里同一个包的 id 比一比，就知道两边是不是同一个东西。
+                </p>
+              </div>
+              <div class="code">
+                <div class="code__bar">
+                  <span class="lang-tag">console</span>
+                  <span data-zh="依赖树 / 发锁 / 验锁" data-en="tree, resolve, verify">依赖树 / 发锁 / 验锁</span>
+                  <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+                </div>
+                <pre>$ lompi tree fixture/store multi
+multi@2.0.0 8326d0125e3b
+  util@0.3.0 e0e90317698f
+
+$ lompi resolve fixture/store multi
+# lompi lock v1
+multi 2.0.0 8326d0125e3b111d51d050e49395400524a18ddc31eb730f7afbc9cb6a4955fb
+util 0.3.0 e0e90317698ff804db92a01bce6b7a965e9e679eb6bb80b25f02c2d05207b041
+
+$ lompi verify fixture/store multi lompi.lock
+[OK] lompi: 锁与仓库一致 (169 bytes)</pre>
+              </div>
+              <div class="prose">
+                <p data-zh-html="缩进表示层次；菱形依赖（两个包依赖同一个）第二次出现时会标 <code>(already shown)</code>，不重复展开——那是<strong>同一个实例</strong>，展开两次会骗人。锁是<strong>身份</strong>清单而不是版本清单；验锁会把整棵树重算一遍再逐字节比对，拿错一份锁得到的是 <code>[DIFF] 锁与仓库不一致</code> 并以 1 退出，不是「差不多能用」。" data-en-html="Indentation is depth; when a diamond appears (two packages depending on the same one) the second occurrence is marked <code>(already shown)</code> rather than expanded again — it is <strong>one instance</strong>, and expanding it twice would mislead. A lock is a list of <strong>identities</strong>, not versions; verifying recomputes the whole tree and compares byte for byte, so the wrong lock yields <code>[DIFF] 锁与仓库不一致</code> and exit 1, not “close enough”.">
+                  缩进表示层次；菱形依赖（两个包依赖同一个）第二次出现时会标 <code>(already shown)</code>，不重复展开——那是<strong>同一个实例</strong>，展开两次会骗人。锁是<strong>身份</strong>清单而不是版本清单；验锁会把整棵树重算一遍再逐字节比对，拿错一份锁得到的是 <code>[DIFF] 锁与仓库不一致</code> 并以 1 退出，不是「差不多能用」。
+                </p>
+              </div>
+
+              <h2 data-zh="身份怎么算" data-en="How identity is computed">身份怎么算</h2>
+              <div class="code">
+                <div class="code__bar">
+                  <span class="lang-tag">text</span>
+                  <span data-zh="实例身份" data-en="instance identity">实例身份</span>
+                  <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+                </div>
+                <pre>id(P) = sha256( 自身源码 ⊕ 每条 name 边: 边名 0x00 子实例身份 0x00 )</pre>
+              </div>
+              <div class="prose">
+                <p data-zh-html="自身源码 = 包内 <code>*.lomt</code>（排除 <code>pkg.lomp</code> 与 <code>deps/</code>），<strong>按文件名排序</strong>后逐文件喂「名字 0x00 内容 0x00」；边也<strong>按名字排序</strong>后才进哈希。所以换个文件顺序写 <code>use</code> 不会改变身份——目录返回顺序不保证，不排序就没有稳定身份。" data-en-html="Own source = the package's <code>*.lomt</code> files (excluding <code>pkg.lomp</code> and <code>deps/</code>), fed file by file in <strong>sorted filename order</strong> as “name 0x00 content 0x00”; edges are likewise <strong>sorted by name</strong> before hashing. Writing the same <code>use</code> lines in a different order therefore does not change identity — directory order is not guaranteed, and without sorting there is no stable identity.">
+                  自身源码 = 包内 <code>*.lomt</code>（排除 <code>pkg.lomp</code> 与 <code>deps/</code>），<strong>按文件名排序</strong>后逐文件喂「名字 0x00 内容 0x00」；边也<strong>按名字排序</strong>后才进哈希。所以换个文件顺序写 <code>use</code> 不会改变身份——目录返回顺序不保证，不排序就没有稳定身份。
+                </p>
+                <p data-zh="这条公式有一个必须接受的后果，把它单独放在这里：" data-en="The formula has one consequence that has to be accepted, so it gets its own line:">
+                  这条公式有一个必须接受的后果，把它单独放在这里：
+                </p>
+              </div>
+              <div class="code">
+                <div class="code__bar">
+                  <span class="lang-tag">text</span>
+                  <span data-zh="同一份源码，两个身份" data-en="same source, two identities">同一份源码，两个身份</span>
+                  <button class="code__copy" type="button" data-copied="已复制" data-zh="复制" data-en="copy">复制</button>
+                </div>
+                <pre>geom 的源码逐字节相同, 但落在两个仓库里
+  仓库 A 有 mathutil 0.1.0 / 0.2.0  →  geom id = 06b4cc0d3b1f…  (绑 0.2.0)
+  仓库 B 只有 mathutil 0.1.0        →  geom id = 0f4bb3784d09…  (绑 0.1.0)</pre>
+              </div>
+              <div class="prose">
+                <p data-zh-html="<strong>两个 id 不同是对的。</strong>同一份源码绑到不同依赖上，语义就不同；把它们合并才是有害的。这正是「只看自身源码是错的」那句话的具体样子。" data-en-html="<strong>Two different ids is the correct answer.</strong> The same source bound to different dependencies means a different meaning, and merging them would be the harmful move. This is what “hashing the source alone would be wrong” looks like in practice.">
+                  <strong>两个 id 不同是对的。</strong>同一份源码绑到不同依赖上，语义就不同；把它们合并才是有害的。这正是「只看自身源码是错的」那句话的具体样子。
+                </p>
+                <p data-zh-html="算的时候用的是<strong>不动点迭代</strong>，不是递归。递归每一层都要留住自己的边表，而这个程序的内存是一块固定工作区（语言没有动态分配），递归就得给每层切一块缓冲，于是深度上限被写死进布局。换成「反复扫到没有新的包可以定身份为止」就没这个问题——代价是最坏 O(n²)，而一个仓库的包数很少（上限 512），这个代价换得起。" data-en-html="The computation uses <strong>fixpoint iteration</strong>, not recursion. Recursion would need each level to hold its own edge table, and this program's memory is one fixed workspace (the language has no dynamic allocation), so recursion would mean carving a buffer per level and baking a depth limit into the layout. Iterating until no new package can be identified avoids that — at a worst case of O(n²), affordable when a store holds few packages (512 at most).">
+                  算的时候用的是<strong>不动点迭代</strong>，不是递归。递归每一层都要留住自己的边表，而这个程序的内存是一块固定工作区（语言没有动态分配），递归就得给每层切一块缓冲，于是深度上限被写死进布局。换成「反复扫到没有新的包可以定身份为止」就没这个问题——代价是最坏 O(n²)，而一个仓库的包数很少（上限 512），这个代价换得起。
+                </p>
+                <p data-zh-html="环也因此<strong>自然暴露</strong>：A→B→A，两边都永远「还没准备好」，循环结束后它们就是剩下的那些。身份算不出来是<strong>响亮</strong>的——环与缺依赖各有独立的状态位与消息，不混成一句「失败」。" data-en-html="Cycles then <strong>fall out on their own</strong>: in A→B→A neither side ever becomes ready, so whatever is left when the loop ends is the cycle. Failure to compute identity is <strong>loud</strong> — a cycle and a missing dependency carry separate status bits and separate messages rather than one merged “failed”.">
+                  环也因此<strong>自然暴露</strong>：A→B→A，两边都永远「还没准备好」，循环结束后它们就是剩下的那些。身份算不出来是<strong>响亮</strong>的——环与缺依赖各有独立的状态位与消息，不混成一句「失败」。
+                </p>
+              </div>
+
+              <h2 data-zh="依赖从源码读，不从清单读" data-en="Dependencies are read from the source, not a manifest">依赖从源码读，不从清单读</h2>
+              <div class="prose">
+                <p data-zh-html="因为模型是「依赖就是源码里的 <code>use</code>」，包管理器必须自己去读源码。参考实现借用了编译器的前端 AST；Lompi 是一个独立程序，借不到，所以它做的是一个<strong>够用的词法扫描</strong>——只认顶层 <code>use</code>，不建语法树。" data-en-html="Because the model is that a dependency <em>is</em> a <code>use</code> in the source, the package manager has to read the source itself. The reference implementation borrows the compiler's front-end AST; Lompi is a standalone program and cannot, so it does a <strong>lexical scan that is good enough</strong> — top-level <code>use</code> only, no syntax tree.">
+                  因为模型是「依赖就是源码里的 <code>use</code>」，包管理器必须自己去读源码。参考实现借用了编译器的前端 AST；Lompi 是一个独立程序，借不到，所以它做的是一个<strong>够用的词法扫描</strong>——只认顶层 <code>use</code>，不建语法树。
+                </p>
+                <p data-zh-html="扫描要处理三种<strong>假 use</strong>，否则会凭空多出依赖边，而那是<strong>静默的错</strong>：行注释里的 <code>// use foo</code>、块注释里的 <code>/* use foo */</code>、以及字符串里的 <code>&quot;use foo&quot;</code>（含反斜杠转义）。" data-en-html="The scan has to handle three kinds of <strong>fake use</strong>, or phantom dependency edges appear — and those fail <strong>silently</strong>: <code>// use foo</code> inside a line comment, <code>/* use foo */</code> inside a block comment, and <code>&quot;use foo&quot;</code> inside a string, backslash escapes included.">
+                  扫描要处理三种<strong>假 use</strong>，否则会凭空多出依赖边，而那是<strong>静默的错</strong>：行注释里的 <code>// use foo</code>、块注释里的 <code>/* use foo */</code>、以及字符串里的 <code>"use foo"</code>（含反斜杠转义）。
+                </p>
+              </div>
+              <div class="note">
+                <strong data-zh="一个明确的边界：" data-en="One stated boundary: ">一个明确的边界：</strong>
+                <span data-zh-html="只认<strong>行首</strong>的 <code>use</code>（前面只允许空白）。语言里 <code>use</code> 只在顶层，而顶层语句在本项目里一行一条——这条规则够用，也不会把 <code>x.use</code> 之类的误认成边。<strong>真有跨行写的 use，这里会漏</strong>，所以 Lompi 会把「扫到的边」和「包目录里存在的模块」对一遍，不匹配就报出来，而不是默默少一条边。" data-en-html="Only a <code>use</code> at the <strong>start of a line</strong> counts (leading whitespace aside). In this language <code>use</code> is top-level only, and top-level statements sit one per line in this project — the rule is sufficient and will not mistake <code>x.use</code> for an edge. <strong>A <code>use</code> written across lines will be missed</strong>, so Lompi cross-checks the edges it scanned against the modules actually present in the package directory and reports a mismatch rather than quietly dropping one.">
+                  只认<strong>行首</strong>的 <code>use</code>（前面只允许空白）。语言里 <code>use</code> 只在顶层，而顶层语句在本项目里一行一条——这条规则够用，也不会把 <code>x.use</code> 之类的误认成边。<strong>真有跨行写的 use，这里会漏</strong>，所以 Lompi 会把「扫到的边」和「包目录里存在的模块」对一遍，不匹配就报出来，而不是默默少一条边。
+                </span>
+              </div>
+
+              <h2 data-zh="两件被工具链逼出来的事" data-en="Two things the toolchain forced">两件被工具链逼出来的事</h2>
+              <ul class="list">
+                <li><b data-zh="为什么函数不返回结构，而是用一块工作区" data-en="Why functions take a workspace instead of returning structs">为什么函数不返回结构，而是用一块工作区</b> <span data-zh-html="—— 这些函数的结果是多块的（名字池 + 记录表 + 内容缓冲），而语言<strong>没有出参、也没有可变全局</strong>，包内的链接器又<strong>不支持按值传聚合</strong>。所以照仓库工具的成法：调用方给一块内存，本层按<strong>命名偏移</strong>使用，签名保持标量。<a href=&quot;../libraries/&quot;>这正是库系统里那两张真库的接口形状</a>，不是 Lompi 自己的口味。" data-en-html=" — these functions produce several blocks at once (a name pool, a record table, a content buffer), and the language has <strong>no out-parameters and no mutable globals</strong>, while the packaged linker <strong>does not support by-value aggregates</strong>. So it follows the repository's own convention: the caller provides a block of memory, the layer uses it at <strong>named offsets</strong>, and signatures stay scalar. <a href=&quot;../libraries/&quot;>This is exactly the interface shape the real libraries use</a>, not a Lompi idiosyncrasy.">—— 这些函数的结果是多块的（名字池 + 记录表 + 内容缓冲），而语言<strong>没有出参、也没有可变全局</strong>，包内的链接器又<strong>不支持按值传聚合</strong>。所以照仓库工具的成法：调用方给一块内存，本层按<strong>命名偏移</strong>使用，签名保持标量。<a href="../libraries/">这正是库系统里那两张真库的接口形状</a>，不是 Lompi 自己的口味。</span></li>
+                <li><b data-zh="为什么两层挤进同一个文件" data-en="Why two layers share one file">为什么两层挤进同一个文件</b> <span data-zh-html="—— 源码扫描（<code>lex_*</code>）与包 / 仓库模型（<code>pkg_*</code> / <code>sto_*</code>）本该是两层，但打包版编译器的<strong>传递导入深度上限是 8</strong>，而 Lompi 这条链正好 8 层（<code>lompi → cli → idn → pkg → sha → dir → txt → sys</code>）。再加一层，最底层的 <code>sys_*</code> 会整片报「未声明」，而且<strong>报错指向的层与真正的原因无关</strong>。分层没变，只是两层住在一个文件里。" data-en-html=" — source scanning (<code>lex_*</code>) and the package/store model (<code>pkg_*</code> / <code>sto_*</code>) ought to be two layers, but the packaged compiler's <strong>transitive import depth limit is 8</strong>, and Lompi's chain is exactly eight (<code>lompi → cli → idn → pkg → sha → dir → txt → sys</code>). One more layer and the bottom <code>sys_*</code> is reported wholesale as “undeclared”, with <strong>the error pointing at a layer unrelated to the actual cause</strong>. The layering is unchanged; two layers just share a file.">—— 源码扫描（<code>lex_*</code>）与包 / 仓库模型（<code>pkg_*</code> / <code>sto_*</code>）本该是两层，但打包版编译器的<strong>传递导入深度上限是 8</strong>，而 Lompi 这条链正好 8 层（<code>lompi → cli → idn → pkg → sha → dir → txt → sys</code>）。再加一层，最底层的 <code>sys_*</code> 会整片报「未声明」，而且<strong>报错指向的层与真正的原因无关</strong>。分层没变，只是两层住在一个文件里。</span></li>
+              </ul>
+              <div class="prose">
+                <p data-zh-html="第二条值得单独看一眼：它不是设计，是<strong>被工具链的护栏顶回来的一道痕迹</strong>。项目的做法是把原因写在文件头上，而不是假装那是自然的。" data-en-html="The second one deserves a look of its own: it is not a design, it is <strong>a mark left by a guard rail pushing back</strong>. The project's habit is to write the reason at the top of the file rather than pretend it was natural.">
+                  第二条值得单独看一眼：它不是设计，是<strong>被工具链的护栏顶回来的一道痕迹</strong>。项目的做法是把原因写在文件头上，而不是假装那是自然的。
+                </p>
+              </div>
+
+              <h2 data-zh="退出码与输出分家" data-en="Exit codes, and the two streams">退出码与输出分家</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="码" data-en="Code">码</th>
+                      <th scope="col" data-zh="含义" data-en="Meaning">含义</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td class="num">0</td><td data-zh-html="成功（含 <code>lompi help</code>）" data-en-html="Success (including <code>lompi help</code>)">成功（含 <code>lompi help</code>）</td></tr>
+                    <tr><td class="num">1</td><td data-zh="失败：仓库打不开 / 依赖成环 / 依赖找不到 / 没有这个包 / 锁与仓库不一致" data-en="Failure: store unreadable, dependency cycle, dependency missing, no such package, lock disagrees with the store">失败：仓库打不开 / 依赖成环 / 依赖找不到 / 没有这个包 / 锁与仓库不一致</td></tr>
+                    <tr><td class="num">2</td><td data-zh="用法错：缺参数、不认识的命令、锁文件读不了" data-en="Usage error: missing argument, unknown command, unreadable lock file">用法错：缺参数、不认识的命令、锁文件读不了</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="prose">
+                <p data-zh-html="诊断走 stderr，正常输出走 stdout——所以 <code>lompi resolve … &gt; lompi.lock</code> 得到的是干净的一份锁，不用过滤。" data-en-html="Diagnostics go to stderr and normal output to stdout — so <code>lompi resolve … &gt; lompi.lock</code> gives you a clean lock with nothing to filter out.">
+                  诊断走 stderr，正常输出走 stdout——所以 <code>lompi resolve … &gt; lompi.lock</code> 得到的是干净的一份锁，不用过滤。
+                </p>
+              </div>
+
+              <h2 data-zh="报错对照" data-en="What each failure means">报错对照</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col" data-zh="你看到的" data-en="What you see">你看到的</th>
+                      <th scope="col" data-zh="意思 / 怎么办" data-en="What it means / what to do">意思 / 怎么办</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td data-zh-html="<code>仓库里没有这个包</code>" data-en-html="<code>仓库里没有这个包</code>"><code>仓库里没有这个包</code></td><td data-zh-html="名字或版本对不上。用 <code>lompi index &lt;store&gt;</code> 看目录名与版本" data-en-html="The name or version does not match. Use <code>lompi index &lt;store&gt;</code> to see the directory names and versions">名字或版本对不上。用 <code>lompi index &lt;store&gt;</code> 看目录名与版本</td></tr>
+                    <tr><td data-zh-html="<code>仓库里没有这个依赖: X</code>" data-en-html="<code>仓库里没有这个依赖: X</code>"><code>仓库里没有这个依赖: X</code></td><td data-zh="某个包的 use X 在仓库里找不到 X。把 X 放进仓库，或改那个包" data-en="Some package's use X has no X in the store. Put X in the store, or change that package">某个包的 use X 在仓库里找不到 X。把 X 放进仓库，或改那个包</td></tr>
+                    <tr><td data-zh-html="<code>依赖成环 …</code>" data-en-html="<code>依赖成环 …</code>"><code>依赖成环 …</code></td><td data-zh="A→B→A。拆环（这门语言在解析期就该拒掉）" data-en="A→B→A. Break the cycle (the language should refuse this at resolve time)">A→B→A。拆环（这门语言在解析期就该拒掉）</td></tr>
+                    <tr><td data-zh-html="<code>[DIFF] 锁与仓库不一致</code>" data-en-html="<code>[DIFF] 锁与仓库不一致</code>"><code>[DIFF] 锁与仓库不一致</code></td><td data-zh="重算出来的锁与文件不同：源码或依赖变了。确认后重打锁" data-en="The recomputed lock differs from the file: source or dependencies changed. Confirm, then re-emit the lock">重算出来的锁与文件不同：源码或依赖变了。确认后重打锁</td></tr>
+                    <tr><td data-zh-html="<code>有源码文件读不出来或太大 …</code>" data-en-html="<code>有源码文件读不出来或太大 …</code>"><code>有源码文件读不出来或太大 …</code></td><td data-zh="单文件超过 256 KiB，或读不到。拆文件" data-en="A single file exceeds 256 KiB, or cannot be read. Split it">单文件超过 256 KiB，或读不到。拆文件</td></tr>
+                    <tr><td data-zh-html="<code>不认识的命令: X</code>" data-en-html="<code>不认识的命令: X</code>"><code>不认识的命令: X</code></td><td data-zh-html="命令名打错。<code>lompi help</code>" data-en-html="The command name is wrong. <code>lompi help</code>">命令名打错。<code>lompi help</code></td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 data-zh="和 pip 对照着看" data-en="Next to pip">和 pip 对照着看</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col">pip</th>
+                      <th scope="col">lompi</th>
+                      <th scope="col" data-zh="差别" data-en="The difference">差别</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td><code>pip install X</code></td><td><code>lompi plan &lt;store&gt; X --into deps</code></td><td data-zh="Lompi 输出计划，落盘交给上层" data-en="Lompi emits a plan; putting files on disk belongs to the layer above">Lompi 输出计划，落盘交给上层</td></tr>
+                    <tr><td><code>pip show X</code></td><td><code>lompi show &lt;store&gt; X</code></td><td data-zh="多给实例身份与 use 边" data-en="Also gives instance identity and use edges">多给实例身份与 use 边</td></tr>
+                    <tr><td><code>pip freeze</code></td><td><code>lompi resolve &lt;store&gt; X</code></td><td data-zh="钉的是内容哈希，不是版本号" data-en="Pins a content hash, not a version number">钉的是内容哈希，不是版本号</td></tr>
+                    <tr><td><code>pip check</code></td><td><code>lompi verify &lt;store&gt; X &lt;锁&gt;</code></td><td data-zh="重算 + 逐字节比对，强得多" data-en="Recompute plus byte-for-byte comparison — considerably stronger">重算 + 逐字节比对，强得多</td></tr>
+                    <tr><td><code>pipdeptree</code></td><td><code>lompi tree &lt;store&gt; X</code></td><td data-zh="同一个包的不同版本各占一行" data-en="Different versions of one package each get their own line">同一个包的不同版本各占一行</td></tr>
+                    <tr><td><code>requirements.txt</code></td><td><code>lompi.lock</code></td><td data-zh="没有版本区间可写；哈希就是身份" data-en="There are no version ranges to write; the hash is the identity">没有版本区间可写；哈希就是身份</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 data-zh="边界（诚实清单）" data-en="Boundaries (stated plainly)">边界（诚实清单）</h2>
+              <ul class="list">
+                <li><b data-zh="没有注册中心、没有网络" data-en="No registry, no network">没有注册中心、没有网络</b> <span data-zh="—— 仓库就是一个本地目录，取件就是读文件。" data-en=" — a store is a local directory; fetching is reading a file.">—— 仓库就是一个本地目录，取件就是读文件。</span></li>
+                <li><b data-zh="不做二进制分发" data-en="No binary distribution">不做二进制分发</b> <span data-zh="—— 泛型是类型定向单态化的，使用方必须看得到源码。" data-en=" — generics are type-directed and monomorphised, so a consumer must be able to see the source.">—— 泛型是类型定向单态化的，使用方必须看得到源码。</span></li>
+                <li><b data-zh-html="<code>plan</code> 不建目录" data-en-html="<code>plan</code> does not create directories"> <code>plan</code> 不建目录</b> <span data-zh-html="—— 工具链的 Windows PE 目标没有 <code>mkdir</code>，它只打计划；<code>deps/</code> 下的目录要自己先建好。" data-en-html=" — the toolchain's Windows PE target has no <code>mkdir</code>, so it only prints a plan; the directories under <code>deps/</code> have to exist first.">—— 工具链的 Windows PE 目标没有 <code>mkdir</code>，它只打计划；<code>deps/</code> 下的目录要自己先建好。</span></li>
+                <li><b data-zh="单文件上限 256 KiB" data-en="A 256 KiB per-file ceiling">单文件上限 256 KiB</b> <span data-zh-html="—— 超了 Lompi <strong>拒算这个包的身份</strong>，而不是截断。静默截断会算出一个<strong>错的</strong>身份，那比报错坏得多。" data-en-html=" — over that, Lompi <strong>refuses to compute the package's identity</strong> rather than truncating. A silent truncation would produce a <strong>wrong</strong> identity, which is far worse than an error.">—— 超了 Lompi <strong>拒算这个包的身份</strong>，而不是截断。静默截断会算出一个<strong>错的</strong>身份，那比报错坏得多。</span></li>
+                <li><b data-zh="容量护栏" data-en="Capacity guard rails">容量护栏</b> <span data-zh-html="—— 仓库 512 个实例、单包 use 边 2048 条、目录项 4096 条、名字 / 路径池各 64 KiB 与 256 KiB、依赖树深度 256。<strong>超出这些会被静默截断</strong>，属于已知上限，不是设计。" data-en-html=" — 512 instances per store, 2048 use edges per package, 4096 directory entries, name and path pools of 64 KiB and 256 KiB, a dependency-tree depth of 256. <strong>Beyond these the result is silently truncated</strong>; these are known ceilings, not a design.">—— 仓库 512 个实例、单包 use 边 2048 条、目录项 4096 条、名字 / 路径池各 64 KiB 与 256 KiB、依赖树深度 256。<strong>超出这些会被静默截断</strong>，属于已知上限，不是设计。</span></li>
+                <li><b data-zh="环单独检测" data-en="Cycles are checked separately">环单独检测</b> <span data-zh-html="—— A <code>use</code> B 且 B <code>use</code> A 会被拒。Merkle 身份<strong>替代不了</strong>这条检测：两边哈希都算得出，所以它得单独做。" data-en-html=" — A <code>use</code> B and B <code>use</code> A is refused. Merkle identity <strong>cannot replace</strong> this check: both hashes are computable, so the check has to stand on its own.">—— A <code>use</code> B 且 B <code>use</code> A 会被拒。Merkle 身份<strong>替代不了</strong>这条检测：两边哈希都算得出，所以它得单独做。</span></li>
+              </ul>
+
+              <div class="note note--steel">
+                <strong data-zh="它现在到哪一步：" data-en="Where it stands: ">它现在到哪一步：</strong>
+                <span data-zh-html="Lompi 覆盖的是<strong>解析与身份</strong>这一层：读依赖、算身份、发锁、验锁、给落盘计划。它<strong>不做</strong>编译器那一侧的物化改名——那是 <a href=&quot;../libraries/&quot;>库系统</a>里 <code>materialize</code> 的活。它自己是用 Loment 写的，在自己的源码目录里 <code>loment build lompi.lomt -o lompi</code> 就能重编出来（<strong>必须在那个目录里调用</strong>——这条工具链的路径导入按当前目录解析）。" data-en-html="Lompi covers the <strong>resolution and identity</strong> layer: reading dependencies, computing identity, emitting and verifying locks, producing a plan. It does <strong>not</strong> do the compiler-side materialisation renaming — that is <code>materialize</code>'s job in the <a href=&quot;../libraries/&quot;>library system</a>. It is itself written in Loment and rebuilds with <code>loment build lompi.lomt -o lompi</code> from its own source directory (<strong>it must be invoked from there</strong> — this toolchain resolves path imports against the current directory).">
+                  Lompi 覆盖的是<strong>解析与身份</strong>这一层：读依赖、算身份、发锁、验锁、给落盘计划。它<strong>不做</strong>编译器那一侧的物化改名——那是 <a href="../libraries/">库系统</a>里 <code>materialize</code> 的活。它自己是用 Loment 写的，在自己的源码目录里 <code>loment build lompi.lomt -o lompi</code> 就能重编出来（<strong>必须在那个目录里调用</strong>——这条工具链的路径导入按当前目录解析）。
+                </span>
+              </div>
