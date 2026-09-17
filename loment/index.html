@@ -393,7 +393,7 @@ export fn flush(req: FlushReq) contract(hex64) {
             </div>
             <div class="stat fade-step" style="--delay: 0.4s">
               <span class="stat__v">1</span>
-              <span class="stat__k" data-zh="未达：M100 —— 0.1.4 Alpha2.3 的发布与外部审计" data-en="not met: M100 — the 0.1.4 Alpha2.3 release and its external audit">未达：M100 —— 0.1.4 Alpha2.3 的发布与外部审计</span>
+              <span class="stat__k" data-zh="未达：M100 —— 第三方审计（0.1.4 Pre2 的源代码已公开）" data-en="not met: M100 — the third-party audit (0.1.4 Pre2's source is public)">未达：M100 —— 第三方审计（0.1.4 Pre2 的源代码已公开）</span>
             </div>
             <div class="stat fade-step" style="--delay: 0.48s">
               <span class="stat__v">1</span>
@@ -559,7 +559,7 @@ export fn flush(req: FlushReq) contract(hex64) {
         </div>
         <div class="foot__end">
           <span>© <span data-year>2026</span> Yuxuan Jiang · MIT</span>
-          <span data-zh="Loment 0.1.4 Alpha2.3 · Potato v1" data-en="Loment 0.1.4 Alpha2.3 · Potato v1">Loment 0.1.4 Alpha2.3 · Potato v1</span>
+          <span data-zh="Loment 0.1.4 Pre2 · Potato v1" data-en="Loment 0.1.4 Pre2 · Potato v1">Loment 0.1.4 Pre2 · Potato v1</span>
         </div>
       </div>
     </footer>
@@ -567,16 +567,16 @@ export fn flush(req: FlushReq) contract(hex64) {
     <dialog class="modal" id="loment-cta" aria-labelledby="loment-cta-title">
       <div class="modal__inner">
         <span class="modal__k" data-zh="Loment · Potato" data-en="Loment · Potato">Loment · Potato</span>
-        <h2 id="loment-cta-title" data-zh="9 月 20 日面向开发者社区" data-en="Opening to the developer community on 20 September">9 月 20 日面向开发者社区</h2>
-        <p data-zh="Loment 与 Potato 目前是 0.1.4 Alpha2.3，已经完成（冻结面见 docs/158），但尚未向开发者发布。开发组工具已经准备完成——格式化器、文档生成器、语言服务、包管理器都有了 Loment 版本，判据是与 Python 版逐字节相同；命令面本身也从 9 条扩到 38 条，而且是用 Loment 写的。100 个里程碑完成 96 个（另有 2 项部分完成、1 项未达、1 项未开始），编译器不仅能不经过任何解释器把自己重建出来，现在连 C 编译器也不需要了——链条的起点是提交进仓库的 genesis 二进制。随包一起落地的还有库管理器 lompi 和一份 agent 指南。Early Use 表单已经开放。" data-en="Loment and Potato are at 0.1.4 Alpha2.3 — complete (the freeze surface is docs/158) but not yet released to developers. The developer tooling is done — the formatter, doc generator, language server and package manager all have Loment versions, judged byte-identical to the Python ones — and the command surface itself grew from 9 to 38 commands, written in Loment. 96 of 100 milestones are complete (2 more partial, 1 unmet, 1 not started), and the compiler now rebuilds itself with no interpreter and no C compiler — the chain starts from a genesis binary committed to the repository. The library manager lompi and an agent guide land with the package too. The Early Use form is open.">
-          Loment 与 Potato 目前是 0.1.4 Alpha2.3，已经完成（冻结面见 docs/158），但尚未向开发者发布。开发组工具已经准备完成——格式化器、文档生成器、语言服务、包管理器都有了 Loment 版本，判据是与 Python 版逐字节相同；命令面本身也从 9 条扩到 38 条，而且是用 Loment 写的。100 个里程碑完成 96 个（另有 2 项部分完成、1 项未达、1 项未开始），编译器不仅能不经过任何解释器把自己重建出来，现在连 C 编译器也不需要了——链条的起点是提交进仓库的 genesis 二进制。随包一起落地的还有库管理器 lompi 和一份 agent 指南。Early Use 表单已经开放。
+        <h2 id="loment-cta-title" data-zh="源代码已公开" data-en="The source is public">源代码已公开</h2>
+        <p data-zh="Loment 与 Potato 目前是 0.1.4 Pre2，已经完成（冻结面见 docs/158），而且**源代码已经公开**（github.com/FujoJTOP/loment）——未过的 M100 是第三方审计那一半，作者无法自证。开发组工具已经准备完成：格式化器、文档生成器、语言服务、包管理器都有了 Loment 版本，判据是与 Python 版逐字节相同；命令面本身也从 9 条扩到 38 条，而且是用 Loment 写的。语言面最后两个版本（Pre1 / Pre2）把后缀与自定义命令交给使用者，并加入了 extern fn 形式的 FFI。100 个里程碑完成 96 个（另有 2 项部分完成、1 项未达、1 项未开始），编译器不仅能不经过任何解释器把自己重建出来，现在连 C 编译器也不需要了——链条的起点是提交进仓库的 genesis 二进制。随包一起落地的还有库管理器 lompi 和一份 agent 指南。" data-en="Loment and Potato are at 0.1.4 Pre2 — complete (the freeze surface is docs/158) and <b>the source is public</b> (github.com/FujoJTOP/loment); what is unmet is M100's third-party audit, which the author cannot self-certify. The developer tooling is done: the formatter, doc generator, language server and package manager all have Loment versions, judged byte-identical to the Python ones, and the command surface itself grew from 9 to 38 commands, written in Loment. The last two version steps (Pre1 and Pre2) hand the suffix and custom commands to users and add FFI in the form of extern fn. 96 of 100 milestones are complete (2 more partial, 1 unmet, 1 not started), and the compiler now rebuilds itself with no interpreter and no C compiler — the chain starts from a genesis binary committed to the repository. The library manager lompi and an agent guide land with the package too.">
+          Loment 与 Potato 目前是 0.1.4 Pre2，已经完成（冻结面见 docs/158），而且**源代码已经公开**（github.com/FujoJTOP/loment）——未过的 M100 是第三方审计那一半，作者无法自证。开发组工具已经准备完成：格式化器、文档生成器、语言服务、包管理器都有了 Loment 版本，判据是与 Python 版逐字节相同；命令面本身也从 9 条扩到 38 条，而且是用 Loment 写的。语言面最后两个版本（Pre1 / Pre2）把后缀与自定义命令交给使用者，并加入了 extern fn 形式的 FFI。100 个里程碑完成 96 个（另有 2 项部分完成、1 项未达、1 项未开始），编译器不仅能不经过任何解释器把自己重建出来，现在连 C 编译器也不需要了——链条的起点是提交进仓库的 genesis 二进制。随包一起落地的还有库管理器 lompi 和一份 agent 指南。
         </p>
         <div class="modal__actions">
-          <a class="btn btn--primary" href="early-use/" data-zh="填写 Early Use 报名" data-en="Sign up for Early Use">填写 Early Use 报名</a>
+          <a class="btn btn--primary" href="https://github.com/FujoJTOP/loment" data-zh="看源代码 (GitHub)" data-en="View the source (GitHub)">看源代码 (GitHub)</a>
           <a class="btn" href="../docs/language/quickstart/" data-modal-close data-zh="读上手文档 (Beta)" data-en="Read the quickstart (Beta)">读上手文档 (Beta)</a>
           <button class="btn btn--ghost" type="button" data-modal-close data-zh="知道了" data-en="Got it">知道了</button>
         </div>
-        <p class="modal__rule" data-zh="日期为计划值，可能调整；以仓库发布为准。" data-en="The date is a plan and may shift; the repository release is authoritative.">日期为计划值，可能调整；以仓库发布为准。</p>
+        <p class="modal__rule" data-zh="源代码在 github.com/FujoJTOP/loment；第三方审计尚未通过。" data-en="The source is at github.com/FujoJTOP/loment; the third-party audit has not passed.">源代码在 github.com/FujoJTOP/loment；第三方审计尚未通过。</p>
       </div>
     </dialog>
 

@@ -10,14 +10,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>冻结面 — 语言 — FujoOS 文档</title>
-    <meta name="description" content="冻结面由 0.1.3.4 Alpha 立下、0.1.4 Alpha2.3 沿用：冻结了什么、明确不冻结什么、7 条已知开放项，以及改动触及冻结面时要走的四步流程。" />
+    <meta name="description" content="冻结面由 0.1.3.4 Alpha 立下、0.1.4 Pre2 沿用：冻结了什么、明确不冻结什么、7 条已知开放项，以及改动触及冻结面时要走的四步流程。" />
     <link rel="canonical" href="https://fujojtop.github.io/FujoOSwebsite/docs/language/freeze/" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="FujoOS" />
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:locale:alternate" content="en" />
     <meta property="og:title" content="冻结面 — 语言 — FujoOS 文档" />
-    <meta property="og:description" content="冻结面由 0.1.3.4 Alpha 立下、0.1.4 Alpha2.3 沿用：冻结了什么、明确不冻结什么、7 条已知开放项，以及改动触及冻结面时要走的四步流程。" />
+    <meta property="og:description" content="冻结面由 0.1.3.4 Alpha 立下、0.1.4 Pre2 沿用：冻结了什么、明确不冻结什么、7 条已知开放项，以及改动触及冻结面时要走的四步流程。" />
     <meta property="og:url" content="https://fujojtop.github.io/FujoOSwebsite/docs/language/freeze/" />
     <meta property="og:image" content="https://fujojtop.github.io/FujoOSwebsite/assets/og-card.png" />
     <meta property="og:image:width" content="1200" />
@@ -182,6 +182,7 @@
                   <a href="../../../docs/language/freeze/" aria-current="page" data-zh="冻结面" data-en="The freeze surface">冻结面</a>
                   <a href="../../../docs/language/l0/" data-zh="L0 单一真源" data-en="L0 source of truth">L0 单一真源</a>
                   <a href="../../../docs/language/capability/" data-zh="能力域即语言构造" data-en="Capability as a construct">能力域即语言构造</a>
+                  <a href="../../../docs/language/ffi/" data-zh="FFI · 调用别的语言" data-en="FFI · calling other languages">FFI · 调用别的语言</a>
                   <a href="../../../docs/language/toolchain/" data-zh="工具链" data-en="Toolchain">工具链</a>
                   <a href="../../../docs/language/selfhost/" data-zh="自举" data-en="Self-hosting">自举</a>
                   <a href="../../../docs/language/potato/" data-zh="Potato 形式对象" data-en="The Potato object">Potato 形式对象</a>
@@ -233,8 +234,8 @@
 <h1 class="h2" style="font-size: var(--t-2xl)" data-zh="冻结面" data-en="The freeze surface">冻结面</h1>
 
               <div class="prose">
-                <p data-zh-html="这一页说的是 <strong>Loment 的冻结面</strong>。它由 0.1.3.4 Alpha 立下、0.1.4 Alpha2.3 沿用——语言面没有破坏性变更，语法、类型规则、诊断码 E001–E019（码只增不改，E018/E019 是 0.1.3.4 之后新增的）、单元装载与发射符号约定与 0.1.3.4 相同。冻结不等于完备，也不等于发布——它说的是<strong>改动要付代价</strong>：任何触及下面那份清单的改动，必须同时改规范、改一致性套件、两个实现同一次提交改完，再走最后那套流程。清单之外的东西随便改。" data-en-html="This page covers <b>Loment's freeze surface</b>. It was established at 0.1.3.4 Alpha and carries over into 0.1.4 Alpha2.3 — there are no breaking changes on the language surface: syntax, type rules, diagnostic codes E001–E019 (codes are only ever added, never changed; E018 and E019 were added after 0.1.3.4) and the unit-loading and emitted-symbol conventions are as in 0.1.3.4. Frozen does not mean complete, and it does not mean released — it means <b>a change now costs something</b>: anything touching the list below has to move the spec, the parity suite and both implementations in one commit, then follow the process at the end. Everything outside that list is free to change.">
-                  这一页说的是 <strong>Loment 的冻结面</strong>。它由 0.1.3.4 Alpha 立下、0.1.4 Alpha2.3 沿用——语言面没有破坏性变更，语法、类型规则、诊断码 E001–E019（码只增不改，E018/E019 是 0.1.3.4 之后新增的）、单元装载与发射符号约定与 0.1.3.4 相同。冻结不等于完备，也不等于发布——它说的是<strong>改动要付代价</strong>：任何触及下面那份清单的改动，必须同时改规范、改一致性套件、两个实现同一次提交改完，再走最后那套流程。清单之外的东西随便改。
+                <p data-zh-html="这一页说的是 <strong>Loment 的冻结面</strong>。它由 0.1.3.4 Alpha 立下、0.1.4 Pre2 沿用——语言面没有破坏性变更，语法、类型规则、诊断码 E001–E021（码只增不改，E018–E021 都是 0.1.3.4 之后新增的）、单元装载与发射符号约定与 0.1.3.4 相同。冻结不等于完备，也不等于发布——它说的是<strong>改动要付代价</strong>：任何触及下面那份清单的改动，必须同时改规范、改一致性套件、两个实现同一次提交改完，再走最后那套流程。清单之外的东西随便改。" data-en-html="This page covers <b>Loment's freeze surface</b>. It was established at 0.1.3.4 Alpha and carries over into 0.1.4 Pre2 — there are no breaking changes on the language surface: syntax, type rules, diagnostic codes E001–E021 (codes are only ever added, never changed; E018 through E021 were all added after 0.1.3.4) and the unit-loading and emitted-symbol conventions are as in 0.1.3.4. Frozen does not mean complete, and it does not mean released — it means <b>a change now costs something</b>: anything touching the list below has to move the spec, the parity suite and both implementations in one commit, then follow the process at the end. Everything outside that list is free to change.">
+                  这一页说的是 <strong>Loment 的冻结面</strong>。它由 0.1.3.4 Alpha 立下、0.1.4 Pre2 沿用——语言面没有破坏性变更，语法、类型规则、诊断码 E001–E021（码只增不改，E018–E021 都是 0.1.3.4 之后新增的）、单元装载与发射符号约定与 0.1.3.4 相同。冻结不等于完备，也不等于发布——它说的是<strong>改动要付代价</strong>：任何触及下面那份清单的改动，必须同时改规范、改一致性套件、两个实现同一次提交改完，再走最后那套流程。清单之外的东西随便改。
                 </p>
               </div>
 
@@ -259,7 +260,7 @@
                 </li>
                 <li>
                   <b data-zh="错误码是单一真源" data-en="One source for diagnostic codes">错误码是单一真源</b>
-                  <span data-zh-html="—— 口径在 <code>tools/loment_diag.RULES</code>（E001–E019），checker 侧能发出的<strong>全部 81 条</strong>消息模板都被它分类（解析期的消息归 E019，不在这 81 条里）。" data-en-html=" — the definitions sit in <code>tools/loment_diag.RULES</code> (E001–E019), and it classifies <b>all 81</b> message templates the checker can emit (parse-time messages are E019 and are not among the 81).">—— 口径在 <code>tools/loment_diag.RULES</code>（E001–E019），checker 侧能发出的<strong>全部 81 条</strong>消息模板都被它分类（解析期的消息归 E019，不在这 81 条里）。</span>
+                  <span data-zh-html="—— 口径在 <code>tools/loment_diag.RULES</code>（E001–E021），checker 侧能发出的<strong>全部 81 条</strong>消息模板都被它分类（解析期的消息归 E019，不在这 81 条里）。" data-en-html=" — the definitions sit in <code>tools/loment_diag.RULES</code> (E001–E019), and it classifies <b>all 81</b> message templates the checker can emit (parse-time messages are E019 and are not among the 81).">—— 口径在 <code>tools/loment_diag.RULES</code>（E001–E021），checker 侧能发出的<strong>全部 81 条</strong>消息模板都被它分类（解析期的消息归 E019，不在这 81 条里）。</span>
                 </li>
               </ul>
               <div class="prose">
@@ -286,7 +287,7 @@
                     </tr>
                     <tr>
                       <td data-zh="诊断口径" data-en="Diagnostic definitions">诊断口径</td>
-                      <td data-zh="错误码 E001–E019，以及「码按修法分」的分组原则" data-en="Error codes E001–E019, plus the principle that codes are cut by the repair">错误码 E001–E019，以及「码按修法分」的分组原则</td>
+                      <td data-zh="错误码 E001–E021，以及「码按修法分」的分组原则" data-en="Error codes E001–E021, plus the principle that codes are cut by the repair">错误码 E001–E021，以及「码按修法分」的分组原则</td>
                       <td data-zh="用户脚本与 CI 会按码匹配；码是最稳的那层 ABI" data-en="User scripts and CI match on the code; the code is the most stable ABI there is">用户脚本与 CI 会按码匹配；码是最稳的那层 ABI</td>
                     </tr>
                     <tr>

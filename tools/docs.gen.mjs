@@ -88,6 +88,7 @@ const SECTIONS = [
       { slug: "freeze", zh: "冻结面", en: "The freeze surface" },
       { slug: "l0", zh: "L0 单一真源", en: "L0 source of truth" },
       { slug: "capability", zh: "能力域即语言构造", en: "Capability as a construct" },
+      { slug: "ffi", zh: "FFI · 调用别的语言", en: "FFI · calling other languages" },
       { slug: "toolchain", zh: "工具链", en: "Toolchain" },
       { slug: "selfhost", zh: "自举", en: "Self-hosting" },
       { slug: "potato", zh: "Potato 形式对象", en: "The Potato object" },
