@@ -165,7 +165,6 @@ const HAND_WRITTEN = [
   "bugs/index.html",
   "bugs/submit/index.html",
   "bugs/api/index.html",
-  "loment/early-use/index.html",
 ];
 
 /* -------------------------------------------------------------- helpers */
@@ -394,57 +393,6 @@ ${indent}  >提交一条 bug</a
 ${indent}>`;
 }
 
-/* The Early Use sign-up — the one thing on this site that has to send mail.
-   A static page cannot, so the form posts to a form-to-email service with a
-   plain HTML form: nothing is loaded from anywhere, which is what the origin
-   rule actually forbids. The endpoint lives in content/ so that swapping the
-   published address for the service's alias is one line rather than a hunt
-   through markup — and an address in a public repository is worth removing
-   the moment there is something to replace it with. */
-function earlyBlock(indent = "          ") {
-  const file = join(ROOT, "content", "early-use.json");
-  let cfg = {};
-  if (existsSync(file)) cfg = JSON.parse(readFileSync(file, "utf8"));
-  const endpoint = String(cfg.endpoint || "").trim();
-  const i = indent;
-  if (!endpoint) {
-    return `${i}<p class="muted" data-zh="报名还没开放。" data-en="Sign-ups are not open yet.">报名还没开放。</p>`;
-  }
-  const next = `${SITE}${AT.loment}early-use/?sent=1`;
-  return `${i}<form class="bugform" action="${esc(endpoint)}" method="POST">
-${i}  <input type="hidden" name="_subject" value="${esc(cfg.subject || "Loment Early Use")}" />
-${i}  <input type="hidden" name="_template" value="table" />
-${i}  <input type="hidden" name="_captcha" value="false" />
-${i}  <input type="hidden" name="_next" value="${esc(next)}" />
-${i}  <input type="text" name="_honey" style="display: none" tabindex="-1" autocomplete="off" aria-hidden="true" />
-
-${i}    <div class="bugform__field">
-${i}      <label for="e-name" data-zh="怎么称呼" data-en="What to call you">怎么称呼</label>
-${i}      <input id="e-name" name="称呼" type="text" autocomplete="name" required />
-${i}    </div>
-${i}    <div class="bugform__field">
-${i}      <label for="e-mail" data-zh="邮箱" data-en="Email">邮箱</label>
-${i}      <p class="bugform__hint" data-zh="报名就是寄一封信给你，所以这个要有。它不会出现在站上任何地方。" data-en="Signing up means a letter to you, so this is the one that has to be right. It is not published anywhere on this site.">报名就是寄一封信给你，所以这个要有。它不会出现在站上任何地方。</p>
-${i}      <input id="e-mail" name="邮箱" type="email" autocomplete="email" required />
-${i}    </div>
-${i}    <div class="bugform__field">
-${i}      <label for="e-use" data-zh="想拿它做什么" data-en="What you want to do with it">想拿它做什么</label>
-${i}      <p class="bugform__hint" data-zh="一两句就够。这一栏决定的是「早期使用者」这个名单还有没有意义。" data-en="A sentence or two is enough. This is the field that decides whether an “early user” list means anything at all.">一两句就够。这一栏决定的是「早期使用者」这个名单还有没有意义。</p>
-${i}      <textarea id="e-use" name="用途" rows="4" required></textarea>
-${i}    </div>
-${i}    <div class="bugform__field">
-${i}      <label for="e-os" data-zh="平时用什么系统" data-en="What you work on">平时用什么系统</label>
-${i}      <p class="bugform__hint" data-zh="可选。Windows / Linux / macOS——只影响我提前告诉你哪些坑。" data-en="Optional. Windows / Linux / macOS — it only changes which rough edges I warn you about.">可选。Windows / Linux / macOS——只影响我提前告诉你哪些坑。</p>
-${i}      <input id="e-os" name="系统" type="text" autocomplete="off" />
-${i}    </div>
-
-${i}    <div class="bugform__actions">
-${i}      <button class="btn btn--primary" type="submit" data-zh="提交报名" data-en="Sign up">提交报名</button>
-${i}      <button class="btn btn--ghost" type="reset" data-zh="清空" data-en="Clear">清空</button>
-${i}    </div>
-${i}</form>`;
-}
-
 function boardBlock(indent = "        ") {
   const { reportTo, bugs } = loadBugs();
   const i = indent;
@@ -563,7 +511,6 @@ function navLinks(up, current) {
         [`${up}${AT.loment}`, "概览", "Overview"],
         [`${up}${AT.loment}lompi/`, "Lompi · 包管理器", "Lompi · the package manager"],
         [`${up}${AT.loment}std/`, "标准库 · std 与 host", "Standard library · std and host"],
-        [`${up}${AT.loment}early-use/`, "Early Use 报名", "Early Use sign-up"],
       ],
     ],
     [`${up}${AT.docs}`, "文档", "Docs"],
@@ -795,7 +742,6 @@ ${navLinks(up, `${up}${AT.docs}`)}
           <a href="${up}${AT.loment}" data-zh="Loment · Potato 语言" data-en="Loment · Potato language">Loment · Potato 语言</a>
           <a href="${up}${AT.loment}lompi/" data-zh="— Lompi · 包管理器" data-en="— Lompi · the package manager">— Lompi · 包管理器</a>
           <a href="${up}${AT.loment}std/" data-zh="— 标准库 · std 与 host" data-en="— Standard library · std and host">— 标准库 · std 与 host</a>
-          <a href="${up}${AT.loment}early-use/" data-zh="— Early Use 报名" data-en="— Early Use sign-up">— Early Use 报名</a>
           <a href="${up}${AT.docs}" data-zh="文档" data-en="Documentation">文档</a>
           <a href="${up}${AT.start}" data-zh="构建与运行" data-en="Build and run">构建与运行</a>
           <a href="${up}${AT.bugs}" data-zh="Bug 社区" data-en="Bug reports">Bug 社区</a>
@@ -953,7 +899,6 @@ ${navLinks(up, current)}
           <a href="${up}${AT.loment}" data-zh="Loment · Potato 语言" data-en="Loment · Potato language">Loment · Potato 语言</a>
           <a href="${up}${AT.loment}lompi/" data-zh="— Lompi · 包管理器" data-en="— Lompi · the package manager">— Lompi · 包管理器</a>
           <a href="${up}${AT.loment}std/" data-zh="— 标准库 · std 与 host" data-en="— Standard library · std and host">— 标准库 · std 与 host</a>
-          <a href="${up}${AT.loment}early-use/" data-zh="— Early Use 报名" data-en="— Early Use sign-up">— Early Use 报名</a>
           <a href="${up}${AT.docs}" data-zh="文档" data-en="Documentation">文档</a>
           <a href="${up}${AT.news}" data-zh="新闻" data-en="News">新闻</a>
           <a href="${up}${AT.bugs}" data-zh="Bug 社区" data-en="Bug reports">Bug 社区</a>
@@ -1080,7 +1025,6 @@ ${items}
   const TICKER_MARKERS = /([ \t]*)<!-- ticker:start -->[\s\S]*?<!-- ticker:end -->/;
   const BOARD_MARKERS = /([ \t]*)<!-- board:start -->[\s\S]*?<!-- board:end -->/;
   const REPORT_MARKERS = /([ \t]*)<!-- report:start -->[\s\S]*?<!-- report:end -->/;
-  const EARLY_MARKERS = /([ \t]*)<!-- early:start -->[\s\S]*?<!-- early:end -->/;
   for (const name of HAND_WRITTEN) {
     const f = join(ROOT, name);
     if (!existsSync(f)) {
@@ -1122,12 +1066,6 @@ ${items}
         (m, indent) => `${indent}<!-- report:start -->\n${reportBlock(indent + "  ")}\n${indent}<!-- report:end -->`
       );
     }
-    if (EARLY_MARKERS.test(next)) {
-      next = next.replace(
-        EARLY_MARKERS,
-        (m, indent) => `${indent}<!-- early:start -->\n${earlyBlock(indent + "  ")}\n${indent}<!-- early:end -->`
-      );
-    }
     if (next !== s) {
       if (check) problems.push(`${name}: asset version or notice out of date`);
       else writeFileSync(f, next);
@@ -1145,7 +1083,6 @@ ${items}
     AT.loment,
     `${AT.loment}lompi/`,
     `${AT.loment}std/`,
-    `${AT.loment}early-use/`,
     AT.bugs,
     `${AT.bugs}submit/`,
     `${AT.bugs}api/`,

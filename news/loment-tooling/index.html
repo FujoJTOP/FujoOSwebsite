@@ -10,14 +10,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Loment 开发组工具准备完成，9 月 20 日面向开发者社区</title>
-    <meta name="description" content="编写 Loment 的路径已不再依赖 Python 解释器：格式化器、文档生成器、语言服务均已有 Loment 版本，判据是与 Python 版本逐字节相同。9 月 20 日面向开发者社区，9 月 15 日开放 Early Use 表单。" />
+    <meta name="description" content="编写 Loment 的路径已不再依赖 Python 解释器：格式化器、文档生成器、语言服务均已有 Loment 版本，判据是与 Python 版本逐字节相同。（这一页写的是 9 月 12 日的状态，其中若干处已不成立，见文内订正。）" />
     <link rel="canonical" href="https://fujojtop.github.io/FujoOSwebsite/news/loment-tooling/" />
     <meta property="og:type" content="article" />
     <meta property="og:site_name" content="FujoOS" />
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:locale:alternate" content="en" />
     <meta property="og:title" content="Loment 开发组工具准备完成，9 月 20 日面向开发者社区" />
-    <meta property="og:description" content="编写 Loment 的路径已不再依赖 Python 解释器：格式化器、文档生成器、语言服务均已有 Loment 版本，判据是与 Python 版本逐字节相同。9 月 20 日面向开发者社区，9 月 15 日开放 Early Use 表单。" />
+    <meta property="og:description" content="编写 Loment 的路径已不再依赖 Python 解释器：格式化器、文档生成器、语言服务均已有 Loment 版本，判据是与 Python 版本逐字节相同。（这一页写的是 9 月 12 日的状态，其中若干处已不成立，见文内订正。）" />
     <meta property="og:url" content="https://fujojtop.github.io/FujoOSwebsite/news/loment-tooling/" />
     <meta property="og:image" content="https://fujojtop.github.io/FujoOSwebsite/assets/og-card.png" />
     <meta property="og:image:width" content="1200" />
@@ -81,7 +81,6 @@
               <a href="../../loment/" data-zh="概览" data-en="Overview">概览</a>
               <a href="../../loment/lompi/" data-zh="Lompi · 包管理器" data-en="Lompi · the package manager">Lompi · 包管理器</a>
               <a href="../../loment/std/" data-zh="标准库 · std 与 host" data-en="Standard library · std and host">标准库 · std 与 host</a>
-              <a href="../../loment/early-use/" data-zh="Early Use 报名" data-en="Early Use sign-up">Early Use 报名</a>
             </div>
           </div>
           <a class="nav__link" href="../../docs/" data-zh="文档" data-en="Docs">文档</a>
@@ -103,7 +102,6 @@
           <a href="../../loment/" data-zh="Loment · Potato 语言" data-en="Loment · Potato language">Loment · Potato 语言</a>
           <a href="../../loment/lompi/" data-zh="— Lompi · 包管理器" data-en="— Lompi · the package manager">— Lompi · 包管理器</a>
           <a href="../../loment/std/" data-zh="— 标准库 · std 与 host" data-en="— Standard library · std and host">— 标准库 · std 与 host</a>
-          <a href="../../loment/early-use/" data-zh="— Early Use 报名" data-en="— Early Use sign-up">— Early Use 报名</a>
           <a href="../../docs/" data-zh="文档" data-en="Documentation">文档</a>
           <a href="../../news/" data-zh="新闻" data-en="News">新闻</a>
           <a href="../../bugs/" data-zh="Bug 社区" data-en="Bug reports">Bug 社区</a>
@@ -123,7 +121,7 @@
           <div class="prose news__body">
 <div class="note note--amber">
                 <strong data-zh="后置订正（2026-09-16）：" data-en="Later correction (2026-09-16): ">后置订正（2026-09-16）：</strong>
-                <span data-zh-html="这一页写的是 9 月 12 日的状态，其中五处在 0.1.4 Alpha2 之后已不成立：<strong>包管理器 <code>lompkg</code> 早已重写</strong>（0.1.4 就已逐字节相同，目录遍历与 SHA-256 用 syscall 自备），L0 生成器 <code>lomc</code> 也一并搬到了 Loment；安装语言服务与跑 <code>lomc.ps1</code> 现在<strong>不需要 clang，也不需要 WSL</strong>，产物在 Windows 上原生出 PE；里程碑是 <strong>96 个</strong>而非 86 个（未开始的只剩 M39 一项），审计主张是 <strong>24 条</strong>而非 16 条；<code>loment</code> 的命令面从 9 条扩到 <strong>38 条</strong>，而且命令面本身就是用 Loment 写的；<strong>lompi 随包发行</strong>。原文保留不改，见 <a href=&quot;../alpha2-and-foc/&quot;>0.1.4 Alpha2 与 FOC-0.1.0</a>。" data-en-html="This page records the state on 12 September, and five of its claims stopped holding after 0.1.4 Alpha2: <b>the package manager <code>lompkg</code> was rewritten long ago</b> (byte-identical as of 0.1.4, with directory traversal and SHA-256 going through syscalls), and the L0 generator <code>lomc</code> moved to Loment as well; installing the language server and running <code>lomc.ps1</code> now need <b>neither clang nor WSL</b>, since the artefact is a native PE on Windows; the milestone count is <b>96</b>, not 86 (only M39 remains unstarted), with <b>24</b> audit claims rather than 16; <code>loment</code>'s command surface grew from 9 to <b>38</b> commands, and the surface itself is written in Loment; and <b>lompi ships with the package</b>. The original text is left as written — see <a href=&quot;../alpha2-and-foc/&quot;>0.1.4 Alpha2 and FOC-0.1.0</a>.">这一页写的是 9 月 12 日的状态，其中五处在 0.1.4 Alpha2 之后已不成立：<strong>包管理器 <code>lompkg</code> 早已重写</strong>（0.1.4 就已逐字节相同，目录遍历与 SHA-256 用 syscall 自备），L0 生成器 <code>lomc</code> 也一并搬到了 Loment；安装语言服务与跑 <code>lomc.ps1</code> 现在<strong>不需要 clang，也不需要 WSL</strong>，产物在 Windows 上原生出 PE；里程碑是 <strong>96 个</strong>而非 86 个（未开始的只剩 M39 一项），审计主张是 <strong>24 条</strong>而非 16 条；<code>loment</code> 的命令面从 9 条扩到 <strong>38 条</strong>，而且命令面本身就是用 Loment 写的；<strong>lompi 随包发行</strong>。原文保留不改，见 <a href="../alpha2-and-foc/">0.1.4 Alpha2 与 FOC-0.1.0</a>。</span>
+                <span data-zh-html="这一页写的是 9 月 12 日的状态，其中六处在 0.1.4 Alpha2 之后已不成立：<strong>包管理器 <code>lompkg</code> 早已重写</strong>（0.1.4 就已逐字节相同，目录遍历与 SHA-256 用 syscall 自备），L0 生成器 <code>lomc</code> 也一并搬到了 Loment；安装语言服务与跑 <code>lomc.ps1</code> 现在<strong>不需要 clang，也不需要 WSL</strong>，产物在 Windows 上原生出 PE；里程碑是 <strong>96 个</strong>而非 86 个（未开始的只剩 M39 一项），审计主张是 <strong>24 条</strong>而非 16 条；<code>loment</code> 的命令面从 9 条扩到 <strong>38 条</strong>，而且命令面本身就是用 Loment 写的；<strong>lompi 随包发行</strong>。还有一处<strong>整个前提都没了</strong>：这一页请人「9 月 15 日填 Early Use 表单」——源代码 9 月 17 日公开之后，没有要提前拿的东西了，那张表连同那个页面已经<strong>撤掉</strong>。原文保留不改，见 <a href=&quot;../alpha2-and-foc/&quot;>0.1.4 Alpha2 与 FOC-0.1.0</a>。" data-en-html="This page records the state on 12 September, and five of its claims stopped holding after 0.1.4 Alpha2: <b>the package manager <code>lompkg</code> was rewritten long ago</b> (byte-identical as of 0.1.4, with directory traversal and SHA-256 going through syscalls), and the L0 generator <code>lomc</code> moved to Loment as well; installing the language server and running <code>lomc.ps1</code> now need <b>neither clang nor WSL</b>, since the artefact is a native PE on Windows; the milestone count is <b>96</b>, not 86 (only M39 remains unstarted), with <b>24</b> audit claims rather than 16; <code>loment</code>'s command surface grew from 9 to <b>38</b> commands, and the surface itself is written in Loment; and <b>lompi ships with the package</b>. One more has lost its whole premise: this page asks people to “fill in the Early Use form on the 15th”, and once the source went public on 17 September there was nothing left to get early — the form and the page that held it have been <strong>retired</strong>. The original text is left as written — see <a href=&quot;../alpha2-and-foc/&quot;>0.1.4 Alpha2 and FOC-0.1.0</a>.">这一页写的是 9 月 12 日的状态，其中六处在 0.1.4 Alpha2 之后已不成立：<strong>包管理器 <code>lompkg</code> 早已重写</strong>（0.1.4 就已逐字节相同，目录遍历与 SHA-256 用 syscall 自备），L0 生成器 <code>lomc</code> 也一并搬到了 Loment；安装语言服务与跑 <code>lomc.ps1</code> 现在<strong>不需要 clang，也不需要 WSL</strong>，产物在 Windows 上原生出 PE；里程碑是 <strong>96 个</strong>而非 86 个（未开始的只剩 M39 一项），审计主张是 <strong>24 条</strong>而非 16 条；<code>loment</code> 的命令面从 9 条扩到 <strong>38 条</strong>，而且命令面本身就是用 Loment 写的；<strong>lompi 随包发行</strong>。还有一处<strong>整个前提都没了</strong>：这一页请人「9 月 15 日填 Early Use 表单」——源代码 9 月 17 日公开之后，没有要提前拿的东西了，那张表连同那个页面已经<strong>撤掉</strong>。原文保留不改，见 <a href="../alpha2-and-foc/">0.1.4 Alpha2 与 FOC-0.1.0</a>。</span>
               </div>
               <p data-zh="Loment 的开发工具链已经完成。面向开发者社区开放的时间定在 9 月 20 日。希望在该日期之前使用的开发者，可于 9 月 15 日填写 Early Use 表单，获得 Loment 0.1.4 Alpha2。" data-en="Loment's developer toolchain is complete. It opens to the developer community on 20 September. Developers who would rather not wait until then can fill in an Early Use form on the 15th to receive Loment 0.1.4 Alpha2.">
                 Loment 的开发工具链已经完成。面向开发者社区开放的时间定在 9 月 20 日。希望在该日期之前使用的开发者，可于 9 月 15 日填写 Early Use 表单，获得 Loment 0.1.4 Alpha2。
@@ -197,6 +195,6 @@
       </div>
     </footer>
 
-    <script src="../../assets/site.js?v=a3159b21"></script>
+    <script src="../../assets/site.js?v=6754d67a"></script>
   </body>
 </html>
