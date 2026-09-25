@@ -1,5 +1,10 @@
 <!doctype html>
-<html lang="zh-CN">
+<html
+  lang="zh-CN"
+  class="theme-instrument"
+  data-title-zh="Loment 已迁至自己的站"
+  data-title-en="Loment has its own site now"
+>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -11,35 +16,67 @@
       content="Loment 现在有自己的站：fujojtop.github.io/loment-site/"
     />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="FujoOS" />
     <meta property="og:title" content="Loment has its own site now" />
     <meta property="og:url" content="https://fujojtop.github.io/loment-site/" />
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:locale:alternate" content="en" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Geist+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/style.css?v=93f82bc7" />
     <link rel="icon" href="../favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" sizes="any" />
+    <link rel="icon" type="image/png" href="../assets/favicon-32.png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png" />
     <style>
-      :root { color-scheme: dark; }
       body {
-        margin: 0;
         min-height: 100vh;
         display: grid;
-        place-items: center;
-        background: #101010;
-        color: #eeeeee;
-        font: 400 16px/1.65 "Geist", ui-sans-serif, system-ui, "Noto Sans SC",
-          "PingFang SC", "Microsoft YaHei", sans-serif;
+        align-content: center;
+        justify-items: center;
         text-align: center;
       }
-      main { padding: 32px; max-width: 36rem; }
-      p { margin: 0 0 10px; }
-      p:last-child { margin-bottom: 0; }
-      .en { color: #8a8a8a; }
-      a { color: #eeeeee; text-underline-offset: 4px; }
-      a:hover { color: #ffffff; }
-      :focus-visible { outline: 2px solid #eeeeee; outline-offset: 3px; }
+      .moved {
+        padding: 48px 24px;
+        max-width: 36rem;
+      }
+      .moved p {
+        margin: 0 0 10px;
+      }
+      .moved p:last-child {
+        margin-bottom: 0;
+      }
+      .moved .en {
+        color: #8a8a8a;
+      }
+      .moved a {
+        text-underline-offset: 4px;
+      }
     </style>
   </head>
   <body>
-    <main>
+    <!-- ticker:start -->
+    <div class="notice notice--alert notice--scroll" role="note" data-notice data-notice-id="release-delay" data-paused="false">
+      <p class="notice__tag"><span class="notice__pip" aria-hidden="true"></span><span data-zh="公告" data-en="Notice">公告</span></p>
+      <div class="notice__view">
+        <div class="notice__track">
+          <span class="notice__item" data-zh="FujoOS公布日延期，以仓库发布为准" data-en="FujoOS release date postponed — the repository is authoritative">FujoOS公布日延期，以仓库发布为准</span>
+          <span class="notice__item" aria-hidden="true" data-zh="FujoOS公布日延期，以仓库发布为准" data-en="FujoOS release date postponed — the repository is authoritative">FujoOS公布日延期，以仓库发布为准</span>
+        </div>
+      </div>
+      <button class="notice__toggle" type="button" data-ticker-toggle aria-pressed="false">
+        <span class="notice__ico" aria-hidden="true"></span>
+        <span class="notice__lbl notice__lbl--pause" data-zh="暂停" data-en="Pause">暂停</span>
+        <span class="notice__lbl notice__lbl--play" data-zh="继续" data-en="Play">继续</span>
+      </button>
+    </div>
+    <!-- ticker:end -->
+
+    <main class="moved">
       <p>这一页已经搬走了 —— Loment 现在有自己的站。</p>
       <p class="en" lang="en">This page has moved. Loment has a site of its own now.</p>
       <p>
